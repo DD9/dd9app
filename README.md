@@ -1,2 +1,17 @@
-# dd9app
-DD9 Extranet V2
+# DD9App
+
+DD9 Extranet V2 - a software contractor management application
+
+## Build and Run locally
+
+Requires NodeJS and Webpack
+
+```bash
+npm install
+npm start
+```
+
+App entry point: start.js
+
+## TODO
+* documentation
