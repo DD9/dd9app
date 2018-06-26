@@ -6,9 +6,9 @@
     "node": ">= 7.6.0"
   },
   "scripts": {
-    "prod": "node ./start.js",
+    "start": "node ./start.js",
     "watch": "nodemon ./start.js --ignore public/",
-    "start": "concurrently \"npm run watch\" \"npm run assets\" --names \"nodeApp,webpack\" --prefix name",
+    "dev": "concurrently \"npm run watch\" \"npm run assets\" --names \"nodeApp,webpack\" --prefix name",
     "assets": "webpack -w --display-max-modules 0"
   },
   "browserslist": "last 3 versions",
