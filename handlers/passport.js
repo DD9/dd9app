@@ -12,7 +12,7 @@ passport.use(User.createStrategy()); // We can do that because we added the pass
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://www.localhost:7777/gateway"
+    callbackURL: "https://dd9app-staging.herokuapp.com/gateway"
   },
   function(accessToken, refreshToken, profile, done) {
     User.findOrCreate({ googleId: profile.id }, function (err, user) {
