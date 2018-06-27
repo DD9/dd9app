@@ -62,7 +62,7 @@ exports.reset = async(req, res) => {
     return res.redirect('/login');
   }
   // 2. If there is a user, show the reset password form
-  res.render('reset', { title: 'Reset your Password' });
+  res.render('auth/reset', { title: 'Reset your Password' });
 };
 
 exports.confirmPasswords = (req, res, next) => {

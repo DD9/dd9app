@@ -15,12 +15,4 @@ exports.dump = (obj) => JSON.stringify(obj, null, 2);
 exports.icon = (name) => fs.readFileSync(`./public/images/icons/${name}.svg`);
 
 // Some details about the site
-exports.siteName = `nodeapp-boiler`;
-
-exports.menu = [
-  { slug: '/item1', title: 'item1', icon: 'store', },
-  { slug: '/item2', title: 'item2', icon: 'tag', },
-  { slug: '/item3', title: 'item3', icon: 'top', },
-  { slug: '/item4', title: 'item4', icon: 'add', },
-  { slug: '/item5', title: 'item5', icon: 'map', },
-];
+exports.siteName = `DD9Extranet V2`;

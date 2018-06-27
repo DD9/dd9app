@@ -3,11 +3,11 @@ const User = mongoose.model('User'); // Already imported in start.js
 const promisify = require('es6-promisify');
 
 exports.loginForm = (req, res) => {
-  res.render('login', { title: 'Login Form' });
+  res.render('auth/login', { title: 'Login Form' });
 };
 
 exports.registerForm = (req, res) => {
-  res.render('register', { title: 'Register' });
+  res.render('auth/register', { title: 'Register' });
 };
 
 // Complimentary client side check
@@ -27,7 +27,7 @@ exports.validateRegister = (req, res, next) => { // Next needed because this is 
   const errors = req.validationErrors();
   if (errors) {
     req.flash('error', errors.map(err => err.msg));
-    res.render('register', { title: 'Register', body: req.body, flashes: req.flash() }) // Manually pass flashes
+    res.render('auth/register', { title: 'Register', body: req.body, flashes: req.flash() }) // Manually pass flashes
     return; // Stop the function from running
   }
   next(); // There were no errors
@@ -41,7 +41,7 @@ exports.register = async (req, res, next) => { // The end of the road is not reg
 };
 
 exports.account = (req, res) => {
-  res.render('account', {title: 'Edit your account'});
+  res.render('auth/account', {title: 'Edit your account'});
 };
 
 exports.updateAccount = async (req, res) => {

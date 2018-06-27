@@ -1,0 +1,33 @@
+doctype html
+html
+  head
+    title= `${title} | ${h.siteName}`
+    link(rel='stylesheet', href='/dist/style.css')
+    link(rel="shortcut icon" type="image/png" href="/images/icons/favicon.ico")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+  body
+
+    if user
+      header
+        include navbar
+
+    block messages
+      if locals.flashes
+        .inner
+          .flash-messages
+            - const categories = Object.keys(locals.flashes)
+            each category in categories
+              each message in flashes[category]
+                .flash(class=`flash--${category}`)
+                  p.flash__text!= message
+                  button.flash__remove(onClick="this.parentElement.remove()") &times;
+    .content
+      block content
+        p default content
+
+    if user
+      footer
+        include footer
+
+    block scripts
+      include scripts
