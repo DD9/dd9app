@@ -6,10 +6,10 @@ const authController = require('../controllers/authController');
 const gatewayController = require('../controllers/gatewayController');
 const { catchErrors } = require('../handlers/errorHandlers'); // Object destructuring, import single method from a module (file), catchErrors wraps async functions
 
-router.get('/', sampleController.homePage);
+router.get('/', userController.loginForm);
 
 router.get('/login', userController.loginForm);
-router.post('/login', authController.login);
+router.get('/auth/google', authController.login);
 router.get('/logout', authController.logout);
 
 router.get('/account', authController.isLoggedIn, userController.account);

@@ -5,7 +5,8 @@ const crypto = require('crypto');
 const promisify = require('es6-promisify');
 const mail = require('../handlers/mail');
 
-exports.login = passport.authenticate('local', { // Local Passport strategy, not using Github auth or something
+exports.login = passport.authenticate('google', {
+  scope: ['https://www.googleapis.com/auth/plus.login'],
   failureRedirect: '/login',
   failureFlash: 'Failed Login!',
   successRedirect: '/',
