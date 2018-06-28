@@ -7235,7 +7235,7 @@ label {
   display: flex;
   -ms-flex-align: center;
   align-items: center;
-  margin-top: 150px;
+  padding-top: 150px;
   padding-bottom: 40px; }
 
 .form-signin {
