@@ -10,6 +10,6 @@ router.get('/auth/logout', authController.logout);
 router.get('/auth/google', authController.googleAuth);
 router.get('/auth/google/callback', authController.googleAuthRedirect);
 
-router.get('auth/gateway', authController.isLoggedIn, gatewayController.filter);
+router.get('/auth/gateway', authController.isLoggedIn, gatewayController.filter);
 
 module.exports = router;
