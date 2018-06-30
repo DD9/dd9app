@@ -18,16 +18,23 @@ passport.use(new GoogleStrategy({
   function(accessToken, refreshToken, profile, done) {
 
     const googleEmail = profile.emails[0].value;
-    const googleName = profile.displayName;
+    const googleFirstName = profile.name.givenName;
+    const googleLastName = profile.name.familyName;
 
     const emailDomain = googleEmail.split("@")[1];
     if (emailDomain !== "dd9.com") {
       return done();
     }
 
+    console.log(profile);
+
     User.findOrCreate(
       { email: googleEmail },
-      { name: googleName },
+      { first_name: googleFirstName,
+        last_name: googleLastName,
+        last_sign_in_at: Date.now(),
+        $inc: { sign_in_count : 1 }
+        },
       function (err, user) {return done(err, user);
     });
   }

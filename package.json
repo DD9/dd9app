@@ -1,5 +1,5 @@
 {
-  "name": "nodeapp-boiler",
+  "name": "dd9app",
   "version": "0.0.0",
   "private": true,
   "engines": {
@@ -9,7 +9,9 @@
     "start": "node ./start.js",
     "watch": "nodemon ./start.js --ignore public/",
     "dev": "concurrently \"npm run watch\" \"npm run assets\" --names \"nodeApp,webpack\" --prefix name",
-    "assets": "webpack -w --display-max-modules 0"
+    "assets": "webpack -w --display-max-modules 0",
+    "load-data": "node ./data/load-data.js",
+    "drop-data": "node ./data/load-data.js --delete"
   },
   "browserslist": "last 3 versions",
   "dependencies": {
