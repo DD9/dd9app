@@ -8,8 +8,19 @@ const mongooseErrorHanlder = require('mongoose-mongodb-errors');
 const findOrCreate = require('mongoose-findorcreate');
 
 const userSchema = new Schema({
-  v1_id: {
-    type: Number
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date
+  },
+  _id: {
+    type: mongoose.Schema.ObjectId
+  },
+  companyId: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Company'
   },
   email: {
     type: String,
@@ -19,43 +30,21 @@ const userSchema = new Schema({
     validate: [validator.isEmail, 'Invalid Email Address'],
     required: 'Please supply an email address'
   },
-  v1_sign_in_count: {
-    type: Number
-  },
-  sign_in_count: {
+  signInCount: {
     type: Number,
   },
-  v1_last_sign_in_at: {
-    type: String
-  },
-  last_sign_in_at: {
+  lastSignInAt: {
     type: Date
   },
-  v1_last_sign_in_ip: {
+  lastSignInIP: {
     type: String
   },
-  last_sign_in_ip: {
-    type: String
-  },
-  v1_created_at: {
-    type: String
-  },
-  created_at: {
-    type: Date,
-    default: Date.now
-  },
-  v1_updated_at: {
-    type: String
-  },
-  updated_at: {
-    type: Date
-  },
-  first_name: {
+  firstName: {
     type: String,
     required: 'Please supply a first name',
     trim: true
   },
-  last_name: {
+  lastName: {
     type: String,
     required: 'Please supply a last name',
     trim: true
@@ -64,46 +53,24 @@ const userSchema = new Schema({
     type: String,
     default: 'staff'
   },
-  clearance_level: {
+  clearanceLevel: {
     type: Number,
     default: 0,
     min: 0,
     max: 5
   },
-  v1_company_id: {
-    type: Number,
-  },
-  company_id: {
-    type: mongoose.Schema.ObjectId,
-  },
   active: {
     type: Boolean,
     default: true
   },
-  hour_log_email: {
+  hourLogEmail: {
     type: String,
     default: 'none'
   },
   memo: {
     type: String
   }
-}, {
-  toJSON: { virtuals : true},
-  toObject: { virtuals : true},
 });
-
-// Companies where userCompanyV1Id == CompanyV1Id
-userSchema.virtual('v1_company', {
-  ref: 'Company',
-  localField: 'v1_company_id',
-  foreignField: 'v1_id'
-});
-
-// userSchema.virtual('company', {
-//   ref: 'Company',
-//   localField: 'company_id',
-//   foreignField: '_id'
-// });
 
 // Rather than storing all the data, we can generate it on the fly
 userSchema.virtual('gravatar').get(function() {
@@ -114,8 +81,8 @@ userSchema.virtual('gravatar').get(function() {
 // Compound index as text
 userSchema.index({
   email: 'text',
-  first_name: 'text',
-  last_name: 'text'
+  firstName: 'text',
+  lastName: 'text'
 });
 
 // Serialize and deserialize sessions

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise; // Prevent false positives from mongoose promise library deprication
 
-const companySchema = new Schema({
+const hourLogSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now
@@ -10,25 +10,24 @@ const companySchema = new Schema({
   updatedAt: {
     type: Date
   },
+  date: {
+    type: Date
+  },
   _id: {
     type: mongoose.Schema.ObjectId
   },
-  name: {
-    type: String,
-    required: 'Please supply a company name'
+  companyId: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Company'
   },
-  active: {
-    type: Boolean,
-    default: true
-  },
-  memo: {
+  title: {
     type: String
   }
 });
 
-companySchema.pre('save', function(next) {
+hourLogSchema.pre('save', function(next) {
   this.updatedAt = Date.now;
   next();
 });
 
-module.exports = mongoose.model('Company', companySchema);
+module.exports = mongoose.model('HourLog', hourLogSchema);

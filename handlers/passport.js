@@ -26,14 +26,12 @@ passport.use(new GoogleStrategy({
       return done();
     }
 
-    console.log(profile);
-
     User.findOrCreate(
       { email: googleEmail },
-      { first_name: googleFirstName,
-        last_name: googleLastName,
-        last_sign_in_at: Date.now(),
-        $inc: { sign_in_count : 1 }
+      { firstName: googleFirstName,
+        lastName: googleLastName,
+        lastSignInAt: Date.now(),
+        $inc: { signInCount : 1 }
         },
       function (err, user) {return done(err, user);
     });

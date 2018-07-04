@@ -10,8 +10,8 @@ router.get('/auth/logout', authController.logout);
 router.get('/auth/google', authController.googleAuth);
 router.get('/auth/google/callback', authController.googleAuthRedirect);
 
-router.get('/auth/gatewa', authController.isLoggedIn, gatewayController.filter);
+router.get('/auth/gateway', authController.isLoggedIn, gatewayController.filter);
 router.get('/auth/gateway/user', authController.isLoggedIn, gatewayController.user);
-router.get('/auth/gateway/company', authController.isLoggedIn, catchErrors(gatewayController.company));
+router.get('/auth/gateway/timeEntry', authController.isLoggedIn, catchErrors(gatewayController.timeEntry));
 
 module.exports = router;
