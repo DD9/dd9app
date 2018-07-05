@@ -2,3 +2,5 @@
 node_modules
 .DS_Store
 variables.env
+dd9app-devpack
+v1_psql_import_scripts
