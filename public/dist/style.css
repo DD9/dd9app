@@ -6783,9 +6783,6 @@ a.text-dark:hover, a.text-dark:focus {
     color: inherit;
     border-color: #dee2e6; } }
 
-body {
-  background-color: #F8F9FA !important; }
-
 html {
   box-sizing: border-box; }
 
@@ -7199,6 +7196,9 @@ template {
 [hidden] {
   display: none; }
 
+body {
+  background-color: #F8F9FA !important; }
+
 input, textarea {
   width: 100%;
   padding: 10px;
@@ -7268,6 +7268,10 @@ label {
   100% {
     transform: translateX(0px); } }
 
+.flash-container {
+  position: absolute;
+  right: 0; }
+
 .flash {
   background: white;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
@@ -7321,6 +7325,24 @@ label {
 
 .navbar ul li a:hover {
   background-color: #930A07; }
+
+footer {
+  font-size: 13px; }
+
+.page-footer {
+  border-top: solid 1px #730500;
+  padding: 8px 0px;
+  margin-bottom: 15px; }
+
+.footer-logo {
+  max-width: 90%;
+  max-height: 90%; }
+
+pre.error {
+  padding: 5rem;
+  background: white;
+  line-height: 3;
+  white-space: pre-line; }
 
 .box-shadow {
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05) !important; }

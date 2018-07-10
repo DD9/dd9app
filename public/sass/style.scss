@@ -1,12 +1,10 @@
 @import "~bootstrap/scss/bootstrap";
 
 @import 'partials/variables';
-@import 'partials/layout';
 @import 'partials/normalize';
+@import 'partials/layout';
 @import 'partials/forms';
 @import 'partials/flashes';
-@import 'partials/navbar';
-//@import 'partials/helpers';
-//@import 'partials/typography';
-
+@import 'partials/header';
+@import 'partials/footer';
 @import 'partials/custom';
