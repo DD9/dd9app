@@ -1,0 +1,8 @@
+mixin loginForm()
+  .form-signin-center.text-center
+    form.my-5.p-4.bg-white.rounded.box-shadow.form-signin(action="/auth/google" method="GET")
+      img.mb-3(src='/images/logos/DD9_extranet_logo_v2_deluxe.png', alt='DD9 Extranet V2.0')
+      .mb-3
+      button.btn.btn-lg.btn-light.btn-block(type='submit') Sign in with Google
+      p.mt-4.text-muted
+        a(href='https://dd9.com') DD9

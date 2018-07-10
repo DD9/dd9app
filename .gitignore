@@ -1,4 +1,7 @@
 .idea/
 node_modules
 .DS_Store
+data/
 variables.env
+v1_psql_import_scripts
+dd9app-devpack

@@ -19,6 +19,9 @@ mongoose.connection.on('error', (err) => {
 
 // Import MongoDB models
 require('./models/User');
+require('./models/Company');
+require('./models/HourLog');
+require('./models/TimeEntry');
 
 // Start the app
 const app = require('./app'); // Import and run app.js

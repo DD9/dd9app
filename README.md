@@ -8,7 +8,7 @@ Requires NodeJS and Webpack
 
 ```bash
 npm install
-npm start
+npm run dev
 ```
 
 App entry point: start.js
