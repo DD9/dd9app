@@ -1,9 +1,6 @@
 const passport = require('passport');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-const crypto = require('crypto');
-const promisify = require('es6-promisify');
-const mail = require('../handlers/mail');
 
 exports.googleAuth = passport.authenticate('google', {
   scope: [
@@ -17,7 +14,7 @@ exports.googleAuth = passport.authenticate('google', {
 exports.googleAuthRedirect = passport.authenticate('google', {
     failureRedirect: '/auth/login',
     failureFlash: 'Please login with a dd9.com email',
-    successRedirect: '/auth/gateway',
+    successRedirect: '/',
 });
 
 exports.loginForm = (req, res) => {
@@ -32,9 +29,39 @@ exports.logout = (req, res) => {
 
 exports.isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
-    next();
-    return;
+    return next();
   }
   req.flash('error', 'Oops, you must be logged in to do that');
   res.redirect('/auth/login');
+};
+
+exports.isNotLoggedIn = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return next();
+  }
+  req.flash('info', 'You are already logged in, please logout to access that page');
+  res.redirect('/');
+};
+
+
+exports.isAdmin = (req, res, next) => {
+  const isAdmin = req.user.permissions[0].admin;
+  if (isAdmin) {
+    return next();
+  }
+  req.flash('info', 'Oops, you must be an admin to do that');
+  res.redirect('back');
+};
+
+exports.filter = (req, res) => {
+  if (req.isAuthenticated()) {
+    const isAdmin = req.user.permissions[0].admin;
+    if (isAdmin) {
+      res.redirect('/hourLog/all');
+    } else {
+      res.redirect('/timeEntry/new');
+    }
+  } else {
+    res.redirect('/auth/login');
+  }
 };

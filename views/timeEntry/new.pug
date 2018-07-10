@@ -1,0 +1,29 @@
+extends ../index/layout
+
+block content
+  .container
+    .my-3.p-3.bg-white.rounded.box-shadow
+      h2 New Time Entries
+      table.table-striped
+        thead
+          td Date
+          td Company
+          td Hours
+          td Description
+        if timeEntries
+          each timeEntry in timeEntries
+            tr
+              td test
+              td test
+              td test
+              td test
+              td test
+        if !timeEntries
+          td
+          td
+          td 0
+          td
+          td
+
+    .my-3.p-3.bg-white.rounded.box-shadow
+      h2 Add New Time Entry

@@ -1,0 +1,19 @@
+extends ../index/layout
+
+block content
+  .inner
+    h2 Hour Logs
+    table.table-striped
+      thead
+        td Date
+        td Company
+        td Title
+        td Hours
+        td Hidden
+      each hourLog in hourLogs
+        tr
+          td= hourLog.date
+          td= hourLog.companyId.name
+          td= hourLog.title
+          td test
+          td test

@@ -3,14 +3,5 @@ html {
 }
 
 body {
-  //background-color: #f5f5f5;
-  background-image: url("/images/other/blurred_background_1.jpg");
-}
-
-.inner {
-  max-width:900px;
-  margin: 0 auto;
-  @media all and (max-width: 900px) {
-    padding: 2rem;
-  }
+  background-color: #F8F9FA !important; // bg-light
 }

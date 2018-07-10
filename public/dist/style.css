@@ -6784,14 +6784,7 @@ a.text-dark:hover, a.text-dark:focus {
     border-color: #dee2e6; } }
 
 body {
-  background-image: url("/images/other/blurred_background_1.jpg"); }
-
-.inner {
-  max-width: 900px;
-  margin: 0 auto; }
-  @media all and (max-width: 900px) {
-    .inner {
-      padding: 2rem; } }
+  background-color: #F8F9FA !important; }
 
 html {
   box-sizing: border-box; }
@@ -7267,12 +7260,6 @@ label {
   border-top-left-radius: 0;
   border-top-right-radius: 0; }
 
-.signin-form-btn-color {
-  background: #6B0506; }
-
-.signin-form-btn-color:hover {
-  background: #6B0506; }
-
 @keyframes slideIn {
   0% {
     transform: translateX(-10px); }
@@ -7325,5 +7312,17 @@ label {
     background: linear-gradient(35deg, #f1e767 0%, #feb645 100%); }
   .flash p {
     margin: 0; }
+
+.bg-dd9-solid-red {
+  background-color: #710706; }
+
+.navbar ul li a {
+  color: #fff; }
+
+.navbar ul li a:hover {
+  background-color: #930A07; }
+
+.box-shadow {
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05) !important; }
 
 /*# sourceMappingURL=style.css.map*/

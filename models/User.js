@@ -53,11 +53,11 @@ const userSchema = new Schema({
     type: String,
     default: 'staff'
   },
-  clearanceLevel: {
-    type: Number,
-    default: 0,
-    min: 0,
-    max: 5
+  permissions: {
+    type: Array,
+    default: [{
+      "admin": false
+    }],
   },
   active: {
     type: Boolean,
