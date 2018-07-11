@@ -31,7 +31,7 @@ exports.isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  req.flash('error', 'Oops, you must be logged in to do that');
+  req.flash('danger', 'Oops, you must be logged in to do that');
   res.redirect('/auth/login');
 };
 
@@ -39,8 +39,7 @@ exports.isNotLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     return next();
   }
-  req.flash('info', 'You are already logged in, please logout to access that page');
-  res.redirect('/');
+  res.redirect('/timeEntry/new');
 };
 
 
@@ -49,8 +48,8 @@ exports.isAdmin = (req, res, next) => {
   if (isAdmin) {
     return next();
   }
-  req.flash('info', 'Oops, you must be an admin to do that');
-  res.redirect('back');
+  req.flash('warning', 'Oops, you must be an admin to do that');
+  res.redirect('/timeEntry/new');
 };
 
 exports.filter = (req, res) => {

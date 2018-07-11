@@ -1,37 +1,4 @@
-input, textarea {
-  width:100%;
-  padding:10px;
-  border: 1px solid $grey;
-  &.input {
-    &--error {
-      border-color: red;
-    }
-  }
-}
-
-label {
-  padding: 10px 0;
-  display: block;
-}
-
-.form {
-  background: white;
-  padding: 2rem;
-  box-shadow: $grad;
-  & + .form {
-    margin-top: 4rem;
-  }
-
-  h2 {
-    margin: 0;
-    font-size: 2rem;
-    padding-bottom: 2rem;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid $grey;
-  }
-}
-
-.form-signin-center {
+.form-card {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
@@ -40,32 +7,12 @@ label {
   padding-bottom: 40px;
 }
 
-.form-signin {
+.signin-form {
   width: 100%;
   max-width: 330px;
-  padding: 15px;
   margin: auto;
 }
-.form-signin .checkbox {
-  font-weight: 400;
-}
-.form-signin .form-control {
-  position: relative;
-  box-sizing: border-box;
-  height: auto;
-  padding: 10px;
-  font-size: 16px;
-}
-.form-signin .form-control:focus {
-  z-index: 2;
-}
-.form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+
+.signin-button {
+  margin-top: 24px;
 }
