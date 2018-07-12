@@ -3,19 +3,20 @@ extends ../index/layout
 block content
   .container
     .row
-      .col
-        h2.hour-log-table-title Hour Logs
-    table#hour_log_all.table-sm.table-striped.table-bordered.w-100
+      .col.company-title
+        h2 #{company.name}
+    .row
+      .col.mt-3
+        h4 Hour Logs
+    table#company_one.table-sm.table-bordered.w-100
       thead
         td Date
-        td Company
         td Title
         td Hours
-        td Hidden
+        td Hidden Hours
       each hourLog in hourLogs
         tr
           td= "2018-06-03"
-          td: a(href=`/company/${hourLog.companyId._id}`) #{hourLog.companyId.name}
           td: a(href=`/hourLog/${hourLog._id}`) #{hourLog.title}
           td 46
           td 46

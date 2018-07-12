@@ -7248,6 +7248,37 @@ footer {
   max-width: 90%;
   max-height: 90%; }
 
+#user_all.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+  background-color: #E2E5FE; }
+
+#hour_log_all_paginate {
+  display: none; }
+
+#hour_log_all {
+  font-size: 14px; }
+
+#hour_log_all.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+  background-color: #E2E5FE; }
+
+.dataTables_filter label {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -ms-flex-pack: right;
+      justify-content: right;
+  -ms-flex-align: center;
+      align-items: center;
+  margin-bottom: 0;
+  margin-right: 21px; }
+
+.hour-log-table-title {
+  position: absolute;
+  left: 20px; }
+
+.hour_log_all_table {
+  margin-top: 20px; }
+
 .box-shadow {
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05) !important; }
 

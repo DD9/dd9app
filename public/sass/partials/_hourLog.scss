@@ -1,0 +1,29 @@
+#hour_log_all_paginate {
+  display: none;
+}
+
+#hour_log_all {
+  font-size: 14px;
+}
+
+#hour_log_all.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+  background-color: #E2E5FE;
+}
+
+.dataTables_filter label {
+  display:flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  margin-bottom: 0;
+  margin-right: 21px;
+}
+
+.hour-log-table-title {
+  position: absolute;
+  left: 20px;
+}
+
+.hour_log_all_table {
+  margin-top: 20px;
+}

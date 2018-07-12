@@ -4,14 +4,14 @@ block content
   .container
     .row
       .col
-        h2.hour-log-table-title Hour Logs
+        h2.user-table-title Users
     table#hour_log_all.table-sm.table-striped.table-bordered.w-100
       thead
-        td Date
+        td Name
+        td Email
         td Company
-        td Title
-        td Hours
-        td Hidden
+        td Last Login
+        td Subscription
       each hourLog in hourLogs
         tr
           td= "2018-06-03"
