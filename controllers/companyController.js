@@ -5,7 +5,6 @@ const HourLog = mongoose.model('HourLog');
 exports.getCompanyById = async (req, res) => {
   const companyId = req.params.id;
   const company = await Company.findOne({ _id: companyId });
-  const hourLogs = await HourLog.find({ companyId : companyId });
-  console.log(hourLogs)
+  const hourLogs = await HourLog.find({ company : companyId });
   res.render("company/one", { title: company.name, company: company, hourLogs: hourLogs});
 };

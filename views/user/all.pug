@@ -1,6 +1,7 @@
 extends ../index/layout
 
 block content
+  pre= h.dump(hourLogs)
   .container
     .row
       .col
@@ -15,7 +16,7 @@ block content
       each hourLog in hourLogs
         tr
           td= "2018-06-03"
-          td: a(href=`/company/${hourLog.companyId._id}`) #{hourLog.companyId.name}
+          td: a(href=`/company/${hourLog.company._id}`) #{hourLog.company.name}
           td: a(href=`/hourLog/${hourLog._id}`) #{hourLog.title}
           td 46
           td 46

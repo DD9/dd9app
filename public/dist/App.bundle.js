@@ -30594,9 +30594,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   "bInfo": false,
   scrollY: 700,
   scroller: true,
-  select: true,
   language: { sSearch: "", searchPlaceholder: "Search..." },
-  "columnDefs": [{ "width": "15%", "targets": 0 }, { "width": "35%", "targets": 0 }, { "width": "30%", "targets": 0 }, { "width": "10%", "targets": 0 }, { "width": "10%", "targets": 0 }]
+  "columns": [{ "width": "15%" }, { "width": "35%" }, { "width": "35%" }, { "width": "7.5%" }, { "width": "7.5%" }]
 });
 
 /***/ }),

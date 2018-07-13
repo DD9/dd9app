@@ -1,0 +1,10 @@
+// Global table styling
+
+.dataTables_filter label {
+  display:flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  margin-bottom: 0;
+  margin-right: 21px;
+}

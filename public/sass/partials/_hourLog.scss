@@ -6,19 +6,6 @@
   font-size: 14px;
 }
 
-#hour_log_all.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-  background-color: #E2E5FE;
-}
-
-.dataTables_filter label {
-  display:flex;
-  flex-direction: row;
-  justify-content: right;
-  align-items: center;
-  margin-bottom: 0;
-  margin-right: 21px;
-}
-
 .hour-log-table-title {
   position: absolute;
   left: 20px;
@@ -26,4 +13,21 @@
 
 .hour_log_all_table {
   margin-top: 20px;
+}
+
+// Fixing misaligned table headers, see table row width %'s in hourLogAll.js
+.hour_log_all_th_date {
+  width: 15% !important;
+}
+.hour_log_all_th_company {
+  width: 35% !important;
+}
+.hour_log_all_th_title {
+  width: 35% !important;
+}
+.hour_log_all_th_hours {
+  width: 7.5% !important;
+}
+.hour_log_all_th_hidden {
+  width: 7.5% !important;
 }

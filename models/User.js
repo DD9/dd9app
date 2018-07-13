@@ -18,7 +18,7 @@ const userSchema = new Schema({
   _id: {
     type: mongoose.Schema.ObjectId
   },
-  companyId: {
+  company: {
     type: mongoose.Schema.ObjectId,
     ref: 'Company'
   },
