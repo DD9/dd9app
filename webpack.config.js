@@ -41,6 +41,11 @@ const styles = {
   use: ExtractTextPlugin.extract(['css-loader?sourceMap', postcss, 'sass-loader?sourceMap'])
 };
 
+// Used for loading fonts
+const fontLoader = {
+  test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000'
+};
+
 // We can also use plugins - this one will compress the crap out of our JS
 const uglify = new webpack.optimize.UglifyJsPlugin({ // eslint-disable-line
   compress: { warnings: false }

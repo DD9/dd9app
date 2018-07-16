@@ -2,18 +2,21 @@ extends ../index/layout
 
 block content
   .container
-    h2 Hour Logs
-    table.table-striped
+    .row
+      .col
+        h2.hour-log-table-title Hour Logs
+    table#hour_log_all.table-sm.table-bordered.table-striped.table-hover.w-100
       thead
-        td Date
-        td Company
-        td Title
-        td Hours
-        td Hidden
-      each hourLog in hourLogs
-        tr
-          td= hourLog.date
-          td= hourLog.companyId.name
-          td= hourLog.title
-          td test
-          td test
+        th.hour_log_all_th_date.sorting Date
+        th.hour_log_all_th_company Company
+        th.hour_log_all_th_title Title
+        th.hour_log_all_th_hours Hours
+        th.hour_log_all_th_hidden Hidden
+      tbody
+        each hourLog in hourLogs
+          tr
+            td= h.YYYYMMDD(hourLog.date)
+            td: a(href=`/company/${hourLog.company._id}`) #{hourLog.company.name}
+            td: a(href=`/hourLog/${hourLog._id}`) #{hourLog.title}
+            td 46
+            td 46

@@ -1,10 +1,16 @@
+@import 'variables';
+
 @import "~bootstrap/scss/bootstrap";
 
-@import 'partials/variables';
 @import 'partials/normalize';
 @import 'partials/layout';
 @import 'partials/forms';
 @import 'partials/flashes';
 @import 'partials/header';
 @import 'partials/footer';
+@import 'partials/datatables';
+@import 'partials/user';
+@import 'partials/company';
+@import 'partials/hourLog';
 @import 'partials/custom';
+

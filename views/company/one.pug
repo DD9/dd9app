@@ -1,0 +1,22 @@
+extends ../index/layout
+
+block content
+  .container
+    .row
+      .col.company-title
+        h2 #{company.name}
+    .row
+      .col.mt-3
+        h4 Hour Logs
+    table#company_one.table-sm.table-bordered.w-100
+      thead
+        td Date
+        td Title
+        td Hours
+        td Hidden Hours
+      each hourLog in hourLogs
+        tr
+          td= "2018-06-03"
+          td: a(href=`/hourLog/${hourLog._id}`) #{hourLog.title}
+          td 46
+          td 46

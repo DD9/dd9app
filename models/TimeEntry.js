@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+  const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise; // Prevent false positives from mongoose promise library deprication
 
@@ -16,15 +16,15 @@ const timeEntrySchema = new Schema({
   _id: {
     type: mongoose.Schema.ObjectId
   },
-  userId: {
+  user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User'
   },
-  companyId: {
+  company: {
     type: mongoose.Schema.ObjectId,
     ref: 'Company'
   },
-  hourLogId: {
+  hourLog: {
     type: mongoose.Schema.ObjectId,
     ref: 'HourLog'
   },
@@ -37,11 +37,11 @@ const timeEntrySchema = new Schema({
   status: {
     type: String
   },
-  publicUserId: {
+  publicUser: {
     type: mongoose.Schema.ObjectId,
     ref: 'User'
   },
-  publicCompanyId: {
+  publicCompany: {
     type: mongoose.Schema.ObjectId,
     ref: 'Company'
   },
