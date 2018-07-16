@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import 'datatables.net-bs4';
-import 'datatables.net-scroller-bs4';
+import 'datatables.net';
+import 'datatables.net-scroller';
 
 $('#user_all').dataTable( {
   "dom": "<'row'<'col'><'col hour_log_all_filter'f>>" +

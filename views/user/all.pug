@@ -6,7 +6,7 @@ block content
     .row
       .col
         h2.user-table-title Users
-    table#hour_log_all.table-sm.table-striped.table-bordered.w-100
+    table#user_all.table-xl.table-striped.table-bordered.w-100
       thead
         td Name
         td Email
@@ -18,5 +18,5 @@ block content
           td= "2018-06-03"
           td: a(href=`/company/${hourLog.company._id}`) #{hourLog.company.name}
           td: a(href=`/hourLog/${hourLog._id}`) #{hourLog.title}
-          td 46
-          td 46
+          td hourLog.publicHours
+          td hourLog.
