@@ -3,5 +3,5 @@ const TimeEntry = mongoose.model('TimeEntry');
 
 exports.new = async (req, res) => {
   const timeEntries = true;
-  res.render("timeEntry/new", { title: "New", timeEntries: timeEntries });
+  res.render("timeEntries/new", { title: "New", timeEntries: timeEntries });
 };

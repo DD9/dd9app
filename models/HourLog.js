@@ -8,20 +8,37 @@ const hourLogSchema = new Schema({
     default: Date.now
   },
   updatedAt: {
-    type: Date
+    type: Date,
+    default: Date.now
   },
-  date: {
+  dateOpened: {
+    type: Date,
+    default: Date.now
+  },
+  dateClosed: {
     type: Date
   },
   _id: {
-    type: mongoose.Schema.ObjectId
+    type: mongoose.Schema.ObjectId,
+    auto: true
   },
   company: {
     type: mongoose.Schema.ObjectId,
     ref: 'Company'
   },
+  timeEntries: [{
+    type: mongoose.Schema.ObjectId,
+    ref: 'TimeEntry',
+  }],
   title: {
-    type: String
+    type: String,
+    default: "Current"
+  },
+  totalPublicHours: {
+    type: Number,
+  },
+  totalHiddenHours: {
+    type: Number,
   }
 });
 

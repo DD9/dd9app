@@ -10,14 +10,16 @@
     "watch": "nodemon ./start.js --ignore public/",
     "dev": "concurrently \"npm run watch\" \"npm run assets\" --names \"nodeApp,webpack\" --prefix name",
     "assets": "webpack -w --display-max-modules 0",
+    "drop-data": "node ./v1_psql_import_scripts/load-data.js --delete",
     "load-data": "node ./v1_psql_import_scripts/load-data.js",
-    "drop-data": "node ./v1_psql_import_scripts/load-data.js --delete"
+    "test-data": "node ./v1_psql_import_scripts/load-data.js --test"
   },
   "browserslist": "last 3 versions",
   "dependencies": {
     "axios": "0.15.3",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.1.1",
+    "cli-progress": "^2.0.0",
     "connect-flash": "0.1.1",
     "connect-mongo": "1.3.2",
     "cookie-parser": "1.4.3",

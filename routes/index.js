@@ -16,10 +16,10 @@ router.get('/auth/google/callback', authController.googleAuthRedirect);
 
 router.get('/users', authController.isLoggedIn, authController.isAdmin, catchErrors(userController.users));
 
-router.get('/company/:id', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.getCompanyById));
+router.get('/companies/:id', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.getCompanyById));
 
-router.get('/hourLog/all', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.all));
+router.get('/hourLogs/all', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.all));
 
-router.get('/timeEntry/new', authController.isLoggedIn, catchErrors(timeEntryController.new));
+router.get('/timeEntries/new', authController.isLoggedIn, catchErrors(timeEntryController.new));
 
 module.exports = router;

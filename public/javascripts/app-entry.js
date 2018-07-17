@@ -1,3 +1,3 @@
 import 'bootstrap';
 import '../sass/style.scss';
-import './modules/hourLog/hourLogAll'
+import './modules/hourLogs/all'

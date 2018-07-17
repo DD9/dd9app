@@ -13,9 +13,10 @@ $('#hour_log_all').dataTable({
   scroller: true,
   language: {sSearch: "", searchPlaceholder: "Search..."},
   "columns": [
-    {"width": "15%"},
-    {"width": "35%"},
-    {"width": "35%"},
+    {"width": "12.5%"},
+    {"width": "12.5%"},
+    {"width": "30%"},
+    {"width": "30%"},
     {"width": "7.5%"},
     {"width": "7.5%"}
   ]
