@@ -7290,6 +7290,10 @@ footer {
 .company-all-th-status {
   width: 50% !important; }
 
+.edit-company-btn {
+  margin-left: 20px;
+  margin-bottom: 10px; }
+
 .hour-log-all-table-paginate {
   display: none; }
 

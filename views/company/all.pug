@@ -12,11 +12,11 @@ block content
             td.companyName: a(href=`/company/${company._id}`) #{company.name}
             td= company.active ? "Active" : "Deactivated"
 
-  #addCompanyModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+  #addCompanyModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='addCompanyModal', aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
         .modal-header
-          h5.modal-title Add Company
+          h5.modal-title New Company
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
         .modal-body
@@ -27,4 +27,4 @@ block content
               .invalid-feedback Invalid form.
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-          button.btn.btn-primary(type='submit' form ='createCompanyForm') Create Company
+          button.btn.btn-primary(type='submit' form='createCompanyForm') Submit
