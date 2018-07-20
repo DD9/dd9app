@@ -18,6 +18,7 @@ router.get('/users', authController.isLoggedIn, authController.isAdmin, catchErr
 
 router.get('/companies/all', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.all));
 router.get('/companies/:id', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.getById));
+router.post('/companies/create', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.create));
 
 router.get('/hourLogs/all', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.all));
 

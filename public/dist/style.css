@@ -7225,7 +7225,8 @@ body {
       align-items: center;
   top: 63px;
   left: 2%;
-  width: 96%; }
+  width: 96%;
+  z-index: 1000; }
 
 .bg-dd9-solid-red {
   background-color: #710706; }
@@ -7263,19 +7264,22 @@ footer {
 #user_all.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
   background-color: #E2E5FE; }
 
-#company-all-table-paginate {
+.company-all-table-paginate {
   display: none; }
 
 .company-all-table-title {
   margin-left: 14px; }
 
+.company-all-table-title h3 {
+  display: inline; }
+
+.add-company-btn {
+  margin-left: 20px;
+  margin-bottom: 10px; }
+
 .company-all-table {
   font-size: 14px;
   margin-top: 10px; }
-
-.add-company-btn {
-  margin-left: 180px;
-  margin-bottom: 12px; }
 
 .company-all-th-name {
   width: 50% !important; }

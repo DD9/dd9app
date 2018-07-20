@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'datatables.net-bs4';
 import 'datatables.net-scroller-bs4';
 
-$('#hour_log_all_table').dataTable({
+$('#hourLogAllTable').dataTable({
   "dom": "<'row'<'col hour-log-all-table-title'><'col hour-log-all-table-filter'f>>" +
   "<'row'<'col-sm-12 hour-log-all-table'tr>>" +
   "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 hour-log-all-table-paginate'p>>",

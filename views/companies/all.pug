@@ -2,12 +2,29 @@ extends ../index/layout
 
 block content
   .container
-    table#company_all_table.table-sm.table-bordered.table-striped.table-hover.w-100
+    table#companyAllTable.table-sm.table-bordered.table-striped.table-hover.w-100
       thead
         th.company-all-th-name Name
         th.company-all-th-empty Status
       tbody
         each company in companies
           tr
-            td: a(href=`/companies/${company._id}`) #{company.name}
+            td.companyName: a(href=`/companies/${company._id}`) #{company.name}
             td= company.active ? "Active" : "Deactivated"
+
+  #addCompanyModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Add Company
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#createCompanyForm.form(action="/companies/create" method="POST" novalidate)
+            .form-group
+              label.col-form-label(for='companyName') Name
+              input#companyName.form-control(name='name' type='text' required maxlength="50")
+              .invalid-feedback Dynamic validation, see /companies/all.js
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button.btn.btn-primary(type='submit' form ='createCompanyForm') Create Company

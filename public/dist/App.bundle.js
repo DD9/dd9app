@@ -31926,7 +31926,10 @@ __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _jquery2.default)('#company_all_table').dataTable({
+var companyAllTable = (0, _jquery2.default)('#companyAllTable');
+var companyNames = [];
+
+companyAllTable.dataTable({
   "dom": "<'row'<'col company-all-table-title'><'col company-all-table-filter'f>>" + "<'row'<'col-sm-12 company-all-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 company-all-table-paginate'p>>",
   "bFilter": true,
   "bLengthChange": false,
@@ -31938,7 +31941,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   "columns": [{ "width": "50%" }, { "width": "50%" }]
 });
 
-(0, _jquery2.default)(".company-all-table-title").html('<h3>Companies</h3>' + '<button class="add-company-btn btn btn-primary" type="button">Add Company</button>');
+(0, _jquery2.default)(".company-all-table-title").html('<h3>Companies</h3>' + '<button type="button" id="add_company_modal_btn" class="add-company-btn btn btn-primary" data-toggle="modal" data-target="#addCompanyModal">Add Company</button>');
+
+companyAllTable.find('.companyName a').each(function () {
+  companyNames.push(this.innerHTML);
+});
+
+(0, _jquery2.default)('#createCompanyForm').on('submit', function (e) {
+  var companyName = (0, _jquery2.default)('#companyName');
+
+  if (!companyName.val()) {
+    (0, _jquery2.default)("#createCompanyForm").find(".invalid-feedback").html("Company Name required.");
+    companyName.addClass("is-invalid");
+    e.preventDefault();
+  } else if (companyNames.includes(companyName.val())) {
+    (0, _jquery2.default)("#createCompanyForm").find(".invalid-feedback").html("Company Name must be unique.");
+    companyName.addClass("is-invalid");
+    e.preventDefault();
+  } else {
+    companyName.removeClass("is-invalid");
+  }
+});
 
 /***/ }),
 /* 8 */
@@ -31957,7 +31980,7 @@ __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _jquery2.default)('#hour_log_all_table').dataTable({
+(0, _jquery2.default)('#hourLogAllTable').dataTable({
   "dom": "<'row'<'col hour-log-all-table-title'><'col hour-log-all-table-filter'f>>" + "<'row'<'col-sm-12 hour-log-all-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 hour-log-all-table-paginate'p>>",
   "bFilter": true,
   "bLengthChange": false,

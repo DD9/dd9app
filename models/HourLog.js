@@ -3,14 +3,6 @@ const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise; // Prevent false positives from mongoose promise library deprication
 
 const hourLogSchema = new Schema({
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
-  },
   dateOpened: {
     type: Date,
     default: Date.now
@@ -39,12 +31,15 @@ const hourLogSchema = new Schema({
   },
   totalHiddenHours: {
     type: Number,
+  },
+  memo: {
+    type: String,
+    default: ''
   }
-});
-
-hourLogSchema.pre('save', function(next) {
-  this.updatedAt = Date.now;
-  next();
-});
+},
+  {
+    timestamps: true
+  }
+);
 
 module.exports = mongoose.model('HourLog', hourLogSchema);

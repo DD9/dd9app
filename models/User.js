@@ -8,15 +8,9 @@ const mongooseErrorHanlder = require('mongoose-mongodb-errors');
 const findOrCreate = require('mongoose-findorcreate');
 
 const userSchema = new Schema({
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date
-  },
   _id: {
-    type: mongoose.Schema.ObjectId
+    type: mongoose.Schema.ObjectId,
+    auto: true
   },
   company: {
     type: mongoose.Schema.ObjectId,
@@ -68,9 +62,14 @@ const userSchema = new Schema({
     default: 'none'
   },
   memo: {
-    type: String
+    type: String,
+    default: ''
   }
-});
+},
+  {
+    timestamps: true
+  }
+);
 
 // Rather than storing all the data, we can generate it on the fly
 userSchema.virtual('gravatar').get(function() {
