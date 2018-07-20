@@ -9,7 +9,7 @@ block content
       tbody
         each company in companies
           tr
-            td.companyName: a(href=`/companies/${company._id}`) #{company.name}
+            td.companyName: a(href=`/company/${company._id}`) #{company.name}
             td= company.active ? "Active" : "Deactivated"
 
   #addCompanyModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
@@ -24,7 +24,7 @@ block content
             .form-group
               label.col-form-label(for='companyName') Name
               input#companyName.form-control(name='name' type='text' required maxlength="50")
-              .invalid-feedback Dynamic validation, see /companies/all.js
+              .invalid-feedback Invalid form.
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
           button.btn.btn-primary(type='submit' form ='createCompanyForm') Create Company

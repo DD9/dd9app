@@ -31944,22 +31944,25 @@ companyAllTable.dataTable({
 (0, _jquery2.default)(".company-all-table-title").html('<h3>Companies</h3>' + '<button type="button" id="add_company_modal_btn" class="add-company-btn btn btn-primary" data-toggle="modal" data-target="#addCompanyModal">Add Company</button>');
 
 companyAllTable.find('.companyName a').each(function () {
-  companyNames.push(this.innerHTML);
+  companyNames.push(this.innerHTML.toLowerCase().trim());
 });
 
-(0, _jquery2.default)('#createCompanyForm').on('submit', function (e) {
-  var companyName = (0, _jquery2.default)('#companyName');
+console.log(companyNames);
 
-  if (!companyName.val()) {
+(0, _jquery2.default)('#createCompanyForm').on('submit', function (e) {
+  var companyNameInputField = (0, _jquery2.default)('#companyName');
+  var companyNameInputValue = companyNameInputField.val().toLowerCase().trim();
+
+  if (!companyNameInputValue) {
     (0, _jquery2.default)("#createCompanyForm").find(".invalid-feedback").html("Company Name required.");
-    companyName.addClass("is-invalid");
+    companyNameInputField.addClass("is-invalid");
     e.preventDefault();
-  } else if (companyNames.includes(companyName.val())) {
+  } else if (companyNames.includes(companyNameInputValue)) {
     (0, _jquery2.default)("#createCompanyForm").find(".invalid-feedback").html("Company Name must be unique.");
-    companyName.addClass("is-invalid");
+    companyNameInputField.addClass("is-invalid");
     e.preventDefault();
   } else {
-    companyName.removeClass("is-invalid");
+    companyNameInputField.removeClass("is-invalid");
   }
 });
 

@@ -3,13 +3,13 @@
     ul.nav
       if user.permissions[0].admin
         li.nav-item
-          a.nav-link(href='/users/all') Users
+          a.nav-link(href='/user/all') Users
         li.nav-item
-          a.nav-link(href='/companies/all') Companies
+          a.nav-link(href='/company/all') Companies
         li.nav-item
-          a.nav-link(href='/hourLogs/all') Hour Logs
+          a.nav-link(href='/hourLog/all') Hour Logs
       li.nav-item
-        a.nav-link(href='/timeEntries/new') Time Entries
+        a.nav-link(href='/timeEntry/new') Time Entries
     ul.nav.justify-content-end
       li.nav-item
         a.nav-link.text-white(href='/') #{user.email}

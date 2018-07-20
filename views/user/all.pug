@@ -5,7 +5,6 @@ block content
     .row
       .col
         h2.user-table-title Users
-
     table#userAllTable.table-xl.table-striped.table-bordered.w-100
       thead
         td Name
@@ -13,10 +12,12 @@ block content
         td Company
         td Last Login
         td Subscription
-      each hourLog in hourLogs
+        td
+      each user in users
         tr
-          td= "2018-06-03"
-          td: a(href=`/company/${hourLog.company._id}`) #{hourLog.company.name}
-          td: a(href=`/hourLog/${hourLog._id}`) #{hourLog.title}
-          td hourLog.publicHours
-          td hourLog.
+          td= `${user.firstName} ${user.lastName}`
+          td= user.email
+          td: a(href=`/company/${user.company._id}`) #{user.company.name}
+          td= user.lastSignInAt
+          td= user.hourLogEmail
+          td

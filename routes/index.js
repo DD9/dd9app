@@ -14,14 +14,14 @@ router.get('/auth/logout', authController.logout);
 router.get('/auth/google', authController.googleAuth);
 router.get('/auth/google/callback', authController.googleAuthRedirect);
 
-router.get('/users', authController.isLoggedIn, authController.isAdmin, catchErrors(userController.users));
+router.get('/user/all', authController.isLoggedIn, authController.isAdmin, catchErrors(userController.all));
 
-router.get('/companies/all', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.all));
-router.get('/companies/:id', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.getById));
-router.post('/companies/create', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.create));
+router.get('/company/all', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.all));
+router.get('/company/:id', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.getById));
+router.post('/company/create', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.create));
 
-router.get('/hourLogs/all', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.all));
+router.get('/hourLog/all', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.all));
 
-router.get('/timeEntries/new', authController.isLoggedIn, catchErrors(timeEntryController.new));
+router.get('/timeEntry/new', authController.isLoggedIn, catchErrors(timeEntryController.new));
 
 module.exports = router;

@@ -40,7 +40,7 @@ exports.isNotLoggedIn = (req, res, next) => {
     return next();
   }
   req.flash('warning', 'You are already logged in');
-  res.redirect('/timeEntries/new');
+  res.redirect('/timeEntry/new');
 };
 
 
@@ -50,16 +50,16 @@ exports.isAdmin = (req, res, next) => {
     return next();
   }
   req.flash('warning', 'Oops, you must be an admin to do that');
-  res.redirect('/timeEntries/new');
+  res.redirect('/timeEntry/new');
 };
 
 exports.filter = (req, res) => {
   if (req.isAuthenticated()) {
     const isAdmin = req.user.permissions[0].admin;
     if (isAdmin) {
-      res.redirect('/hourLogs/all');
+      res.redirect('/hourLog/all');
     } else {
-      res.redirect('/timeEntries/new');
+      res.redirect('/timeEntry/new');
     }
   } else {
     res.redirect('/auth/login');

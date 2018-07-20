@@ -28,21 +28,24 @@ $(".company-all-table-title").html(
 );
 
 companyAllTable.find('.companyName a').each(function() {
-  companyNames.push(this.innerHTML);
+  companyNames.push(this.innerHTML.toLowerCase().trim());
 });
 
-$('#createCompanyForm').on('submit', function(e) {
-  let companyName = $('#companyName');
+console.log(companyNames);
 
-  if(!companyName.val()) {
+$('#createCompanyForm').on('submit', function(e) {
+  const companyNameInputField = $('#companyName');
+  const companyNameInputValue = companyNameInputField.val().toLowerCase().trim();
+
+  if(!companyNameInputValue) {
     $("#createCompanyForm").find(".invalid-feedback").html("Company Name required.");
-    companyName.addClass("is-invalid");
+    companyNameInputField.addClass("is-invalid");
     e.preventDefault();
-  } else if(companyNames.includes(companyName.val())) {
+  } else if(companyNames.includes(companyNameInputValue)) {
     $("#createCompanyForm").find(".invalid-feedback").html("Company Name must be unique.");
-    companyName.addClass("is-invalid");
+    companyNameInputField.addClass("is-invalid");
     e.preventDefault();
   } else {
-    companyName.removeClass("is-invalid");
+    companyNameInputField.removeClass("is-invalid");
   }
 });

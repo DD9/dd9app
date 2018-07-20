@@ -9,7 +9,7 @@ const companySchema = new Schema({
   },
   name: {
     type: String,
-    required: 'Server Side Validation: Please supply a company name',
+    required: 'Please supply a company name',
     maxlength: 50
   },
   active: {
