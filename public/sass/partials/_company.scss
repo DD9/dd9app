@@ -1,1 +1,25 @@
-// Styling for the company page
+#company-all-table-paginate {
+  display: none;
+}
+
+.company-all-table-title {
+  margin-left: 14px;
+}
+
+.company-all-table {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+//.add-company-btn {
+//  margin-left: 180px;
+//  margin-bottom: 12px;
+//}
+
+// Fixing misaligned table headers, see table row width %'s in companyAll.js
+.company-all-th-name {
+  width: 50% !important;
+}
+.company-all-th-status {
+  width: 50% !important;
+}

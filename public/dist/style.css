@@ -7263,35 +7263,52 @@ footer {
 #user_all.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
   background-color: #E2E5FE; }
 
-#hour_log_all_paginate {
+#company-all-table-paginate {
   display: none; }
 
-#hour_log_all {
-  font-size: 14px; }
+.company-all-table-title {
+  margin-left: 14px; }
 
-.hour-log-table-title {
-  position: absolute;
-  left: 20px; }
+.company-all-table {
+  font-size: 14px;
+  margin-top: 10px; }
 
-.hour_log_all_table {
-  margin-top: 20px; }
+.add-company-btn {
+  margin-left: 180px;
+  margin-bottom: 12px; }
 
-.hour_log_all_th_date_opened {
+.company-all-th-name {
+  width: 50% !important; }
+
+.company-all-th-status {
+  width: 50% !important; }
+
+.hour-log-all-table-paginate {
+  display: none; }
+
+.hour-log-all-table-title {
+  margin-left: 14px; }
+
+.hour-log-all-table {
+  font-size: 14px;
+  margin-top: 10px; }
+
+.hour-log-all-th-date-opened {
   width: 12.5% !important; }
 
-.hour_log_all_th_date_closed {
+.hour-log-all-th-date-closed {
   width: 12.5% !important; }
 
-.hour_log_all_th_company {
+.hour-log-all-th-company {
   width: 30% !important; }
 
-.hour_log_all_th_title {
+.hour-log-all-th-title {
   width: 30% !important; }
 
-.hour_log_all_th_total_public_hours {
+.hour-log-all-th-total-public-hours {
   width: 7.5% !important; }
 
-.hour_log_all_th_total_hidden_hours {
+.hour-log-all-th-total-hidden-hours {
   width: 7.5% !important; }
 
 .box-shadow {

@@ -1,0 +1,13 @@
+extends ../index/layout
+
+block content
+  .container
+    table#company_all_table.table-sm.table-bordered.table-striped.table-hover.w-100
+      thead
+        th.company-all-th-name Name
+        th.company-all-th-empty Status
+      tbody
+        each company in companies
+          tr
+            td: a(href=`/companies/${company._id}`) #{company.name}
+            td= company.active ? "Active" : "Deactivated"

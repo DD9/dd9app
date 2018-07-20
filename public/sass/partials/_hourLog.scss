@@ -1,36 +1,32 @@
-#hour_log_all_paginate {
+.hour-log-all-table-paginate {
   display: none;
 }
 
-#hour_log_all {
+.hour-log-all-table-title {
+  margin-left: 14px;
+}
+
+.hour-log-all-table {
   font-size: 14px;
-}
-
-.hour-log-table-title {
-  position: absolute;
-  left: 20px;
-}
-
-.hour_log_all_table {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 // Fixing misaligned table headers, see table row width %'s in hourLogAll.js
-.hour_log_all_th_date_opened {
+.hour-log-all-th-date-opened {
   width: 12.5% !important;
 }
-.hour_log_all_th_date_closed {
+.hour-log-all-th-date-closed {
   width: 12.5% !important;
 }
-.hour_log_all_th_company {
+.hour-log-all-th-company {
   width: 30% !important;
 }
-.hour_log_all_th_title {
+.hour-log-all-th-title {
   width: 30% !important;
 }
-.hour_log_all_th_total_public_hours {
+.hour-log-all-th-total-public-hours {
   width: 7.5% !important;
 }
-.hour_log_all_th_total_hidden_hours {
+.hour-log-all-th-total-hidden-hours {
   width: 7.5% !important;
 }

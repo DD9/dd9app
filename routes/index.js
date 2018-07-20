@@ -16,7 +16,8 @@ router.get('/auth/google/callback', authController.googleAuthRedirect);
 
 router.get('/users', authController.isLoggedIn, authController.isAdmin, catchErrors(userController.users));
 
-router.get('/companies/:id', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.getCompanyById));
+router.get('/companies/all', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.all));
+router.get('/companies/:id', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.getById));
 
 router.get('/hourLogs/all', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.all));
 
