@@ -11,14 +11,15 @@ if (major < 7 || (major === 7 && minor <= 5)) {
 require('dotenv').config({ path: 'variables.env' });
 
 // Connect to our Database and handle any bad connections
-mongoose.connect(process.env.DATABASE); // Mongoose is MongoDB -> JS middleware
-mongoose.Promise = global.Promise; // Tell Mongoose to use ES6 promises when returning data
-mongoose.connection.on('error', (err) => {
-  console.error(`${err.message}`);
+const promise = mongoose.connect(process.env.DATABASE, { // Mongoose is MongoDB -> JS middleware
+  useNewUrlParser: true,
+  keepAlive: true,
+  reconnectTries: 30,
 });
 
 // Import MongoDB models
 require('./models/User');
+require('./models/Contact');
 require('./models/Company');
 require('./models/HourLog');
 require('./models/TimeEntry');

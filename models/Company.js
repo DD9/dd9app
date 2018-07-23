@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-mongoose.Promise = global.Promise; // Prevent false positives from mongoose promise library deprication
 
 const companySchema = new Schema({
   _id: {
@@ -25,7 +24,6 @@ const companySchema = new Schema({
     timestamps: true
   }
 );
-
 
 // Unique index on company names to server side validate duplicate company names
 companySchema.index(

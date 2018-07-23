@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-mongoose.Promise = global.Promise; // Prevent false positives from mongoose promise library deprication
 const md5 = require('md5');
 const validator = require('validator');
 const passportLocalMongoose = require('passport-local-mongoose');
@@ -79,9 +78,9 @@ userSchema.virtual('gravatar').get(function() {
 
 // Compound index as text
 userSchema.index({
-  email: 'text',
-  firstName: 'text',
-  lastName: 'text'
+  email: 1,
+  firstName: 1,
+  lastName: 1
 });
 
 // Serialize and deserialize sessions

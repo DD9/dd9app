@@ -19,6 +19,10 @@ router.get('/user/all', authController.isLoggedIn, authController.isAdmin, catch
 router.get('/company/all', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.all));
 router.get('/company/:id', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.getById));
 router.post('/company/create', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.create));
+router.post('/company/:id/edit', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.edit));
+router.post('/company/:id/activate', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.activate));
+router.post('/company/:id/deactivate', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.deactivate));
+router.post('/company/:id/delete', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.delete));
 
 router.get('/hourLog/all', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.all));
 

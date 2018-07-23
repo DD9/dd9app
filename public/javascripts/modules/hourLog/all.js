@@ -1,7 +1,7 @@
-import $ from 'jquery';
 import 'datatables.net-bs4';
 import 'datatables.net-scroller-bs4';
 
+// Datatables and table title
 $('#hourLogAllTable').dataTable({
   "dom": "<'row'<'col hour-log-all-table-title'><'col hour-log-all-table-filter'f>>" +
   "<'row'<'col-sm-12 hour-log-all-table'tr>>" +
@@ -9,7 +9,7 @@ $('#hourLogAllTable').dataTable({
   "bFilter": true,
   "bLengthChange": false,
   "bInfo": false,
-  "aaSorting": [[0,'desc'], [2,'asc']],
+  "aaSorting": [[0,'desc'], [2,'asc'], [3,'asc']],
   scrollY: 700,
   scroller: true,
   language: {sSearch: "", searchPlaceholder: "Search..."},

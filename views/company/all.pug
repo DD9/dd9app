@@ -12,7 +12,7 @@ block content
             td.companyName: a(href=`/company/${company._id}`) #{company.name}
             td= company.active ? "Active" : "Deactivated"
 
-  #addCompanyModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='addCompanyModal', aria-hidden='true')
+  #createCompanyModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='createCompanyModal', aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
         .modal-header
@@ -20,7 +20,7 @@ block content
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
         .modal-body
-          form#createCompanyForm.form(action="/companies/create" method="POST" novalidate)
+          form#createCompanyForm.form(action="/company/create" method="POST" novalidate)
             .form-group
               label.col-form-label(for='companyName') Name
               input#companyName.form-control(name='name' type='text' required maxlength="50")

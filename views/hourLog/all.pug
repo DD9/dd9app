@@ -16,6 +16,10 @@ block content
             td= h.YYYYMMDD(hourLog.dateOpened)
             td= hourLog.dateClosed ? h.YYYYMMDD(hourLog.dateClosed) : ''
             td: a(href=`/company/${hourLog.company._id}`) #{hourLog.company.name}
-            td: a(href=`/hourLog/${hourLog._id}`) #{hourLog.title}
+            td: a(href=`/hourLog/${hourLog._id}`)
+              if hourLog.hasSubmittedEntries
+                | <b>#{hourLog.title}*</b>
+              else
+                | #{hourLog.title}
             td= hourLog.totalPublicHours
             td= hourLog.totalHiddenHours

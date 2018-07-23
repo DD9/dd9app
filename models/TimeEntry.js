@@ -1,6 +1,5 @@
-  const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-mongoose.Promise = global.Promise; // Prevent false positives from mongoose promise library deprication
 
 const timeEntrySchema = new Schema({
   date: {

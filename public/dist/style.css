@@ -7271,14 +7271,14 @@ footer {
   display: none; }
 
 .company-all-table-title {
-  margin-left: 14px; }
+  margin-left: 10px; }
 
 .company-all-table-title h3 {
   display: inline; }
 
-.add-company-btn {
+.create-company-btn {
   margin-left: 20px;
-  margin-bottom: 10px; }
+  margin-bottom: 12px; }
 
 .company-all-table {
   font-size: 14px;
@@ -7290,15 +7290,15 @@ footer {
 .company-all-th-status {
   width: 50% !important; }
 
-.edit-company-btn {
+.company-title-btn {
   margin-left: 20px;
-  margin-bottom: 10px; }
+  margin-bottom: 12px; }
 
 .hour-log-all-table-paginate {
   display: none; }
 
 .hour-log-all-table-title {
-  margin-left: 14px; }
+  margin-left: 10px; }
 
 .hour-log-all-table {
   font-size: 14px;

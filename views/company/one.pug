@@ -4,37 +4,61 @@ block content
   .container
     .row
       .col.company-title
+        pre= h.dump(hourLog)
         h2.d-inline #{company.name}
-        button#edit_company_modal_btn.edit-company-btn.btn.btn-primary(type='button', data-toggle='modal', data-target='#editCompanyModal') Edit
-    .row
-      .col.mt-2
-        h4 Hour Logs
-    table#company_one.table-sm.table-bordered.w-100
-      thead
-        td Date
-        td Title
-        td Hours
-        td Hidden Hours
-      each hourLog in hourLogs
-        tr
-          td= "2018-06-03"
-          td: a(href=`/hourLog/${hourLog._id}`) #{hourLog.title}
-          td 46
-          td 46
+        if (company.active === true)
+          button#editCompanyBtn.company-title-btn.btn.btn-primary(type='button', data-toggle='modal', data-target='#editCompanyModal') Edit
+        else
+          form#activateCompanyForm.form.d-inline(action=`/company/${company._id}/activate` method="POST")
+            button#activateCompanyBtn.company-title-btn.btn.btn-primary(type='submit' form='activateCompanyForm') Activate
+    .my-3.py-1.px-3.bg-white.rounded.box-shadow
+      .row
+        .col.mt-2
+          h4 Hour Logs
+      table#companyOneTable.table.table-sm.w-100
+        thead.thead-light
+          th Date
+          th Title
+          th Hours
+          th Hidden Hours
+        each hourLog in hourLogs
+          tr
+            td= h.YYYYMMDD(hourLog.dateOpened)
+            td: a(href=`/hourLog/${hourLog._id}`) #{hourLog.title}
+            td= hourLog.totalPublicHours
+            td= hourLog.totalHiddenHours
 
   #editCompanyModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='editCompanyModal', aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
         .modal-header
-          h5.modal-title Edit -Company
+          h5.modal-title Edit: #{company.name}
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
         .modal-body
-          form#editCompanyForm.form(action="/companies/update" method="POST" novalidate)
+          form#editCompanyForm.form(action=`/company/${company._id}/edit` method="POST" novalidate)
             .form-group
               label.col-form-label(for='companyName') Name
-              input#companyName.form-control(name='name' type='text' required maxlength="50")
+              input#companyName.form-control(name='name' type='text' value=company.name required maxlength="50")
               .invalid-feedback Invalid form.
+              button.btn-secondary.mt-3.btn.btn-block(type='button', data-dismiss='modal' data-toggle='modal' data-target='#confirmEditCompanyModal' data-payload="Deactivate") deactivate
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
           button.btn.btn-primary(type='submit' form='editCompanyForm') Submit
+
+  #confirmEditCompanyModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='editCompanyModal', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Confirm
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#confirmEditCompanyForm.form(action=`/company/${company._id}/` method="POST" novalidate)
+            .form-group
+              label.col-form-label(for='confirm') Enter company name
+              input#confirm.form-control(name='name' type='text' placeholder=company.name required maxlength="50")
+              .invalid-feedback Invalid form.
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button.confirm-edit-company-submit.btn(type='submit' form='confirmEditCompanyForm') Submit

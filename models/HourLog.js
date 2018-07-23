@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-mongoose.Promise = global.Promise; // Prevent false positives from mongoose promise library deprication
 
 const hourLogSchema = new Schema({
   dateOpened: {
@@ -31,6 +30,10 @@ const hourLogSchema = new Schema({
   },
   totalHiddenHours: {
     type: Number,
+  },
+  hasSubmittedEntries: {
+    type: Boolean,
+    default: false
   },
   memo: {
     type: String,
