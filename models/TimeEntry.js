@@ -1,20 +1,13 @@
-  const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-mongoose.Promise = global.Promise; // Prevent false positives from mongoose promise library deprication
 
 const timeEntrySchema = new Schema({
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date
-  },
   date: {
     type: Date
   },
   _id: {
-    type: mongoose.Schema.ObjectId
+    type: mongoose.Schema.ObjectId,
+    auto: true
   },
   user: {
     type: mongoose.Schema.ObjectId,
@@ -53,12 +46,15 @@ const timeEntrySchema = new Schema({
   },
   publicDescription: {
     type: String
+  },
+  memo: {
+    type: String,
+    default: ''
   }
-});
-
-timeEntrySchema.pre('save', function(next) {
-  this.updatedAt = Date.now;
-  next();
-});
+},
+  {
+    timestamps: true
+  }
+);
 
 module.exports = mongoose.model('TimeEntry', timeEntrySchema);

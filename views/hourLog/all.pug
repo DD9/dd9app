@@ -2,21 +2,24 @@ extends ../index/layout
 
 block content
   .container
-    .row
-      .col
-        h2.hour-log-table-title Hour Logs
-    table#hour_log_all.table-sm.table-bordered.table-striped.table-hover.w-100
+    table#hourLogAllTable.table-sm.table-bordered.table-striped.table-hover.w-100
       thead
-        th.hour_log_all_th_date.sorting Date
-        th.hour_log_all_th_company Company
-        th.hour_log_all_th_title Title
-        th.hour_log_all_th_hours Hours
-        th.hour_log_all_th_hidden Hidden
+        th.hour-log-all-th-date-opened Date Opened
+        th.hour-log-all-th-date-closed Date Closed
+        th.hour-log-all-th-company Company
+        th.hour-log-all-th-title Title
+        th.hour-log-all-th-total-public-hours Hours
+        th.hour-log-all-th-total-hidden_hours Hidden
       tbody
         each hourLog in hourLogs
           tr
-            td= h.YYYYMMDD(hourLog.date)
+            td= h.YYYYMMDD(hourLog.dateOpened)
+            td= hourLog.dateClosed ? h.YYYYMMDD(hourLog.dateClosed) : ''
             td: a(href=`/company/${hourLog.company._id}`) #{hourLog.company.name}
-            td: a(href=`/hourLog/${hourLog._id}`) #{hourLog.title}
-            td 46
-            td 46
+            td: a(href=`/hourLog/${hourLog._id}`)
+              if hourLog.hasSubmittedEntries
+                | <b>#{hourLog.title}*</b>
+              else
+                | #{hourLog.title}
+            td= hourLog.totalPublicHours
+            td= hourLog.totalHiddenHours

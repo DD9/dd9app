@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 14);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -9993,7 +9993,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	return jQuery;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)(module)))
 
 /***/ }),
 /* 1 */
@@ -10019,7 +10019,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 (function (factory) {
 	if (true) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0), __webpack_require__(2)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0), __webpack_require__(3)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
 			return factory($, window, document);
 		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -10168,6 +10168,52 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/*! Bootstrap 4 styling wrapper for Scroller
+ * ©2018 SpryMedia Ltd - datatables.net/license
+ */
+
+(function (factory) {
+	if (true) {
+		// AMD
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0), __webpack_require__(1), __webpack_require__(11)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
+			return factory($, window, document);
+		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
+		// CommonJS
+		module.exports = function (root, $) {
+			if (!root) {
+				root = window;
+			}
+
+			if (!$ || !$.fn.dataTable) {
+				$ = require('datatables.net-bs4')(root, $).$;
+			}
+
+			if (!$.fn.dataTable.Scroller) {
+				require('datatables.net-scroller')(root, $);
+			}
+
+			return factory($, root, root.document);
+		};
+	} else {
+		// Browser
+		factory(jQuery, window, document);
+	}
+})(function ($, window, document, undefined) {
+
+	return $.fn.dataTable;
+});
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24119,7 +24165,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26642,10 +26688,10 @@ Popper.Defaults = Defaults;
 
 exports.default = Popper;
 //# sourceMappingURL=popper.js.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)))
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26659,7 +26705,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function (global, factory) {
-  ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory(exports, __webpack_require__(0), __webpack_require__(3)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__(0), __webpack_require__(3)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+  ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory(exports, __webpack_require__(0), __webpack_require__(4)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__(0), __webpack_require__(4)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.bootstrap = {}, global.jQuery, global.Popper);
@@ -30571,87 +30617,189 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //# sourceMappingURL=bootstrap.js.map
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
-
-var _jquery = __webpack_require__(0);
-
-var _jquery2 = _interopRequireDefault(_jquery);
+/* WEBPACK VAR INJECTION */(function($) {
 
 __webpack_require__(1);
 
-__webpack_require__(7);
+__webpack_require__(2);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-(0, _jquery2.default)('#hour_log_all').dataTable({
-  "dom": "<'row'<'col'><'col hour_log_all_filter'f>>" + "<'row'<'col-sm-12 hour_log_all_table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+// Datatables and table title
+var companyAllTable = $('#companyAllTable');
+companyAllTable.dataTable({
+  "dom": "<'row'<'col company-all-table-title'><'col company-all-table-filter'f>>" + "<'row'<'col-sm-12 company-all-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 company-all-table-paginate'p>>",
   "bFilter": true,
   "bLengthChange": false,
   "bInfo": false,
+  "aaSorting": [[1, 'asc'], [0, 'asc']],
   scrollY: 700,
   scroller: true,
   language: { sSearch: "", searchPlaceholder: "Search..." },
-  "columns": [{ "width": "15%" }, { "width": "35%" }, { "width": "35%" }, { "width": "7.5%" }, { "width": "7.5%" }]
+  "columns": [{ "width": "50%" }, { "width": "50%" }]
 });
 
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
+$(".company-all-table-title").html('<h3>Companies</h3>' + '<button type="button" class="create-company-btn btn btn-primary" data-toggle="modal" data-target="#createCompanyModal">Add Company</button>');
 
-// removed by extract-text-webpack-plugin
+// createCompany modal submission validation
+var companyNames = [];
+
+companyAllTable.find('.companyName a').each(function () {
+  companyNames.push(this.innerHTML.toLowerCase().trim());
+});
+
+var createCompanyForm = $('#createCompanyForm');
+var companyNameInputField = createCompanyForm.find('#companyName');
+createCompanyForm.on('submit', function (e) {
+  var companyNameInputValue = companyNameInputField.val().toLowerCase().trim();
+  if (!companyNameInputValue) {
+    createCompanyForm.find(".invalid-feedback").html("Company Name required.");
+    companyNameInputField.addClass("is-invalid");
+    e.preventDefault();
+  } else if (companyNames.includes(companyNameInputValue)) {
+    createCompanyForm.find(".invalid-feedback").html("Company Name must be unique.");
+    companyNameInputField.addClass("is-invalid");
+    e.preventDefault();
+  } else {
+    companyNameInputField.removeClass("is-invalid");
+  }
+});
+
+// Reset createCompany modal on close
+$('#createCompanyModal').on('hidden.bs.modal', function () {
+  companyNameInputField.val('');
+  companyNameInputField.removeClass("is-invalid");
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
+/* WEBPACK VAR INJECTION */(function($) {
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/*! Bootstrap 4 styling wrapper for Scroller
- * ©2018 SpryMedia Ltd - datatables.net/license
- */
-
-(function (factory) {
-	if (true) {
-		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0), __webpack_require__(1), __webpack_require__(8)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
-			return factory($, window, document);
-		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
-		// CommonJS
-		module.exports = function (root, $) {
-			if (!root) {
-				root = window;
-			}
-
-			if (!$ || !$.fn.dataTable) {
-				$ = require('datatables.net-bs4')(root, $).$;
-			}
-
-			if (!$.fn.dataTable.Scroller) {
-				require('datatables.net-scroller')(root, $);
-			}
-
-			return factory($, root, root.document);
-		};
-	} else {
-		// Browser
-		factory(jQuery, window, document);
-	}
-})(function ($, window, document, undefined) {
-
-	return $.fn.dataTable;
+// editModal submission validation
+var editCompanyForm = $('#editCompanyForm');
+var companyNameInputField = $('#companyName');
+editCompanyForm.on('submit', function (e) {
+  var companyNameInputValue = companyNameInputField.val().toLowerCase().trim();
+  if (!companyNameInputValue) {
+    editCompanyForm.find(".invalid-feedback").html("Company Name required.");
+    companyNameInputField.addClass("is-invalid");
+    e.preventDefault();
+  } else {
+    companyNameInputField.removeClass("is-invalid");
+  }
 });
+
+// Reset editModal on close
+editCompanyForm.on('hidden.bs.modal', function () {
+  companyNameInputField.removeClass("is-invalid");
+});
+
+// Pass confirmModal payload for dynamic styles
+var confirmEditCompanyModal = $('#confirmEditCompanyModal');
+var confirmEditCompanyForm = $('#confirmEditCompanyForm');
+var recycledActionAttribute = confirmEditCompanyForm.attr("action");
+confirmEditCompanyModal.on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget);
+  var action = button.data('payload');
+  confirmEditCompanyModal.find('.modal-title').html(document.getElementById("confirmEditCompanyModal").getElementsByClassName("modal-title")[0].innerHTML + ' ' + action);
+  confirmEditCompanyForm.attr("action", confirmEditCompanyForm.attr("action") + action.toLowerCase());
+
+  var confirmEditCompanySubmit = $('.confirm-edit-company-submit');
+  confirmEditCompanySubmit.html(action);
+  if (action === "Delete") {
+    confirmEditCompanySubmit.addClass("btn-danger");
+  } else {
+    confirmEditCompanySubmit.addClass("btn-warning");
+  }
+});
+
+// confirmModal submission validation
+var confirmInputField = confirmEditCompanyModal.find('#confirm');
+confirmEditCompanyForm.on('submit', function (e) {
+
+  if (confirmInputField.val() !== confirmInputField.attr("placeholder")) {
+    confirmEditCompanyForm.find(".invalid-feedback").html("Input does not match company name.");
+    confirmInputField.addClass("is-invalid");
+    e.preventDefault();
+  } else {
+    confirmInputField.removeClass("is-invalid");
+  }
+});
+
+// Reset confirmModal on close
+confirmEditCompanyModal.on('hidden.bs.modal', function () {
+  confirmInputField.val('');
+  confirmInputField.removeClass("is-invalid");
+  confirmEditCompanyForm.attr("action", recycledActionAttribute);
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+__webpack_require__(1);
+
+__webpack_require__(2);
+
+// Datatables and table title
+$('#hourLogAllTable').dataTable({
+  "dom": "<'row'<'col hour-log-all-table-title'><'col hour-log-all-table-filter'f>>" + "<'row'<'col-sm-12 hour-log-all-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 hour-log-all-table-paginate'p>>",
+  "bFilter": true,
+  "bLengthChange": false,
+  "bInfo": false,
+  "aaSorting": [[0, 'desc'], [2, 'asc'], [3, 'asc']],
+  scrollY: 700,
+  scroller: true,
+  language: { sSearch: "", searchPlaceholder: "Search..." },
+  "columns": [{ "width": "12.5%" }, { "width": "12.5%" }, { "width": "30%" }, { "width": "30%" }, { "width": "7.5%" }, { "width": "7.5%" }]
+});
+
+$(".hour-log-all-table-title").html('<h3>Hour Logs</h3>');
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+__webpack_require__(1);
+
+__webpack_require__(2);
+
+// Datatables and table title
+$('#user_all').dataTable({
+  "dom": "<'row'<'col'><'col hour_log_all_filter'f>>" + "<'row'<'col-sm-12 hour_log_all_table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+  "bFilter": true,
+  "bLengthChange": false,
+  "bInfo": false,
+  scrollY: 700,
+  scroller: true,
+  select: true,
+  language: { sSearch: "", searchPlaceholder: "Search..." },
+  "columnDefs": [{ "width": "15%", "targets": 0 }, { "width": "35%", "targets": 0 }, { "width": "30%", "targets": 0 }, { "width": "10%", "targets": 0 }, { "width": "10%", "targets": 0 }]
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30685,7 +30833,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 (function (factory) {
 	if (true) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0), __webpack_require__(2)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0), __webpack_require__(3)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
 			return factory($, window, document);
 		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -31944,7 +32092,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 9 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31974,7 +32122,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 10 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32004,17 +32152,23 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 11 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(4);
+__webpack_require__(5);
+
+__webpack_require__(10);
+
+__webpack_require__(9);
 
 __webpack_require__(6);
 
-__webpack_require__(5);
+__webpack_require__(7);
+
+__webpack_require__(8);
 
 /***/ })
 /******/ ]);

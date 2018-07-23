@@ -1,34 +1,34 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-mongoose.Promise = global.Promise; // Prevent false positives from mongoose promise library deprication
 
 const companySchema = new Schema({
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date
-  },
   _id: {
-    type: mongoose.Schema.ObjectId
+    type: mongoose.Schema.ObjectId,
+    auto: true
   },
   name: {
     type: String,
-    required: 'Please supply a company name'
+    required: 'Please supply a company name',
+    maxlength: 50
   },
   active: {
     type: Boolean,
     default: true
   },
   memo: {
-    type: String
+    type: String,
+    default: ''
   }
-});
+},
+  {
+    timestamps: true
+  }
+);
 
-companySchema.pre('save', function(next) {
-  this.updatedAt = Date.now;
-  next();
-});
+// Unique index on company names to server side validate duplicate company names
+companySchema.index(
+  { name: 1 },
+  { unique: true }
+);
 
 module.exports = mongoose.model('Company', companySchema);

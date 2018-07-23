@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-mongoose.Promise = global.Promise; // Prevent false positives from mongoose promise library deprication
 const md5 = require('md5');
 const validator = require('validator');
 const passportLocalMongoose = require('passport-local-mongoose');
@@ -8,15 +7,9 @@ const mongooseErrorHanlder = require('mongoose-mongodb-errors');
 const findOrCreate = require('mongoose-findorcreate');
 
 const userSchema = new Schema({
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date
-  },
   _id: {
-    type: mongoose.Schema.ObjectId
+    type: mongoose.Schema.ObjectId,
+    auto: true
   },
   company: {
     type: mongoose.Schema.ObjectId,
@@ -68,9 +61,14 @@ const userSchema = new Schema({
     default: 'none'
   },
   memo: {
-    type: String
+    type: String,
+    default: ''
   }
-});
+},
+  {
+    timestamps: true
+  }
+);
 
 // Rather than storing all the data, we can generate it on the fly
 userSchema.virtual('gravatar').get(function() {
@@ -80,9 +78,9 @@ userSchema.virtual('gravatar').get(function() {
 
 // Compound index as text
 userSchema.index({
-  email: 'text',
-  firstName: 'text',
-  lastName: 'text'
+  email: 1,
+  firstName: 1,
+  lastName: 1
 });
 
 // Serialize and deserialize sessions

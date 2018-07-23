@@ -1,33 +1,48 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-mongoose.Promise = global.Promise; // Prevent false positives from mongoose promise library deprication
 
 const hourLogSchema = new Schema({
-  createdAt: {
+  dateOpened: {
     type: Date,
     default: Date.now
   },
-  updatedAt: {
-    type: Date
-  },
-  date: {
+  dateClosed: {
     type: Date
   },
   _id: {
-    type: mongoose.Schema.ObjectId
+    type: mongoose.Schema.ObjectId,
+    auto: true
   },
   company: {
     type: mongoose.Schema.ObjectId,
     ref: 'Company'
   },
+  timeEntries: [{
+    type: mongoose.Schema.ObjectId,
+    ref: 'TimeEntry',
+  }],
   title: {
-    type: String
+    type: String,
+    default: "Current"
+  },
+  totalPublicHours: {
+    type: Number,
+  },
+  totalHiddenHours: {
+    type: Number,
+  },
+  hasSubmittedEntries: {
+    type: Boolean,
+    default: false
+  },
+  memo: {
+    type: String,
+    default: ''
   }
-});
-
-hourLogSchema.pre('save', function(next) {
-  this.updatedAt = Date.now;
-  next();
-});
+},
+  {
+    timestamps: true
+  }
+);
 
 module.exports = mongoose.model('HourLog', hourLogSchema);
