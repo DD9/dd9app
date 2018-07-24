@@ -25,6 +25,7 @@ router.post('/company/:id/deactivate', authController.isLoggedIn, authController
 router.post('/company/:id/delete', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.delete));
 
 router.get('/hourLog/all', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.all));
+router.get('/hourLog/:id', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.one));
 
 router.get('/timeEntry/new', authController.isLoggedIn, catchErrors(timeEntryController.new));
 

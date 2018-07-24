@@ -1,0 +1,90 @@
+extends ../index/layout
+
+block content
+  .container
+    .row
+      .col
+        h2 <u>#{hourLog.title}</u> Hour Log for <u><a href="/company/#{hourLog.company._id}">#{hourLog.company.name}</a></u>
+    .my-3.py-1.px-3.bg-white.rounded.box-shadow
+      .row
+        .col.mt-2
+          h4 Approved
+      table#approvedTimeEntriesTable.table.table-sm.w-100
+        thead.thead-light
+          th Date
+          th Company
+          th User
+          th Hours
+          th Description
+          th
+        each timeEntry in approvedTimeEntries
+          tr
+            td= h.YYYYMMDD(timeEntry.publicDate)
+            td= timeEntry.publicCompany.name
+            td= `${timeEntry.publicUser.firstName} ${timeEntry.publicUser.lastName}`
+            td= timeEntry.publicHours
+            td= timeEntry.publicDescription
+            td <a href="">Hide</a> <a href="">Reject</a>
+        tr
+          td
+          td
+          td
+          td= hourLog.totalPublicHours
+          td
+          td <a href="">Reject All</a>
+
+    .my-3.py-1.px-3.bg-white.rounded.box-shadow
+      .row
+        .col.mt-2
+          h4 Hidden
+      table#hiddenTimeEntriesTable.table.table-sm.w-100
+        thead.thead-light
+          th Date
+          th Company
+          th User
+          th Hours
+          th Description
+          th
+        each timeEntry in hiddenTimeEntries
+          tr
+            td= h.YYYYMMDD(timeEntry.publicDate)
+            td= timeEntry.publicCompany.name
+            td= `${timeEntry.publicUser.firstName} ${timeEntry.publicUser.lastName}`
+            td= timeEntry.publicHours
+            td= timeEntry.publicDescription
+            td <a href="">Approve</a> <a href="">Reject</a>
+        tr
+          td
+          td
+          td
+          td= hourLog.totalHiddenHours
+          td
+          td <a href="">Approve All</a>
+
+    .my-3.py-1.px-3.bg-white.rounded.box-shadow
+      .row
+        .col.mt-2
+          h4 Submitted
+      table#submittedTimeEntriesTable.table.table-sm.w-100
+        thead.thead-light
+          th Date
+          th Company
+          th User
+          th Hours
+          th Description
+          th
+        each timeEntry in submittedTimeEntries
+          tr
+            td= h.YYYYMMDD(timeEntry.publicDate)
+            td= timeEntry.publicCompany.name
+            td= `${timeEntry.publicUser.firstName} ${timeEntry.publicUser.lastName}`
+            td= timeEntry.publicHours
+            td= timeEntry.publicDescription
+            td <a href="">Approve</a> <a href="">Hide</a> <a href="">Reject</a>
+        tr
+          td
+          td
+          td
+          td= hourLog.totalSubmittedHours
+          td
+          td <a href="">Approve All</a> <a href="">Hide All</a> <a href="">Reject All</a>

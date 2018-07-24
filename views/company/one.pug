@@ -4,7 +4,6 @@ block content
   .container
     .row
       .col.company-title
-        pre= h.dump(hourLog)
         h2.d-inline #{company.name}
         if (company.active === true)
           button#editCompanyBtn.company-title-btn.btn.btn-primary(type='button', data-toggle='modal', data-target='#editCompanyModal') Edit

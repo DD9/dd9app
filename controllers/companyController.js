@@ -10,7 +10,7 @@ exports.all = async (req, res) => {
 exports.getById = async (req, res) => {
   const companyId = req.params.id;
   const company = await Company.findOne({ _id: companyId });
-  const hourLogs = await HourLog.find({ company : companyId });
+  const hourLogs = await HourLog.find({ company : companyId }).populate("timeEntries");
   res.render("company/one", { title: company.name, company: company, hourLogs: hourLogs });
 };
 
