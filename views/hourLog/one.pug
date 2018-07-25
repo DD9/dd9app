@@ -1,11 +1,19 @@
 extends ../index/layout
 
+include ../timeEntry/mixins/_newTimeEntryWithoutCompany
+
 block content
   .container
     .row
-      .col
-        h2 <u>#{hourLog.title}</u> Hour Log for <u><a href="/company/#{hourLog.company._id}">#{hourLog.company.name}</a></u>
-    .my-3.py-1.px-3.bg-white.rounded.box-shadow
+      .col.d-inline-block
+        h2.company-one-title.d-inline <u>#{hourLog.title}</u> Hour Log for <u><a href="/company/#{hourLog.company._id}">#{hourLog.company.name}</a></u>
+        if (h.YYYYMMDD(hourLog.dateClosed) === "1994-04-17")
+          form#closeHourLogForm.form.d-inline(action=`/hourLog/${hourLog._id}/close` method="POST")
+            button#closeHourLogButton.close-hour-log-btn.btn.btn-primary(type='button') Close Hour Log
+        else
+          form#openHourLogForm.form.d-inline(action=`/hourLog/${hourLog._id}/open` method="POST")
+            button#openHourLogButton.open-hour-log-btn.btn.btn-primary(type='button') Open Hour Log
+    .mt-4.mb-5.py-1.px-3.bg-white.rounded.box-shadow
       .row
         .col.mt-2
           h4 Approved
@@ -31,9 +39,9 @@ block content
           td
           td= hourLog.totalPublicHours
           td
-          td <a href="">Reject All</a>
+          td
 
-    .my-3.py-1.px-3.bg-white.rounded.box-shadow
+    .my-5.py-1.px-3.bg-white.rounded.box-shadow
       .row
         .col.mt-2
           h4 Hidden
@@ -59,9 +67,9 @@ block content
           td
           td= hourLog.totalHiddenHours
           td
-          td <a href="">Approve All</a>
+          td
 
-    .my-3.py-1.px-3.bg-white.rounded.box-shadow
+    .my-5.py-1.px-3.bg-white.rounded.box-shadow
       .row
         .col.mt-2
           h4 Submitted
@@ -87,4 +95,16 @@ block content
           td
           td= hourLog.totalSubmittedHours
           td
-          td <a href="">Approve All</a> <a href="">Hide All</a> <a href="">Reject All</a>
+          td
+
+    .py-1.px-3.bg-white.rounded.box-shadow.hour-log-one-time-entry-card
+      .row
+        .col.my-2
+          h4.d-inline Add New Time Entry for <u><a href="/company/#{hourLog.company._id}">#{hourLog.company.name}</a></u>
+          a.time-entry-collapse-anchor(data-toggle='collapse', href='#timeEntryCollapse', role='button', aria-expanded='false', aria-controls='timeEntryCollapse')
+            button.close(type='button', aria-label='Close')
+              span(aria-hidden='true') +
+      #timeEntryCollapse.collapse
+        +newTimeEntryWithoutCompany()
+
+
