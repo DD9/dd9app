@@ -22,11 +22,19 @@ router.post('/company/create', authController.isLoggedIn, authController.isAdmin
 router.post('/company/:id/edit', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.edit));
 router.post('/company/:id/activate', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.activate));
 router.post('/company/:id/deactivate', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.deactivate));
-router.post('/company/:id/delete', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.delete));
 
 router.get('/hourLog/all', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.all));
 router.get('/hourLog/:id', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.one));
+router.post('/hourLog/:id/open', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.open));
+router.post('/hourLog/:id/close', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.close));
 
 router.get('/timeEntry/new', authController.isLoggedIn, catchErrors(timeEntryController.new));
+router.post('/timeEntry/new', authController.isLoggedIn, catchErrors(timeEntryController.new));
+
+/*
+  API
+ */
+
+router.get('/api/v1/hourLog/:id/timeEntries', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.timeEntries));
 
 module.exports = router;

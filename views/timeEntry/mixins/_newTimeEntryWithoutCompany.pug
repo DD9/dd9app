@@ -1,14 +1,23 @@
 mixin newTimeEntryWithoutCompany()
   hr
-  form#createCompanyForm.form(action="/company/create" method="POST" novalidate)
+  form#createTimeEntryForm.form(action="/timeEntry/new" method="POST" novalidate)
     .form-group.row
-      label.col-sm-2.col-form-label(for='inputEmail3') Email
+      label.col-sm-2.col-form-label(for='text') Date
       .col-sm-10
-        input#inputEmail3.form-control(type='email', placeholder='Email')
+        input#date.form-control(name='date' type='text' value=h.YYYYMMDD(new Date()) required maxlength="10")
+        .invalid-feedback.invalid-date Invalid form.
     .form-group.row
-      label.col-sm-2.col-form-label(for='inputPassword3') Password
+      label.col-sm-2.col-form-label(for='hours') Hours
       .col-sm-10
-        input#inputPassword3.form-control(type='password', placeholder='Password')
+        input#hours.form-control(name='hours' type='tel' required maxlength="5")
+        .invalid-feedback Invalid form.
+    .form-group.row
+      label.col-sm-2.col-form-label(for='description') Description
+      .col-sm-10
+        input#description.form-control(name='description' type='text' required maxlength="255")
+        .invalid-feedback Invalid form.
+    input#hourLogCompanyId.d-none(name='hourLogCompanyId' type='text' value=hourLog.company._id)
+    input#hourLogId.d-none(name='hourLogId' type='text' value=hourLog._id)
     .form-group.row
       .col-sm-10
         button.btn.btn-primary(type='submit') Save

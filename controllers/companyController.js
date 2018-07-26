@@ -15,35 +15,28 @@ exports.getById = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-  const company = await (new Company(req.body)).save();
+  const company = await (new Company(req.body));
   req.flash('success', `Successfully created ${company.name}`);
   res.redirect(`/company/${company._id}`);
 };
 
 exports.edit = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOneAndUpdate({ _id: companyId }, req.body).exec();
+  const company = await Company.findOneAndUpdate({ _id: companyId }, req.body);
   req.flash('success', `Successfully edited ${company.name}`);
   res.redirect(`/company/${company._id}`);
 };
 
 exports.activate = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOneAndUpdate({ _id: companyId }, { active: true }).exec();
+  const company = await Company.findOneAndUpdate({ _id: companyId }, { active: true });
   req.flash('success', `Successfully activated ${company.name}`);
   res.redirect(`/company/${company._id}`);
 };
 
 exports.deactivate = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOneAndUpdate({ _id: companyId }, { active: false }).exec();
+  const company = await Company.findOneAndUpdate({ _id: companyId }, { active: false });
   req.flash('success', `Successfully deactivated ${company.name}`);
   res.redirect(`/company/${company._id}`);
-};
-
-exports.delete = async (req, res) => {
-  const companyId = req.params.id;
-  const company = await Company.findOneAndRemove({ _id: companyId }).exec();
-  req.flash('success', `Successfully deleted ${company.name}`);
-  res.redirect(`/company/all`);
 };

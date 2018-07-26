@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const timeEntrySchema = new Schema({
   date: {
-    type: Date
+    type: Date,
+    required: 'Date required.',
   },
   _id: {
     type: mongoose.Schema.ObjectId,
@@ -22,13 +23,16 @@ const timeEntrySchema = new Schema({
     ref: 'HourLog'
   },
   hours: {
-    type: Number
+    type: Number,
+    required: 'Hours required.',
   },
   description: {
-    type: String
+    type: String,
+    required: 'Description required.',
   },
   status: {
-    type: String
+    type: String,
+    default: "submitted"
   },
   publicUser: {
     type: mongoose.Schema.ObjectId,
@@ -39,13 +43,16 @@ const timeEntrySchema = new Schema({
     ref: 'Company'
   },
   publicDate: {
-    type: Date
+    type: Date,
+    required: 'Public date required.',
   },
   publicHours: {
-    type: Number
+    type: Number,
+    required: 'Public hours required.',
   },
   publicDescription: {
-    type: String
+    type: String,
+    required: 'Public description required.',
   },
   memo: {
     type: String,

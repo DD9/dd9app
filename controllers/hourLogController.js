@@ -9,7 +9,38 @@ exports.all = async (req, res) => {
 exports.one = async (req, res) => {
   const hourLogId = req.params.id;
   const hourLog = await HourLog.findOne({ _id: hourLogId })
-    .populate("company timeEntries")
+    .populate('company', 'name')
+    .populate({
+      path: 'timeEntries',
+      populate: [{
+        path: 'publicCompany',
+        model: 'Company',
+        select: 'name'
+      },{
+        path: 'publicUser',
+        model: 'User',
+        select: 'firstName lastName'
+      }]
+    });
+  
+  res.render("hourLog/one", { title: hourLog.company.name, hourLog });
+};
+
+exports.open = async (req, res) => {
+  const hourLogId = req.params.id;
+  const hourLog = await HourLog.findOneAndUpdate({ _id: hourLogId }, { dateClosed: new Date(1994, 3, 17) },  { new: true });
+  res.json(hourLog);
+};
+
+exports.close = async (req, res) => {
+  const hourLogId = req.params.id;
+  const hourLog = await HourLog.findOneAndUpdate({ _id: hourLogId }, { dateClosed: new Date() }, { new: true });
+  res.json(hourLog);
+};
+
+exports.timeEntries = async (req, res) => {
+  const hourLogId = req.params.id;
+  const hourLog = await HourLog.findOne({ _id: hourLogId })
     .populate({
       path: 'timeEntries',
       populate: [{
@@ -27,6 +58,7 @@ exports.one = async (req, res) => {
   const approvedTimeEntries = [];
   const hiddenTimeEntries = [];
   const submittedTimeEntries = [];
+
   for (let i = 0; i < hourLog.timeEntries.length; i++) {
     let timeEntry = hourLog.timeEntries[i];
     switch (timeEntry.status) {
@@ -43,25 +75,6 @@ exports.one = async (req, res) => {
     }
   }
 
-  console.log(`approvedTimeEntries`);
-  console.log(approvedTimeEntries);
-
-  console.log(`hiddenTimeEntries`);
-  console.log(hiddenTimeEntries);
-
-  console.log(`submittedTimeEntries`);
-  console.log(submittedTimeEntries);
-
-  res.render("hourLog/one", {
-    title: hourLog.company.name,
-    hourLog,
-    approvedTimeEntries,
-    hiddenTimeEntries,
-    submittedTimeEntries
-  });
+  res.json({ approvedTimeEntries, hiddenTimeEntries, submittedTimeEntries });
 };
 
-exports.open = async (req, res) => {
-  const hourLogId = req.params.id;
-  const hourLog = await HourLog.findOneAndUpdate({ _id: hourLogId }, {dateClosed: Date.now()})
-};
