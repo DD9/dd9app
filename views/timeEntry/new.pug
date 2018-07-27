@@ -1,29 +1,40 @@
 extends ../index/layout
 
+include ../timeEntry/mixins/_newTimeEntry
+
 block content
-  .container
-    .mb-5.p-3.bg-white.rounded.box-shadow
-      h2 New Time Entries
-      table.table-striped
-        thead
-          td Date
-          td Company
-          td Hours
-          td Description
-        if timeEntries
-          each timeEntry in timeEntries
+  .container.time-entry-new
+    .my-5.py-1.px-3.bg-white.rounded.box-shadow
+      .row
+        .col.mt-2
+          h4 New Time Entries
+      table#createdTimeEntriesTable.table.table-sm.w-100
+        thead.thead-light
+          th Date
+          th Company
+          th Hours
+          th Description
+          th
+        each timeEntry in timeEntries
+          if (timeEntry.status === "created")
             tr
-              td test
-              td test
-              td test
-              td test
-              td test
-        if !timeEntries
+              td= h.YYYYMMDD(timeEntry.date)
+              td= timeEntry.company.name
+              td= timeEntry.hours
+              td= timeEntry.description
+              if user.permissions[0].admin
+                td <a href="">Approve</a>&nbsp&nbsp<a href="">Hide</a>&nbsp&nbsp<a href="">Submit</a>&nbsp&nbsp<a href="">Delete</a>
+              else
+                td <a href="">Submit</a>&nbsp&nbsp<a href="">Delete</a
+        tr
           td
           td
-          td 0
+          td= totalCreatedHours
           td
           td
 
-    .my-3.p-3.bg-white.rounded.box-shadow
-      h2 Add New Time Entry
+    .py-1.px-3.bg-white.rounded.box-shadow.time-entry-new-time-entry-card
+      .row
+        .col.mt-3.mb-2
+          h4 Add New Time Entry
+      +newTimeEntry()

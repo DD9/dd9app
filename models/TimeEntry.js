@@ -53,15 +53,16 @@ const timeEntrySchema = new Schema({
   publicDescription: {
     type: String,
     required: 'Public description required.',
-  },
-  memo: {
-    type: String,
-    default: ''
   }
 },
   {
     timestamps: true
   }
 );
+
+timeEntrySchema.index({
+  status: 1,
+  user: -1
+});
 
 module.exports = mongoose.model('TimeEntry', timeEntrySchema);

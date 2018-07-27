@@ -1,16 +1,24 @@
-const createTimeEntryForm = $('#createTimeEntryForm');
-const dateInput = createTimeEntryForm.find('#date');
-const hoursInput = createTimeEntryForm.find('#hours');
-const descriptionInput = createTimeEntryForm.find('#description');
+const newTimeEntryForm = $('#newTimeEntryForm');
+const dateInput = newTimeEntryForm.find('#date');
+const companyIdInput = newTimeEntryForm.find('#companyId');
+const hoursInput = newTimeEntryForm.find('#hours');
+const descriptionInput = newTimeEntryForm.find('#description');
 
-createTimeEntryForm.on('submit', function(e) {
+newTimeEntryForm.on('submit', function(e) {
   const dateVal = dateInput.val();
+  const companyIdVal = companyIdInput.val();
   const hoursVal= hoursInput.val();
   const descriptionVal = descriptionInput.val();
 
   if (!dateVal) {
     dateInput.closest('div').find('.invalid-feedback').html("Date required.");
     dateInput.addClass("is-invalid");
+    e.preventDefault();
+  }
+
+  if (!companyIdVal) {
+    companyIdInput.closest('div').find('.invalid-feedback').html("Company required.");
+    companyIdInput.addClass("is-invalid");
     e.preventDefault();
   }
 

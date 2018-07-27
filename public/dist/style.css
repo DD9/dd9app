@@ -7831,6 +7831,9 @@ footer {
 .hour-log-all-th-total-hidden-hours {
   width: 7.5% !important; }
 
+.hour-log-one {
+  font-size: 15px; }
+
 .company-all-table-title {
   margin-left: 10px; }
 
@@ -7845,6 +7848,12 @@ footer {
   float: right; }
 
 .hour-log-one-time-entry-card {
+  margin-bottom: 40px; }
+
+.time-entry-new {
+  font-size: 15px; }
+
+.time-entry-new-time-entry-card {
   margin-bottom: 40px; }
 
 /*# sourceMappingURL=style.css.map*/

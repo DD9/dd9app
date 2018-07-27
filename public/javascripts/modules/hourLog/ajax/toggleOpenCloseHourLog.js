@@ -6,6 +6,10 @@ $('#openHourLogForm').on('submit', ajaxOpenHourLogForm);
 function ajaxCloseHourLogForm(e) {
   e.preventDefault();
   axios
+    .get() //TODO confirm no open submissions, flashes
+    .then(res => {
+
+    })
     .post(this.action)
     .then(res => {
       $('#openHourLogButton').removeClass('d-none');

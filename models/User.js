@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const md5 = require('md5');
 const validator = require('validator');
 const passportLocalMongoose = require('passport-local-mongoose');
 const mongooseErrorHanlder = require('mongoose-mongodb-errors');
@@ -59,22 +58,12 @@ const userSchema = new Schema({
   hourLogEmail: {
     type: String,
     default: 'none'
-  },
-  memo: {
-    type: String,
-    default: ''
   }
 },
   {
     timestamps: true
   }
 );
-
-// Rather than storing all the data, we can generate it on the fly
-userSchema.virtual('gravatar').get(function() {
-  const hash = md5(this.email);
-  return `https://gravatar.com/avatar/${hash}?s=200`;
-});
 
 // Compound index as text
 userSchema.index({
@@ -89,7 +78,7 @@ userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
 // PrettyPrint MongoDB errors if they're thrown by the server
 userSchema.plugin(mongooseErrorHanlder);
 
-// Depricated Mongo function required by Passport
+// Depricated Mongo function required for Passport Google integration
 userSchema.plugin(findOrCreate);
 
 module.exports = mongoose.model('User', userSchema);

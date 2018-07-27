@@ -31,13 +31,8 @@ const hourLogSchema = new Schema({
   totalHiddenHours: {
     type: Number,
   },
-  hasSubmittedEntries: {
-    type: Boolean,
-    default: false
-  },
-  memo: {
-    type: String,
-    default: ''
+  totalSubmittedHours: {
+    type: Number,
   }
 },
   {

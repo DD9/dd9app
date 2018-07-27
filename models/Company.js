@@ -14,10 +14,6 @@ const companySchema = new Schema({
   active: {
     type: Boolean,
     default: true
-  },
-  memo: {
-    type: String,
-    default: ''
   }
 },
   {

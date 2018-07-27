@@ -29,7 +29,7 @@ router.post('/hourLog/:id/open', authController.isLoggedIn, authController.isAdm
 router.post('/hourLog/:id/close', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.close));
 
 router.get('/timeEntry/new', authController.isLoggedIn, catchErrors(timeEntryController.new));
-router.post('/timeEntry/new', authController.isLoggedIn, catchErrors(timeEntryController.new));
+router.post('/timeEntry/create', authController.isLoggedIn, catchErrors(timeEntryController.create));
 
 /*
   API

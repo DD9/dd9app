@@ -22,7 +22,7 @@ exports.one = async (req, res) => {
         select: 'firstName lastName'
       }]
     });
-  
+
   res.render("hourLog/one", { title: hourLog.company.name, hourLog });
 };
 
@@ -53,7 +53,6 @@ exports.timeEntries = async (req, res) => {
         select: 'firstName lastName'
       }]
     });
-
 
   const approvedTimeEntries = [];
   const hiddenTimeEntries = [];

@@ -1,8 +1,8 @@
-mixin newTimeEntryWithoutCompany()
+mixin newTimeEntryWithHiddenFields()
   hr
-  form#createTimeEntryForm.form(action="/timeEntry/new" method="POST" novalidate)
+  form#newTimeEntryForm.form(action="/timeEntry/create" method="POST" novalidate)
     .form-group.row
-      label.col-sm-2.col-form-label(for='text') Date
+      label.col-sm-2.col-form-label(for='date') Date
       .col-sm-10
         input#date.form-control(name='date' type='text' value=h.YYYYMMDD(new Date()) required maxlength="10")
         .invalid-feedback.invalid-date Invalid form.
@@ -16,7 +16,7 @@ mixin newTimeEntryWithoutCompany()
       .col-sm-10
         input#description.form-control(name='description' type='text' required maxlength="255")
         .invalid-feedback Invalid form.
-    input#hourLogCompanyId.d-none(name='hourLogCompanyId' type='text' value=hourLog.company._id)
+    input#companyId.d-none(name='companyId' type='text' value=hourLog.company._id)
     input#hourLogId.d-none(name='hourLogId' type='text' value=hourLog._id)
     .form-group.row
       .col-sm-10

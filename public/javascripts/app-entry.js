@@ -7,7 +7,8 @@ import './modules/company/all'
 import './modules/company/one'
 
 import './modules/hourLog/all'
-import './modules/hourLog/one'
-import './modules/hourLog/ajax/openCloseHourLog'
+import './modules/hourLog/ajax/toggleOpenCloseHourLog'
+import './modules/hourLog/ajax/tableActions'
 
+import './modules/timeEntry/datepicker'
 import './modules/timeEntry/formValidation'
