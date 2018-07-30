@@ -25,7 +25,6 @@ $(".company-all-table-title").html(
   '<button type="button" class="create-company-btn btn btn-primary" data-toggle="modal" data-target="#createCompanyModal">Add Company</button>'
 );
 
-
 // createCompany modal submission validation
 const companyNames = [];
 
@@ -34,24 +33,24 @@ companyAllTable.find('.companyName a').each(function() {
 });
 
 const createCompanyForm = $('#createCompanyForm');
-const companyNameInputField = createCompanyForm.find('#companyName');
+const companyNameInput = createCompanyForm.find('#companyName');
 createCompanyForm.on('submit', function(e) {
-  const companyNameInputValue = companyNameInputField.val().toLowerCase().trim();
-  if(!companyNameInputValue) {
+  const companyNameInputVal = companyNameInput.val().toLowerCase().trim();
+  if (!companyNameInputVal) {
     createCompanyForm.find(".invalid-feedback").html("Company Name required.");
-    companyNameInputField.addClass("is-invalid");
+    companyNameInput.addClass("is-invalid");
     e.preventDefault();
-  } else if(companyNames.includes(companyNameInputValue)) {
+  } else if (companyNames.includes(companyNameInputVal)) {
     createCompanyForm.find(".invalid-feedback").html("Company Name must be unique.");
-    companyNameInputField.addClass("is-invalid");
+    companyNameInput.addClass("is-invalid");
     e.preventDefault();
   } else {
-    companyNameInputField.removeClass("is-invalid");
+    companyNameInput.removeClass("is-invalid");
   }
 });
 
 // Reset createCompany modal on close
 $('#createCompanyModal').on('hidden.bs.modal', function() {
-  companyNameInputField.val('');
-  companyNameInputField.removeClass("is-invalid");
+  companyNameInput.val('');
+  companyNameInput.removeClass("is-invalid");
 });

@@ -19,7 +19,6 @@ const promise = mongoose.connect(process.env.DATABASE, { // Mongoose is MongoDB 
 
 // Import MongoDB models
 require('./models/User');
-require('./models/Contact');
 require('./models/Company');
 require('./models/HourLog');
 require('./models/TimeEntry');

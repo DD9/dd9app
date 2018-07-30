@@ -2,17 +2,14 @@ extends ../index/layout
 
 block content
   .container
-    .row
-      .col
-        h2.user-table-title Users
-    table#userAllTable.table-xl.table-striped.table-bordered.w-100
+    table#userAllTable.table-sm.table-striped.table-bordered.w-100
       thead
-        td Name
-        td Email
-        td Company
-        td Last Login
-        td Subscription
-        td
+        th Name
+        th Email
+        th Company
+        th Last Login
+        th Subscription
+        th
       each user in users
         tr
           td= `${user.firstName} ${user.lastName}`
@@ -20,4 +17,4 @@ block content
           td: a(href=`/company/${user.company._id}`) #{user.company.name}
           td= user.lastSignInAt
           td= user.hourLogEmail
-          td
+          td: a.delete(href=`/api/v1/user/${user._id}/edit`) Edit

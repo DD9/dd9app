@@ -1,0 +1,115 @@
+extends ../index/layout
+
+include ../timeEntry/mixins/_createAndsubmitTimeEntry
+
+block content
+  .container.hour-log-one
+    .row
+      .col.d-inline-block
+        h2.company-one-title.d-inline <u>#{hourLog.title}</u> Hour Log for <u><a href="/company/#{hourLog.company._id}">#{hourLog.company.name}</a></u>
+        if (h.YYYYMMDD(hourLog.dateClosed) === "1969-12-31")
+          form#closeHourLogForm.form.d-inline(action=`/hourLog/${hourLog._id}/close` method="POST")
+            button#closeHourLogButton.close-hour-log-btn.btn.btn-primary(type='submit') Close Hour Log
+          form#openHourLogForm.form.d-inline.d-none(action=`/hourLog/${hourLog._id}/open` method="POST")
+            button#openHourLogButton.open-hour-log-btn.btn.btn-primary.d-none(type='submit') Open Hour Log
+        else
+          form#openHourLogForm.form.d-inline(action=`/hourLog/${hourLog._id}/open` method="POST")
+            button#openHourLogButton.open-hour-log-btn.btn.btn-primary(type='submit') Open Hour Log
+          form#closeHourLogForm.form.d-inline(action=`/hourLog/${hourLog._id}/close` method="POST")
+            button#closeHourLogButton.close-hour-log-btn.btn.btn-primary.d-none(type='submit') Close Hour Log
+    .mt-4.mb-5.py-1.px-3.bg-white.rounded.box-shadow
+      .row
+        .col.mt-2
+          h4 Approved
+      table#approvedTimeEntriesTable.table.table-sm.w-100
+        thead.thead-light
+          th Date
+          th Company
+          th User
+          th Hours
+          th Description
+          th
+        each timeEntry in hourLog.timeEntries
+          if (timeEntry.status === "approved")
+            tr
+              td= h.YYYYMMDD(timeEntry.publicDate)
+              td= timeEntry.publicCompany.name
+              td= `${timeEntry.publicUser.firstName} ${timeEntry.publicUser.lastName}`
+              td= timeEntry.publicHours
+              td= timeEntry.publicDescription
+              td <a href="">Hide</a>&nbsp&nbsp<a href="">Reject</a>
+        tr
+          td
+          td
+          td
+          td= hourLog.totalPublicHours
+          td
+          td
+
+    .my-5.py-1.px-3.bg-white.rounded.box-shadow
+      .row
+        .col.mt-2
+          h4 Hidden
+      table#hiddenTimeEntriesTable.table.table-sm.w-100
+        thead.thead-light
+          th Date
+          th Company
+          th User
+          th Hours
+          th Description
+          th
+        each timeEntry in hourLog.timeEntries
+          if (timeEntry.status === "hidden")
+            tr
+              td= h.YYYYMMDD(timeEntry.publicDate)
+              td= timeEntry.publicCompany.name
+              td= `${timeEntry.publicUser.firstName} ${timeEntry.publicUser.lastName}`
+              td= timeEntry.publicHours
+              td= timeEntry.publicDescription
+              td <a href="">Approve</a>&nbsp&nbsp<a href="">Reject</a>
+        tr
+          td
+          td
+          td
+          td= hourLog.totalHiddenHours
+          td
+          td
+
+    .my-5.py-1.px-3.bg-white.rounded.box-shadow
+      .row
+        .col.mt-2
+          h4 Submitted
+      table#submittedTimeEntriesTable.table.table-sm.w-100
+        thead.thead-light
+          th Date
+          th Company
+          th User
+          th Hours
+          th Description
+          th
+        each timeEntry in hourLog.timeEntries
+          if (timeEntry.status === "submitted")
+            tr
+              td= h.YYYYMMDD(timeEntry.publicDate)
+              td= timeEntry.publicCompany.name
+              td= `${timeEntry.publicUser.firstName} ${timeEntry.publicUser.lastName}`
+              td= timeEntry.publicHours
+              td= timeEntry.publicDescription
+              td <a href="">Approve</a>&nbsp&nbsp<a href="">Hide</a>&nbsp&nbsp<a href="">Delete</a>
+        tr
+          td
+          td
+          td
+          td= hourLog.totalSubmittedHours
+          td
+          td
+
+    .py-1.px-3.bg-white.rounded.box-shadow.hour-log-one-time-entry-card
+      .row
+        .col.mt-3.mb-2
+          h4.d-inline Submit New Time Entry for <u><a href="/company/#{hourLog.company._id}">#{hourLog.company.name}</a></u>
+          a.time-entry-collapse-anchor(data-toggle='collapse', href='#timeEntryCollapse', role='button', aria-expanded='false', aria-controls='timeEntryCollapse')
+            button.close(type='button', aria-label='Close')
+              span(aria-hidden='true') +
+      #timeEntryCollapse.collapse
+        +createAndsubmitTimeEntry()

@@ -14,10 +14,6 @@ const companySchema = new Schema({
   active: {
     type: Boolean,
     default: true
-  },
-  memo: {
-    type: String,
-    default: ''
   }
 },
   {
@@ -29,6 +25,10 @@ const companySchema = new Schema({
 companySchema.index(
   { name: 1 },
   { unique: true }
+);
+
+companySchema.index(
+  { active: 1 },
 );
 
 module.exports = mongoose.model('Company', companySchema);

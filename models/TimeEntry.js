@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const timeEntrySchema = new Schema({
   date: {
-    type: Date
+    type: Date,
+    required: 'Date required.',
   },
   _id: {
     type: mongoose.Schema.ObjectId,
@@ -11,50 +12,61 @@ const timeEntrySchema = new Schema({
   },
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: 'User required.'
   },
   company: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Company'
+    ref: 'Company',
+    required: 'Company required.'
   },
   hourLog: {
     type: mongoose.Schema.ObjectId,
     ref: 'HourLog'
   },
   hours: {
-    type: Number
+    type: Number,
+    required: 'Hours required.'
   },
   description: {
-    type: String
+    type: String,
+    required: 'Description required.'
   },
   status: {
-    type: String
+    type: String,
+    required: 'Status required.'
   },
   publicUser: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: 'Public user required.'
   },
   publicCompany: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Company'
+    ref: 'Company',
+    required: 'Public company required.'
   },
   publicDate: {
-    type: Date
+    type: Date,
+    required: 'Public date required.'
   },
   publicHours: {
-    type: Number
+    type: Number,
+    required: 'Public hours required.'
   },
   publicDescription: {
-    type: String
-  },
-  memo: {
     type: String,
-    default: ''
+    required: 'Public description required.'
   }
 },
   {
     timestamps: true
   }
 );
+
+timeEntrySchema.index({
+  status: 1,
+  user: -1
+});
 
 module.exports = mongoose.model('TimeEntry', timeEntrySchema);

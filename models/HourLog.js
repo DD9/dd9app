@@ -27,22 +27,24 @@ const hourLogSchema = new Schema({
   },
   totalPublicHours: {
     type: Number,
+    default: 0
   },
   totalHiddenHours: {
     type: Number,
+    default: 0
   },
-  hasSubmittedEntries: {
-    type: Boolean,
-    default: false
-  },
-  memo: {
-    type: String,
-    default: ''
+  totalSubmittedHours: {
+    type: Number,
+    default: 0
   }
 },
   {
     timestamps: true
   }
+);
+
+hourLogSchema.index(
+  { title: 1 },
 );
 
 module.exports = mongoose.model('HourLog', hourLogSchema);

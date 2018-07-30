@@ -1,0 +1,23 @@
+mixin createAndsubmitTimeEntry()
+  hr
+  form#submitTimeEntryForm.timeEntryForm.form(action="/timeEntry/submit" method="POST" novalidate)
+    .form-group.row
+      label.col-sm-2.col-form-label(for='date') Date
+      .col-sm-10
+        input#date.form-control(name='date' type='text' value=h.YYYYMMDD(new Date()) required maxlength="10")
+        .invalid-feedback.invalid-date Invalid form.
+    .form-group.row
+      label.col-sm-2.col-form-label(for='hours') Hours
+      .col-sm-10
+        input#hours.form-control(name='hours' type='tel' required maxlength="5")
+        .invalid-feedback Invalid form.
+    .form-group.row
+      label.col-sm-2.col-form-label(for='description') Description
+      .col-sm-10
+        input#description.form-control(name='description' type='text' required maxlength="255")
+        .invalid-feedback Invalid form.
+    input#companyId.d-none(name='companyId' type='text' value=hourLog.company._id)
+    input#hourLogId.d-none(name='hourLogId' type='text' value=hourLog._id)
+    .form-group.row
+      .col-sm-10
+        button.btn.btn-primary(type='submit') Save

@@ -14,10 +14,10 @@ block content
         each hourLog in hourLogs
           tr
             td= h.YYYYMMDD(hourLog.dateOpened)
-            td= hourLog.dateClosed ? h.YYYYMMDD(hourLog.dateClosed) : ''
+            td= (h.YYYYMMDD(hourLog.dateClosed) === "1969-12-31") ? '' : h.YYYYMMDD(hourLog.dateClosed)
             td: a(href=`/company/${hourLog.company._id}`) #{hourLog.company.name}
             td: a(href=`/hourLog/${hourLog._id}`)
-              if hourLog.hasSubmittedEntries
+              if (hourLog.totalSubmittedHours > 0)
                 | <b>#{hourLog.title}*</b>
               else
                 | #{hourLog.title}

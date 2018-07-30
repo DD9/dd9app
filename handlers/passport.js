@@ -15,6 +15,7 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: process.env.DOMAIN + "/auth/google/callback"
   },
+  // Do after successful Google authentication
   function(accessToken, refreshToken, profile, done) {
 
     const googleEmail = profile.emails[0].value;
