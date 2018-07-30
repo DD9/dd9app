@@ -2,22 +2,28 @@ import 'datatables.net-bs4';
 import 'datatables.net-scroller-bs4';
 
 // Datatables and table title
-$('#user_all').dataTable( {
-  "dom": "<'row'<'col'><'col hour_log_all_filter'f>>" +
-  "<'row'<'col-sm-12 hour_log_all_table'tr>>" +
-  "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+$('#userAllTable').dataTable( {
+  "dom": "<'row'<'col user-all-table-title'><'col user-all-table-filter'f>>" +
+  "<'row'<'col-sm-12 user-all-table'tr>>" +
+  "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 user-all-table-paginate'p>>",
   "bFilter": true,
   "bLengthChange": false,
   "bInfo": false,
-  scrollY: 700,
+  "aaSorting": [[0,'asc']],
+  scrollY: 400,
   scroller: true,
-  select: true,
   language: {sSearch: "", searchPlaceholder: "Search..."},
-  "columnDefs": [
-    { "width": "15%", "targets": 0 },
-    { "width": "35%", "targets": 0 },
-    { "width": "30%", "targets": 0 },
-    { "width": "10%", "targets": 0 },
-    { "width": "10%", "targets": 0 },
+  "columns": [
+    { "width": "20%"},
+    { "width": "20%"},
+    { "width": "10%"},
+    { "width": "30%"},
+    { "width": "10%"},
+    { "width": "10%"},
   ]
 });
+
+$(".user-all-table-title").html(
+  '<h3>Users</h3>' +
+  '<button type="button" class="create-user-btn btn btn-primary" data-toggle="modal" data-target="#createUserModal">Add User</button>'
+);

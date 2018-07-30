@@ -1,13 +1,13 @@
 extends ../index/layout
 
-include ../timeEntry/mixins/_newTimeEntryWithHiddenFields
+include ../timeEntry/mixins/_createAndsubmitTimeEntry
 
 block content
   .container.hour-log-one
     .row
       .col.d-inline-block
         h2.company-one-title.d-inline <u>#{hourLog.title}</u> Hour Log for <u><a href="/company/#{hourLog.company._id}">#{hourLog.company.name}</a></u>
-        if (h.YYYYMMDD(hourLog.dateClosed) === "1994-04-17")
+        if (h.YYYYMMDD(hourLog.dateClosed) === "1969-12-31")
           form#closeHourLogForm.form.d-inline(action=`/hourLog/${hourLog._id}/close` method="POST")
             button#closeHourLogButton.close-hour-log-btn.btn.btn-primary(type='submit') Close Hour Log
           form#openHourLogForm.form.d-inline.d-none(action=`/hourLog/${hourLog._id}/open` method="POST")
@@ -112,4 +112,4 @@ block content
             button.close(type='button', aria-label='Close')
               span(aria-hidden='true') +
       #timeEntryCollapse.collapse
-        +newTimeEntryWithHiddenFields()
+        +createAndsubmitTimeEntry()

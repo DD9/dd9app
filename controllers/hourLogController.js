@@ -28,7 +28,7 @@ exports.one = async (req, res) => {
 
 exports.open = async (req, res) => {
   const hourLogId = req.params.id;
-  const hourLog = await HourLog.findOneAndUpdate({ _id: hourLogId }, { dateClosed: new Date(1994, 3, 17) },  { new: true });
+  const hourLog = await HourLog.findOneAndUpdate({ _id: hourLogId }, { dateClosed: new Date(0) },  { new: true });
   res.json(hourLog);
 };
 

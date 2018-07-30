@@ -27,4 +27,8 @@ companySchema.index(
   { unique: true }
 );
 
+companySchema.index(
+  { active: 1 },
+);
+
 module.exports = mongoose.model('Company', companySchema);

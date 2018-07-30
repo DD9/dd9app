@@ -1,6 +1,6 @@
-mixin newTimeEntryWithHiddenFields()
+mixin createAndsubmitTimeEntry()
   hr
-  form#newTimeEntryForm.form(action="/timeEntry/create" method="POST" novalidate)
+  form#submitTimeEntryForm.timeEntryForm.form(action="/timeEntry/submit" method="POST" novalidate)
     .form-group.row
       label.col-sm-2.col-form-label(for='date') Date
       .col-sm-10

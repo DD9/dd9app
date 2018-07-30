@@ -1,6 +1,6 @@
 extends ../index/layout
 
-include ../timeEntry/mixins/_newTimeEntry
+include ../timeEntry/mixins/_createTimeEntry
 
 block content
   .container.time-entry-new
@@ -16,20 +16,28 @@ block content
           th Description
           th
         each timeEntry in timeEntries
-          if (timeEntry.status === "created")
-            tr
-              td= h.YYYYMMDD(timeEntry.date)
-              td= timeEntry.company.name
-              td= timeEntry.hours
-              td= timeEntry.description
-              if user.permissions[0].admin
-                td <a href="">Approve</a>&nbsp&nbsp<a href="">Hide</a>&nbsp&nbsp<a href="">Submit</a>&nbsp&nbsp<a href="">Delete</a>
-              else
-                td <a href="">Submit</a>&nbsp&nbsp<a href="">Delete</a
-        tr
+          tr
+            td= h.YYYYMMDD(timeEntry.date)
+            td= timeEntry.company.name
+            td= timeEntry.hours
+            td= timeEntry.description
+            if user.permissions[0].admin
+              td
+                a.approve(href=`/api/v1/timeEntry/${timeEntry._id}/approve`) Approve
+                | &nbsp&nbsp
+                a.hide(href=`/api/v1/timeEntry/${timeEntry._id}/hide`) Hide
+                | &nbsp&nbsp
+                a.submit(href=`/api/v1/timeEntry/${timeEntry._id}/submit`) Submit
+                | &nbsp&nbsp
+                a.delete(href=`/api/v1/timeEntry/${timeEntry._id}/delete`) Delete
+            else
+                a.submit(href=`/api/v1/timeEntry/${timeEntry._id}/submit`) Submit
+                | &nbsp&nbsp
+                a.delete(href=`/api/v1/timeEntry/${timeEntry._id}/delete`) Delete
+        tr#lastRowInCreatedTimeEntriesTable
           td
           td
-          td= totalCreatedHours
+          td#totalCreatedHours= totalCreatedHours
           td
           td
 
@@ -37,4 +45,4 @@ block content
       .row
         .col.mt-3.mb-2
           h4 Add New Time Entry
-      +newTimeEntry()
+      +createTimeEntry()

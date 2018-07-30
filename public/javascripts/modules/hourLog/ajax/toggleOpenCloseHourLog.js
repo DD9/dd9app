@@ -6,15 +6,14 @@ $('#openHourLogForm').on('submit', ajaxOpenHourLogForm);
 function ajaxCloseHourLogForm(e) {
   e.preventDefault();
   axios
-    .get() //TODO confirm no open submissions, flashes
-    .then(res => {
-
-    })
+    // .get() //TODO confirm no open submissions, flashes
+    // .then(res => {
+    //
+    // })
     .post(this.action)
     .then(res => {
       $('#openHourLogButton').removeClass('d-none');
       $('#closeHourLogButton').addClass('d-none');
-      console.log(res.data);
     })
     .catch(console.error);
 }
@@ -26,7 +25,6 @@ function ajaxOpenHourLogForm(e) {
     .then(res => {
       $('#openHourLogButton').addClass('d-none');
       $('#closeHourLogButton').removeClass('d-none');
-      console.log(res.data);
     })
     .catch(console.error);
 }

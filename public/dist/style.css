@@ -7773,8 +7773,22 @@ footer {
   margin-bottom: 0;
   margin-right: 21px; }
 
-#user_all.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-  background-color: #E2E5FE; }
+.user-all-table-paginate {
+  display: none; }
+
+.user-all-table-title {
+  margin-left: 10px; }
+
+.user-all-table-title h3 {
+  display: inline; }
+
+.create-user-btn {
+  margin-left: 20px;
+  margin-bottom: 12px; }
+
+.user-all-table {
+  font-size: 14px;
+  margin-top: 10px; }
 
 .company-all-table-paginate {
   display: none; }

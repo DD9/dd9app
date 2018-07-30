@@ -12,11 +12,13 @@ const timeEntrySchema = new Schema({
   },
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: 'User required.'
   },
   company: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Company'
+    ref: 'Company',
+    required: 'Company required.'
   },
   hourLog: {
     type: mongoose.Schema.ObjectId,
@@ -24,35 +26,37 @@ const timeEntrySchema = new Schema({
   },
   hours: {
     type: Number,
-    required: 'Hours required.',
+    required: 'Hours required.'
   },
   description: {
     type: String,
-    required: 'Description required.',
+    required: 'Description required.'
   },
   status: {
     type: String,
-    default: "submitted"
+    required: 'Status required.'
   },
   publicUser: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: 'Public user required.'
   },
   publicCompany: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Company'
+    ref: 'Company',
+    required: 'Public company required.'
   },
   publicDate: {
     type: Date,
-    required: 'Public date required.',
+    required: 'Public date required.'
   },
   publicHours: {
     type: Number,
-    required: 'Public hours required.',
+    required: 'Public hours required.'
   },
   publicDescription: {
     type: String,
-    required: 'Public description required.',
+    required: 'Public description required.'
   }
 },
   {

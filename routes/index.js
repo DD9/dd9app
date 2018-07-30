@@ -27,14 +27,14 @@ router.get('/hourLog/all', authController.isLoggedIn, authController.isAdmin, ca
 router.get('/hourLog/:id', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.one));
 router.post('/hourLog/:id/open', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.open));
 router.post('/hourLog/:id/close', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.close));
+router.get('/api/v1/hourLog/:id/timeEntries', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.timeEntries));
 
 router.get('/timeEntry/new', authController.isLoggedIn, catchErrors(timeEntryController.new));
-router.post('/timeEntry/create', authController.isLoggedIn, catchErrors(timeEntryController.create));
-
-/*
-  API
- */
-
-router.get('/api/v1/hourLog/:id/timeEntries', authController.isLoggedIn, authController.isAdmin, catchErrors(hourLogController.timeEntries));
+router.post('/api/v1/timeEntry/create', authController.isLoggedIn, catchErrors(timeEntryController.create));
+router.post('/api/v1/timeEntry/createAndSubmit', authController.isLoggedIn, catchErrors(timeEntryController.createAndSubmit));
+router.get('/api/v1/timeEntry/:id/approve', authController.isLoggedIn, catchErrors(timeEntryController.approve));
+router.get('/api/v1/timeEntry/:id/hide', authController.isLoggedIn, catchErrors(timeEntryController.hide));
+router.get('/api/v1/timeEntry/:id/submit', authController.isLoggedIn, catchErrors(timeEntryController.submit));
+router.get('/api/v1/timeEntry/:id/delete', authController.isLoggedIn, catchErrors(timeEntryController.delete));
 
 module.exports = router;
