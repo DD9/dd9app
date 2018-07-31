@@ -15,6 +15,7 @@ router.get('/auth/google', authController.googleAuth);
 router.get('/auth/google/callback', authController.googleAuthRedirect);
 
 router.get('/user/all', authController.isLoggedIn, authController.isAdmin, catchErrors(userController.all));
+router.post('/api/v1/user/:id/edit', authController.isLoggedIn, authController.isAdmin, catchErrors(userController.edit));
 
 router.get('/company/all', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.all));
 router.get('/company/:id', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.getById));

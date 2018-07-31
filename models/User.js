@@ -25,10 +25,10 @@ const userSchema = new Schema({
   signInCount: {
     type: Number,
   },
-  lastSignInAt: {
+  lastLogin: {
     type: Date
   },
-  lastSignInIP: {
+  lastLoginIP: {
     type: String
   },
   firstName: {
@@ -51,13 +51,9 @@ const userSchema = new Schema({
       "admin": false
     }],
   },
-  active: {
-    type: Boolean,
-    default: true
-  },
-  hourLogEmail: {
+  status: {
     type: String,
-    default: 'none'
+    default: "active"
   }
 },
   {

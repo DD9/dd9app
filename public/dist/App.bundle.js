@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 171);
+/******/ 	return __webpack_require__(__webpack_require__.s = 172);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1901,7 +1901,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             try {
                 oldLocale = globalLocale._abbr;
                 var aliasedRequire = require;
-                __webpack_require__(170)("./" + name);
+                __webpack_require__(171)("./" + name);
                 getSetGlobalLocale(oldLocale);
             } catch (e) {}
         }
@@ -14715,6 +14715,15 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+module.exports = __webpack_require__(151);
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -14882,14 +14891,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(2);
-var normalizeHeaderName = __webpack_require__(164);
+var normalizeHeaderName = __webpack_require__(165);
 
 var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 var DEFAULT_CONTENT_TYPE = {
@@ -14977,7 +14986,7 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(137)))
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14992,7 +15001,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 (function (factory) {
 	if (true) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(3), __webpack_require__(168)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(4), __webpack_require__(169)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
 			return factory($, window, document);
 		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -15023,7 +15032,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15087,15 +15096,6 @@ exports.default = validateTimeEntryFormInput;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = __webpack_require__(150);
-
-/***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -15103,12 +15103,12 @@ module.exports = __webpack_require__(150);
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(2);
-var settle = __webpack_require__(156);
-var buildURL = __webpack_require__(159);
-var parseHeaders = __webpack_require__(165);
-var isURLSameOrigin = __webpack_require__(163);
+var settle = __webpack_require__(157);
+var buildURL = __webpack_require__(160);
+var parseHeaders = __webpack_require__(166);
+var isURLSameOrigin = __webpack_require__(164);
 var createError = __webpack_require__(11);
-var btoa = typeof window !== 'undefined' && window.btoa && window.btoa.bind(window) || __webpack_require__(158);
+var btoa = typeof window !== 'undefined' && window.btoa && window.btoa.bind(window) || __webpack_require__(159);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -15201,7 +15201,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(161);
+      var cookies = __webpack_require__(162);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ? cookies.read(config.xsrfCookieName) : undefined;
@@ -15318,7 +15318,7 @@ module.exports = function isCancel(value) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(155);
+var enhanceError = __webpack_require__(156);
 
 /**
  * Create an Error with the specified message, config, error code, and response.
@@ -44242,7 +44242,7 @@ Popper.Defaults = Defaults;
 
 exports.default = Popper;
 //# sourceMappingURL=popper.js.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(169)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(170)))
 
 /***/ }),
 /* 139 */
@@ -48207,9 +48207,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(3);
+__webpack_require__(4);
 
-__webpack_require__(5);
+__webpack_require__(6);
 
 // Datatables and table title
 var companyAllTable = $('#companyAllTable');
@@ -48338,7 +48338,7 @@ confirmEditCompanyModal.on('hidden.bs.modal', function () {
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var _axios = __webpack_require__(7);
+var _axios = __webpack_require__(3);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -48376,9 +48376,9 @@ function ajaxOpenHourLogForm(e) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(3);
+__webpack_require__(4);
 
-__webpack_require__(5);
+__webpack_require__(6);
 
 // Datatables and table title
 $('#hourLogAllTable').dataTable({
@@ -48403,11 +48403,11 @@ $(".hour-log-all-table-title").html('<h3>Hour Logs</h3>');
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var _formValidation = __webpack_require__(6);
+var _formValidation = __webpack_require__(7);
 
 var _formValidation2 = _interopRequireDefault(_formValidation);
 
-var _axios = __webpack_require__(7);
+var _axios = __webpack_require__(3);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -48455,10 +48455,56 @@ function ajaxAddCreatedTimeEntry(e) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(167);
+var _axios = __webpack_require__(3);
 
-$('#newTimeEntryForm').find('#date').datepicker({
-  format: 'yyyy-mm-dd'
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var createdTimeEntriesTable = $('#createdTimeEntriesTable');
+
+// Approve
+createdTimeEntriesTable.find('.approve').click(function (e) {
+  e.preventDefault();
+  $(this).closest("tr").remove();
+  _axios2.default.get(this.href).then(function (res) {
+    var totalCreatedHours = $('#totalCreatedHours');
+    var newTotal = +totalCreatedHours.html() - +res.data.hours;
+    totalCreatedHours.html(newTotal);
+  }).catch(console.error);
+});
+
+// Hide
+createdTimeEntriesTable.find('.hide').click(function (e) {
+  e.preventDefault();
+  $(this).closest("tr").remove();
+  _axios2.default.get(this.href).then(function (res) {
+    var totalCreatedHours = $('#totalCreatedHours');
+    var newTotal = +totalCreatedHours.html() - +res.data.hours;
+    totalCreatedHours.html(newTotal);
+  }).catch(console.error);
+});
+
+// Submit
+createdTimeEntriesTable.find('.submit').click(function (e) {
+  e.preventDefault();
+  $(this).closest("tr").remove();
+  _axios2.default.get(this.href).then(function (res) {
+    var totalCreatedHours = $('#totalCreatedHours');
+    var newTotal = +totalCreatedHours.html() - +res.data.hours;
+    totalCreatedHours.html(newTotal);
+  }).catch(console.error);
+});
+
+// Delete
+createdTimeEntriesTable.find('.delete').click(function (e) {
+  e.preventDefault();
+  $(this).closest("tr").remove();
+  _axios2.default.get(this.href).then(function (res) {
+    var totalCreatedHours = $('#totalCreatedHours');
+    var newTotal = +totalCreatedHours.html() - +res.data.hours;
+    totalCreatedHours.html(newTotal);
+  }).catch(console.error);
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
@@ -48469,12 +48515,36 @@ $('#newTimeEntryForm').find('#date').datepicker({
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(3);
+__webpack_require__(168);
 
-__webpack_require__(5);
+$('#newTimeEntryForm').find('#date').datepicker({
+  format: 'yyyy-mm-dd'
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+__webpack_require__(4);
+
+__webpack_require__(6);
+
+var _axios = __webpack_require__(3);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Datatables and table title
-$('#userAllTable').dataTable({
+var userAllTable = $('#userAllTable').dataTable({
   "dom": "<'row'<'col user-all-table-title'><'col user-all-table-filter'f>>" + "<'row'<'col-sm-12 user-all-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 user-all-table-paginate'p>>",
   "bFilter": true,
   "bLengthChange": false,
@@ -48487,16 +48557,44 @@ $('#userAllTable').dataTable({
 });
 
 $(".user-all-table-title").html('<h3>Users</h3>' + '<button type="button" class="create-user-btn btn btn-primary" data-toggle="modal" data-target="#createUserModal">Add User</button>');
+
+// Populate the edit modal with current data
+$('.edit-user-btn').on("click", function () {
+  $("#editUserForm").attr("action", '/api/v1/user/' + $(this).data('user') + '/edit');
+  $("#company").val($(this).data('company'));
+  $("#status").val($(this).data('status'));
+  $("#role").val($(this).data('role'));
+  $("#firstName").val($(this).data('firstname'));
+  $("#lastName").val($(this).data('lastname'));
+  $("#email").attr('placeholder', $(this).data('email'));
+});
+
+// User table ajax on submit
+$('#editUserForm').on('submit', ajaxEditUser);
+function ajaxEditUser(e) {
+  e.preventDefault();
+  $('#editUserModal').modal('toggle');
+  _axios2.default.post(this.action, {
+    company: this.company.value,
+    status: this.status.value,
+    role: this.role.value,
+    firstName: this.firstName.value,
+    lastName: this.lastName.value,
+    lastLogin: this.lastLogin.value
+  }).then(function (res) {
+    userAllTable.DataTable().row('#' + res.data.email).data([res.data.firstName + ' ' + res.data.lastName, '' + res.data.email, '<a href=\'/company/' + res.data.company._id + '\'>' + res.data.company.name + '</a>', '' + res.data.role, '' + (0, _moment2.default)(res.data.lastLogin).format("dddd, MMMM Do YYYY [at] h:mmA"), '<a class="edit-user-btn center-me" data-toggle="modal" href="#editUserModal" data-company=' + res.data.company._id + ' data-status=' + res.data.status + ' data-role=' + res.data.role + ' data-firstName=' + res.data.firstName + ' data-lastName=' + res.data.lastName + ' data-email=' + res.data.email + ' data-lastlogin=' + res.data.lastLogin + '>Edit</a>']).draw();
+  }).catch(console.error);
+}
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48504,8 +48602,8 @@ $(".user-all-table-title").html('<h3>Users</h3>' + '<button type="button" class=
 
 var utils = __webpack_require__(2);
 var bind = __webpack_require__(12);
-var Axios = __webpack_require__(152);
-var defaults = __webpack_require__(4);
+var Axios = __webpack_require__(153);
+var defaults = __webpack_require__(5);
 
 /**
  * Create an instance of Axios
@@ -48539,14 +48637,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(9);
-axios.CancelToken = __webpack_require__(151);
+axios.CancelToken = __webpack_require__(152);
 axios.isCancel = __webpack_require__(10);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(166);
+axios.spread = __webpack_require__(167);
 
 module.exports = axios;
 
@@ -48554,7 +48652,7 @@ module.exports = axios;
 module.exports.default = axios;
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48617,18 +48715,18 @@ CancelToken.source = function source() {
 module.exports = CancelToken;
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var defaults = __webpack_require__(4);
+var defaults = __webpack_require__(5);
 var utils = __webpack_require__(2);
-var InterceptorManager = __webpack_require__(153);
-var dispatchRequest = __webpack_require__(154);
-var isAbsoluteURL = __webpack_require__(162);
-var combineURLs = __webpack_require__(160);
+var InterceptorManager = __webpack_require__(154);
+var dispatchRequest = __webpack_require__(155);
+var isAbsoluteURL = __webpack_require__(163);
+var combineURLs = __webpack_require__(161);
 
 /**
  * Create a new instance of Axios
@@ -48708,7 +48806,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 module.exports = Axios;
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48766,16 +48864,16 @@ InterceptorManager.prototype.forEach = function forEach(fn) {
 module.exports = InterceptorManager;
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(2);
-var transformData = __webpack_require__(157);
+var transformData = __webpack_require__(158);
 var isCancel = __webpack_require__(10);
-var defaults = __webpack_require__(4);
+var defaults = __webpack_require__(5);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -48832,7 +48930,7 @@ module.exports = function dispatchRequest(config) {
 };
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48858,7 +48956,7 @@ module.exports = function enhanceError(error, config, code, response) {
 };
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48884,7 +48982,7 @@ module.exports = function settle(resolve, reject, response) {
 };
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48910,7 +49008,7 @@ module.exports = function transformData(data, headers, fns) {
 };
 
 /***/ }),
-/* 158 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48951,7 +49049,7 @@ function btoa(input) {
 module.exports = btoa;
 
 /***/ }),
-/* 159 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49018,7 +49116,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 };
 
 /***/ }),
-/* 160 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49037,7 +49135,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 };
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49096,7 +49194,7 @@ function nonStandardBrowserEnv() {
 }();
 
 /***/ }),
-/* 162 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49118,7 +49216,7 @@ module.exports = function isAbsoluteURL(url) {
 };
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49187,7 +49285,7 @@ function nonStandardBrowserEnv() {
 }();
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49205,7 +49303,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 };
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49250,7 +49348,7 @@ module.exports = function parseHeaders(headers) {
 };
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49284,7 +49382,7 @@ module.exports = function spread(callback) {
 };
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51093,7 +51191,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52386,7 +52484,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52416,7 +52514,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 170 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -52681,11 +52779,11 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 170;
+webpackContext.id = 171;
 
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52693,9 +52791,9 @@ webpackContext.id = 170;
 
 __webpack_require__(140);
 
-__webpack_require__(149);
+__webpack_require__(150);
 
-__webpack_require__(148);
+__webpack_require__(149);
 
 __webpack_require__(141);
 
@@ -52707,76 +52805,13 @@ __webpack_require__(144);
 
 __webpack_require__(143);
 
-__webpack_require__(147);
+__webpack_require__(148);
 
-__webpack_require__(6);
+__webpack_require__(7);
 
 __webpack_require__(146);
 
-__webpack_require__(175);
-
-/***/ }),
-/* 172 */,
-/* 173 */,
-/* 174 */,
-/* 175 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {
-
-var _axios = __webpack_require__(7);
-
-var _axios2 = _interopRequireDefault(_axios);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var createdTimeEntriesTable = $('#createdTimeEntriesTable');
-
-// Approve
-createdTimeEntriesTable.find('.approve').click(function (e) {
-  e.preventDefault();
-  $(this).closest("tr").remove();
-  _axios2.default.get(this.href).then(function (res) {
-    var totalCreatedHours = $('#totalCreatedHours');
-    var newTotal = +totalCreatedHours.html() - +res.data.hours;
-    totalCreatedHours.html(newTotal);
-  }).catch(console.error);
-});
-
-// Hide
-createdTimeEntriesTable.find('.hide').click(function (e) {
-  e.preventDefault();
-  $(this).closest("tr").remove();
-  _axios2.default.get(this.href).then(function (res) {
-    var totalCreatedHours = $('#totalCreatedHours');
-    var newTotal = +totalCreatedHours.html() - +res.data.hours;
-    totalCreatedHours.html(newTotal);
-  }).catch(console.error);
-});
-
-// Submit
-createdTimeEntriesTable.find('.submit').click(function (e) {
-  e.preventDefault();
-  $(this).closest("tr").remove();
-  _axios2.default.get(this.href).then(function (res) {
-    var totalCreatedHours = $('#totalCreatedHours');
-    var newTotal = +totalCreatedHours.html() - +res.data.hours;
-    totalCreatedHours.html(newTotal);
-  }).catch(console.error);
-});
-
-// Delete
-createdTimeEntriesTable.find('.delete').click(function (e) {
-  e.preventDefault();
-  $(this).closest("tr").remove();
-  _axios2.default.get(this.href).then(function (res) {
-    var totalCreatedHours = $('#totalCreatedHours');
-    var newTotal = +totalCreatedHours.html() - +res.data.hours;
-    totalCreatedHours.html(newTotal);
-  }).catch(console.error);
-});
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+__webpack_require__(147);
 
 /***/ })
 /******/ ]);

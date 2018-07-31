@@ -19,3 +19,23 @@
   font-size: 14px;
   margin-top: 10px;
 }
+
+// Fixing misaligned table headers, see table row width %'s in hourLogAll.js
+.user-all-th-name {
+  width: 20% !important;
+}
+.user-all-th-email {
+  width: 20% !important;
+}
+.user-all-th-company {
+  width: 10% !important;
+}
+.user-all-th-role {
+  width: 10% !important;
+}
+.user-all-th-last-login  {
+  width: 30% !important;
+}
+.user-all-th-edit {
+  width: 10% !important;
+}
