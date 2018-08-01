@@ -1,4 +1,35 @@
-.company-title-btn {
+.company-one-title-btn {
   margin-left: 20px;
   margin-bottom: 12px;
+}
+
+.company-one-table-paginate {
+  display: none;
+}
+
+.company-one-table-title {
+  margin-left: 10px;
+}
+
+.company-one-table-title h3 {
+  display: inline;
+}
+
+.company-one-table {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+// Fixing misaligned table headers, see table row width %'s in hourLogAll.js
+.company-one-th-name {
+  width: 20% !important;
+}
+.company-one-th-email {
+  width: 60% !important;
+}
+.company-one-th-company {
+  width: 10% !important;
+}
+.company-one-th-role {
+  width: 10% !important;
 }

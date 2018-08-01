@@ -10,7 +10,7 @@ block content
         if (h.YYYYMMDD(hourLog.dateClosed) === "1969-12-31")
           form#closeHourLogForm.form.d-inline(action=`/hourLog/${hourLog._id}/close` method="POST")
             button#closeHourLogButton.close-hour-log-btn.btn.btn-primary(type='submit') Close Hour Log
-          form#openHourLogForm.form.d-inline.d-none(action=`/hourLog/${hourLog._id}/open` method="POST")
+          form#openHourLogForm.form.d-inline(action=`/hourLog/${hourLog._id}/open` method="POST")
             button#openHourLogButton.open-hour-log-btn.btn.btn-primary.d-none(type='submit') Open Hour Log
         else
           form#openHourLogForm.form.d-inline(action=`/hourLog/${hourLog._id}/open` method="POST")

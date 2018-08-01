@@ -1,0 +1,44 @@
+mixin editUserOneFormAdmin()
+  form#editUserOneFormAdmin.editUserForm.form(action=`/api/v1/user/${user._id}/edit/admin` method="POST" novalidate)
+    if user.permissions[0].admin
+      .form-group.row
+        label.col-sm-2.col-form-label(for='company') Company
+        .col-sm-10
+          select#company.form-control(name='company' data-value=user.company)
+            for company in companies
+              option(value=company._id) #{company.name}
+      .form-group.row
+        label.col-sm-2.col-form-label(for='status') Status
+        .col-sm-10
+          select#status.form-control(name='status' data-value=user.status)
+            option(value='active') Active
+            option(value='inactive') Inactive
+      .form-group.row
+        label.col-sm-2.col-form-label(for='role') Role
+        .col-sm-10
+          select#role.form-control(name='role' data-value=user.role)
+            option(value='client') Client
+            option(value='staff') Staff
+            option(value='admin') Admin
+    .form-group.row
+      label.col-sm-2.col-form-label(for='firstName') First name
+      .col-sm-10
+        input#firstName.form-control(name='firstName' type='text' value=user.firstName required maxlength='25')
+        .invalid-feedback Invalid form.
+    .form-group.row
+      label.col-sm-2.col-form-label(for='lastName') Last name
+      .col-sm-10
+        input#lastName.form-control(name='lastName' type='text' value=user.lastName required maxlength='25')
+        .invalid-feedback Invalid form.
+    .form-group.row
+      label.col-sm-2.col-form-label(for='email') Email
+      .col-sm-10
+        input#email.form-control(name='email' type='text' value=user.email disabled)
+    .form-group.row
+      label.col-sm-2.col-form-label(for='password') Password
+      .col-sm-10
+        input#password.form-control(name='password' type='text' placeholder="password and email managed by GSuite" disabled)
+        .invalid-feedback Invalid form.
+    .form-group.row
+      .col-sm-10
+        button.btn.btn-primary(type='submit') Save

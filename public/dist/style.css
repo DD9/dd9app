@@ -7708,6 +7708,9 @@ template {
 .box-shadow {
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05) !important; }
 
+.hiddenHoursTextColor {
+  color: #AAAAAA; }
+
 body {
   background-color: #F8F9FA !important; }
 
@@ -7808,6 +7811,9 @@ footer {
 .user-all-th-edit {
   width: 10% !important; }
 
+.user-one-title {
+  margin-left: 10px; }
+
 .company-all-table-paginate {
   display: none; }
 
@@ -7831,9 +7837,34 @@ footer {
 .company-all-th-status {
   width: 50% !important; }
 
-.company-title-btn {
+.company-one-title-btn {
   margin-left: 20px;
   margin-bottom: 12px; }
+
+.company-one-table-paginate {
+  display: none; }
+
+.company-one-table-title {
+  margin-left: 10px; }
+
+.company-one-table-title h3 {
+  display: inline; }
+
+.company-one-table {
+  font-size: 14px;
+  margin-top: 10px; }
+
+.company-one-th-name {
+  width: 20% !important; }
+
+.company-one-th-email {
+  width: 60% !important; }
+
+.company-one-th-company {
+  width: 10% !important; }
+
+.company-one-th-role {
+  width: 10% !important; }
 
 .hour-log-all-table-paginate {
   display: none; }
@@ -7884,6 +7915,9 @@ footer {
 
 .time-entry-new {
   font-size: 15px; }
+
+#createdTimeEntriesTable td {
+  padding-bottom: 0; }
 
 .time-entry-new-time-entry-card {
   margin-bottom: 40px; }

@@ -4,8 +4,8 @@ const HourLog = mongoose.model('HourLog');
 const TimeEntry = mongoose.model('TimeEntry');
 
 exports.new = async (req, res) => {
-  const companies = await Company.find({ active: true }).sort('name').select('name');
-  const timeEntries = await TimeEntry.find({ status: 'created', user: req.user._id }).populate("company");
+  const companies = await Company.find({ status: "active" }).select('name').sort('name');
+  const timeEntries = await TimeEntry.find({ status: 'created', user: req.user._id }).populate('company', 'name');
 
   let totalCreatedHours = 0;
   for (let i = 0; i < timeEntries.length; i++) {
@@ -13,7 +13,7 @@ exports.new = async (req, res) => {
     totalCreatedHours += timeEntry.hours;
   }
 
-  res.render('timeEntry/new', { title: "Time Entry", timeEntries, totalCreatedHours, companies })
+  res.render('timeEntry/new', { title: "Time Entry", companies, timeEntries, totalCreatedHours })
 };
 
 exports.create = async (req, res) => {

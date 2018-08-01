@@ -1,38 +1,11 @@
-import 'datatables.net-bs4';
-import 'datatables.net-scroller-bs4';
+import editUserValidation from '../editUserValidation';
+
 import axios from 'axios';
 import moment from 'moment';
 
-// Datatables and table title
-const userAllTable = $('#userAllTable').dataTable({
-  "dom": "<'row'<'col user-all-table-title'><'col user-all-table-filter'f>>" +
-  "<'row'<'col-sm-12 user-all-table'tr>>" +
-  "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 user-all-table-paginate'p>>",
-  "bFilter": true,
-  "bLengthChange": false,
-  "bInfo": false,
-  "aaSorting": [[0,'asc']],
-  scrollY: 400,
-  scroller: true,
-  language: {sSearch: "", searchPlaceholder: "Search..."},
-  "columns": [
-    { "width": "20%"},
-    { "width": "20%"},
-    { "width": "10%"},
-    { "width": "30%"},
-    { "width": "10%"},
-    { "width": "10%"},
-  ]
-});
-
-$(".user-all-table-title").html(
-  '<h3>Users</h3>' +
-  '<button type="button" class="create-user-btn btn btn-primary" data-toggle="modal" data-target="#createUserModal">Add User</button>'
-);
-
-// Populate the edit modal with current data
+// Populate the user all edit modal with current data
 $('.edit-user-btn').on("click", function () {
-  $("#editUserForm").attr("action", `/api/v1/user/${$(this).data('user')}/edit`);
+  $("#editUserAllForm").attr("action", `/api/v1/user/${$(this).data('user')}/edit/admin`);
   $("#company").val($(this).data('company'));
   $("#status").val($(this).data('status'));
   $("#role").val($(this).data('role'));
@@ -41,10 +14,11 @@ $('.edit-user-btn').on("click", function () {
   $("#email").attr('placeholder', ($(this).data('email')));
 });
 
-// User table ajax on submit
-$('#editUserForm').on('submit', ajaxEditUser);
+// User all table ajax on submit
+$('#editUserAllForm').on('submit', ajaxEditUser);
 function ajaxEditUser(e) {
   e.preventDefault();
+  editUserValidation();
   $('#editUserModal').modal('toggle');
   axios
     .post(this.action, {
@@ -56,7 +30,7 @@ function ajaxEditUser(e) {
       lastLogin: this.lastLogin.value
     })
     .then(res => {
-      userAllTable.DataTable().row(`#${res.data.email}`).data([
+      $('#userAllTable').DataTable().row(`#${res.data.email}`).data([
         `${res.data.firstName} ${res.data.lastName}`,
         `${res.data.email}`,
         `<a href='/company/${res.data.company._id}'>${res.data.company.name}</a>`,

@@ -1,4 +1,4 @@
-function validateTimeEntryFormInput() {
+function createTimeEntryValidation() {
   const timeEntryForm = $('.timeEntryForm');
   const dateInput = timeEntryForm.find('#date');
   const companyInput = timeEntryForm.find('#company');
@@ -49,4 +49,5 @@ function validateTimeEntryFormInput() {
   }
 }
 
-export default validateTimeEntryFormInput;
+export default createTimeEntryValidation
+

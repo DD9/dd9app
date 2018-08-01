@@ -15,10 +15,12 @@ router.get('/auth/google', authController.googleAuth);
 router.get('/auth/google/callback', authController.googleAuthRedirect);
 
 router.get('/user/all', authController.isLoggedIn, authController.isAdmin, catchErrors(userController.all));
-router.post('/api/v1/user/:id/edit', authController.isLoggedIn, authController.isAdmin, catchErrors(userController.edit));
+router.get('/user/:id', authController.isLoggedIn, catchErrors(userController.one));
+router.post('/api/v1/user/:id/edit', authController.isLoggedIn, catchErrors(userController.edit));
+router.post('/api/v1/user/:id/edit/admin', authController.isLoggedIn, authController.isAdmin, catchErrors(userController.editAdmin));
 
 router.get('/company/all', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.all));
-router.get('/company/:id', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.getById));
+router.get('/company/:id', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.one));
 router.post('/company/create', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.create));
 router.post('/company/:id/edit', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.edit));
 router.post('/company/:id/activate', authController.isLoggedIn, authController.isAdmin, catchErrors(companyController.activate));
@@ -33,9 +35,9 @@ router.get('/api/v1/hourLog/:id/timeEntries', authController.isLoggedIn, authCon
 router.get('/timeEntry/new', authController.isLoggedIn, catchErrors(timeEntryController.new));
 router.post('/api/v1/timeEntry/create', authController.isLoggedIn, catchErrors(timeEntryController.create));
 router.post('/api/v1/timeEntry/createAndSubmit', authController.isLoggedIn, catchErrors(timeEntryController.createAndSubmit));
-router.get('/api/v1/timeEntry/:id/approve', authController.isLoggedIn, catchErrors(timeEntryController.approve));
-router.get('/api/v1/timeEntry/:id/hide', authController.isLoggedIn, catchErrors(timeEntryController.hide));
-router.get('/api/v1/timeEntry/:id/submit', authController.isLoggedIn, catchErrors(timeEntryController.submit));
-router.get('/api/v1/timeEntry/:id/delete', authController.isLoggedIn, catchErrors(timeEntryController.delete));
+router.post('/api/v1/timeEntry/:id/approve', authController.isLoggedIn, catchErrors(timeEntryController.approve));
+router.post('/api/v1/timeEntry/:id/hide', authController.isLoggedIn, catchErrors(timeEntryController.hide));
+router.post('/api/v1/timeEntry/:id/submit', authController.isLoggedIn, catchErrors(timeEntryController.submit));
+router.post('/api/v1/timeEntry/:id/delete', authController.isLoggedIn, catchErrors(timeEntryController.delete));
 
 module.exports = router;

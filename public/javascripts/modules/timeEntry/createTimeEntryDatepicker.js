@@ -1,5 +1,5 @@
 import "bootstrap-datepicker"
 
-$('#newTimeEntryForm').find('#date').datepicker({
+$('#createTimeEntryForm').find('#date').datepicker({
   format: 'yyyy-mm-dd'
 });

@@ -19,21 +19,24 @@ block content
           tr
             td= h.YYYYMMDD(timeEntry.date)
             td= timeEntry.company.name
-            td= timeEntry.hours
+            td.time-entry-table-hours= timeEntry.hours
             td= timeEntry.description
             if user.permissions[0].admin
               td
-                a.approve(href=`/api/v1/timeEntry/${timeEntry._id}/approve`) Approve
-                | &nbsp&nbsp
-                a.hide(href=`/api/v1/timeEntry/${timeEntry._id}/hide`) Hide
-                | &nbsp&nbsp
-                a.submit(href=`/api/v1/timeEntry/${timeEntry._id}/submit`) Submit
-                | &nbsp&nbsp
-                a.delete(href=`/api/v1/timeEntry/${timeEntry._id}/delete`) Delete
+                form.time-entry-table-action-approve.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/approve` method="POST")
+                  button.btn.btn-sm.btn-link(type='submit') Approve
+                form.time-entry-table-action-hide.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/hide` method="POST")
+                  button.btn.btn-sm.btn-link(type='submit') Hide
+                form.time-entry-table-action-submit.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/submit` method="POST")
+                  button.btn.btn-sm.btn-link(type='submit') Submit
+                form.time-entry-table-action-delete.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/delete` method="POST")
+                  button.btn.btn-sm.btn-link(type='submit') Delete
             else
-                a.submit(href=`/api/v1/timeEntry/${timeEntry._id}/submit`) Submit
-                | &nbsp&nbsp
-                a.delete(href=`/api/v1/timeEntry/${timeEntry._id}/delete`) Delete
+              form.time-entry-table-action-submit.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/submit` method="POST")
+                button.btn.btn-sm.btn-link(type='submit') Submit
+              form.time-entry-table-action-delete.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/delete` method="POST")
+                button.btn.btn-sm.btn-link(type='submit') Delete
+
         tr#lastRowInCreatedTimeEntriesTable
           td
           td

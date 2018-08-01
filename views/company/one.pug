@@ -5,27 +5,28 @@ block content
     .row
       .col.company-title
         h2.d-inline #{company.name}
-        if (company.active === true)
-          button#editCompanyBtn.company-title-btn.btn.btn-primary(type='button', data-toggle='modal', data-target='#editCompanyModal') Edit
+        if company.status === "active"
+          button#editCompanyBtn.company-one-title-btn.btn.btn-primary(type='button', data-toggle='modal', data-target='#editCompanyModal') Edit
+          form#activateCompanyForm.form.d-inline(action=`/company/${company._id}/activate` method="POST")
+            button#activateCompanyBtn.company-one-title-btn.btn.btn-primary.d-none(type='submit') Activate
         else
           form#activateCompanyForm.form.d-inline(action=`/company/${company._id}/activate` method="POST")
-            button#activateCompanyBtn.company-title-btn.btn.btn-primary(type='submit' form='activateCompanyForm') Activate
-    .my-3.py-1.px-3.bg-white.rounded.box-shadow
-      .row
-        .col.mt-2
-          h4 Hour Logs
+            button#activateCompanyBtn.company-one-title-btn.btn.btn-primary(type='submit') Activate
+          button#editCompanyBtn.company-one-title-btn.btn.btn-primary.d-none(type='button', data-toggle='modal', data-target='#editCompanyModal') Edit
+
+    .my-3.py-3.px-3.bg-white.rounded.box-shadow
       table#companyOneTable.table.table-sm.w-100
         thead.thead-light
-          th Date
-          th Title
-          th Hours
-          th Hidden Hours
+          th.company-one-th-name Date
+          th.company-one-th-email Title
+          th.company-one-th-company Hours
+          th.company-one-th-name.hiddenHoursTextColor Hidden Hours
         each hourLog in hourLogs
           tr
             td= h.YYYYMMDD(hourLog.dateOpened)
             td: a(href=`/hourLog/${hourLog._id}`) #{hourLog.title}
             td= hourLog.totalPublicHours
-            td= hourLog.totalHiddenHours
+            td.hiddenHoursTextColor= hourLog.totalHiddenHours
 
   #editCompanyModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='editCompanyModal', aria-hidden='true')
     .modal-dialog(role='document')
@@ -40,24 +41,8 @@ block content
               label.col-form-label(for='companyName') Name
               input#companyName.form-control(name='name' type='text' value=company.name required maxlength="50")
               .invalid-feedback Invalid form.
-              button.btn-secondary.mt-3.btn.btn-block(type='button', data-dismiss='modal' data-toggle='modal' data-target='#confirmEditCompanyModal' data-payload="Deactivate") deactivate
+          form#deactivateCompanyForm.form.d-inline(action=`/company/${company._id}/deactivate` method="POST")
+            button.btn-secondary.mt-3.btn.btn-block(type='submit') Deactivate
         .modal-footer
-          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-          button.btn.btn-primary(type='submit' form='editCompanyForm') Submit
-
-  #confirmEditCompanyModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='editCompanyModal', aria-hidden='true')
-    .modal-dialog(role='document')
-      .modal-content
-        .modal-header
-          h5.modal-title Confirm
-          button.close(type='button', data-dismiss='modal', aria-label='Close')
-            span(aria-hidden='true') ×
-        .modal-body
-          form#confirmEditCompanyForm.form(action=`/company/${company._id}/` method="POST" novalidate)
-            .form-group
-              label.col-form-label(for='confirm') Enter company name
-              input#confirm.form-control(name='name' type='text' placeholder=company.name required maxlength="50")
-              .invalid-feedback Invalid form.
-        .modal-footer
-          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-          button.confirm-edit-company-submit.btn(type='submit' form='confirmEditCompanyForm') Submit
+          button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+          button.btn.btn-primary(form='editCompanyForm') Submit
