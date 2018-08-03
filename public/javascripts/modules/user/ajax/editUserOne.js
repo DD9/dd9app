@@ -16,7 +16,7 @@ $(document).ready(function () {
   }
 });
 
-// My account ajax on submit
+// My account edit ajax
 $('#editUserOneForm').on('submit', ajaxEditUser);
 function ajaxEditUser(e) {
   e.preventDefault();
@@ -33,7 +33,7 @@ function ajaxEditUser(e) {
     .catch(console.error);
 }
 
-// My account ajax on submit for admins
+// My account edit ajax for admins
 $('#editUserOneFormAdmin').on('submit', ajaxEditUserAdmin);
 function ajaxEditUserAdmin(e) {
   e.preventDefault();

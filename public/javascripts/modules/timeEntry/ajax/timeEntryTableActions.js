@@ -7,6 +7,17 @@ import axios from 'axios';
 instantiateTimeEntryTableActions();
 
 function instantiateTimeEntryTableActions() {
+
+  let deleteTimeEntryBtn;
+  $('.delete-time-entry-btn').on("click", function () {
+    deleteTimeEntryBtn = this;
+    $("#confirmDeleteTimeEntryForm").attr("action", `/api/v1/timeEntry/${$(this).data('timeentry')}/delete`);
+  });
+
+  $('.confirm-ok-btn').on("click", function () {
+    $('#confirmDeleteTimeEntryModal').modal('toggle');
+  });
+
   $('.time-entry-table-action-approve').on('submit', ajaxTimeEntryTableApprove);
   $('.time-entry-table-action-hide').on('submit', ajaxTimeEntryTableHide);
   $('.time-entry-table-action-submit').on('submit', ajaxTimeEntryTableSubmit);
@@ -56,10 +67,12 @@ function instantiateTimeEntryTableActions() {
   // Delete
   function ajaxTimeEntryTableDelete(e) {
     e.preventDefault();
-    $(this).closest("tr").remove();
+    $(deleteTimeEntryBtn).closest("tr").remove();
+    console.log(this);
     axios
       .post(this.action)
       .then(res => {
+        console.log(res);
         const newTotal = +totalCreatedHours.html() - +res.data.hours;
         totalCreatedHours.html(newTotal);
       })

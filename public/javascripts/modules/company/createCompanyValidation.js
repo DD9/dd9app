@@ -14,14 +14,14 @@ function createCompanyValidation() {
   let hasError = false;
   if (!companyNameInputVal) {
     hasError = true;
-    createCompanyForm.find(".invalid-feedback").html("Company Name required.");
-    companyNameInput.addClass("is-invalid");
+    createCompanyForm.find('.invalid-feedback').html("Company name required.");
+    companyNameInput.addClass('is-invalid');
   } else if (companyNames.includes(companyNameInputVal)) {
     hasError = true;
-    createCompanyForm.find(".invalid-feedback").html("Company Name must be unique.");
-    companyNameInput.addClass("is-invalid");
+    createCompanyForm.find('.invalid-feedback').html("Company name must be unique.");
+    companyNameInput.addClass('is-invalid');
   } else {
-    companyNameInput.removeClass("is-invalid");
+    companyNameInput.removeClass('is-invalid');
   }
 
   if (hasError) {

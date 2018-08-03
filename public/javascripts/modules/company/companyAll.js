@@ -23,4 +23,4 @@ companyAllTable.dataTable({
 $(".company-all-table-title").html(
   '<h3>Companies</h3>' +
   '<button type="button" class="create-company-btn btn btn-primary" data-toggle="modal" data-target="#createCompanyModal">Add Company</button>'
-);``
+);

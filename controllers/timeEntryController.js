@@ -61,24 +61,17 @@ exports.createAndSubmit = async (req, res) => {
 exports.approve = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOneAndUpdate({ _id: timeEntryId }, { $set: { status: "approved" } }, { new: true });
-  const hourLog = await HourLog.findOne({ title: "Current", company: timeEntry.company });
-
-  console.log(hourLog);
+  let hourLog = await HourLog.findOne({ title: "Current", company: timeEntry.company });
 
   if (!hourLog) {
-    await new HourLog({
-      company: timeEntry.company,
-      timeEntries: timeEntry._id,
-      dateClosed: new Date(0),
-      totalApprovedHours: timeEntry.hours
-    }).save();
+    hourLog = await (new HourLog({ company: timeEntry.company, timeEntries: timeEntry._id, dateClosed: new Date(0), totalPublicHours: timeEntry.hours }));
     timeEntry.hourLog = hourLog._id;
   } else {
-    await hourLog.update({ $push: { timeEntries: timeEntry._id }}).exec();
-    hourLog.totalApprovedHours += timeEntry.hours;
+    await hourLog.update({ $push: { timeEntries: timeEntry._id }});
+    hourLog.totalPublicHours += timeEntry.hours;
     timeEntry.hourLog = hourLog._id;
-    await hourLog.save();
   }
+  await hourLog.save();
   await timeEntry.save();
 
   res.json(timeEntry);
@@ -87,21 +80,17 @@ exports.approve = async (req, res) => {
 exports.hide = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOneAndUpdate({ _id: timeEntryId }, { $set: { status: "hidden" } }, { new: true });
-  const hourLog = await HourLog.findOne({ title: "Current", company: timeEntry.company });
+  let hourLog = await HourLog.findOne({ title: "Current", company: timeEntry.company });
 
   if (!hourLog) {
-    await new HourLog({
-      company: timeEntry.company,
-      timeEntries: timeEntry._id,
-      dateClosed: new Date(0),
-      totalHiddenHours: timeEntry.hours
-    }).save();
+    hourLog = await (new HourLog({ company: timeEntry.company, timeEntries: timeEntry._id, dateClosed: new Date(0), totalHiddenHours: timeEntry.hours }));
     timeEntry.hourLog = hourLog._id;
   } else {
     await hourLog.update({ $push: { timeEntries: timeEntry._id }});
     hourLog.totalHiddenHours += timeEntry.hours;
     timeEntry.hourLog = hourLog._id;
   }
+  await hourLog.save();
   await timeEntry.save();
 
   res.json(timeEntry);
@@ -110,21 +99,17 @@ exports.hide = async (req, res) => {
 exports.submit = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOneAndUpdate({ _id: timeEntryId }, { $set: { status: "submitted" } }, { new: true });
-  const hourLog = await HourLog.findOne({ title: "Current", company: timeEntry.company });
+  let hourLog = await HourLog.findOne({ title: "Current", company: timeEntry.company });
 
   if (!hourLog) {
-    await new HourLog({
-      company: timeEntry.company,
-      timeEntries: timeEntry._id,
-      dateClosed: new Date(0),
-      totalSubmittedHours: timeEntry.hours
-    }).save();
+    hourLog = await (new HourLog({ company: timeEntry.company, timeEntries: timeEntry._id, dateClosed: new Date(0), totalSubmittedHours: timeEntry.hours }));
     timeEntry.hourLog = hourLog._id;
   } else {
     await hourLog.update({ $push: { timeEntries: timeEntry._id }});
     hourLog.totalSubmittedHours += timeEntry.hours;
     timeEntry.hourLog = hourLog._id;
   }
+  await hourLog.save();
   await timeEntry.save();
 
   res.json(timeEntry);

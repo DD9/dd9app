@@ -22,9 +22,9 @@ exports.create = async (req, res) => {
 
 exports.edit = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOneAndUpdate({ _id: companyId }, req.body);
+  const company = await Company.findOneAndUpdate({ _id: companyId }, req.body, { new: true });
   req.flash('success', `Successfully edited ${company.name}`);
-  res.redirect(`/company/${company._id}`);
+  res.json(company);
 };
 
 exports.activate = async (req, res) => {

@@ -3,8 +3,8 @@ extends ../index/layout
 block content
   .container
     .row
-      .col.company-title
-        h2.d-inline #{company.name}
+      .col
+        h2.company-title.d-inline #{company.name}
         if company.status === "active"
           button#editCompanyBtn.company-one-title-btn.btn.btn-primary(type='button', data-toggle='modal', data-target='#editCompanyModal') Edit
           form#activateCompanyForm.form.d-inline(action=`/company/${company._id}/activate` method="POST")

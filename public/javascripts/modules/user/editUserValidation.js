@@ -10,17 +10,17 @@ function editUserValidation() {
   if (!firstName) {
     hasError = true;
     firstNameInput.closest('div').find('.invalid-feedback').html("First name required.");
-    firstNameInput.addClass("is-invalid");
+    firstNameInput.addClass('is-invalid');
   } else {
-    firstNameInput.removeClass("is-invalid");
+    firstNameInput.removeClass('is-invalid');
   }
 
   if (!lastName) {
     hasError = true;
     lastNameInput.closest('div').find('.invalid-feedback').html("Last name required.");
-    lastNameInput.addClass("is-invalid");
+    lastNameInput.addClass('is-invalid');
   } else {
-    lastNameInput.removeClass("is-invalid");
+    lastNameInput.removeClass('is-invalid');
   }
 
   if (hasError) {

@@ -29,13 +29,18 @@ block content
                   button.btn.btn-sm.btn-link(type='submit') Hide
                 form.time-entry-table-action-submit.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/submit` method="POST")
                   button.btn.btn-sm.btn-link(type='submit') Submit
-                form.time-entry-table-action-delete.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/delete` method="POST")
-                  button.btn.btn-sm.btn-link(type='submit') Delete
+                button.delete-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeEntry=timeEntry._id) Delete
             else
-              form.time-entry-table-action-submit.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/submit` method="POST")
-                button.btn.btn-sm.btn-link(type='submit') Submit
-              form.time-entry-table-action-delete.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/delete` method="POST")
-                button.btn.btn-sm.btn-link(type='submit') Delete
+                form.time-entry-table-action-submit.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/submit` method="POST")
+                  button.btn.btn-sm.btn-link(type='submit') Submit
+                button.delete-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry=timeEntry._id) Delete
+            td
+              button.btn.btn-sm.btn-link(data-toggle='modal' data-target='#editTimeEntryModal'
+              data-date=timeEntry.date
+              data-company=timeEntry.company._id
+              data-hours=timeEntry.hours
+              data-description=timeEntry.description)
+              | Edit
 
         tr#lastRowInCreatedTimeEntriesTable
           td
@@ -49,3 +54,17 @@ block content
         .col.mt-3.mb-2
           h4 Add New Time Entry
       +createTimeEntry()
+
+  #confirmDeleteTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmDeleteTimeEntryModal', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Confirm
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#confirmDeleteTimeEntryForm.time-entry-table-action-delete.form(action=`/api/v1/timeEntry/:id/delete` method="POST")
+            p.text-center Are you sure you want to delete this time entry?
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button.confirm-ok-btn.btn.btn-primary(type='submit' form='confirmDeleteTimeEntryForm') Ok
