@@ -1,5 +1,5 @@
 mixin editUserOneForm()
-  form#editUserOneForm.editUserForm.form(action=`/api/v1/user/${user._id}/edit` method="POST" novalidate)
+  form#editUserOneForm.edit-user-form.form(action=`/api/v1/user/${user._id}/edit` method="POST" novalidate)
     .form-group.row
       label.col-sm-2.col-form-label(for='firstName') First name
       .col-sm-10

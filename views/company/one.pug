@@ -17,16 +17,18 @@ block content
     .my-3.py-3.px-3.bg-white.rounded.box-shadow
       table#companyOneTable.table.table-sm.w-100
         thead.thead-light
-          th.company-one-th-name Date
+          th.company-one-th-date-opened Date Opened
+          th.company-one-th-date-closed Date Closed
           th.company-one-th-email Title
           th.company-one-th-company Hours
-          th.company-one-th-name.hiddenHoursTextColor Hidden Hours
+          th.company-one-th-name.hidden-hours-text-color Hidden Hours
         each hourLog in hourLogs
           tr
             td= h.YYYYMMDD(hourLog.dateOpened)
+            td= (h.YYYYMMDD(hourLog.dateClosed) === "1970-01-01") ? '' : h.YYYYMMDD(hourLog.dateClosed)
             td: a(href=`/hourLog/${hourLog._id}`) #{hourLog.title}
             td= hourLog.totalPublicHours
-            td.hiddenHoursTextColor= hourLog.totalHiddenHours
+            td.hidden-hours-text-color= hourLog.totalHiddenHours
 
   #editCompanyModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='editCompanyModal', aria-hidden='true')
     .modal-dialog(role='document')
@@ -41,6 +43,9 @@ block content
               label.col-form-label(for='companyName') Name
               input#companyName.form-control(name='name' type='text' value=company.name required maxlength="50")
               .invalid-feedback Invalid form.
+              .companies-json.d-none
+                each company in companies
+                  p #{company.name}
           form#deactivateCompanyForm.form.d-inline(action=`/company/${company._id}/deactivate` method="POST")
             button.btn-secondary.mt-3.btn.btn-block(type='submit') Deactivate
         .modal-footer

@@ -1,9 +1,9 @@
-function createTimeEntryValidation() {
-  const createTimeEntryForm = $('#createTimeEntryForm');
-  const dateInput = createTimeEntryForm.find('#date');
-  const companyInput = createTimeEntryForm.find('#company');
-  const hoursInput = createTimeEntryForm.find('#hours');
-  const descriptionInput = createTimeEntryForm.find('#description');
+function editTimeEntryValidation() {
+  const editTimeEntryForm = $('#editTimeEntryForm');
+  const dateInput = editTimeEntryForm.find('#date');
+  const companyInput = editTimeEntryForm.find('#company');
+  const hoursInput = editTimeEntryForm.find('#hours');
+  const descriptionInput = editTimeEntryForm.find('#description');
 
   const dateVal = dateInput.val();
   const companyVal = companyInput.val();
@@ -49,5 +49,5 @@ function createTimeEntryValidation() {
   }
 }
 
-export default createTimeEntryValidation
+export default editTimeEntryValidation
 

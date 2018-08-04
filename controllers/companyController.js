@@ -9,9 +9,10 @@ exports.all = async (req, res) => {
 
 exports.one = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOne({ _id: companyId });
-  const hourLogs = await HourLog.find({ company : companyId });
-  res.render("company/one", { title: company.name, company, hourLogs });
+  const company = await Company.findOne({ _id: companyId }).select('name');
+  const companies = await Company.find().select('name');
+  const hourLogs = await HourLog.find({ company : companyId }).select('dateOpened dateClosed title totalPublicHours totalHiddenHours');
+  res.render("company/one", { title: company.name, company, companies, hourLogs });
 };
 
 exports.create = async (req, res) => {
@@ -22,7 +23,7 @@ exports.create = async (req, res) => {
 
 exports.edit = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOneAndUpdate({ _id: companyId }, req.body, { new: true });
+  const company = await Company.findOneAndUpdate({ _id: companyId }, req.body, { new: true }).select('name');
   req.flash('success', `Successfully edited ${company.name}`);
   res.json(company);
 };
@@ -31,12 +32,12 @@ exports.activate = async (req, res) => {
   const companyId = req.params.id;
   const company = await Company.findOneAndUpdate({ _id: companyId }, { status: "active" });
   req.flash('success', `Successfully activated ${company.name}`);
-  res.redirect(`/company/${company._id}`);
+  res.json('');
 };
 
 exports.deactivate = async (req, res) => {
   const companyId = req.params.id;
   const company = await Company.findOneAndUpdate({ _id: companyId }, { status: "inactive" });
   req.flash('success', `Successfully deactivated ${company.name}`);
-  res.redirect(`/company/${company._id}`);
+  res.json('');
 };

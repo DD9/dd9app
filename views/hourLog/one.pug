@@ -7,7 +7,7 @@ block content
     .row
       .col.d-inline-block
         h2.company-one-title.d-inline <u>#{hourLog.title}</u> Hour Log for <u><a href="/company/#{hourLog.company._id}">#{hourLog.company.name}</a></u>
-        if (h.YYYYMMDD(hourLog.dateClosed) === "1969-12-31")
+        if (h.YYYYMMDD(hourLog.dateClosed) === "1970-01-01")
           form#closeHourLogForm.form.d-inline(action=`/hourLog/${hourLog._id}/close` method="POST")
             button#closeHourLogButton.close-hour-log-btn.btn.btn-primary(type='submit') Close Hour Log
           form#openHourLogForm.form.d-inline(action=`/hourLog/${hourLog._id}/open` method="POST")

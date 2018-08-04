@@ -35,8 +35,9 @@ router.get('/api/v1/hourLog/:id/timeEntries', authController.isLoggedIn, authCon
 router.get('/timeEntry/new', authController.isLoggedIn, catchErrors(timeEntryController.new));
 router.post('/api/v1/timeEntry/create', authController.isLoggedIn, catchErrors(timeEntryController.create));
 router.post('/api/v1/timeEntry/createAndSubmit', authController.isLoggedIn, catchErrors(timeEntryController.createAndSubmit));
-router.post('/api/v1/timeEntry/:id/approve', authController.isLoggedIn, catchErrors(timeEntryController.approve));
-router.post('/api/v1/timeEntry/:id/hide', authController.isLoggedIn, catchErrors(timeEntryController.hide));
+router.post('/api/v1/timeEntry/:id/edit', authController.isLoggedIn, authController.isAdmin, catchErrors(timeEntryController.edit));
+router.post('/api/v1/timeEntry/:id/approve', authController.isLoggedIn, authController.isAdmin, catchErrors(timeEntryController.approve));
+router.post('/api/v1/timeEntry/:id/hide', authController.isLoggedIn, authController.isAdmin, catchErrors(timeEntryController.hide));
 router.post('/api/v1/timeEntry/:id/submit', authController.isLoggedIn, catchErrors(timeEntryController.submit));
 router.post('/api/v1/timeEntry/:id/delete', authController.isLoggedIn, catchErrors(timeEntryController.delete));
 

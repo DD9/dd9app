@@ -1,14 +1,14 @@
 import 'datatables.net-bs4';
 
 // Datatables and table title
-const userAllTable = $('#userAllTable').dataTable({
+$('#userAllTable').dataTable({
   "dom": "<'row'<'col user-all-table-title'><'col user-all-table-filter'f>>" +
   "<'row'<'col-sm-12 user-all-table'tr>>" +
   "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 user-all-table-paginate'p>>",
   "bFilter": true,
   "paging": false,
   "bInfo": false,
-  "aaSorting": [[0,'asc']],
+  "aaSorting": [0,'asc'],
   language: {sSearch: "", searchPlaceholder: "Search..."},
   "columns": [
     { "width": "20%"},

@@ -3,7 +3,6 @@
 
 @import 'partials/variables';
 @import 'partials/normalize';
-@import 'partials/custom';
 @import 'partials/layout';
 @import 'partials/forms';
 @import 'partials/flashes';
@@ -19,5 +18,7 @@
 
 @import '/hourLog/all';
 @import '/hourLog/one';
+@import '/hourLog/global';
 
 @import '/timeEntry/new';
+@import '/timeEntry/global';

@@ -1,21 +1,31 @@
 const editCompanyForm = $('#editCompanyForm');
-const companyNameInputField = $('#companyName');
+const companyNameInput = $('#companyName');
+const companyNames = [];
 
-// Reset editModal on close
-editCompanyForm.on('hidden.bs.modal', function() {
-  companyNameInputField.removeClass('is-invalid');
+// Check for duplicates
+$('.companies-json').find('p').each(function () {
+  companyNames.push(this.innerHTML.toLowerCase().trim());
 });
 
 function editCompanyValidation() {
-  const companyNameInputValue = companyNameInputField.val().toLowerCase().trim();
+  const companyNameInputVal = companyNameInput.val().toLowerCase().trim();
 
   let hasError = false;
-  if (!companyNameInputValue) {
+
+  if (!companyNameInputVal) {
     hasError = true;
     editCompanyForm.find('.invalid-feedback').html("Company name required.");
-    companyNameInputField.addClass('is-invalid');
+    companyNameInput.addClass('is-invalid');
   } else {
-    companyNameInputField.removeClass('is-invalid');
+    companyNameInput.removeClass('is-invalid');
+  }
+
+  if (companyNames.includes(companyNameInputVal)) {
+    hasError = true;
+    editCompanyForm.find('.invalid-feedback').html("Company name must be unique.");
+    companyNameInput.addClass('is-invalid');
+  } else {
+    companyNameInput.removeClass('is-invalid');
   }
 
   if (hasError) {

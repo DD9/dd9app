@@ -1,5 +1,5 @@
 mixin editUserOneFormAdmin()
-  form#editUserOneFormAdmin.editUserForm.form(action=`/api/v1/user/${user._id}/edit/admin` method="POST" novalidate)
+  form#editUserOneFormAdmin.edit-user-form.form(action=`/api/v1/user/${user._id}/edit/admin` method="POST" novalidate)
     if user.permissions[0].admin
       .form-group.row
         label.col-sm-2.col-form-label(for='company') Company

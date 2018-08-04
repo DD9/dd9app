@@ -58,10 +58,38 @@ exports.createAndSubmit = async (req, res) => {
   res.redirect("/hourLog/5b5a56ac443bd381c0790a6a");
 };
 
+exports.edit = async (req, res) => {
+  const timeEntryId = req.params.id;
+  const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
+  const company = await Company.findOne({ _id: req.body.company }).select('name');
+
+  if (timeEntry.status === "created") {
+    timeEntry.company = req.body.company;
+    timeEntry.date = req.body.date;
+    timeEntry.hours = req.body.hours;
+    timeEntry.description = req.body.description;
+    timeEntry.publicCompany = req.body.company;
+    timeEntry.publicDate = req.body.date;
+    timeEntry.publicHours = req.body.hours;
+    timeEntry.publicDescription = req.body.description;
+  } else {
+    timeEntry.publicCompany = req.body.company;
+    timeEntry.publicDate = req.body.date;
+    timeEntry.publicHours = req.body.hours;
+    timeEntry.publicDescription = req.body.description;
+  }
+
+  await timeEntry.save();
+
+  res.json({ timeEntry, company, admin: req.user.permissions[0].admin })
+};
+
 exports.approve = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOneAndUpdate({ _id: timeEntryId }, { $set: { status: "approved" } }, { new: true });
   let hourLog = await HourLog.findOne({ title: "Current", company: timeEntry.company });
+
+  console.log(hourLog);
 
   if (!hourLog) {
     hourLog = await (new HourLog({ company: timeEntry.company, timeEntries: timeEntry._id, dateClosed: new Date(0), totalPublicHours: timeEntry.hours }));
@@ -82,6 +110,8 @@ exports.hide = async (req, res) => {
   const timeEntry = await TimeEntry.findOneAndUpdate({ _id: timeEntryId }, { $set: { status: "hidden" } }, { new: true });
   let hourLog = await HourLog.findOne({ title: "Current", company: timeEntry.company });
 
+  console.log(hourLog);
+
   if (!hourLog) {
     hourLog = await (new HourLog({ company: timeEntry.company, timeEntries: timeEntry._id, dateClosed: new Date(0), totalHiddenHours: timeEntry.hours }));
     timeEntry.hourLog = hourLog._id;
@@ -100,6 +130,8 @@ exports.submit = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOneAndUpdate({ _id: timeEntryId }, { $set: { status: "submitted" } }, { new: true });
   let hourLog = await HourLog.findOne({ title: "Current", company: timeEntry.company });
+
+  console.log(hourLog);
 
   if (!hourLog) {
     hourLog = await (new HourLog({ company: timeEntry.company, timeEntries: timeEntry._id, dateClosed: new Date(0), totalSubmittedHours: timeEntry.hours }));

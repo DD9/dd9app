@@ -1,5 +1,5 @@
 function editUserValidation() {
-  const editUserForm = $('.editUserForm');
+  const editUserForm = $('.edit-user-form');
   const firstNameInput = editUserForm.find('#firstName');
   const lastNameInput = editUserForm.find('#lastName');
   const firstName = firstNameInput.val();

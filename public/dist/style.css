@@ -7705,14 +7705,11 @@ template {
 [hidden] {
   display: none; }
 
-.box-shadow {
-  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05) !important; }
-
-.hiddenHoursTextColor {
-  color: #AAAAAA; }
-
 body {
   background-color: #F8F9FA !important; }
+
+.box-shadow {
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05) !important; }
 
 .form-card {
   display: -ms-flexbox;
@@ -7854,11 +7851,14 @@ footer {
   font-size: 14px;
   margin-top: 10px; }
 
-.company-one-th-name {
-  width: 20% !important; }
+.company-one-th-date-opened {
+  width: 15% !important; }
+
+.company-one-th-date-closed {
+  width: 15% !important; }
 
 .company-one-th-email {
-  width: 60% !important; }
+  width: 50% !important; }
 
 .company-one-th-company {
   width: 10% !important; }
@@ -7913,13 +7913,51 @@ footer {
 .hour-log-one-time-entry-card {
   margin-bottom: 40px; }
 
-.time-entry-new {
-  font-size: 15px; }
-
-#createdTimeEntriesTable td {
-  padding-bottom: 0; }
+.hidden-hours-text-color {
+  color: #AAAAAA; }
 
 .time-entry-new-time-entry-card {
   margin-bottom: 40px; }
+
+.time-entry-container {
+  font-size: 15px; }
+
+.time-entry-table td:nth-child(1) {
+  padding-top: 11.9px !important;
+  padding-bottom: 0 !important; }
+
+.time-entry-table td:nth-child(2) {
+  padding-top: 11.9px !important;
+  padding-bottom: 0 !important; }
+
+.time-entry-table td:nth-child(3) {
+  padding-top: 11.9px !important;
+  padding-bottom: 0 !important; }
+
+.time-entry-table td:nth-child(4) {
+  padding-top: 11.9px !important;
+  padding-bottom: 0 !important; }
+
+.time-entry-table td:nth-child(5) {
+  padding-bottom: 0 !important; }
+
+.edit-time-entry-btn svg {
+  padding-top: 4px;
+  width: 18px; }
+
+.time-entry-th-date {
+  width: 9% !important; }
+
+.time-entry-th-company {
+  width: 20% !important; }
+
+.time-entry-th-hours {
+  width: 4% !important; }
+
+.time-entry-th-description {
+  width: 40% !important; }
+
+.time-entry-th-actions {
+  width: 27% !important; }
 
 /*# sourceMappingURL=style.css.map*/

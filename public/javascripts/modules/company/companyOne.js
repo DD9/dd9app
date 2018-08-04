@@ -12,8 +12,9 @@ $('#companyOneTable').dataTable({
   "aaSorting": [[0,'dsc']],
   language: {sSearch: "", searchPlaceholder: "Search..."},
   "columns": [
-    { "width": "20%"},
-    { "width": "60%"},
+    { "width": "15%"},
+    { "width": "15%"},
+    { "width": "50%"},
     { "width": "10%"},
     { "width": "10%"},
   ]
