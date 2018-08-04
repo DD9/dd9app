@@ -23,12 +23,12 @@ block content
             td= timeEntry.description
             if user.permissions[0].admin
               td
-                form.time-entry-table-action-approve.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/approve` method="POST")
+                form.time-entry-table-action-approve.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/approve` method="POST" data-hours=timeEntry.hours)
                   button.btn.btn-sm.btn-link(type='submit') Approve
-                form.time-entry-table-action-hide.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/hide` method="POST")
+                form.time-entry-table-action-hide.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/hide` method="POST" data-hours=timeEntry.hours)
                   button.btn.btn-sm.btn-link(type='submit') Hide
-                button.submit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry=timeEntry._id) Submit
-                button.delete-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry=timeEntry._id) Delete
+                button.submit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Submit
+                button.delete-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Delete
                 button.edit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#editTimeEntryModal'
                   data-rownumber=rowNumber
                   data-timeentry=timeEntry._id
@@ -38,8 +38,8 @@ block content
                   data-description=timeEntry.description)
                   != h.icon('pencil')
             else
-                button.submit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry=timeEntry._id) Submit
-                button.delete-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry=timeEntry._id) Delete
+                button.submit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Submit
+                button.delete-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Delete
                 button.edit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#editTimeEntryModal'
                   data-rownumber=rowNumber
                   data-timeentry=timeEntry._id
@@ -49,7 +49,7 @@ block content
                   data-description=timeEntry.description)
                   != h.icon('pencil')
 
-        tr#lastRowInCreatedTimeEntriesTable
+        tr#totalCreatedHoursRow
           td
           td
           td#totalCreatedHours= totalCreatedHours
