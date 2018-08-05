@@ -1,49 +1,49 @@
-.time-entry-container {
+.created-time-entry-container {
   font-size: 15px;
 }
 
-.time-entry-table td:nth-child(1) {
+.created-time-entry-table td:nth-child(1) {
   padding-top: 11.9px !important;
   padding-bottom: 0 !important;
 }
 
-.time-entry-table td:nth-child(2) {
+.created-time-entry-table td:nth-child(2) {
   padding-top: 11.9px !important;
   padding-bottom: 0 !important;
 }
 
-.time-entry-table td:nth-child(3) {
+.created-time-entry-table td:nth-child(3) {
   padding-top: 11.9px !important;
   padding-bottom: 0 !important;
 }
 
-.time-entry-table td:nth-child(4) {
+.created-time-entry-table td:nth-child(4) {
   padding-top: 11.9px !important;
   padding-bottom: 0 !important;
 }
 
-.time-entry-table td:nth-child(5) {
+.created-time-entry-table td:nth-child(5) {
   padding-bottom: 0 !important;
 }
 
-.edit-time-entry-btn svg {
+.edit-created-time-entry-btn svg {
   padding-top: 4px;
   width: 18px;
 }
 
 // Fixing misaligned table headers, see table row width %'s in hourLogAll.js
-.time-entry-th-date {
+.created-time-entry-th-date {
   width: 9% !important;
 }
-.time-entry-th-company {
+.created-time-entry-th-company {
   width: 20% !important;
 }
-.time-entry-th-hours {
+.created-time-entry-th-hours {
   width: 4% !important;
 }
-.time-entry-th-description {
+.created-time-entry-th-description {
   width: 40% !important;
 }
-.time-entry-th-actions  {
+.created-time-entry-th-actions  {
   width: 27% !important;
 }

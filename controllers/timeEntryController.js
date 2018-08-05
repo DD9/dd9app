@@ -5,15 +5,15 @@ const TimeEntry = mongoose.model('TimeEntry');
 
 exports.new = async (req, res) => {
   const companies = await Company.find({ status: "active" }).select('name').sort('name');
-  const timeEntries = await TimeEntry.find({ status: 'created', user: req.user._id }).populate('company', 'name');
+  const timeEntries = await TimeEntry.find({ status: "created", user: req.user._id }).populate('company', 'name');
 
-  let totalCreatedHours = 0;
+  let totalCreatedTimeEntryHours = 0;
   for (let i = 0; i < timeEntries.length; i++) {
     let timeEntry = timeEntries[i];
-    totalCreatedHours += timeEntry.hours;
+    totalCreatedTimeEntryHours += timeEntry.hours;
   }
 
-  res.render('timeEntry/new', { title: "Time Entry", companies, timeEntries, totalCreatedHours })
+  res.render('timeEntry/new', { title: "Time Entry", companies, timeEntries, totalCreatedTimeEntryHours })
 };
 
 exports.create = async (req, res) => {
@@ -63,7 +63,7 @@ exports.edit = async (req, res) => {
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
   const company = await Company.findOne({ _id: req.body.company }).select('name');
 
-  if (timeEntry.status === "created") {
+  if (timeEntry.status ==="created" && +timeEntry.user === +req.user._id) {
     timeEntry.company = req.body.company;
     timeEntry.date = req.body.date;
     timeEntry.hours = req.body.hours;
@@ -72,11 +72,15 @@ exports.edit = async (req, res) => {
     timeEntry.publicDate = req.body.date;
     timeEntry.publicHours = req.body.hours;
     timeEntry.publicDescription = req.body.description;
-  } else {
+  } else if (timeEntry.status !== "created" && req.user.permissions[0].admin === true) {
+    timeEntry.publicUser = req.user;
     timeEntry.publicCompany = req.body.company;
     timeEntry.publicDate = req.body.date;
     timeEntry.publicHours = req.body.hours;
     timeEntry.publicDescription = req.body.description;
+  } else {
+    res.json({error: 'unauthorized'});
+    return console.log(`unauthorized request: ${req.url} \n from user: ${req.user} \n with post body: ${JSON.stringify(req.body)}`);
   }
 
   await timeEntry.save();

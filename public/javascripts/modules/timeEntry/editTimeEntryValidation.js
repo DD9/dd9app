@@ -1,9 +1,9 @@
 function editTimeEntryValidation() {
-  const editTimeEntryForm = $('#editTimeEntryForm');
-  const dateInput = editTimeEntryForm.find('#date');
-  const companyInput = editTimeEntryForm.find('#company');
-  const hoursInput = editTimeEntryForm.find('#hours');
-  const descriptionInput = editTimeEntryForm.find('#description');
+  const editCreatedTimeEntryForm = $('#editCreatedTimeEntryForm');
+  const dateInput = editCreatedTimeEntryForm.find('#date');
+  const companyInput = editCreatedTimeEntryForm.find('#company');
+  const hoursInput = editCreatedTimeEntryForm.find('#hours');
+  const descriptionInput = editCreatedTimeEntryForm.find('#description');
 
   const dateVal = dateInput.val();
   const companyVal = companyInput.val();

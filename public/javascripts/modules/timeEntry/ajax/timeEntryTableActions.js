@@ -7,51 +7,51 @@ import axios from 'axios';
 
 // Approve and hide listeners
 approveAndHideBtnListeners();
-export function approveAndHideBtnListeners(approveForm = '.time-entry-table-action-approve', hideForm = '.time-entry-table-action-hide') {
-  $(approveForm).on('submit', ajaxTimeEntryTableApprove);
-  $(hideForm).on('submit', ajaxTimeEntryTableHide);
+export function approveAndHideBtnListeners(approveForm = '.created-time-entry-table-action-approve', hideForm = '.created-time-entry-table-action-hide') {
+  $(approveForm).on('submit', ajaxCreatedTimeEntryTableApprove);
+  $(hideForm).on('submit', ajaxCreatedTimeEntryTimeEntryTableHide);
 }
 // Confirm modals not created dynamically, form actions don't need to be updated
-const submitForm = '.time-entry-table-action-submit';
-const deleteForm = '.time-entry-table-action-delete';
-$(submitForm).on('submit', ajaxTimeEntryTableSubmit);
-$(deleteForm).on('submit', ajaxTimeEntryTableDelete);
+const submitForm = '.created-time-entry-table-action-submit';
+const deleteForm = '.created-time-entry-table-action-delete';
+$(submitForm).on('submit', ajaxCreatedTimeEntryTimeEntryTableSubmit);
+$(deleteForm).on('submit', ajaxCreatedTimeEntryTimeEntryTableDelete);
 
 // Submit listener
 let submitTimeEntryBtn;
 confirmSubmitListener();
-export function confirmSubmitListener(button = '.submit-time-entry-btn') {
+export function confirmSubmitListener(button = '.submit-created-time-entry-btn') {
   $(button).on("click", function () {
     submitTimeEntryBtn = this;
     console.log(submitTimeEntryBtn);
-    $("#confirmSubmitTimeEntryForm").attr("action", `/api/v1/timeEntry/${$(this).data('timeentry')}/submit`);
+    $("#confirmSubmitCreatedTimeEntryForm").attr("action", `/api/v1/timeEntry/${$(this).data('timeentry')}/submit`);
   });
 
-  $('.confirm-submit-btn').on("click", function () {
-    $('#confirmSubmitTimeEntryModal').modal('toggle');
+  $('.confirm-created-time-entry-submit-btn').on("click", function () {
+    $('#confirmSubmitCreatedTimeEntryModal').modal('toggle');
   });
 }
 
 // Delete listener
 let deleteTimeEntryBtn;
 confirmDeleteListener();
-export function confirmDeleteListener(button = '.delete-time-entry-btn') {
+export function confirmDeleteListener(button = '.delete-created-time-entry-btn') {
   $(button).on("click", function () {
     deleteTimeEntryBtn = this;
-    $("#confirmDeleteTimeEntryForm").attr("action", `/api/v1/timeEntry/${$(this).data('timeentry')}/delete`);
+    $("#confirmDeleteCreatedTimeEntryForm").attr("action", `/api/v1/timeEntry/${$(this).data('timeentry')}/delete`);
   });
 
-  $('.confirm-delete-btn').on("click", function () {
-    $('#confirmDeleteTimeEntryModal').modal('toggle');
+  $('.confirm-created-time-entry-delete-btn').on("click", function () {
+    $('#confirmDeleteCreatedTimeEntryModal').modal('toggle');
   });
 }
 
 // Update total create hours value
 export function updateTotalCreatedTimeEntryHours(oldHours, newHours) {
-  const totalCreatedHours = +$('#totalCreatedHours').html();
-  const newTotal = (totalCreatedHours - (+oldHours - +newHours));
-  console.log(`${totalCreatedHours} - (${oldHours} - ${newHours}) = ${newTotal}`);
-  $('#createdTimeEntriesTable').DataTable().row(`#totalCreatedHoursRow`).data([
+  const totalCreatedTimeEntryHours = +$('#totalCreatedTimeEntryHours').html();
+  const newTotal = (totalCreatedTimeEntryHours - (+oldHours - +newHours));
+  console.log(`${totalCreatedTimeEntryHours} - (${oldHours} - ${newHours}) = ${newTotal}`);
+  $('#createdTimeEntriesTable').DataTable().row(`#totalCreatedTimeEntryHoursRow`).data([
     ``,
     ``,
     `${newTotal}`,
@@ -62,8 +62,8 @@ export function updateTotalCreatedTimeEntryHours(oldHours, newHours) {
 }
 
 // Approve
-function ajaxTimeEntryTableApprove(e) {
-  console.log(`ajaxTimeEntryTableApprove`);
+function ajaxCreatedTimeEntryTableApprove(e) {
+  console.log(`ajaxCreatedTimeEntryTableApprove`);
   console.log(this);
   e.preventDefault();
   $('#createdTimeEntriesTable').DataTable().row($(this).closest('tr')).remove().draw();
@@ -75,8 +75,8 @@ function ajaxTimeEntryTableApprove(e) {
 }
 
 // Hide
-function ajaxTimeEntryTableHide(e) {
-  console.log(`ajaxTimeEntryTableHide`);
+function ajaxCreatedTimeEntryTimeEntryTableHide(e) {
+  console.log(`ajaxCreatedTimeEntryTimeEntryTableHide`);
   console.log(this);
   e.preventDefault();
   $('#createdTimeEntriesTable').DataTable().row($(this).closest('tr')).remove().draw();
@@ -88,8 +88,8 @@ function ajaxTimeEntryTableHide(e) {
 }
 
 // Submit
-function ajaxTimeEntryTableSubmit(e) {
-  console.log(`ajaxTimeEntryTableSubmit`);
+function ajaxCreatedTimeEntryTimeEntryTableSubmit(e) {
+  console.log(`ajaxCreatedTimeEntryTimeEntryTableSubmit`);
   console.log(submitTimeEntryBtn);
   e.preventDefault();
   $('#createdTimeEntriesTable').DataTable().row($(submitTimeEntryBtn).closest("tr")).remove().draw();
@@ -101,8 +101,8 @@ function ajaxTimeEntryTableSubmit(e) {
 }
 
 // Delete
-function ajaxTimeEntryTableDelete(e) {
-  console.log(`ajaxTimeEntryTableDelete`);
+function ajaxCreatedTimeEntryTimeEntryTableDelete(e) {
+  console.log(`ajaxCreatedTimeEntryTimeEntryTableDelete`);
   console.log(this);
   e.preventDefault();
   $('#createdTimeEntriesTable').DataTable().row($(deleteTimeEntryBtn).closest("tr")).remove().draw();

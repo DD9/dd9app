@@ -29,16 +29,16 @@ function ajaxAddCreatedTimeEntry(e) {
         `${res.data.timeEntry.hours}`,
         `${res.data.timeEntry.description}`,
         `${createdTimeEntryTableActionButtonsHtml(res, createdTimeEntriesTableRowNumber)}`
-      ]).draw().node().id = `createdTimeEntriesTableRow-${createdTimeEntriesTableRowNumber}`;
+      ]).draw().node().id = `created-time-entries-table-row-${createdTimeEntriesTableRowNumber}`;
       updateTotalCreatedTimeEntryHours(0, res.data.timeEntry.hours);
       instantiateTimeEntryTableActionListeners(
-        `.createdTimeEntriesTableRow-${createdTimeEntriesTableRowNumber}-approve`,
-        `.createdTimeEntriesTableRow-${createdTimeEntriesTableRowNumber}-hide`,
-        `.createdTimeEntriesTableRow-${createdTimeEntriesTableRowNumber}-submit`,
-        `.createdTimeEntriesTableRow-${createdTimeEntriesTableRowNumber}-delete`,
-        `.createdTimeEntriesTableRow-${createdTimeEntriesTableRowNumber}-edit`,
+        `.created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-approve`,
+        `.created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-hide`,
+        `.created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-submit`,
+        `.created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-delete`,
+        `.created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-edit`,
       );
-      // $('#createTimeEntryForm #hours, #description').val(''); //TODO turn on
+      $('#createTimeEntryForm #hours, #description').val('');
     })
     .catch(console.error);
 }
@@ -47,15 +47,15 @@ export function createdTimeEntryTableActionButtonsHtml(res, createdTimeEntriesTa
   const editSVG = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve"><image xlink:href="/images/icons/pencil.svg" x="0" y="0" width="100%" height="100%"/></svg>`;
   let html = '';
   if (res.data.admin === true) {
-    html += `<form class="createdTimeEntriesTableRow-${createdTimeEntriesTableRowNumber}-approve time-entry-table-action-approve form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/approve' method="POST" data-hours=${res.data.timeEntry.hours}><button class="btn btn-sm btn-link" type="submit">Approve</button></form>`;
-    html += `<form class="createdTimeEntriesTableRow-${createdTimeEntriesTableRowNumber}-hide time-entry-table-action-hide form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/hide' method="POST" data-hours=${res.data.timeEntry.hours}><button class="btn btn-sm btn-link" type="submit">Hide</button></form>`;
-    html += `<button class="createdTimeEntriesTableRow-${createdTimeEntriesTableRowNumber}-submit ubmit-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.hours}>Submit</button>`;
-    html += `<button class="createdTimeEntriesTableRow-${createdTimeEntriesTableRowNumber}-delete delete-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.hours}>Delete</button>`;
-    html += `<button class="createdTimeEntriesTableRow-${createdTimeEntriesTableRowNumber}-edit edit-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#editTimeEntryModal' data-rownumber=${createdTimeEntriesTableRowNumber} data-timeentry=${res.data.timeEntry._id} data-date=${res.data.timeEntry.date} data-company=${res.data.timeEntry.company} data-hours=${res.data.timeEntry.hours} data-description=${res.data.timeEntry.description}>${editSVG}</button>`;
+    html += `<form class="created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-approve created-time-entry-table-action-approve form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/approve' method="POST" data-hours=${res.data.timeEntry.hours}><button class="btn btn-sm btn-link" type="submit">Approve</button></form>`;
+    html += `<form class="created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-hide created-time-entry-table-action-hide form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/hide' method="POST" data-hours=${res.data.timeEntry.hours}><button class="btn btn-sm btn-link" type="submit">Hide</button></form>`;
+    html += `<button class="created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-submit submit-created-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmSubmitCreatedTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.hours}>Submit</button>`;
+    html += `<button class="created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-delete delete-created-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmDeleteCreatedTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.hours}>Delete</button>`;
+    html += `<button class="created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-edit edit-created-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#editCreatedTimeEntryModal' data-rownumber=${createdTimeEntriesTableRowNumber} data-timeentry=${res.data.timeEntry._id} data-date=${res.data.timeEntry.date} data-company=${res.data.timeEntry.company} data-hours=${res.data.timeEntry.hours} data-description=${res.data.timeEntry.description}>${editSVG}</button>`;
   } else {
-    html += `<button class="createdTimeEntriesTableRow-${createdTimeEntriesTableRowNumber}-submit submit-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.hours}>Submit</button>`;
-    html += `<button class="createdTimeEntriesTableRow-${createdTimeEntriesTableRowNumber}-delete delete-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.hours}>Delete</button>`;
-    html += `<button class="createdTimeEntriesTableRow-${createdTimeEntriesTableRowNumber}-edit edit-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#editTimeEntryModal' data-rownumber=${createdTimeEntriesTableRowNumber} data-timeentry=${res.data.timeEntry._id} data-date=${res.data.timeEntry.date} data-company=${res.data.timeEntry.company} data-hours=${res.data.timeEntry.hours} data-description=${res.data.timeEntry.description}>${editSVG}</button>`;
+    html += `<button class="created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-submit submit-created-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmSubmitCreatedTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.hours}>Submit</button>`;
+    html += `<button class="created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-delete delete-created-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmDeleteCreatedTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.hours}>Delete</button>`;
+    html += `<button class="created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-edit edit-created-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#editCreatedTimeEntryModal' data-rownumber=${createdTimeEntriesTableRowNumber} data-timeentry=${res.data.timeEntry._id} data-date=${res.data.timeEntry.date} data-company=${res.data.timeEntry.company} data-hours=${res.data.timeEntry.hours} data-description=${res.data.timeEntry.description}>${editSVG}</button>`;
   }
   return html;
 }

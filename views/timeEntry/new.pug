@@ -3,33 +3,33 @@ extends ../index/layout
 include ../timeEntry/mixins/_createTimeEntry
 
 block content
-  .container.time-entry-container
+  .container.created-time-entry-container
     .my-5.py-1.px-3.bg-white.rounded.box-shadow
       .row
         .col.mt-2
           h4 New Time Entries
-      table#createdTimeEntriesTable.time-entry-table.table.table-sm.w-100
+      table#createdTimeEntriesTable.created-time-entry-table.table.table-sm.w-100
         thead.thead-light
-          th.time-entry-th-date Date
-          th.time-entry-th-company Company
-          th.time-entry-th-hours Hours
-          th.time-entry-th-description Description
-          th.time-entry-th-actions
+          th.created-time-entry-th-date Date
+          th.created-time-entry-th-company Company
+          th.created-time-entry-th-hours Hours
+          th.created-time-entry-th-description Description
+          th.created-time-entry-th-actions
         each timeEntry, rowNumber in timeEntries
-          tr(id=`createdTimeEntriesTableRow-${rowNumber}`)
+          tr(id=`created-time-entries-table-row-${rowNumber}`)
             td= h.YYYYMMDD(timeEntry.date)
             td= timeEntry.company.name
-            td.time-entry-hours= timeEntry.hours
+            td= timeEntry.hours
             td= timeEntry.description
             if user.permissions[0].admin
               td
-                form.time-entry-table-action-approve.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/approve` method="POST" data-hours=timeEntry.hours)
+                form.created-time-entry-table-action-approve.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/approve` method="POST" data-hours=timeEntry.hours)
                   button.btn.btn-sm.btn-link(type='submit') Approve
-                form.time-entry-table-action-hide.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/hide` method="POST" data-hours=timeEntry.hours)
+                form.created-time-entry-table-action-hide.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/hide` method="POST" data-hours=timeEntry.hours)
                   button.btn.btn-sm.btn-link(type='submit') Hide
-                button.submit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Submit
-                button.delete-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Delete
-                button.edit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#editTimeEntryModal'
+                button.submit-created-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmSubmitCreatedTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Submit
+                button.delete-created-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmDeleteCreatedTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Delete
+                button.edit-created-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#editCreatedTimeEntryModal'
                   data-rownumber=rowNumber
                   data-timeentry=timeEntry._id
                   data-date=timeEntry.date
@@ -38,9 +38,9 @@ block content
                   data-description=timeEntry.description)
                   != h.icon('pencil')
             else
-                button.submit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Submit
-                button.delete-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Delete
-                button.edit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#editTimeEntryModal'
+                button.submit-created-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmSubmitCreatedTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Submit
+                button.delete-created-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmDeleteCreatedTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Delete
+                button.edit-created-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#editCreatedTimeEntryModal'
                   data-rownumber=rowNumber
                   data-timeentry=timeEntry._id
                   data-date=timeEntry.date
@@ -49,10 +49,10 @@ block content
                   data-description=timeEntry.description)
                   != h.icon('pencil')
 
-        tr#totalCreatedHoursRow
+        tr#totalCreatedTimeEntryHoursRow
           td
           td
-          td#totalCreatedHours= totalCreatedHours
+          td#totalCreatedTimeEntryHours= totalCreatedTimeEntryHours
           td
           td
 
@@ -62,7 +62,7 @@ block content
           h4 Add New Time Entry
       +createTimeEntry()
 
-  #confirmSubmitTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmSubmitTimeEntryModal', aria-hidden='true')
+  #confirmSubmitCreatedTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmSubmitCreatedTimeEntryModal', aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
         .modal-header
@@ -70,13 +70,13 @@ block content
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
         .modal-body
-          form#confirmSubmitTimeEntryForm.time-entry-table-action-submit.form(action=`/api/v1/timeEntry/:id/submit` method="POST")
+          form#confirmSubmitCreatedTimeEntryForm.created-time-entry-table-action-submit.form(action=`/api/v1/timeEntry/:id/submit` method="POST")
             p.text-center Are you sure you want to submit this time entry?
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-          button.confirm-submit-btn.btn.btn-primary(type='submit' form='confirmSubmitTimeEntryForm') Ok
+          button.confirm-created-time-entry-submit-btn.btn.btn-primary(type='submit' form='confirmSubmitCreatedTimeEntryForm') Ok
 
-  #confirmDeleteTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmDeleteTimeEntryModal', aria-hidden='true')
+  #confirmDeleteCreatedTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmDeleteCreatedTimeEntryModal', aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
         .modal-header
@@ -84,13 +84,13 @@ block content
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
         .modal-body
-          form#confirmDeleteTimeEntryForm.time-entry-table-action-delete.form(action=`/api/v1/timeEntry/:id/delete` method="POST")
+          form#confirmDeleteCreatedTimeEntryForm.created-time-entry-table-action-delete.form(action=`/api/v1/timeEntry/:id/delete` method="POST")
             p.text-center Are you sure you want to delete this time entry?
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-          button.confirm-delete-btn.btn.btn-primary(form='confirmDeleteTimeEntryForm') Ok
+          button.confirm-created-time-entry-delete-btn.btn.btn-primary(form='confirmDeleteCreatedTimeEntryForm') Ok
 
-  #editTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='editTimeEntryModal', aria-hidden='true')
+  #editCreatedTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='editCreatedTimeEntryModal', aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
         .modal-header
@@ -98,7 +98,7 @@ block content
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
         .modal-body
-          form#editTimeEntryForm.time-entry-form.form(action=`/api/v1/timeEntry/:id/edit` method="POST" novalidate)
+          form#editCreatedTimeEntryForm.time-entry-form.form(action=`/api/v1/timeEntry/:id/edit` method="POST" novalidate)
             .form-group.row
               label.col-sm-2.col-form-label(for='date') Date
               .col-sm-10
@@ -121,4 +121,4 @@ block content
                 .invalid-feedback Invalid form.
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-          button.btn.btn-primary(form='editTimeEntryForm') Submit
+          button.btn.btn-primary(form='editCreatedTimeEntryForm') Submit

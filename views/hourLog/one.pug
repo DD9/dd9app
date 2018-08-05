@@ -23,26 +23,26 @@ block content
           h4 Approved
       table#approvedTimeEntriesTable.table.table-sm.w-100
         thead.thead-light
-          th Date
-          th Company
-          th User
-          th Hours
-          th Description
-          th
-        each timeEntry in hourLog.timeEntries
+          th.approved-time-entry-th-date Date
+          th.approved-time-entry-th-company Company
+          th.approved-time-entry-th-company User
+          th.approved-time-entry-th-hours Hours
+          th.approved-time-entry-th-description Description
+          th.approved-time-entry-th-edit
+        each timeEntry, rowNumber in hourLog.timeEntries
           if (timeEntry.status === "approved")
-            tr
+            tr(id=`approvedTimeEntriesTableRow-${rowNumber}`)
               td= h.YYYYMMDD(timeEntry.publicDate)
               td= timeEntry.publicCompany.name
               td= `${timeEntry.publicUser.firstName} ${timeEntry.publicUser.lastName}`
               td= timeEntry.publicHours
               td= timeEntry.publicDescription
               td <a href="">Hide</a>&nbsp&nbsp<a href="">Reject</a>
-        tr
+        tr#totalCreatedTimeEntryHoursRow
           td
           td
           td
-          td= hourLog.totalPublicHours
+          td#totalApprovedHours= hourLog.totalPublicHours
           td
           td
 
