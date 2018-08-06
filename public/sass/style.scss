@@ -10,15 +10,15 @@
 @import 'partials/footer';
 @import 'partials/datatables';
 
-@import '/user/all';
-@import '/user/one';
+@import '/user/userAll';
+@import '/user/userOne';
 
-@import '/company/all';
-@import '/company/one';
+@import '/company/companyAll';
+@import '/company/companyOne';
 
-@import '/hourLog/all';
-@import '/hourLog/one';
-@import '/hourLog/global';
+@import '/hourLog/hourLogAll';
+@import '/hourLog/hourLogOne';
+@import '/hourLog/hourLogGlobal';
 
-@import '/timeEntry/new';
-@import '/timeEntry/global';
+@import '/timeEntry/timeEntryNew';
+@import '/timeEntry/timeEntryGlobal';

@@ -5,12 +5,12 @@ const Company = mongoose.model('Company');
 exports.all = async (req, res) => {
   const users = await User.find().populate('company');
   const companies = await Company.find({ status: "active" }).select('name').sort('name');
-  res.render("user/all", { title: "Users", users, companies });
+  res.render("user/userAll", { title: "Users", users, companies });
 };
 
 exports.one = async (req, res) => {
   const companies = await Company.find({ status: "active" }).select('name').sort('name');
-  res.render("user/one", { title: "My Account", companies });
+  res.render("user/userOne", { title: "My Account", companies });
 };
 
 exports.edit = async (req, res) => {

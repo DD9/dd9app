@@ -4,63 +4,82 @@
  */
 
 import editTimeEntryValidation from '../editTimeEntryValidation';
-import { createdTimeEntryTableActionButtonsHtml, instantiateTimeEntryTableActionListeners } from './createTimeEntry';
-import { updateTotalCreatedTimeEntryHours } from "./timeEntryTableActions";
+import { createTimeEntryTableActionButtonsHtml, instantiateTimeEntryTableActions, updateTotalTimeEntryTableHours } from "./timeEntryTableActions";
 
 import axios from 'axios';
 import moment from 'moment';
 
-const editCreatedTimeEntryForm = $("#editCreatedTimeEntryForm");
+const editTimeEntryModal = $("#editTimeEntryModal");
+const editTimeEntryForm = $('#editTimeEntryForm');
+
+// Init edit buttons
+const anyEditTimeEntryBtn = '.edit-time-entry-btn';
+instantiateEditTimeEntryBtn(anyEditTimeEntryBtn);
 
 // Populate the time entry edit modal with current data
-let createdTimeEntriesTableRowNumber;
+let timeEntryTableType;
+let timeEntryTableRowNumber;
 let currentTimeEntryHours;
-instantiateEditTimeEntryBtn();
-export function instantiateEditTimeEntryBtn(button = '.edit-created-time-entry-btn') {
+export function instantiateEditTimeEntryBtn(button) {
   $(button).on("click", function () {
-    createdTimeEntriesTableRowNumber = $(this).data('rownumber');
-    console.log(createdTimeEntriesTableRowNumber);
+    timeEntryTableType = $(this).data('tabletype');
+    timeEntryTableRowNumber = $(this).data('rownumber');
     currentTimeEntryHours = $(this).data('hours');
-    console.log(currentTimeEntryHours);
-    editCreatedTimeEntryForm.attr("action", `/api/v1/timeEntry/${$(this).data('timeentry')}/edit`);
-    editCreatedTimeEntryForm.find('#date').val(moment.utc($(this).data('date')).format("YYYY-MM-DD"));
-    editCreatedTimeEntryForm.find('#company').val($(this).data('company'));
-    editCreatedTimeEntryForm.find('#hours').val($(this).data('hours'));
-    editCreatedTimeEntryForm.find('#description').val($(this).data('description'));
+    editTimeEntryForm.attr('action', `/api/v1/timeEntry/${$(this).data('timeentry')}/edit`);
+    editTimeEntryModal.find('#date').val(moment.utc($(this).data('date')).format("YYYY-MM-DD"));
+    editTimeEntryModal.find('#company').val($(this).data('company'));
+    editTimeEntryModal.find('#user').val($(this).data('user'));
+    editTimeEntryModal.find('#hours').val($(this).data('hours'));
+    editTimeEntryModal.find('#description').val($(this).data('description'));
   });
 }
 
-// Time entry table ajax on submit
-editCreatedTimeEntryForm.on('submit', ajaxEditTimeEntry);
-
-function ajaxEditTimeEntry(e) {
+// Time entry edit modal ajax on submit
+editTimeEntryModal.on('submit', function(e) {
   console.log(`ajaxEditTimeEntry`);
   e.preventDefault();
   editTimeEntryValidation();
-  $('#editCreatedTimeEntryModal').modal('toggle');
+  $('#editTimeEntryModal').modal('toggle');
+  console.log(editTimeEntryForm.attr('action'));
+  console.log(editTimeEntryForm.find('#date').val());
   axios
-    .post(this.action, {
-      date: this.date.value,
-      company: this.company.value,
-      hours: this.hours.value,
-      description: this.description.value
+    .post(editTimeEntryForm.attr('action'), {
+      date: editTimeEntryForm.find('#date').val(),
+      company: editTimeEntryForm.find('#company').val(),
+      user: editTimeEntryForm.find('#user').val(),
+      hours: editTimeEntryForm.find('#hours').val(),
+      description: editTimeEntryForm.find('#description').val()
     })
     .then(res => {
-      $('#createdTimeEntriesTable').DataTable().row(`#created-time-entries-table-row-${createdTimeEntriesTableRowNumber}`).data([
-        `${moment.utc(res.data.timeEntry.date).format("YYYY-MM-DD")}`,
-        `${res.data.company.name}`,
-        `${res.data.timeEntry.hours}`,
-        `${res.data.timeEntry.description}`,
-        `${createdTimeEntryTableActionButtonsHtml(res, createdTimeEntriesTableRowNumber)}`
-      ]).draw();
-      updateTotalCreatedTimeEntryHours(currentTimeEntryHours, res.data.timeEntry.hours);
-      instantiateTimeEntryTableActionListeners(
-        `.created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-approve`,
-        `.created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-hide`,
-        `.created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-submit`,
-        `.created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-delete`,
-        `.created-time-entries-table-row-${createdTimeEntriesTableRowNumber}-edit`,
+      if (timeEntryTableType === "created") {
+        $(`#${timeEntryTableType}TimeEntryTable`).DataTable().row(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}`).data([
+          `${moment.utc(res.data.timeEntry.date).format("YYYY-MM-DD")}`,
+          `${res.data.timeEntry.company.name}`,
+          `${res.data.timeEntry.hours}`,
+          `${res.data.timeEntry.description}`,
+          `${createTimeEntryTableActionButtonsHtml(res, timeEntryTableType, timeEntryTableRowNumber)}`
+        ]).draw();
+        updateTotalTimeEntryTableHours(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.hours);
+      } else {
+        $(`#${timeEntryTableType}TimeEntryTable`).DataTable().row(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}`).data([
+          `${moment.utc(res.data.timeEntry.date).format("YYYY-MM-DD")}`,
+          `${res.data.timeEntry.publicCompany.name}`,
+          `${res.data.timeEntry.publicUser.firstName} ${res.data.timeEntry.publicUser.lastName}`,
+          `${res.data.timeEntry.publicHours}`,
+          `${res.data.timeEntry.publicDescription}`,
+          `${createTimeEntryTableActionButtonsHtml(res, timeEntryTableType, timeEntryTableRowNumber)}`
+        ]).draw();
+        updateTotalTimeEntryTableHours(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.publicHours);
+      }
+      instantiateTimeEntryTableActions(
+        timeEntryTableType,
+        `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Approve`,
+        `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Hide`,
+        `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Reject`,
+        `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Submit`,
+        `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Delete`,
       );
+      instantiateEditTimeEntryBtn(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit`);
     })
     .catch(console.error);
-}
+});

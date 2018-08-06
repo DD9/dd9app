@@ -14,9 +14,9 @@ function ajaxCreateCompany(e) {
     .then(res => {
       console.log(res.data);
       $('#companyAllTable').DataTable().row.add([
-        `<a href='/company/${res.data._id}'>${res.data.name}</a>`,
+        `<a href='/company/${res.data.name}'>${res.data.name}</a>`,
         `${res.data.status.charAt(0).toUpperCase() + res.data.status.slice(1)}`,
-      ]).draw();
+      ]).draw();ed
     })
     .catch(console.error);
 }

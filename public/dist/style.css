@@ -7894,7 +7894,7 @@ footer {
 .hour-log-all-th-total-hidden-hours {
   width: 7.5% !important; }
 
-.hour-log-one {
+.hour-log-one-container {
   font-size: 15px; }
 
 .company-all-table-title {
@@ -7913,14 +7913,67 @@ footer {
 .hour-log-one-time-entry-card {
   margin-bottom: 40px; }
 
+.hour-log-one-time-entry-th-date {
+  width: 9% !important; }
+
+.hour-log-one-time-entry-th-company {
+  width: 15% !important; }
+
+.hour-log-one-time-entry-th-user {
+  width: 15% !important; }
+
+.hour-log-one-time-entry-th-hours {
+  width: 4% !important; }
+
+.hour-log-one-time-entry-th-description {
+  width: 36% !important; }
+
+.hour-log-one-time-entry-th-actions {
+  width: 21% !important; }
+
+.hour-log-one-time-entry-table td:nth-child(1) {
+  padding-top: 11.9px !important;
+  padding-bottom: 0 !important; }
+
+.hour-log-one-time-entry-table td:nth-child(2) {
+  padding-top: 11.9px !important;
+  padding-bottom: 0 !important; }
+
+.hour-log-one-time-entry-table td:nth-child(3) {
+  padding-top: 11.9px !important;
+  padding-bottom: 0 !important; }
+
+.hour-log-one-time-entry-table td:nth-child(4) {
+  padding-top: 11.9px !important;
+  padding-bottom: 0 !important; }
+
+.hour-log-one-time-entry-table td:nth-child(5) {
+  padding-top: 11.9px !important;
+  padding-bottom: 0 !important; }
+
+.hour-log-one-time-entry-table td:nth-child(6) {
+  padding-bottom: 0 !important; }
+
 .hidden-hours-text-color {
   color: #AAAAAA; }
 
-.time-entry-new-time-entry-card {
-  margin-bottom: 40px; }
-
-.created-time-entry-container {
+.new-time-entry-container {
   font-size: 15px; }
+
+.created-time-entry-th-date {
+  width: 9% !important; }
+
+.created-time-entry-th-company {
+  width: 20% !important; }
+
+.created-time-entry-th-hours {
+  width: 4% !important; }
+
+.created-time-entry-th-description {
+  width: 40% !important; }
+
+.created-time-entry-th-actions {
+  width: 27% !important; }
 
 .created-time-entry-table td:nth-child(1) {
   padding-top: 11.9px !important;
@@ -7941,23 +7994,11 @@ footer {
 .created-time-entry-table td:nth-child(5) {
   padding-bottom: 0 !important; }
 
-.edit-created-time-entry-btn svg {
+.time-entry-new-time-entry-card {
+  margin-bottom: 40px; }
+
+.edit-time-entry-btn svg {
   padding-top: 4px;
   width: 18px; }
-
-.created-time-entry-th-date {
-  width: 9% !important; }
-
-.created-time-entry-th-company {
-  width: 20% !important; }
-
-.created-time-entry-th-hours {
-  width: 4% !important; }
-
-.created-time-entry-th-description {
-  width: 40% !important; }
-
-.created-time-entry-th-actions {
-  width: 27% !important; }
 
 /*# sourceMappingURL=style.css.map*/

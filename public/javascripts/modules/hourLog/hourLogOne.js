@@ -1,6 +1,6 @@
 import 'datatables.net-bs4';
 
-$('#createdTimeEntryTable').dataTable({
+$('#approvedTimeEntryTable, #hiddenTimeEntryTable, #submittedTimeEntryTable').dataTable({
   "dom": "<'row'<'col user-all-table-title'><'col user-all-table-filter'f>>" +
   "<'row'<'col-sm-12 user-all-table'tr>>" +
   "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 user-all-table-paginate'p>>",
@@ -11,9 +11,10 @@ $('#createdTimeEntryTable').dataTable({
   "aaSorting": [0,'desc'],
   "columns": [
     { "width": "9%"},
-    { "width": "20%"},
+    { "width": "15%"},
+    { "width": "15%"},
     { "width": "4%"},
-    { "width": "40%"},
-    { "width": "27%"},
+    { "width": "36%"},
+    { "width": "21%"},
   ]
 });

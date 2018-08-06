@@ -15,8 +15,8 @@ import './modules/company/editCompanyValidation'
 import './modules/company/ajax/companyToggleActiveInactive'
 
 import './modules/hourLog/hourLogAll'
+import './modules/hourLog/hourLogOne'
 import './modules/hourLog/ajax/hourLogToggleOpenClose'
-import './modules/hourLog/ajax/hourLogTableActions'
 
 import './modules/timeEntry/timeEntryNew'
 import './modules/timeEntry/timeEntryDatepicker'

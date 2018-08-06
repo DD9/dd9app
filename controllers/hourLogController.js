@@ -1,13 +1,17 @@
 const mongoose = require('mongoose');
+const User = mongoose.model('User');
+const Company = mongoose.model('Company');
 const HourLog = mongoose.model('HourLog');
 
 exports.all = async (req, res) => {
   const hourLogs = await HourLog.find().populate('company');
-  res.render("hourLog/all", { title: "Hour Logs", hourLogs: hourLogs });
+  res.render("hourLog/hourLogAll", { title: "Hour Logs", hourLogs: hourLogs });
 };
 
 exports.one = async (req, res) => {
   const hourLogId = req.params.id;
+  const users = await User.find({ status: "active" }).select('firstName lastName').sort('firstName');
+  const companies = await Company.find({ status: "active" }).select('name').sort('name');
   const hourLog = await HourLog.findOne({ _id: hourLogId })
     .populate('company', 'name')
     .populate({
@@ -22,8 +26,7 @@ exports.one = async (req, res) => {
         select: 'firstName lastName'
       }]
     });
-
-  res.render("hourLog/one", { title: hourLog.company.name, hourLog });
+  res.render("hourLog/hourLogOne", { title: hourLog.company.name, users, companies, hourLog });
 };
 
 exports.open = async (req, res) => {

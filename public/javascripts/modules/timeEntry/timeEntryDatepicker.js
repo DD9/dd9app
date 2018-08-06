@@ -4,6 +4,6 @@ $('#createTimeEntryForm').find('#date').datepicker({
   format: 'yyyy-mm-dd'
 });
 
-$('#editCreatedTimeEntryForm').find('#date').datepicker({
+$('#editTimeEntryModal').find('#date').datepicker({
   format: 'yyyy-mm-dd'
 });

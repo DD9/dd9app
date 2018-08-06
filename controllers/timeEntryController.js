@@ -13,7 +13,7 @@ exports.new = async (req, res) => {
     totalCreatedTimeEntryHours += timeEntry.hours;
   }
 
-  res.render('timeEntry/new', { title: "Time Entry", companies, timeEntries, totalCreatedTimeEntryHours })
+  res.render('timeEntry/timeEntryNew', { title: "Time Entry", companies, timeEntries, totalCreatedTimeEntryHours })
 };
 
 exports.create = async (req, res) => {
@@ -31,7 +31,9 @@ exports.create = async (req, res) => {
     status: "created"
   }).save();
 
-  res.json({ timeEntry, admin: req.user.permissions[0].admin });
+  const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntry._id }).populate('user company');
+
+  res.json({ timeEntry: populatedTimeEntry, admin: req.user.permissions[0].admin });
 };
 
 exports.createAndSubmit = async (req, res) => {
@@ -58,24 +60,24 @@ exports.createAndSubmit = async (req, res) => {
   res.redirect("/hourLog/5b5a56ac443bd381c0790a6a");
 };
 
+// Handle time entry updates for new creates, adjudications, admins, and staff
 exports.edit = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
-  const company = await Company.findOne({ _id: req.body.company }).select('name');
 
   if (timeEntry.status ==="created" && +timeEntry.user === +req.user._id) {
-    timeEntry.company = req.body.company;
     timeEntry.date = req.body.date;
+    timeEntry.company = req.body.company;
     timeEntry.hours = req.body.hours;
     timeEntry.description = req.body.description;
-    timeEntry.publicCompany = req.body.company;
     timeEntry.publicDate = req.body.date;
+    timeEntry.publicCompany = req.body.company;
     timeEntry.publicHours = req.body.hours;
     timeEntry.publicDescription = req.body.description;
   } else if (timeEntry.status !== "created" && req.user.permissions[0].admin === true) {
-    timeEntry.publicUser = req.user;
-    timeEntry.publicCompany = req.body.company;
     timeEntry.publicDate = req.body.date;
+    timeEntry.publicUser = req.body.user;
+    timeEntry.publicCompany = req.body.company;
     timeEntry.publicHours = req.body.hours;
     timeEntry.publicDescription = req.body.description;
   } else {
@@ -84,8 +86,9 @@ exports.edit = async (req, res) => {
   }
 
   await timeEntry.save();
+  const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntryId }).populate('user publicUser company publicCompany');
 
-  res.json({ timeEntry, company, admin: req.user.permissions[0].admin })
+  res.json({ timeEntry: populatedTimeEntry, admin: req.user.permissions[0].admin })
 };
 
 exports.approve = async (req, res) => {

@@ -4,7 +4,7 @@ const HourLog = mongoose.model('HourLog');
 
 exports.all = async (req, res) => {
   const companies = await Company.find();
-  res.render("company/all", { title: "Companies", companies: companies });
+  res.render("company/companyAll", { title: "Companies", companies: companies });
 };
 
 exports.one = async (req, res) => {
@@ -12,7 +12,7 @@ exports.one = async (req, res) => {
   const company = await Company.findOne({ name: companyName }).select('name status');
   const companies = await Company.find().select('name');
   const hourLogs = await HourLog.find({ company : company._id }).select('dateOpened dateClosed title totalPublicHours totalHiddenHours');
-  res.render("company/one", { title: company.name, company, companies, hourLogs });
+  res.render("company/companyOne", { title: company.name, company, companies, hourLogs });
 };
 
 exports.create = async (req, res) => {

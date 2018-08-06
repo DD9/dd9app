@@ -4476,7 +4476,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     return hooks;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(146)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)(module)))
 
 /***/ }),
 /* 1 */
@@ -14405,7 +14405,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	return jQuery;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(146)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)(module)))
 
 /***/ }),
 /* 2 */
@@ -14416,7 +14416,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var bind = __webpack_require__(19);
+var bind = __webpack_require__(18);
 
 /*global toString:true*/
 
@@ -14743,7 +14743,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 (function (factory) {
 	if (true) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(20)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(19)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
 			return factory($, window, document);
 		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -14900,10 +14900,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.approveAndHideBtnListeners = approveAndHideBtnListeners;
-exports.confirmSubmitListener = confirmSubmitListener;
-exports.confirmDeleteListener = confirmDeleteListener;
-exports.updateTotalCreatedTimeEntryHours = updateTotalCreatedTimeEntryHours;
+exports.createTimeEntryTableActionButtonsHtml = createTimeEntryTableActionButtonsHtml;
+exports.instantiateTimeEntryTableActions = instantiateTimeEntryTableActions;
+exports.updateTotalTimeEntryTableHours = updateTotalTimeEntryTableHours;
 
 var _axios = __webpack_require__(3);
 
@@ -14911,104 +14910,200 @@ var _axios2 = _interopRequireDefault(_axios);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Approve and hide listeners
-approveAndHideBtnListeners(); /*
-                               * Ajax for time entry table action button submit listeners, edit listeners and actions in separate file.
-                               * Actions Must be reinstantiated when to new buttons when new buttons are added to the DOM via Ajax.
-                               */
-
-function approveAndHideBtnListeners() {
-  var approveForm = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.created-time-entry-table-action-approve';
-  var hideForm = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '.created-time-entry-table-action-hide';
-
-  $(approveForm).on('submit', ajaxCreatedTimeEntryTableApprove);
-  $(hideForm).on('submit', ajaxCreatedTimeEntryTimeEntryTableHide);
+// Function used to dynamically create time entry table action buttons on time entry edit and create
+function createTimeEntryTableActionButtonsHtml(res, timeEntryTableType, timeEntryTableRowNumber) {
+  var editSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve"><image xlink:href="/images/icons/pencil.svg" x="0" y="0" width="100%" height="100%"/></svg>';
+  var html = '';
+  if (res.data.admin === true) {
+    console.log(res);
+    if (timeEntryTableType === "approved") {
+      html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide" class="' + timeEntryTableType + '-time-entry-table-hide-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/hide\' method="POST" data-hours=' + res.data.timeEntry.publicHours + '><button class="btn btn-sm btn-link" type="submit">Hide</button></form>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject" class="reject-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmRejectTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.publicHours + '>Reject</button>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#editTimeEntryModal\' data-tabletype=' + timeEntryTableType + ' data-rownumber=' + timeEntryTableRowNumber + ' data-timeentry=' + res.data.timeEntry._id + ' data-date=' + res.data.timeEntry.publicDate + ' data-user=' + res.data.timeEntry.publicUser._id + ' data-company=' + res.data.timeEntry.publicCompany._id + ' data-hours=' + res.data.timeEntry.publicHours + ' data-description=' + res.data.timeEntry.publicDescription + '>' + editSVG + '</button>';
+    } else if (timeEntryTableType === "hidden") {
+      html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve" class="time-entry-table-form-approve form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/approve\' method="POST" data-hours=' + res.data.timeEntry.publicHours + '><button class="btn btn-sm btn-link" type="submit">Approve</button></form>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject" class="reject-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmRejectTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.publicHours + '>Reject</button>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#editTimeEntryModal\' data-tabletype=' + timeEntryTableType + ' data-rownumber=' + timeEntryTableRowNumber + ' data-timeentry=' + res.data.timeEntry._id + ' data-date=' + res.data.timeEntry.publicDate + ' data-user=' + res.data.timeEntry.publicUser._id + ' data-company=' + res.data.timeEntry.publicCompany._id + ' data-hours=' + res.data.timeEntry.publicHours + ' data-description=' + res.data.timeEntry.publicDescription + '>' + editSVG + '</button>';
+    } else if (timeEntryTableType === "submitted") {
+      html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve" class="' + timeEntryTableType + '-time-entry-table-approve-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/approve\' method="POST" data-hours=' + res.data.timeEntry.publicHours + '><button class="btn btn-sm btn-link" type="submit">Approve</button></form>';
+      html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide" class="' + timeEntryTableType + '-time-entry-table-hide-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/hide\' method="POST" data-hours=' + res.data.timeEntry.publicHours + '><button class="btn btn-sm btn-link" type="submit">Hide</button></form>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject" class="reject-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmRejectTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.publicHours + '>Reject</button>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#editTimeEntryModal\' data-tabletype=' + timeEntryTableType + ' data-rownumber=' + timeEntryTableRowNumber + ' data-timeentry=' + res.data.timeEntry._id + ' data-date=' + res.data.timeEntry.publicDate + ' data-user=' + res.data.timeEntry.publicUser._id + ' data-company=' + res.data.timeEntry.publicCompany._id + ' data-hours=' + res.data.timeEntry.publicHours + ' data-description=' + res.data.timeEntry.publicDescription + '>' + editSVG + '</button>';
+    } else if (timeEntryTableType === "created") {
+      html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve" class="' + timeEntryTableType + '-time-entry-table-approve-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/approve\' method="POST" data-hours=' + res.data.timeEntry.hours + '><button class="btn btn-sm btn-link" type="submit">Approve</button></form>';
+      html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide" class="' + timeEntryTableType + '-time-entry-table-hide-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/hide\' method="POST" data-hours=' + res.data.timeEntry.hours + '><button class="btn btn-sm btn-link" type="submit">Hide</button></form>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Submit" class="submit-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmSubmitTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.hours + '>Submit</button>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Delete" class="delete-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmDeleteTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.hours + '>Delete</button>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#editTimeEntryModal\' data-tabletype=' + timeEntryTableType + ' data-rownumber=' + timeEntryTableRowNumber + ' data-timeentry=' + res.data.timeEntry._id + ' data-date=' + res.data.timeEntry.date + ' data-company=' + res.data.timeEntry.company._id + ' data-hours=' + res.data.timeEntry.hours + ' data-description=' + res.data.timeEntry.description + '>' + editSVG + '</button>';
+    }
+  } else {
+    html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Submit" class="submit-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmSubmitTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.hours + '>Submit</button>';
+    html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Delete" class="delete-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmDeleteTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.hours + '>Delete</button>';
+    html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#editTimeEntryModal\' data-tabletype=' + timeEntryTableType + ' data-rownumber=' + timeEntryTableRowNumber + ' data-timeentry=' + res.data.timeEntry._id + ' data-date=' + res.data.timeEntry.date + ' data-company=' + res.data.timeEntry.company._id + ' data-hours=' + res.data.timeEntry.hours + ' data-description=' + res.data.timeEntry.description + '>' + editSVG + '</button>';
+  }
+  return html;
 }
-// Confirm modals not created dynamically, form actions don't need to be updated
-var submitForm = '.created-time-entry-table-action-submit';
-var deleteForm = '.created-time-entry-table-action-delete';
-$(submitForm).on('submit', ajaxCreatedTimeEntryTimeEntryTableSubmit);
-$(deleteForm).on('submit', ajaxCreatedTimeEntryTimeEntryTableDelete);
+
+// Init table actions on load
+/*
+ * Ajax for time entry table button listeners, edit listener in editTimeEntry.js
+ * Actions Must be reinstantiated to new buttons when new buttons are added to the DOM via Ajax
+ */
+
+instantiateTimeEntryNewTableActions();
+instantiateHourLogOneTableActions();
+
+function instantiateTimeEntryNewTableActions() {
+  var createdTimeEntryTableApproveForm = '.created-time-entry-table-approve-form';
+  var createdTimeEntryTableHideForm = '.created-time-entry-table-hide-form';
+  var createdTimeEntryTableSubmitBtn = '.submit-created-time-entry-btn';
+  var createdTimeEntryTableDeleteBtn = '.delete-created-time-entry-btn';
+  instantiateTimeEntryTableActions("created", createdTimeEntryTableApproveForm, createdTimeEntryTableHideForm, "", createdTimeEntryTableSubmitBtn, createdTimeEntryTableDeleteBtn);
+}
+
+function instantiateHourLogOneTableActions() {
+  var approvedTimeEntryTableHideForm = '.approved-time-entry-table-hide-form';
+  var approvedTimeEntryTableRejectBtn = '.reject-approved-time-entry-btn';
+  instantiateTimeEntryTableActions("approved", "", approvedTimeEntryTableHideForm, approvedTimeEntryTableRejectBtn, "", "");
+  var hiddenTimeEntryTableApproveForm = '.hidden-time-entry-table-approve-form';
+  var hiddenTimeEntryTableRejectBtn = '.reject-hidden-time-entry-btn';
+  instantiateTimeEntryTableActions("hidden", hiddenTimeEntryTableApproveForm, "", hiddenTimeEntryTableRejectBtn, "", "");
+  var submittedTimeEntryTableApproveForm = '.submitted-time-entry-table-approve-form';
+  var submittedTimeEntryTableHideForm = '.submitted-time-entry-table-hide-form';
+  var submittedTimeEntryTableRejectBtn = '.reject-submitted-time-entry-btn';
+  instantiateTimeEntryTableActions("submitted", submittedTimeEntryTableApproveForm, submittedTimeEntryTableHideForm, submittedTimeEntryTableRejectBtn, "", "");
+}
+
+// Function to initialize listeners and actions on dynamically created time entry buttons
+function instantiateTimeEntryTableActions(timeEntryTableType, approveFormSelector, hideFormSelector, rejectBtnSelector, submitBtnSelector, deleteBtnSelector) {
+  if (timeEntryTableType === "appoved") {
+    hideFormListener(hideFormSelector, timeEntryTableType);
+    confirmRejectBtnListener(rejectBtnSelector, timeEntryTableType);
+  } else if (timeEntryTableType === "hidden") {
+    approveFormListener(approveFormSelector, timeEntryTableType);
+    confirmRejectBtnListener(rejectBtnSelector, timeEntryTableType);
+  } else if (timeEntryTableType === "submitted") {
+    approveFormListener(approveFormSelector, timeEntryTableType);
+    hideFormListener(hideFormSelector, timeEntryTableType);
+    confirmRejectBtnListener(rejectBtnSelector, timeEntryTableType);
+  } else if (timeEntryTableType === "created") {
+    approveFormListener(approveFormSelector, timeEntryTableType);
+    hideFormListener(hideFormSelector, timeEntryTableType);
+    confirmDeleteBtnListener(deleteBtnSelector, timeEntryTableType);
+    confirmSubmitBtnListener(submitBtnSelector, timeEntryTableType);
+  }
+}
+
+// Approve listener
+function approveFormListener(form, timeEntryTableType) {
+  $(form).on('submit', function (e) {
+    console.log('ajaxTimeEntryTableApprove');
+    e.preventDefault();
+    $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row($(this).closest('tr')).remove().draw();
+    console.log(this);
+    updateTotalTimeEntryTableHours(timeEntryTableType, $(this).data('hours'), 0);
+    _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+  });
+}
+
+// Hide listener
+function hideFormListener(form, timeEntryTableType) {
+  $(form).on('submit', function (e) {
+    console.log('ajaxTimeEntryTableHide');
+    e.preventDefault();
+    $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row($(this).closest('tr')).remove().draw();
+    updateTotalTimeEntryTableHours(timeEntryTableType, $(this).data('hours'), 0);
+    _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+  });
+}
+
+// Reject listener
+var rejectTimeEntryBtn = void 0;
+var rejectForm = '#confirmRejectTimeEntryForm';
+function confirmRejectBtnListener(button, timeEntryTableType) {
+  $(button).on("click", function () {
+    rejectTimeEntryBtn = this;
+    $("#confirmRejectTimeEntryForm").attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/delete');
+    if ($(submitForm).data('submitted') === true) {
+      throw new Error("Preventing double submission");
+    } else {
+      $(submitForm).data('submitted', true);
+    }
+    $(rejectForm).on('submit', function (e) {
+      console.log('ajaxTimeEntryTableReject');
+      e.preventDefault();
+      $(rejectForm).unbind(e);
+      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row($(this).closest('tr')).remove().draw();
+      updateTotalTimeEntryTableHours(timeEntryTableType, $(this).data('hours'), 0);
+      _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+    });
+  });
+  $('#confirmRejectTimeEntryBtn').on("click", function () {
+    $('#confirmRejectTimeEntryModal').modal('toggle');
+  });
+}
 
 // Submit listener
 var submitTimeEntryBtn = void 0;
-confirmSubmitListener();
-function confirmSubmitListener() {
-  var button = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.submit-created-time-entry-btn';
-
+var submitForm = '#confirmSubmitTimeEntryForm';
+function confirmSubmitBtnListener(button, timeEntryTableType) {
   $(button).on("click", function () {
     submitTimeEntryBtn = this;
-    console.log(submitTimeEntryBtn);
-    $("#confirmSubmitCreatedTimeEntryForm").attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/submit');
+    $("#confirmSubmitTimeEntryForm").attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/submit');
+    if ($(submitForm).data('submitted') === true) {
+      throw new Error("Preventing double submission");
+    } else {
+      $(submitForm).data('submitted', true);
+    }
+    $(submitForm).on('submit', function (e) {
+      console.log('ajaxTimeEntryTableSubmit');
+      e.preventDefault();
+      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row($(submitTimeEntryBtn).closest("tr")).remove().draw();
+      updateTotalTimeEntryTableHours(timeEntryTableType, $(submitTimeEntryBtn).data('hours'), 0);
+      _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+    });
   });
-
-  $('.confirm-created-time-entry-submit-btn').on("click", function () {
-    $('#confirmSubmitCreatedTimeEntryModal').modal('toggle');
+  $('#confirmCreatedTimeEntrySubmitBtn').on("click", function () {
+    $('#confirmSubmitTimeEntryModal').modal('toggle');
   });
 }
 
 // Delete listener
 var deleteTimeEntryBtn = void 0;
-confirmDeleteListener();
-function confirmDeleteListener() {
-  var button = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.delete-created-time-entry-btn';
-
+var deleteForm = '#confirmDeleteTimeEntryForm';
+function confirmDeleteBtnListener(button, timeEntryTableType) {
   $(button).on("click", function () {
     deleteTimeEntryBtn = this;
-    $("#confirmDeleteCreatedTimeEntryForm").attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/delete');
+    $("#confirmDeleteTimeEntryForm").attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/delete');
+    if ($(submitForm).data('submitted') === true) {
+      throw new Error("Preventing double submission");
+    } else {
+      $(submitForm).data('submitted', true);
+    }
+    $(deleteForm).on('submit', function (e) {
+      console.log('ajaxTimeEntryTableDelete');
+      e.preventDefault();
+      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row($(deleteTimeEntryBtn).closest("tr")).remove().draw();
+      updateTotalTimeEntryTableHours(timeEntryTableType, $(deleteTimeEntryBtn).data('hours'), 0);
+      _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+    });
   });
-
-  $('.confirm-created-time-entry-delete-btn').on("click", function () {
-    $('#confirmDeleteCreatedTimeEntryModal').modal('toggle');
+  $('#confirmTimeEntryDeleteBtn').on("click", function () {
+    $('#confirmDeleteTimeEntryModal').modal('toggle');
   });
 }
 
-// Update total create hours value
-function updateTotalCreatedTimeEntryHours(oldHours, newHours) {
-  var totalCreatedTimeEntryHours = +$('#totalCreatedTimeEntryHours').html();
-  var newTotal = totalCreatedTimeEntryHours - (+oldHours - +newHours);
-  console.log(totalCreatedTimeEntryHours + ' - (' + oldHours + ' - ' + newHours + ') = ' + newTotal);
-  $('#createdTimeEntriesTable').DataTable().row('#totalCreatedTimeEntryHoursRow').data(['', '', '' + newTotal, '', '', '']).draw();
-}
-
-// Approve
-function ajaxCreatedTimeEntryTableApprove(e) {
-  console.log('ajaxCreatedTimeEntryTableApprove');
-  console.log(this);
-  e.preventDefault();
-  $('#createdTimeEntriesTable').DataTable().row($(this).closest('tr')).remove().draw();
-  updateTotalCreatedTimeEntryHours($(this).data('hours'), 0);
-  _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
-}
-
-// Hide
-function ajaxCreatedTimeEntryTimeEntryTableHide(e) {
-  console.log('ajaxCreatedTimeEntryTimeEntryTableHide');
-  console.log(this);
-  e.preventDefault();
-  $('#createdTimeEntriesTable').DataTable().row($(this).closest('tr')).remove().draw();
-  updateTotalCreatedTimeEntryHours($(this).data('hours'), 0);
-  _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
-}
-
-// Submit
-function ajaxCreatedTimeEntryTimeEntryTableSubmit(e) {
-  console.log('ajaxCreatedTimeEntryTimeEntryTableSubmit');
-  console.log(submitTimeEntryBtn);
-  e.preventDefault();
-  $('#createdTimeEntriesTable').DataTable().row($(submitTimeEntryBtn).closest("tr")).remove().draw();
-  updateTotalCreatedTimeEntryHours($(submitTimeEntryBtn).data('hours'), 0);
-  _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
-}
-
-// Delete
-function ajaxCreatedTimeEntryTimeEntryTableDelete(e) {
-  console.log('ajaxCreatedTimeEntryTimeEntryTableDelete');
-  console.log(this);
-  e.preventDefault();
-  $('#createdTimeEntriesTable').DataTable().row($(deleteTimeEntryBtn).closest("tr")).remove().draw();
-  updateTotalCreatedTimeEntryHours($(deleteTimeEntryBtn).data('hours'), 0);
-  _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+// Update total time entry table hours value
+function updateTotalTimeEntryTableHours(timeEntryTableType, oldHours, newHours) {
+  var uppercaseTimeEntryTableType = timeEntryTableType.charAt(0).toUpperCase() + timeEntryTableType.slice(1);
+  var totalTimeTableEntryHours = +$('#total' + uppercaseTimeEntryTableType + 'TimeEntryHours').html();
+  var newTotal = totalTimeTableEntryHours - (+oldHours - +newHours);
+  console.log(totalTimeTableEntryHours + ' - (' + oldHours + ' - ' + newHours + ') = ' + newTotal);
+  if (timeEntryTableType === "created") {
+    $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#total' + uppercaseTimeEntryTableType + 'TimeEntryHoursRow').data(['', '', '' + newTotal, '', '']).draw();
+  } else {
+    $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#total' + uppercaseTimeEntryTableType + 'TimeEntryHoursRow').data(['', '', '', '' + newTotal, '', '']).draw();
+  }
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
@@ -15080,10 +15175,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(15);
+    adapter = __webpack_require__(14);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(15);
+    adapter = __webpack_require__(14);
   }
   return adapter;
 }
@@ -15148,7 +15243,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 });
 
 module.exports = defaults;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(144)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(143)))
 
 /***/ }),
 /* 8 */
@@ -15303,94 +15398,12 @@ exports.default = editCompanyValidation;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createdTimeEntryTableActionButtonsHtml = createdTimeEntryTableActionButtonsHtml;
-exports.instantiateTimeEntryTableActionListeners = instantiateTimeEntryTableActionListeners;
-
-var _createTimeEntryValidation = __webpack_require__(13);
-
-var _createTimeEntryValidation2 = _interopRequireDefault(_createTimeEntryValidation);
-
-var _timeEntryTableActions = __webpack_require__(5);
-
-var _editTimeEntry = __webpack_require__(12);
-
-var _axios = __webpack_require__(3);
-
-var _axios2 = _interopRequireDefault(_axios);
-
-var _moment = __webpack_require__(0);
-
-var _moment2 = _interopRequireDefault(_moment);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-$('#createTimeEntryForm').on('submit', ajaxAddCreatedTimeEntry);
-
-function ajaxAddCreatedTimeEntry(e) {
-  var _this = this;
-
-  console.log("ajaxAddCreatedTimeEntry");
-  e.preventDefault();
-  (0, _createTimeEntryValidation2.default)();
-  _axios2.default.post(this.action, {
-    date: this.date.value,
-    company: this.company.value,
-    hours: this.hours.value,
-    description: this.description.value
-  }).then(function (res) {
-    var createdTimeEntriesTable = $('#createdTimeEntriesTable');
-    var createdTimeEntriesTableRowNumber = createdTimeEntriesTable.find('tr').length - 2;
-    var companyName = $(_this).find('option:selected').text();
-    createdTimeEntriesTable.DataTable().row.add(["" + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), "" + companyName, "" + res.data.timeEntry.hours, "" + res.data.timeEntry.description, "" + createdTimeEntryTableActionButtonsHtml(res, createdTimeEntriesTableRowNumber)]).draw().node().id = "created-time-entries-table-row-" + createdTimeEntriesTableRowNumber;
-    (0, _timeEntryTableActions.updateTotalCreatedTimeEntryHours)(0, res.data.timeEntry.hours);
-    instantiateTimeEntryTableActionListeners(".created-time-entries-table-row-" + createdTimeEntriesTableRowNumber + "-approve", ".created-time-entries-table-row-" + createdTimeEntriesTableRowNumber + "-hide", ".created-time-entries-table-row-" + createdTimeEntriesTableRowNumber + "-submit", ".created-time-entries-table-row-" + createdTimeEntriesTableRowNumber + "-delete", ".created-time-entries-table-row-" + createdTimeEntriesTableRowNumber + "-edit");
-    $('#createTimeEntryForm #hours, #description').val('');
-  }).catch(console.error);
-}
-
-function createdTimeEntryTableActionButtonsHtml(res, createdTimeEntriesTableRowNumber) {
-  var editSVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\" x=\"0px\" y=\"0px\" viewBox=\"0 0 100 100\" style=\"enable-background:new 0 0 100 100;\" xml:space=\"preserve\"><image xlink:href=\"/images/icons/pencil.svg\" x=\"0\" y=\"0\" width=\"100%\" height=\"100%\"/></svg>";
-  var html = '';
-  if (res.data.admin === true) {
-    html += "<form class=\"created-time-entries-table-row-" + createdTimeEntriesTableRowNumber + "-approve created-time-entry-table-action-approve form d-inline\" action='/api/v1/timeEntry/" + res.data.timeEntry._id + "/approve' method=\"POST\" data-hours=" + res.data.timeEntry.hours + "><button class=\"btn btn-sm btn-link\" type=\"submit\">Approve</button></form>";
-    html += "<form class=\"created-time-entries-table-row-" + createdTimeEntriesTableRowNumber + "-hide created-time-entry-table-action-hide form d-inline\" action='/api/v1/timeEntry/" + res.data.timeEntry._id + "/hide' method=\"POST\" data-hours=" + res.data.timeEntry.hours + "><button class=\"btn btn-sm btn-link\" type=\"submit\">Hide</button></form>";
-    html += "<button class=\"created-time-entries-table-row-" + createdTimeEntriesTableRowNumber + "-submit submit-created-time-entry-btn btn btn-sm btn-link\" data-toggle='modal' data-target='#confirmSubmitCreatedTimeEntryModal' data-timeentry=" + res.data.timeEntry._id + " data-hours=" + res.data.timeEntry.hours + ">Submit</button>";
-    html += "<button class=\"created-time-entries-table-row-" + createdTimeEntriesTableRowNumber + "-delete delete-created-time-entry-btn btn btn-sm btn-link\" data-toggle='modal' data-target='#confirmDeleteCreatedTimeEntryModal' data-timeentry=" + res.data.timeEntry._id + " data-hours=" + res.data.timeEntry.hours + ">Delete</button>";
-    html += "<button class=\"created-time-entries-table-row-" + createdTimeEntriesTableRowNumber + "-edit edit-created-time-entry-btn btn btn-sm btn-link\" data-toggle='modal' data-target='#editCreatedTimeEntryModal' data-rownumber=" + createdTimeEntriesTableRowNumber + " data-timeentry=" + res.data.timeEntry._id + " data-date=" + res.data.timeEntry.date + " data-company=" + res.data.timeEntry.company + " data-hours=" + res.data.timeEntry.hours + " data-description=" + res.data.timeEntry.description + ">" + editSVG + "</button>";
-  } else {
-    html += "<button class=\"created-time-entries-table-row-" + createdTimeEntriesTableRowNumber + "-submit submit-created-time-entry-btn btn btn-sm btn-link\" data-toggle='modal' data-target='#confirmSubmitCreatedTimeEntryModal' data-timeentry=" + res.data.timeEntry._id + " data-hours=" + res.data.timeEntry.hours + ">Submit</button>";
-    html += "<button class=\"created-time-entries-table-row-" + createdTimeEntriesTableRowNumber + "-delete delete-created-time-entry-btn btn btn-sm btn-link\" data-toggle='modal' data-target='#confirmDeleteCreatedTimeEntryModal' data-timeentry=" + res.data.timeEntry._id + " data-hours=" + res.data.timeEntry.hours + ">Delete</button>";
-    html += "<button class=\"created-time-entries-table-row-" + createdTimeEntriesTableRowNumber + "-edit edit-created-time-entry-btn btn btn-sm btn-link\" data-toggle='modal' data-target='#editCreatedTimeEntryModal' data-rownumber=" + createdTimeEntriesTableRowNumber + " data-timeentry=" + res.data.timeEntry._id + " data-date=" + res.data.timeEntry.date + " data-company=" + res.data.timeEntry.company + " data-hours=" + res.data.timeEntry.hours + " data-description=" + res.data.timeEntry.description + ">" + editSVG + "</button>";
-  }
-  return html;
-}
-
-function instantiateTimeEntryTableActionListeners(approveFormSelector, hideFormSelector, submitBtnSelector, deleteBtnSelector, editBtnSelector) {
-  (0, _timeEntryTableActions.approveAndHideBtnListeners)(approveFormSelector, hideFormSelector);
-  (0, _timeEntryTableActions.confirmSubmitListener)(submitBtnSelector);
-  (0, _timeEntryTableActions.confirmDeleteListener)(deleteBtnSelector);
-  (0, _editTimeEntry.instantiateEditTimeEntryBtn)(editBtnSelector);
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 exports.instantiateEditTimeEntryBtn = instantiateEditTimeEntryBtn;
 
-var _editTimeEntryValidation = __webpack_require__(14);
+var _editTimeEntryValidation = __webpack_require__(13);
 
 var _editTimeEntryValidation2 = _interopRequireDefault(_editTimeEntryValidation);
 
-var _createTimeEntry = __webpack_require__(11);
-
 var _timeEntryTableActions = __webpack_require__(5);
 
 var _axios = __webpack_require__(3);
@@ -15403,56 +15416,66 @@ var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var editCreatedTimeEntryForm = $("#editCreatedTimeEntryForm");
-
-// Populate the time entry edit modal with current data
 /*
  * Ajax for time entry edit submits.
  * Must be reinstantiated when new buttons are added to the DOM via Ajax.
  */
 
-var createdTimeEntriesTableRowNumber = void 0;
-var currentTimeEntryHours = void 0;
-instantiateEditTimeEntryBtn();
-function instantiateEditTimeEntryBtn() {
-  var button = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.edit-created-time-entry-btn';
+var editTimeEntryModal = $("#editTimeEntryModal");
+var editTimeEntryForm = $('#editTimeEntryForm');
 
+// Init edit buttons
+var anyEditTimeEntryBtn = '.edit-time-entry-btn';
+instantiateEditTimeEntryBtn(anyEditTimeEntryBtn);
+
+// Populate the time entry edit modal with current data
+var timeEntryTableType = void 0;
+var timeEntryTableRowNumber = void 0;
+var currentTimeEntryHours = void 0;
+function instantiateEditTimeEntryBtn(button) {
   $(button).on("click", function () {
-    createdTimeEntriesTableRowNumber = $(this).data('rownumber');
-    console.log(createdTimeEntriesTableRowNumber);
+    timeEntryTableType = $(this).data('tabletype');
+    timeEntryTableRowNumber = $(this).data('rownumber');
     currentTimeEntryHours = $(this).data('hours');
-    console.log(currentTimeEntryHours);
-    editCreatedTimeEntryForm.attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/edit');
-    editCreatedTimeEntryForm.find('#date').val(_moment2.default.utc($(this).data('date')).format("YYYY-MM-DD"));
-    editCreatedTimeEntryForm.find('#company').val($(this).data('company'));
-    editCreatedTimeEntryForm.find('#hours').val($(this).data('hours'));
-    editCreatedTimeEntryForm.find('#description').val($(this).data('description'));
+    editTimeEntryForm.attr('action', '/api/v1/timeEntry/' + $(this).data('timeentry') + '/edit');
+    editTimeEntryModal.find('#date').val(_moment2.default.utc($(this).data('date')).format("YYYY-MM-DD"));
+    editTimeEntryModal.find('#company').val($(this).data('company'));
+    editTimeEntryModal.find('#user').val($(this).data('user'));
+    editTimeEntryModal.find('#hours').val($(this).data('hours'));
+    editTimeEntryModal.find('#description').val($(this).data('description'));
   });
 }
 
-// Time entry table ajax on submit
-editCreatedTimeEntryForm.on('submit', ajaxEditTimeEntry);
-
-function ajaxEditTimeEntry(e) {
+// Time entry edit modal ajax on submit
+editTimeEntryModal.on('submit', function (e) {
   console.log('ajaxEditTimeEntry');
   e.preventDefault();
   (0, _editTimeEntryValidation2.default)();
-  $('#editCreatedTimeEntryModal').modal('toggle');
-  _axios2.default.post(this.action, {
-    date: this.date.value,
-    company: this.company.value,
-    hours: this.hours.value,
-    description: this.description.value
+  $('#editTimeEntryModal').modal('toggle');
+  console.log(editTimeEntryForm.attr('action'));
+  console.log(editTimeEntryForm.find('#date').val());
+  _axios2.default.post(editTimeEntryForm.attr('action'), {
+    date: editTimeEntryForm.find('#date').val(),
+    company: editTimeEntryForm.find('#company').val(),
+    user: editTimeEntryForm.find('#user').val(),
+    hours: editTimeEntryForm.find('#hours').val(),
+    description: editTimeEntryForm.find('#description').val()
   }).then(function (res) {
-    $('#createdTimeEntriesTable').DataTable().row('#created-time-entries-table-row-' + createdTimeEntriesTableRowNumber).data(['' + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), '' + res.data.company.name, '' + res.data.timeEntry.hours, '' + res.data.timeEntry.description, '' + (0, _createTimeEntry.createdTimeEntryTableActionButtonsHtml)(res, createdTimeEntriesTableRowNumber)]).draw();
-    (0, _timeEntryTableActions.updateTotalCreatedTimeEntryHours)(currentTimeEntryHours, res.data.timeEntry.hours);
-    (0, _createTimeEntry.instantiateTimeEntryTableActionListeners)('.created-time-entries-table-row-' + createdTimeEntriesTableRowNumber + '-approve', '.created-time-entries-table-row-' + createdTimeEntriesTableRowNumber + '-hide', '.created-time-entries-table-row-' + createdTimeEntriesTableRowNumber + '-submit', '.created-time-entries-table-row-' + createdTimeEntriesTableRowNumber + '-delete', '.created-time-entries-table-row-' + createdTimeEntriesTableRowNumber + '-edit');
+    if (timeEntryTableType === "created") {
+      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber).data(['' + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), '' + res.data.timeEntry.company.name, '' + res.data.timeEntry.hours, '' + res.data.timeEntry.description, '' + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw();
+      (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.hours);
+    } else {
+      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber).data(['' + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), '' + res.data.timeEntry.publicCompany.name, res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw();
+      (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.publicHours);
+    }
+    (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Submit', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Delete');
+    instantiateEditTimeEntryBtn('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit');
   }).catch(console.error);
-}
+});
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15516,7 +15539,7 @@ exports.default = createTimeEntryValidation;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15526,11 +15549,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 function editTimeEntryValidation() {
-  var editCreatedTimeEntryForm = $('#editCreatedTimeEntryForm');
-  var dateInput = editCreatedTimeEntryForm.find('#date');
-  var companyInput = editCreatedTimeEntryForm.find('#company');
-  var hoursInput = editCreatedTimeEntryForm.find('#hours');
-  var descriptionInput = editCreatedTimeEntryForm.find('#description');
+  var editTimeEntryModal = $('#editTimeEntryModal');
+  var dateInput = editTimeEntryModal.find('#date');
+  var companyInput = editTimeEntryModal.find('#company');
+  var hoursInput = editTimeEntryModal.find('#hours');
+  var descriptionInput = editTimeEntryModal.find('#description');
 
   var dateVal = dateInput.val();
   var companyVal = companyInput.val();
@@ -15580,7 +15603,7 @@ exports.default = editTimeEntryValidation;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15591,7 +15614,7 @@ var settle = __webpack_require__(168);
 var buildURL = __webpack_require__(171);
 var parseHeaders = __webpack_require__(177);
 var isURLSameOrigin = __webpack_require__(175);
-var createError = __webpack_require__(18);
+var createError = __webpack_require__(17);
 var btoa = typeof window !== 'undefined' && window.btoa && window.btoa.bind(window) || __webpack_require__(170);
 
 module.exports = function xhrAdapter(config) {
@@ -15756,10 +15779,10 @@ module.exports = function xhrAdapter(config) {
     request.send(requestData);
   });
 };
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(144)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(143)))
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15785,7 +15808,7 @@ Cancel.prototype.__CANCEL__ = true;
 module.exports = Cancel;
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15796,7 +15819,7 @@ module.exports = function isCancel(value) {
 };
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15819,7 +15842,7 @@ module.exports = function createError(message, config, code, response) {
 };
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15836,7 +15859,7 @@ module.exports = function bind(fn, thisArg) {
 };
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29788,7 +29811,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29870,7 +29893,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29937,7 +29960,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30004,7 +30027,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30125,7 +30148,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30192,7 +30215,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30305,7 +30328,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30372,7 +30395,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30507,7 +30530,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30622,7 +30645,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30761,7 +30784,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30859,7 +30882,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30925,7 +30948,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31050,7 +31073,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31175,7 +31198,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31291,7 +31314,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31450,7 +31473,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31543,7 +31566,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31745,7 +31768,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31816,7 +31839,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31903,7 +31926,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31971,7 +31994,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32055,7 +32078,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32139,7 +32162,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32223,7 +32246,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32310,7 +32333,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32419,7 +32442,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32491,7 +32514,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32559,7 +32582,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32631,7 +32654,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32703,7 +32726,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32770,7 +32793,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32842,7 +32865,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32921,7 +32944,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33021,7 +33044,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33112,7 +33135,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33212,7 +33235,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33300,7 +33323,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33374,7 +33397,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33490,7 +33513,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 60 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33604,7 +33627,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 61 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33672,7 +33695,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33754,7 +33777,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 63 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33840,7 +33863,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33931,7 +33954,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 65 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34014,7 +34037,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 66 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34096,7 +34119,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34181,7 +34204,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34312,7 +34335,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34444,7 +34467,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34550,7 +34573,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34682,7 +34705,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34844,7 +34867,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34962,7 +34985,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35066,7 +35089,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35156,7 +35179,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 76 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35296,7 +35319,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 77 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35373,7 +35396,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 78 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35473,7 +35496,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 79 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35563,7 +35586,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 80 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35659,7 +35682,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 81 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35754,7 +35777,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 82 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35869,7 +35892,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 83 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36003,7 +36026,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 84 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36092,7 +36115,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 85 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36187,7 +36210,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 86 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36332,7 +36355,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 87 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36410,7 +36433,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 88 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36536,7 +36559,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 89 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36641,7 +36664,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 90 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36753,7 +36776,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 91 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36825,7 +36848,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 92 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36923,7 +36946,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 93 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37010,7 +37033,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 94 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37122,7 +37145,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 95 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37312,7 +37335,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 96 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37402,7 +37425,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 97 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37492,7 +37515,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 98 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37560,7 +37583,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 99 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37662,7 +37685,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 100 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37732,7 +37755,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 101 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37863,7 +37886,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 102 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37958,7 +37981,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 103 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38053,7 +38076,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 104 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38121,7 +38144,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 105 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38253,7 +38276,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 106 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38387,7 +38410,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 107 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38455,7 +38478,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 108 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38527,7 +38550,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 109 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38610,7 +38633,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 110 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38800,7 +38823,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 111 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38885,7 +38908,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 112 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38953,7 +38976,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 113 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39033,7 +39056,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 114 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39209,7 +39232,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 115 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39390,7 +39413,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 116 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39466,7 +39489,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 117 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39577,7 +39600,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 118 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39688,7 +39711,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 119 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39784,7 +39807,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 120 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39858,7 +39881,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 121 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39925,7 +39948,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 122 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40063,7 +40086,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 123 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40160,7 +40183,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 124 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40232,7 +40255,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 125 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40356,7 +40379,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 126 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40431,7 +40454,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 127 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40501,7 +40524,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 128 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40619,7 +40642,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 129 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40722,7 +40745,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 130 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40822,7 +40845,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 131 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40888,7 +40911,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 132 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40954,7 +40977,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 133 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41071,7 +41094,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 134 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41225,7 +41248,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 135 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41310,7 +41333,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 136 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41376,7 +41399,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 137 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41442,7 +41465,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 138 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41530,7 +41553,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 139 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41603,7 +41626,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 140 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41671,7 +41694,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 141 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41788,7 +41811,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 142 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41899,7 +41922,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 143 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42010,7 +42033,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 144 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42203,7 +42226,7 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 145 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44729,7 +44752,7 @@ exports.default = Popper;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(181)))
 
 /***/ }),
-/* 146 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44759,7 +44782,7 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 147 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44773,7 +44796,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function (global, factory) {
-  ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory(exports, __webpack_require__(1), __webpack_require__(145)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__(1), __webpack_require__(145)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+  ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory(exports, __webpack_require__(1), __webpack_require__(144)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__(1), __webpack_require__(144)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.bootstrap = {}, global.jQuery, global.Popper);
@@ -48685,7 +48708,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //# sourceMappingURL=bootstrap.js.map
 
 /***/ }),
-/* 148 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48724,7 +48747,7 @@ function ajaxDeactivateCompanyForm(e) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 149 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48749,13 +48772,13 @@ function ajaxCreateCompany(e) {
     name: this.name.value
   }).then(function (res) {
     console.log(res.data);
-    $('#companyAllTable').DataTable().row.add(['<a href=\'/company/' + res.data._id + '\'>' + res.data.name + '</a>', '' + (res.data.status.charAt(0).toUpperCase() + res.data.status.slice(1))]).draw();
+    $('#companyAllTable').DataTable().row.add(['<a href=\'/company/' + res.data.name + '\'>' + res.data.name + '</a>', '' + (res.data.status.charAt(0).toUpperCase() + res.data.status.slice(1))]).draw();ed;
   }).catch(console.error);
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 150 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48786,7 +48809,7 @@ function ajaxEditCompany(e) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 151 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48813,7 +48836,7 @@ $(".company-all-table-title").html('<h3>Companies</h3>' + '<button type="button"
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 152 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48838,14 +48861,7 @@ $(".company-one-table-title").html('<h4>Hour Logs</h4>');
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 153 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/***/ }),
-/* 154 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48884,7 +48900,7 @@ function ajaxCloseHourLogForm(e) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 155 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48911,6 +48927,78 @@ $(".hour-log-all-table-title").html('<h3>Hour Logs</h3>');
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
+/* 154 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+__webpack_require__(4);
+
+$('#approvedTimeEntryTable, #hiddenTimeEntryTable, #submittedTimeEntryTable').dataTable({
+  "dom": "<'row'<'col user-all-table-title'><'col user-all-table-filter'f>>" + "<'row'<'col-sm-12 user-all-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 user-all-table-paginate'p>>",
+  "bFilter": false,
+  "paging": false,
+  "pagination": false,
+  "bInfo": false,
+  "aaSorting": [0, 'desc'],
+  "columns": [{ "width": "9%" }, { "width": "15%" }, { "width": "15%" }, { "width": "4%" }, { "width": "36%" }, { "width": "21%" }]
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 155 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+var _createTimeEntryValidation = __webpack_require__(12);
+
+var _createTimeEntryValidation2 = _interopRequireDefault(_createTimeEntryValidation);
+
+var _timeEntryTableActions = __webpack_require__(5);
+
+var _editTimeEntry = __webpack_require__(11);
+
+var _axios = __webpack_require__(3);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+$('#createTimeEntryForm').on('submit', ajaxAddCreatedTimeEntry);
+
+function ajaxAddCreatedTimeEntry(e) {
+  var _this = this;
+
+  console.log("ajaxAddCreatedTimeEntry");
+  e.preventDefault();
+  (0, _createTimeEntryValidation2.default)();
+  _axios2.default.post(this.action, {
+    date: this.date.value,
+    company: this.company.value,
+    hours: this.hours.value,
+    description: this.description.value
+  }).then(function (res) {
+    var createdTimeEntryTable = $('#createdTimeEntryTable');
+    var timeEntryTableType = "created";
+    var timeEntryTableRowNumber = createdTimeEntryTable.find('tr').length - 2;
+    var companyName = $(_this).find('option:selected').text();
+    createdTimeEntryTable.DataTable().row.add(["" + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), "" + companyName, "" + res.data.timeEntry.hours, "" + res.data.timeEntry.description, "" + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw().node().id = timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber;
+    (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, 0, res.data.timeEntry.hours);
+    (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Approve", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Hide", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Reject", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Submit", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Delete");
+    (0, _editTimeEntry.instantiateEditTimeEntryBtn)("#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Edit");
+    // $('#createTimeEntryForm #hours, #description').val('');
+  }).catch(console.error);
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
 /* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -48923,7 +49011,7 @@ $('#createTimeEntryForm').find('#date').datepicker({
   format: 'yyyy-mm-dd'
 });
 
-$('#editCreatedTimeEntryForm').find('#date').datepicker({
+$('#editTimeEntryModal').find('#date').datepicker({
   format: 'yyyy-mm-dd'
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
@@ -48935,7 +49023,9 @@ $('#editCreatedTimeEntryForm').find('#date').datepicker({
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-$('#createdTimeEntriesTable').dataTable({
+__webpack_require__(4);
+
+$('#createdTimeEntryTable').dataTable({
   "dom": "<'row'<'col user-all-table-title'><'col user-all-table-filter'f>>" + "<'row'<'col-sm-12 user-all-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 user-all-table-paginate'p>>",
   "bFilter": false,
   "paging": false,
@@ -49119,7 +49209,7 @@ $(".user-all-table-title").html('<h3>Users</h3>' + '<button type="button" class=
 
 
 var utils = __webpack_require__(2);
-var bind = __webpack_require__(19);
+var bind = __webpack_require__(18);
 var Axios = __webpack_require__(164);
 var defaults = __webpack_require__(7);
 
@@ -49154,9 +49244,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(16);
+axios.Cancel = __webpack_require__(15);
 axios.CancelToken = __webpack_require__(163);
-axios.isCancel = __webpack_require__(17);
+axios.isCancel = __webpack_require__(16);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -49176,7 +49266,7 @@ module.exports.default = axios;
 "use strict";
 
 
-var Cancel = __webpack_require__(16);
+var Cancel = __webpack_require__(15);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -49390,7 +49480,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(2);
 var transformData = __webpack_require__(169);
-var isCancel = __webpack_require__(17);
+var isCancel = __webpack_require__(16);
 var defaults = __webpack_require__(7);
 
 /**
@@ -49480,7 +49570,7 @@ module.exports = function enhanceError(error, config, code, response) {
 "use strict";
 
 
-var createError = __webpack_require__(18);
+var createError = __webpack_require__(17);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -51743,7 +51833,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 (function (factory) {
 	if (true) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(20)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(19)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
 			return factory($, window, document);
 		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -53036,252 +53126,252 @@ module.exports = g;
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./af": 21,
-	"./af.js": 21,
-	"./ar": 28,
-	"./ar-dz": 22,
-	"./ar-dz.js": 22,
-	"./ar-kw": 23,
-	"./ar-kw.js": 23,
-	"./ar-ly": 24,
-	"./ar-ly.js": 24,
-	"./ar-ma": 25,
-	"./ar-ma.js": 25,
-	"./ar-sa": 26,
-	"./ar-sa.js": 26,
-	"./ar-tn": 27,
-	"./ar-tn.js": 27,
-	"./ar.js": 28,
-	"./az": 29,
-	"./az.js": 29,
-	"./be": 30,
-	"./be.js": 30,
-	"./bg": 31,
-	"./bg.js": 31,
-	"./bm": 32,
-	"./bm.js": 32,
-	"./bn": 33,
-	"./bn.js": 33,
-	"./bo": 34,
-	"./bo.js": 34,
-	"./br": 35,
-	"./br.js": 35,
-	"./bs": 36,
-	"./bs.js": 36,
-	"./ca": 37,
-	"./ca.js": 37,
-	"./cs": 38,
-	"./cs.js": 38,
-	"./cv": 39,
-	"./cv.js": 39,
-	"./cy": 40,
-	"./cy.js": 40,
-	"./da": 41,
-	"./da.js": 41,
-	"./de": 44,
-	"./de-at": 42,
-	"./de-at.js": 42,
-	"./de-ch": 43,
-	"./de-ch.js": 43,
-	"./de.js": 44,
-	"./dv": 45,
-	"./dv.js": 45,
-	"./el": 46,
-	"./el.js": 46,
-	"./en-au": 47,
-	"./en-au.js": 47,
-	"./en-ca": 48,
-	"./en-ca.js": 48,
-	"./en-gb": 49,
-	"./en-gb.js": 49,
-	"./en-ie": 50,
-	"./en-ie.js": 50,
-	"./en-il": 51,
-	"./en-il.js": 51,
-	"./en-nz": 52,
-	"./en-nz.js": 52,
-	"./eo": 53,
-	"./eo.js": 53,
-	"./es": 56,
-	"./es-do": 54,
-	"./es-do.js": 54,
-	"./es-us": 55,
-	"./es-us.js": 55,
-	"./es.js": 56,
-	"./et": 57,
-	"./et.js": 57,
-	"./eu": 58,
-	"./eu.js": 58,
-	"./fa": 59,
-	"./fa.js": 59,
-	"./fi": 60,
-	"./fi.js": 60,
-	"./fo": 61,
-	"./fo.js": 61,
-	"./fr": 64,
-	"./fr-ca": 62,
-	"./fr-ca.js": 62,
-	"./fr-ch": 63,
-	"./fr-ch.js": 63,
-	"./fr.js": 64,
-	"./fy": 65,
-	"./fy.js": 65,
-	"./gd": 66,
-	"./gd.js": 66,
-	"./gl": 67,
-	"./gl.js": 67,
-	"./gom-latn": 68,
-	"./gom-latn.js": 68,
-	"./gu": 69,
-	"./gu.js": 69,
-	"./he": 70,
-	"./he.js": 70,
-	"./hi": 71,
-	"./hi.js": 71,
-	"./hr": 72,
-	"./hr.js": 72,
-	"./hu": 73,
-	"./hu.js": 73,
-	"./hy-am": 74,
-	"./hy-am.js": 74,
-	"./id": 75,
-	"./id.js": 75,
-	"./is": 76,
-	"./is.js": 76,
-	"./it": 77,
-	"./it.js": 77,
-	"./ja": 78,
-	"./ja.js": 78,
-	"./jv": 79,
-	"./jv.js": 79,
-	"./ka": 80,
-	"./ka.js": 80,
-	"./kk": 81,
-	"./kk.js": 81,
-	"./km": 82,
-	"./km.js": 82,
-	"./kn": 83,
-	"./kn.js": 83,
-	"./ko": 84,
-	"./ko.js": 84,
-	"./ky": 85,
-	"./ky.js": 85,
-	"./lb": 86,
-	"./lb.js": 86,
-	"./lo": 87,
-	"./lo.js": 87,
-	"./lt": 88,
-	"./lt.js": 88,
-	"./lv": 89,
-	"./lv.js": 89,
-	"./me": 90,
-	"./me.js": 90,
-	"./mi": 91,
-	"./mi.js": 91,
-	"./mk": 92,
-	"./mk.js": 92,
-	"./ml": 93,
-	"./ml.js": 93,
-	"./mn": 94,
-	"./mn.js": 94,
-	"./mr": 95,
-	"./mr.js": 95,
-	"./ms": 97,
-	"./ms-my": 96,
-	"./ms-my.js": 96,
-	"./ms.js": 97,
-	"./mt": 98,
-	"./mt.js": 98,
-	"./my": 99,
-	"./my.js": 99,
-	"./nb": 100,
-	"./nb.js": 100,
-	"./ne": 101,
-	"./ne.js": 101,
-	"./nl": 103,
-	"./nl-be": 102,
-	"./nl-be.js": 102,
-	"./nl.js": 103,
-	"./nn": 104,
-	"./nn.js": 104,
-	"./pa-in": 105,
-	"./pa-in.js": 105,
-	"./pl": 106,
-	"./pl.js": 106,
-	"./pt": 108,
-	"./pt-br": 107,
-	"./pt-br.js": 107,
-	"./pt.js": 108,
-	"./ro": 109,
-	"./ro.js": 109,
-	"./ru": 110,
-	"./ru.js": 110,
-	"./sd": 111,
-	"./sd.js": 111,
-	"./se": 112,
-	"./se.js": 112,
-	"./si": 113,
-	"./si.js": 113,
-	"./sk": 114,
-	"./sk.js": 114,
-	"./sl": 115,
-	"./sl.js": 115,
-	"./sq": 116,
-	"./sq.js": 116,
-	"./sr": 118,
-	"./sr-cyrl": 117,
-	"./sr-cyrl.js": 117,
-	"./sr.js": 118,
-	"./ss": 119,
-	"./ss.js": 119,
-	"./sv": 120,
-	"./sv.js": 120,
-	"./sw": 121,
-	"./sw.js": 121,
-	"./ta": 122,
-	"./ta.js": 122,
-	"./te": 123,
-	"./te.js": 123,
-	"./tet": 124,
-	"./tet.js": 124,
-	"./tg": 125,
-	"./tg.js": 125,
-	"./th": 126,
-	"./th.js": 126,
-	"./tl-ph": 127,
-	"./tl-ph.js": 127,
-	"./tlh": 128,
-	"./tlh.js": 128,
-	"./tr": 129,
-	"./tr.js": 129,
-	"./tzl": 130,
-	"./tzl.js": 130,
-	"./tzm": 132,
-	"./tzm-latn": 131,
-	"./tzm-latn.js": 131,
-	"./tzm.js": 132,
-	"./ug-cn": 133,
-	"./ug-cn.js": 133,
-	"./uk": 134,
-	"./uk.js": 134,
-	"./ur": 135,
-	"./ur.js": 135,
-	"./uz": 137,
-	"./uz-latn": 136,
-	"./uz-latn.js": 136,
-	"./uz.js": 137,
-	"./vi": 138,
-	"./vi.js": 138,
-	"./x-pseudo": 139,
-	"./x-pseudo.js": 139,
-	"./yo": 140,
-	"./yo.js": 140,
-	"./zh-cn": 141,
-	"./zh-cn.js": 141,
-	"./zh-hk": 142,
-	"./zh-hk.js": 142,
-	"./zh-tw": 143,
-	"./zh-tw.js": 143
+	"./af": 20,
+	"./af.js": 20,
+	"./ar": 27,
+	"./ar-dz": 21,
+	"./ar-dz.js": 21,
+	"./ar-kw": 22,
+	"./ar-kw.js": 22,
+	"./ar-ly": 23,
+	"./ar-ly.js": 23,
+	"./ar-ma": 24,
+	"./ar-ma.js": 24,
+	"./ar-sa": 25,
+	"./ar-sa.js": 25,
+	"./ar-tn": 26,
+	"./ar-tn.js": 26,
+	"./ar.js": 27,
+	"./az": 28,
+	"./az.js": 28,
+	"./be": 29,
+	"./be.js": 29,
+	"./bg": 30,
+	"./bg.js": 30,
+	"./bm": 31,
+	"./bm.js": 31,
+	"./bn": 32,
+	"./bn.js": 32,
+	"./bo": 33,
+	"./bo.js": 33,
+	"./br": 34,
+	"./br.js": 34,
+	"./bs": 35,
+	"./bs.js": 35,
+	"./ca": 36,
+	"./ca.js": 36,
+	"./cs": 37,
+	"./cs.js": 37,
+	"./cv": 38,
+	"./cv.js": 38,
+	"./cy": 39,
+	"./cy.js": 39,
+	"./da": 40,
+	"./da.js": 40,
+	"./de": 43,
+	"./de-at": 41,
+	"./de-at.js": 41,
+	"./de-ch": 42,
+	"./de-ch.js": 42,
+	"./de.js": 43,
+	"./dv": 44,
+	"./dv.js": 44,
+	"./el": 45,
+	"./el.js": 45,
+	"./en-au": 46,
+	"./en-au.js": 46,
+	"./en-ca": 47,
+	"./en-ca.js": 47,
+	"./en-gb": 48,
+	"./en-gb.js": 48,
+	"./en-ie": 49,
+	"./en-ie.js": 49,
+	"./en-il": 50,
+	"./en-il.js": 50,
+	"./en-nz": 51,
+	"./en-nz.js": 51,
+	"./eo": 52,
+	"./eo.js": 52,
+	"./es": 55,
+	"./es-do": 53,
+	"./es-do.js": 53,
+	"./es-us": 54,
+	"./es-us.js": 54,
+	"./es.js": 55,
+	"./et": 56,
+	"./et.js": 56,
+	"./eu": 57,
+	"./eu.js": 57,
+	"./fa": 58,
+	"./fa.js": 58,
+	"./fi": 59,
+	"./fi.js": 59,
+	"./fo": 60,
+	"./fo.js": 60,
+	"./fr": 63,
+	"./fr-ca": 61,
+	"./fr-ca.js": 61,
+	"./fr-ch": 62,
+	"./fr-ch.js": 62,
+	"./fr.js": 63,
+	"./fy": 64,
+	"./fy.js": 64,
+	"./gd": 65,
+	"./gd.js": 65,
+	"./gl": 66,
+	"./gl.js": 66,
+	"./gom-latn": 67,
+	"./gom-latn.js": 67,
+	"./gu": 68,
+	"./gu.js": 68,
+	"./he": 69,
+	"./he.js": 69,
+	"./hi": 70,
+	"./hi.js": 70,
+	"./hr": 71,
+	"./hr.js": 71,
+	"./hu": 72,
+	"./hu.js": 72,
+	"./hy-am": 73,
+	"./hy-am.js": 73,
+	"./id": 74,
+	"./id.js": 74,
+	"./is": 75,
+	"./is.js": 75,
+	"./it": 76,
+	"./it.js": 76,
+	"./ja": 77,
+	"./ja.js": 77,
+	"./jv": 78,
+	"./jv.js": 78,
+	"./ka": 79,
+	"./ka.js": 79,
+	"./kk": 80,
+	"./kk.js": 80,
+	"./km": 81,
+	"./km.js": 81,
+	"./kn": 82,
+	"./kn.js": 82,
+	"./ko": 83,
+	"./ko.js": 83,
+	"./ky": 84,
+	"./ky.js": 84,
+	"./lb": 85,
+	"./lb.js": 85,
+	"./lo": 86,
+	"./lo.js": 86,
+	"./lt": 87,
+	"./lt.js": 87,
+	"./lv": 88,
+	"./lv.js": 88,
+	"./me": 89,
+	"./me.js": 89,
+	"./mi": 90,
+	"./mi.js": 90,
+	"./mk": 91,
+	"./mk.js": 91,
+	"./ml": 92,
+	"./ml.js": 92,
+	"./mn": 93,
+	"./mn.js": 93,
+	"./mr": 94,
+	"./mr.js": 94,
+	"./ms": 96,
+	"./ms-my": 95,
+	"./ms-my.js": 95,
+	"./ms.js": 96,
+	"./mt": 97,
+	"./mt.js": 97,
+	"./my": 98,
+	"./my.js": 98,
+	"./nb": 99,
+	"./nb.js": 99,
+	"./ne": 100,
+	"./ne.js": 100,
+	"./nl": 102,
+	"./nl-be": 101,
+	"./nl-be.js": 101,
+	"./nl.js": 102,
+	"./nn": 103,
+	"./nn.js": 103,
+	"./pa-in": 104,
+	"./pa-in.js": 104,
+	"./pl": 105,
+	"./pl.js": 105,
+	"./pt": 107,
+	"./pt-br": 106,
+	"./pt-br.js": 106,
+	"./pt.js": 107,
+	"./ro": 108,
+	"./ro.js": 108,
+	"./ru": 109,
+	"./ru.js": 109,
+	"./sd": 110,
+	"./sd.js": 110,
+	"./se": 111,
+	"./se.js": 111,
+	"./si": 112,
+	"./si.js": 112,
+	"./sk": 113,
+	"./sk.js": 113,
+	"./sl": 114,
+	"./sl.js": 114,
+	"./sq": 115,
+	"./sq.js": 115,
+	"./sr": 117,
+	"./sr-cyrl": 116,
+	"./sr-cyrl.js": 116,
+	"./sr.js": 117,
+	"./ss": 118,
+	"./ss.js": 118,
+	"./sv": 119,
+	"./sv.js": 119,
+	"./sw": 120,
+	"./sw.js": 120,
+	"./ta": 121,
+	"./ta.js": 121,
+	"./te": 122,
+	"./te.js": 122,
+	"./tet": 123,
+	"./tet.js": 123,
+	"./tg": 124,
+	"./tg.js": 124,
+	"./th": 125,
+	"./th.js": 125,
+	"./tl-ph": 126,
+	"./tl-ph.js": 126,
+	"./tlh": 127,
+	"./tlh.js": 127,
+	"./tr": 128,
+	"./tr.js": 128,
+	"./tzl": 129,
+	"./tzl.js": 129,
+	"./tzm": 131,
+	"./tzm-latn": 130,
+	"./tzm-latn.js": 130,
+	"./tzm.js": 131,
+	"./ug-cn": 132,
+	"./ug-cn.js": 132,
+	"./uk": 133,
+	"./uk.js": 133,
+	"./ur": 134,
+	"./ur.js": 134,
+	"./uz": 136,
+	"./uz-latn": 135,
+	"./uz-latn.js": 135,
+	"./uz.js": 136,
+	"./vi": 137,
+	"./vi.js": 137,
+	"./x-pseudo": 138,
+	"./x-pseudo.js": 138,
+	"./yo": 139,
+	"./yo.js": 139,
+	"./zh-cn": 140,
+	"./zh-cn.js": 140,
+	"./zh-hk": 141,
+	"./zh-hk.js": 141,
+	"./zh-tw": 142,
+	"./zh-tw.js": 142
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -53307,7 +53397,7 @@ webpackContext.id = 182;
 "use strict";
 
 
-__webpack_require__(147);
+__webpack_require__(146);
 
 __webpack_require__(161);
 
@@ -53319,37 +53409,37 @@ __webpack_require__(159);
 
 __webpack_require__(6);
 
+__webpack_require__(150);
+
 __webpack_require__(151);
 
-__webpack_require__(152);
+__webpack_require__(148);
 
 __webpack_require__(149);
-
-__webpack_require__(150);
 
 __webpack_require__(9);
 
 __webpack_require__(10);
 
-__webpack_require__(148);
+__webpack_require__(147);
 
-__webpack_require__(155);
+__webpack_require__(153);
 
 __webpack_require__(154);
 
-__webpack_require__(153);
+__webpack_require__(152);
 
 __webpack_require__(157);
 
 __webpack_require__(156);
+
+__webpack_require__(155);
 
 __webpack_require__(11);
 
 __webpack_require__(12);
 
 __webpack_require__(13);
-
-__webpack_require__(14);
 
 __webpack_require__(5);
 
