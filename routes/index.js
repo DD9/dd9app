@@ -38,6 +38,7 @@ router.post('/api/v1/timeEntry/createAndSubmit', authController.isLoggedIn, catc
 router.post('/api/v1/timeEntry/:id/edit', authController.isLoggedIn, authController.isAdmin, catchErrors(timeEntryController.edit));
 router.post('/api/v1/timeEntry/:id/approve', authController.isLoggedIn, authController.isAdmin, catchErrors(timeEntryController.approve));
 router.post('/api/v1/timeEntry/:id/hide', authController.isLoggedIn, authController.isAdmin, catchErrors(timeEntryController.hide));
+router.post('/api/v1/timeEntry/:id/reject', authController.isLoggedIn, authController.isAdmin, catchErrors(timeEntryController.reject));
 router.post('/api/v1/timeEntry/:id/submit', authController.isLoggedIn, catchErrors(timeEntryController.submit));
 router.post('/api/v1/timeEntry/:id/delete', authController.isLoggedIn, catchErrors(timeEntryController.delete));
 

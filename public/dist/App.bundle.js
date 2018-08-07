@@ -14904,9 +14904,15 @@ exports.createTimeEntryTableActionButtonsHtml = createTimeEntryTableActionButton
 exports.instantiateTimeEntryTableActions = instantiateTimeEntryTableActions;
 exports.updateTotalTimeEntryTableHours = updateTotalTimeEntryTableHours;
 
+var _editTimeEntry = __webpack_require__(11);
+
 var _axios = __webpack_require__(3);
 
 var _axios2 = _interopRequireDefault(_axios);
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14915,7 +14921,6 @@ function createTimeEntryTableActionButtonsHtml(res, timeEntryTableType, timeEntr
   var editSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve"><image xlink:href="/images/icons/pencil.svg" x="0" y="0" width="100%" height="100%"/></svg>';
   var html = '';
   if (res.data.admin === true) {
-    console.log(res);
     if (timeEntryTableType === "approved") {
       html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide" class="' + timeEntryTableType + '-time-entry-table-hide-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/hide\' method="POST" data-hours=' + res.data.timeEntry.publicHours + '><button class="btn btn-sm btn-link" type="submit">Hide</button></form>';
       html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject" class="reject-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmRejectTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.publicHours + '>Reject</button>';
@@ -14976,10 +14981,14 @@ function instantiateHourLogOneTableActions() {
 
 // Function to initialize listeners and actions on dynamically created time entry buttons
 function instantiateTimeEntryTableActions(timeEntryTableType, approveFormSelector, hideFormSelector, rejectBtnSelector, submitBtnSelector, deleteBtnSelector) {
-  if (timeEntryTableType === "appoved") {
+  if (timeEntryTableType === "approved") {
+    console.log(hideFormSelector, timeEntryTableType);
+    console.log(rejectBtnSelector, timeEntryTableType);
     hideFormListener(hideFormSelector, timeEntryTableType);
     confirmRejectBtnListener(rejectBtnSelector, timeEntryTableType);
   } else if (timeEntryTableType === "hidden") {
+    console.log(approveFormSelector, timeEntryTableType);
+    console.log(rejectBtnSelector, timeEntryTableType);
     approveFormListener(approveFormSelector, timeEntryTableType);
     confirmRejectBtnListener(rejectBtnSelector, timeEntryTableType);
   } else if (timeEntryTableType === "submitted") {
@@ -14997,101 +15006,119 @@ function instantiateTimeEntryTableActions(timeEntryTableType, approveFormSelecto
 // Approve listener
 function approveFormListener(form, timeEntryTableType) {
   $(form).on('submit', function (e) {
+    var _this = this;
+
     console.log('ajaxTimeEntryTableApprove');
     e.preventDefault();
     $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row($(this).closest('tr')).remove().draw();
     console.log(this);
     updateTotalTimeEntryTableHours(timeEntryTableType, $(this).data('hours'), 0);
-    _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+    _axios2.default.post(this.action).then(function (res) {
+      var receivingTimeEntryTableType = res.data.timeEntry.status;
+      var receivingTimeEntryTable = $('#' + receivingTimeEntryTableType + 'TimeEntryTable');
+      var receivingTimeEntryTableRowNumber = receivingTimeEntryTable.find('tr').length - 2;
+      receivingTimeEntryTable.DataTable().row.add(['' + _moment2.default.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD"), '' + res.data.timeEntry.publicCompany.name, res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + createTimeEntryTableActionButtonsHtml(res, receivingTimeEntryTableType, receivingTimeEntryTableRowNumber)]).draw().node().id = receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber;
+      updateTotalTimeEntryTableHours(receivingTimeEntryTableType, 0, $(_this).data('hours'));
+      instantiateTimeEntryTableActions(receivingTimeEntryTableType, '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Approve', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Hide', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Reject', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Submit', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Delete');
+      (0, _editTimeEntry.instantiateEditTimeEntryBtn)('#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Edit');
+    }).catch(console.error);
   });
 }
 
 // Hide listener
 function hideFormListener(form, timeEntryTableType) {
   $(form).on('submit', function (e) {
+    var _this2 = this;
+
     console.log('ajaxTimeEntryTableHide');
     e.preventDefault();
     $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row($(this).closest('tr')).remove().draw();
     updateTotalTimeEntryTableHours(timeEntryTableType, $(this).data('hours'), 0);
-    _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+    _axios2.default.post(this.action).then(function (res) {
+      var receivingTimeEntryTableType = res.data.timeEntry.status;
+      var receivingTimeEntryTable = $('#' + receivingTimeEntryTableType + 'TimeEntryTable');
+      var receivingTimeEntryTableRowNumber = receivingTimeEntryTable.find('tr').length - 2;
+      receivingTimeEntryTable.DataTable().row.add(['' + _moment2.default.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD"), '' + res.data.timeEntry.publicCompany.name, res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + createTimeEntryTableActionButtonsHtml(res, receivingTimeEntryTableType, receivingTimeEntryTableRowNumber)]).draw().node().id = receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber;
+      updateTotalTimeEntryTableHours(receivingTimeEntryTableType, 0, $(_this2).data('hours'));
+      instantiateTimeEntryTableActions(receivingTimeEntryTableType, '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Approve', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Hide', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Reject', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Submit', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Delete');
+      (0, _editTimeEntry.instantiateEditTimeEntryBtn)('#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Edit');
+    }).catch(console.error);
   });
 }
 
 // Reject listener
 var rejectTimeEntryBtn = void 0;
+var rejectTimeEntryTableType = void 0;
 var rejectForm = '#confirmRejectTimeEntryForm';
 function confirmRejectBtnListener(button, timeEntryTableType) {
   $(button).on("click", function () {
     rejectTimeEntryBtn = this;
-    $("#confirmRejectTimeEntryForm").attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/delete');
-    if ($(submitForm).data('submitted') === true) {
-      throw new Error("Preventing double submission");
-    } else {
-      $(submitForm).data('submitted', true);
-    }
-    $(rejectForm).on('submit', function (e) {
-      console.log('ajaxTimeEntryTableReject');
-      e.preventDefault();
-      $(rejectForm).unbind(e);
-      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row($(this).closest('tr')).remove().draw();
-      updateTotalTimeEntryTableHours(timeEntryTableType, $(this).data('hours'), 0);
-      _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
-    });
+    rejectTimeEntryTableType = timeEntryTableType;
+    $("#confirmRejectTimeEntryForm").attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/reject');
   });
   $('#confirmRejectTimeEntryBtn').on("click", function () {
     $('#confirmRejectTimeEntryModal').modal('toggle');
   });
 }
+$(rejectForm).on('submit', function (e) {
+  console.log('ajaxTimeEntryTableReject');
+  e.preventDefault();
+  $('#' + rejectTimeEntryTableType + 'TimeEntryTable').DataTable().row($(rejectTimeEntryBtn).closest('tr')).remove().draw();
+  updateTotalTimeEntryTableHours(rejectTimeEntryTableType, $(rejectTimeEntryBtn).data('hours'), 0);
+  _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+});
 
 // Submit listener
 var submitTimeEntryBtn = void 0;
+var submitTimeEntryTableType = void 0;
 var submitForm = '#confirmSubmitTimeEntryForm';
 function confirmSubmitBtnListener(button, timeEntryTableType) {
   $(button).on("click", function () {
     submitTimeEntryBtn = this;
+    submitTimeEntryTableType = timeEntryTableType;
     $("#confirmSubmitTimeEntryForm").attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/submit');
-    if ($(submitForm).data('submitted') === true) {
-      throw new Error("Preventing double submission");
-    } else {
-      $(submitForm).data('submitted', true);
-    }
-    $(submitForm).on('submit', function (e) {
-      console.log('ajaxTimeEntryTableSubmit');
-      e.preventDefault();
-      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row($(submitTimeEntryBtn).closest("tr")).remove().draw();
-      updateTotalTimeEntryTableHours(timeEntryTableType, $(submitTimeEntryBtn).data('hours'), 0);
-      _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
-    });
   });
   $('#confirmCreatedTimeEntrySubmitBtn').on("click", function () {
     $('#confirmSubmitTimeEntryModal').modal('toggle');
   });
 }
+$(submitForm).on('submit', function (e) {
+  console.log('ajaxTimeEntryTableSubmit');
+  e.preventDefault();
+  $('#' + submitTimeEntryTableType + 'TimeEntryTable').DataTable().row($(submitTimeEntryBtn).closest("tr")).remove().draw();
+  updateTotalTimeEntryTableHours(submitTimeEntryTableType, $(submitTimeEntryBtn).data('hours'), 0);
+  _axios2.default.post(this.action).then(function (res) {
+    var receivingTimeEntryTableType = res.data.timeEntry.status;
+    var receivingTimeEntryTable = $('#' + receivingTimeEntryTableType + 'TimeEntryTable');
+    var receivingTimeEntryTableRowNumber = receivingTimeEntryTable.find('tr').length - 2;
+    receivingTimeEntryTable.DataTable().row.add(['' + _moment2.default.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD"), '' + res.data.timeEntry.publicCompany.name, res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + createTimeEntryTableActionButtonsHtml(res, receivingTimeEntryTableType, receivingTimeEntryTableRowNumber)]).draw().node().id = receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber;
+    updateTotalTimeEntryTableHours(receivingTimeEntryTableType, 0, $(submitTimeEntryBtn).data('hours'));
+    instantiateTimeEntryTableActions(receivingTimeEntryTableType, '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Approve', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Hide', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Reject', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Submit', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Delete');
+    (0, _editTimeEntry.instantiateEditTimeEntryBtn)('#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Edit');
+  }).catch(console.error);
+});
 
 // Delete listener
 var deleteTimeEntryBtn = void 0;
+var deleteTimeEntryTableType = void 0;
 var deleteForm = '#confirmDeleteTimeEntryForm';
 function confirmDeleteBtnListener(button, timeEntryTableType) {
   $(button).on("click", function () {
     deleteTimeEntryBtn = this;
+    deleteTimeEntryTableType = timeEntryTableType;
     $("#confirmDeleteTimeEntryForm").attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/delete');
-    if ($(submitForm).data('submitted') === true) {
-      throw new Error("Preventing double submission");
-    } else {
-      $(submitForm).data('submitted', true);
-    }
-    $(deleteForm).on('submit', function (e) {
-      console.log('ajaxTimeEntryTableDelete');
-      e.preventDefault();
-      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row($(deleteTimeEntryBtn).closest("tr")).remove().draw();
-      updateTotalTimeEntryTableHours(timeEntryTableType, $(deleteTimeEntryBtn).data('hours'), 0);
-      _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
-    });
-  });
-  $('#confirmTimeEntryDeleteBtn').on("click", function () {
-    $('#confirmDeleteTimeEntryModal').modal('toggle');
   });
 }
+$(deleteForm).on('submit', function (e) {
+  console.log('ajaxTimeEntryTableDelete');
+  e.preventDefault();
+  $('#' + deleteTimeEntryTableType + 'TimeEntryTable').DataTable().row($(deleteTimeEntryBtn).closest("tr")).remove().draw();
+  updateTotalTimeEntryTableHours(deleteTimeEntryTableType, $(deleteTimeEntryBtn).data('hours'), 0);
+  _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+});
+$('#confirmTimeEntryDeleteBtn').on("click", function () {
+  $('#confirmDeleteTimeEntryModal').modal('toggle');
+});
 
 // Update total time entry table hours value
 function updateTotalTimeEntryTableHours(timeEntryTableType, oldHours, newHours) {
@@ -15433,7 +15460,9 @@ var timeEntryTableType = void 0;
 var timeEntryTableRowNumber = void 0;
 var currentTimeEntryHours = void 0;
 function instantiateEditTimeEntryBtn(button) {
+  console.log('instantiating edit');
   $(button).on("click", function () {
+    console.log('edit click');
     timeEntryTableType = $(this).data('tabletype');
     timeEntryTableRowNumber = $(this).data('rownumber');
     currentTimeEntryHours = $(this).data('hours');

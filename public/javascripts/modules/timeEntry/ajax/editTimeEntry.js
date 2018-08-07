@@ -21,7 +21,9 @@ let timeEntryTableType;
 let timeEntryTableRowNumber;
 let currentTimeEntryHours;
 export function instantiateEditTimeEntryBtn(button) {
+  console.log(`instantiating edit`);
   $(button).on("click", function () {
+    console.log(`edit click`);
     timeEntryTableType = $(this).data('tabletype');
     timeEntryTableRowNumber = $(this).data('rownumber');
     currentTimeEntryHours = $(this).data('hours');

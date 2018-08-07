@@ -7,7 +7,7 @@ block content
   .container.hour-log-one-container
     .row
       .col.d-inline-block
-        h2.company-one-title.d-inline <u>#{hourLog.title}</u> Hour Log for <u><a href="/company/#{hourLog.company._id}">#{hourLog.company.name}</a></u>
+        h2.company-one-title.d-inline <u>#{hourLog.title}</u> Hour Log for <u><a href="/company/#{hourLog.company.name}">#{hourLog.company.name}</a></u>
         if (h.YYYYMMDD(hourLog.dateClosed) === "1970-01-01")
           form#closeHourLogForm.form.d-inline(action=`/hourLog/${hourLog._id}/close` method="POST")
             button#closeHourLogButton.close-hour-log-btn.btn.btn-primary(type='submit') Close Hour Log
@@ -30,7 +30,8 @@ block content
           th.hour-log-one-time-entry-th-hours Hours
           th.hour-log-one-time-entry-th-description Description
           th.hour-log-one-time-entry-th-actions
-        each timeEntry, rowNumber in hourLog.timeEntries
+        each timeEntry in hourLog.timeEntries
+          - rowNumber = 0;
           if (timeEntry.status === "approved")
             tr(id=`approvedTimeEntryTableRow${rowNumber}`)
               td= h.YYYYMMDD(timeEntry.publicDate)
@@ -52,6 +53,7 @@ block content
                 data-hours=timeEntry.publicHours
                 data-description=timeEntry.publicDescription)
                   != h.icon('pencil')
+          - rowNumber += 1
         tr#totalApprovedTimeEntryHoursRow
           td
           td
@@ -72,7 +74,8 @@ block content
           th.hour-log-one-time-entry-th-hours  Hours
           th.hour-log-one-time-entry-th-description  Description
           th.hour-log-one-time-entry-th-actions
-        each timeEntry, rowNumber in hourLog.timeEntries
+        each timeEntry in hourLog.timeEntries
+          - rowNumber = 0;
           if (timeEntry.status === "hidden")
             tr(id=`hiddenTimeEntryTableRow${rowNumber}`)
               td= h.YYYYMMDD(timeEntry.publicDate)
@@ -94,6 +97,7 @@ block content
                 data-hours=timeEntry.publicHours
                 data-description=timeEntry.publicDescription)
                   != h.icon('pencil')
+          - rowNumber += 1
         tr#totalHiddenTimeEntryHoursRow
           td
           td
@@ -114,7 +118,8 @@ block content
           th.hour-log-one-time-entry-th-hours  Hours
           th.hour-log-one-time-entry-th-description  Description
           th.hour-log-one-time-entry-th-actions
-        each timeEntry, rowNumber in hourLog.timeEntries
+        each timeEntry in hourLog.timeEntries
+          - rowNumber = 0;
           if (timeEntry.status === "submitted")
             tr(id=`submittedTimeEntryTableRow${rowNumber}`)
               td= h.YYYYMMDD(timeEntry.publicDate)
@@ -138,6 +143,7 @@ block content
                 data-hours=timeEntry.publicHours
                 data-description=timeEntry.publicDescription)
                   != h.icon('pencil')
+          - rowNumber += 1
         tr#totalSubmittedTimeEntryHoursRow
           td
           td
@@ -149,7 +155,7 @@ block content
     .py-1.px-3.bg-white.rounded.box-shadow.hour-log-one-time-entry-card
       .row
         .col.mt-3.mb-2
-          h4.d-inline Submit New Time Entry for <u><a href="/company/#{hourLog.company._id}">#{hourLog.company.name}</a></u>
+          h4.d-inline Submit New Time Entry for <u><a href="/company/#{hourLog.company.name}">#{hourLog.company.name}</a></u>
           a.time-entry-collapse-anchor(data-toggle='collapse', href='#timeEntryCollapse', role='button', aria-expanded='false', aria-controls='timeEntryCollapse')
             button.close(type='button', aria-label='Close')
               span(aria-hidden='true') +
