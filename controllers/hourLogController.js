@@ -1,13 +1,17 @@
 const mongoose = require('mongoose');
+const User = mongoose.model('User');
+const Company = mongoose.model('Company');
 const HourLog = mongoose.model('HourLog');
 
 exports.all = async (req, res) => {
-  const hourLogs = await HourLog.find().populate("company");
-  res.render("hourLog/all", { title: "Hour Logs", hourLogs: hourLogs });
+  const hourLogs = await HourLog.find().populate('company');
+  res.render("hourLog/hourLogAll", { title: "Hour Logs", hourLogs: hourLogs });
 };
 
 exports.one = async (req, res) => {
   const hourLogId = req.params.id;
+  const users = await User.find({ status: "active" }).select('firstName lastName').sort('firstName');
+  const companies = await Company.find({ status: "active" }).select('name').sort('name');
   const hourLog = await HourLog.findOne({ _id: hourLogId })
     .populate('company', 'name')
     .populate({
@@ -22,19 +26,42 @@ exports.one = async (req, res) => {
         select: 'firstName lastName'
       }]
     });
-
-  res.render("hourLog/one", { title: hourLog.company.name, hourLog });
+  res.render("hourLog/hourLogOne", { title: hourLog.company.name, users, companies, hourLog });
 };
 
 exports.open = async (req, res) => {
   const hourLogId = req.params.id;
-  const hourLog = await HourLog.findOneAndUpdate({ _id: hourLogId }, { dateClosed: new Date(0) },  { new: true });
-  res.json(hourLog);
+
+  const closingHourLog = await HourLog.findOne({ _id: hourLogId });
+  const currentHourLog = await HourLog.findOne({ title: "Current", company: closingHourLog.company });
+
+  if (!currentHourLog) {
+    closingHourLog.title = "Current";
+    closingHourLog.dateClosed = new Date(0);
+    await closingHourLog.save();
+    return res.json({ updatedClosedHourLog: true });
+  } else {
+    currentHourLog.totalPublicHours += closingHourLog.totalPublicHours;
+    currentHourLog.totalHiddenHours += closingHourLog.totalHiddenHours;
+    await currentHourLog.update({ $addToSet: { timeEntries: closingHourLog.timeEntries }});
+    await closingHourLog.remove();
+    await currentHourLog.save();
+    return res.json(currentHourLog);
+  }
 };
 
 exports.close = async (req, res) => {
   const hourLogId = req.params.id;
-  const hourLog = await HourLog.findOneAndUpdate({ _id: hourLogId }, { dateClosed: new Date() }, { new: true });
+  const hourLog = await HourLog.findOne({ _id: hourLogId });
+
+  if (hourLog.totalSubmittedHours > 0) {
+    return res.json({ error: "Cannot close an hour log with submitted time entries."});
+  } else {
+    hourLog.title = req.body.title;
+    hourLog.dateClosed = new Date();
+    await hourLog.save();
+  }
+
   res.json(hourLog);
 };
 

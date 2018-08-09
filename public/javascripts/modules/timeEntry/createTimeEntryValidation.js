@@ -1,5 +1,5 @@
-function validateTimeEntryFormInput() {
-  const timeEntryForm = $('.timeEntryForm');
+function createTimeEntryValidation() {
+  const timeEntryForm = $('.create-time-entry-form');
   const dateInput = timeEntryForm.find('#date');
   const companyInput = timeEntryForm.find('#company');
   const hoursInput = timeEntryForm.find('#hours');
@@ -15,33 +15,33 @@ function validateTimeEntryFormInput() {
   if (!dateVal) {
     hasError = true;
     dateInput.closest('div').find('.invalid-feedback').html("Date required.");
-    dateInput.addClass("is-invalid");
+    dateInput.addClass('is-invalid');
   } else {
-    dateInput.removeClass("is-invalid");
+    dateInput.removeClass('is-invalid');
   }
 
   if (!companyVal) {
     hasError = true;
     companyInput.closest('div').find('.invalid-feedback').html("Company required.");
-    companyInput.addClass("is-invalid");
+    companyInput.addClass('is-invalid');
   } else {
-    companyInput.removeClass("is-invalid");
+    companyInput.removeClass('is-invalid');
   }
 
   if (!hoursVal) {
     hasError = true;
     hoursInput.closest('div').find('.invalid-feedback').html("Hours required.");
-    hoursInput.addClass("is-invalid");
+    hoursInput.addClass('is-invalid');
   } else {
-    hoursInput.removeClass("is-invalid");
+    hoursInput.removeClass('is-invalid');
   }
 
   if (!descriptionVal) {
     hasError = true;
     descriptionInput.closest('div').find('.invalid-feedback').html("Description required.");
-    descriptionInput.addClass("is-invalid");
+    descriptionInput.addClass('is-invalid');
   } else {
-    descriptionInput.removeClass("is-invalid");
+    descriptionInput.removeClass('is-invalid');
   }
 
   if (hasError) {
@@ -49,4 +49,5 @@ function validateTimeEntryFormInput() {
   }
 }
 
-export default validateTimeEntryFormInput;
+export default createTimeEntryValidation
+

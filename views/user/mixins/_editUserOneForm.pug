@@ -1,0 +1,25 @@
+mixin editUserOneForm()
+  form#editUserOneForm.edit-user-form.form(action=`/api/v1/user/${user._id}/edit` method="POST" novalidate)
+    .form-group.row
+      label.col-sm-2.col-form-label(for='firstName') First name
+      .col-sm-10
+        input#firstName.form-control(name='firstName' type='text' value=user.firstName required maxlength='25')
+        .invalid-feedback Invalid form.
+    .form-group.row
+      label.col-sm-2.col-form-label(for='lastName') Last name
+      .col-sm-10
+        input#lastName.form-control(name='lastName' type='text' value=user.lastName required maxlength='25')
+        .invalid-feedback Invalid form.
+    .form-group.row
+      label.col-sm-2.col-form-label(for='email') Email
+      .col-sm-10
+        input#email.form-control(name='email' type='text' value=user.email disabled)
+    .form-group.row
+      label.col-sm-2.col-form-label(for='password') Password
+      .col-sm-10
+        input#password.form-control(name='password' type='text' placeholder="password and email managed by GSuite" disabled)
+        .invalid-feedback Invalid form.
+    input#lastLogin.d-none(name='lastLogin' type='text' value=user.lastLogin)
+    .form-group.row
+      .col-sm-10
+        button.btn.btn-primary(type='submit') Save

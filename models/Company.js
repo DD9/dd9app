@@ -8,12 +8,12 @@ const companySchema = new Schema({
   },
   name: {
     type: String,
-    required: 'Please supply a company name',
-    maxlength: 50
+    required: "Please supply a company name",
+    maxlength: 100
   },
-  active: {
-    type: Boolean,
-    default: true
+  status: {
+    type: String,
+    default: "active"
   }
 },
   {

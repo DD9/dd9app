@@ -1,6 +1,6 @@
 mixin createAndsubmitTimeEntry()
   hr
-  form#submitTimeEntryForm.timeEntryForm.form(action="/timeEntry/submit" method="POST" novalidate)
+  form#createAndSubmitTimeEntryForm.create-time-entry-form.form(action="/api/v1/timeEntry/createAndSubmit" method="POST" novalidate)
     .form-group.row
       label.col-sm-2.col-form-label(for='date') Date
       .col-sm-10
@@ -16,8 +16,8 @@ mixin createAndsubmitTimeEntry()
       .col-sm-10
         input#description.form-control(name='description' type='text' required maxlength="255")
         .invalid-feedback Invalid form.
-    input#companyId.d-none(name='companyId' type='text' value=hourLog.company._id)
-    input#hourLogId.d-none(name='hourLogId' type='text' value=hourLog._id)
+    input#company.d-none(name='company' type='text' value=hourLog.company._id)
+    input#hourLog.d-none(name='hourLog' type='text' value=hourLog._id)
     .form-group.row
       .col-sm-10
         button.btn.btn-primary(type='submit') Save

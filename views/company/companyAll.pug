@@ -9,8 +9,8 @@ block content
       tbody
         each company in companies
           tr
-            td.companyName: a(href=`/company/${company._id}`) #{company.name}
-            td= company.active ? "Active" : "Deactivated"
+            td.company-name: a(href=`/company/${company.name}`) #{company.name}
+            td= h.capitalizeFirstLetter(company.status)
 
   #createCompanyModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='createCompanyModal', aria-hidden='true')
     .modal-dialog(role='document')
@@ -22,9 +22,9 @@ block content
         .modal-body
           form#createCompanyForm.form(action="/company/create" method="POST" novalidate)
             .form-group
-              label.col-form-label(for='companyName') Name
-              input#companyName.form-control(name='name' type='text' required maxlength="50")
+              label.col-form-label(for='name') Name
+              input#name.form-control(name='name' type='text' required maxlength="100")
               .invalid-feedback Invalid form.
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-          button.btn.btn-primary(type='submit' form='createCompanyForm') Submit
+          button.btn.btn-primary(form='createCompanyForm') Submit

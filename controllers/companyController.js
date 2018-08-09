@@ -4,39 +4,40 @@ const HourLog = mongoose.model('HourLog');
 
 exports.all = async (req, res) => {
   const companies = await Company.find();
-  res.render("company/all", { title: "Companies", companies: companies });
+  res.render("company/companyAll", { title: "Companies", companies: companies });
 };
 
-exports.getById = async (req, res) => {
-  const companyId = req.params.id;
-  const company = await Company.findOne({ _id: companyId });
-  const hourLogs = await HourLog.find({ company : companyId }).populate("timeEntries");
-  res.render("company/one", { title: company.name, company: company, hourLogs: hourLogs });
+exports.one = async (req, res) => {
+  const companyName = req.params.name;
+  const company = await Company.findOne({ name: companyName }).select('name status');
+  const companies = await Company.find().select('name');
+  const hourLogs = await HourLog.find({ company : company._id }).select('dateOpened dateClosed title totalPublicHours totalHiddenHours');
+  res.render("company/companyOne", { title: company.name, company, companies, hourLogs });
 };
 
 exports.create = async (req, res) => {
-  const company = await (new Company(req.body));
+  const company = await (new Company(req.body)).save();
   req.flash('success', `Successfully created ${company.name}`);
-  res.redirect(`/company/${company._id}`);
+  res.json(company);
 };
 
 exports.edit = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOneAndUpdate({ _id: companyId }, req.body);
+  const company = await Company.findOneAndUpdate({ _id: companyId }, req.body, { new: true }).select('name');
   req.flash('success', `Successfully edited ${company.name}`);
-  res.redirect(`/company/${company._id}`);
+  res.json(company);
 };
 
 exports.activate = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOneAndUpdate({ _id: companyId }, { active: true });
+  const company = await Company.findOneAndUpdate({ _id: companyId }, { status: "active" });
   req.flash('success', `Successfully activated ${company.name}`);
-  res.redirect(`/company/${company._id}`);
+  res.json('');
 };
 
 exports.deactivate = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOneAndUpdate({ _id: companyId }, { active: false });
+  const company = await Company.findOneAndUpdate({ _id: companyId }, { status: "inactive" });
   req.flash('success', `Successfully deactivated ${company.name}`);
-  res.redirect(`/company/${company._id}`);
+  res.json('');
 };

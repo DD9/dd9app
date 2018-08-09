@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 171);
+/******/ 	return __webpack_require__(__webpack_require__.s = 184);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1901,7 +1901,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             try {
                 oldLocale = globalLocale._abbr;
                 var aliasedRequire = require;
-                __webpack_require__(170)("./" + name);
+                __webpack_require__(183)("./" + name);
                 getSetGlobalLocale(oldLocale);
             } catch (e) {}
         }
@@ -4476,7 +4476,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     return hooks;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(139)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)(module)))
 
 /***/ }),
 /* 1 */
@@ -14405,7 +14405,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	return jQuery;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(139)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)(module)))
 
 /***/ }),
 /* 2 */
@@ -14416,7 +14416,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var bind = __webpack_require__(12);
+var bind = __webpack_require__(18);
 
 /*global toString:true*/
 
@@ -14715,6 +14715,15 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+module.exports = __webpack_require__(162);
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -14734,7 +14743,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 (function (factory) {
 	if (true) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(13)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(19)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
 			return factory($, window, document);
 		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -14882,14 +14891,394 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 4 */
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.instantiateEditTimeEntryBtn = instantiateEditTimeEntryBtn;
+
+var _editTimeEntryValidation = __webpack_require__(13);
+
+var _editTimeEntryValidation2 = _interopRequireDefault(_editTimeEntryValidation);
+
+var _timeEntryTableActions = __webpack_require__(6);
+
+var _axios = __webpack_require__(3);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*
+ * Ajax for time entry edit submits.
+ * Must be reinstantiated when new buttons are added to the DOM via Ajax.
+ */
+
+var editTimeEntryModal = $("#editTimeEntryModal");
+var editTimeEntryForm = $('#editTimeEntryForm');
+
+// Init edit buttons
+var anyEditTimeEntryBtn = '.edit-time-entry-btn';
+instantiateEditTimeEntryBtn(anyEditTimeEntryBtn);
+
+// Populate the time entry edit modal with current data
+var timeEntryTableType = void 0;
+var timeEntryTableRowNumber = void 0;
+var currentTimeEntryHours = void 0;
+function instantiateEditTimeEntryBtn(button) {
+  console.log('instantiating edit');
+  $(button).on("click", function () {
+    console.log('edit click');
+    timeEntryTableType = $(this).data('tabletype');
+    timeEntryTableRowNumber = $(this).data('rownumber');
+    currentTimeEntryHours = $(this).data('hours');
+    editTimeEntryForm.attr('action', '/api/v1/timeEntry/' + $(this).data('timeentry') + '/edit');
+    editTimeEntryModal.find('#date').val(_moment2.default.utc($(this).data('date')).format("YYYY-MM-DD"));
+    editTimeEntryModal.find('#company').val($(this).data('company'));
+    editTimeEntryModal.find('#user').val($(this).data('user'));
+    editTimeEntryModal.find('#hours').val($(this).data('hours'));
+    editTimeEntryModal.find('#description').val($(this).data('description'));
+  });
+}
+
+// Time entry edit modal ajax on submit
+editTimeEntryModal.on('submit', function (e) {
+  console.log('ajaxEditTimeEntry');
+  e.preventDefault();
+  (0, _editTimeEntryValidation2.default)();
+  $('#editTimeEntryModal').modal('toggle');
+  console.log(editTimeEntryForm.attr('action'));
+  console.log(editTimeEntryForm.find('#date').val());
+  _axios2.default.post(editTimeEntryForm.attr('action'), {
+    date: editTimeEntryForm.find('#date').val(),
+    company: editTimeEntryForm.find('#company').val(),
+    user: editTimeEntryForm.find('#user').val(),
+    hours: editTimeEntryForm.find('#hours').val(),
+    description: editTimeEntryForm.find('#description').val()
+  }).then(function (res) {
+    if (timeEntryTableType === "created") {
+      var companyTd = res.data.timeEntry.company.name;
+      if (res.data.admin) companyTd = '<a href="/company/' + res.data.timeEntry.company.name + '">' + res.data.timeEntry.company.name + '</a>';
+      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber).data(['' + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), '' + companyTd, '' + res.data.timeEntry.hours, '' + res.data.timeEntry.description, '' + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw();
+      (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.hours);
+      (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Submit', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Delete');
+      instantiateEditTimeEntryBtn('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit');
+    } else if (res.data.adjudicatedTimeEntryCompany) {
+      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber).remove().draw();
+      (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.publicHours, true);
+    } else {
+      var _companyTd = '<a href="/company/' + res.data.timeEntry.publicCompany.name + '">' + res.data.timeEntry.publicCompany.name + '</a>';
+      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber).data(['' + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), '' + _companyTd, res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw();
+      (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.publicHours);
+      (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Submit', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Delete');
+      instantiateEditTimeEntryBtn('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit');
+    }
+  }).catch(console.error);
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createTimeEntryTableActionButtonsHtml = createTimeEntryTableActionButtonsHtml;
+exports.instantiateTimeEntryTableActions = instantiateTimeEntryTableActions;
+exports.updateTotalTimeEntryTableHours = updateTotalTimeEntryTableHours;
+
+var _editTimeEntry = __webpack_require__(5);
+
+var _axios = __webpack_require__(3);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Function used to dynamically create time entry table action buttons on time entry edit and create
+function createTimeEntryTableActionButtonsHtml(res, timeEntryTableType, timeEntryTableRowNumber) {
+  var editSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve"><image xlink:href="/images/icons/pencil.svg" x="0" y="0" width="100%" height="100%"/></svg>';
+  var html = '';
+  if (res.data.admin === true) {
+    if (timeEntryTableType === "approved") {
+      html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide" class="' + timeEntryTableType + '-time-entry-table-hide-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/hide\' method="POST" data-hours=' + res.data.timeEntry.publicHours + '><button class="btn btn-sm btn-link" type="submit">Hide</button></form>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject" class="reject-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmRejectTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.publicHours + '>Reject</button>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#editTimeEntryModal\' data-tabletype=' + timeEntryTableType + ' data-rownumber=' + timeEntryTableRowNumber + ' data-timeentry=' + res.data.timeEntry._id + ' data-date=' + res.data.timeEntry.publicDate + ' data-user=' + res.data.timeEntry.publicUser._id + ' data-company=' + res.data.timeEntry.publicCompany._id + ' data-hours=' + res.data.timeEntry.publicHours + ' data-description=' + res.data.timeEntry.publicDescription + '>' + editSVG + '</button>';
+    } else if (timeEntryTableType === "hidden") {
+      html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve" class="time-entry-table-form-approve form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/approve\' method="POST" data-hours=' + res.data.timeEntry.publicHours + '><button class="btn btn-sm btn-link" type="submit">Approve</button></form>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject" class="reject-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmRejectTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.publicHours + '>Reject</button>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#editTimeEntryModal\' data-tabletype=' + timeEntryTableType + ' data-rownumber=' + timeEntryTableRowNumber + ' data-timeentry=' + res.data.timeEntry._id + ' data-date=' + res.data.timeEntry.publicDate + ' data-user=' + res.data.timeEntry.publicUser._id + ' data-company=' + res.data.timeEntry.publicCompany._id + ' data-hours=' + res.data.timeEntry.publicHours + ' data-description=' + res.data.timeEntry.publicDescription + '>' + editSVG + '</button>';
+    } else if (timeEntryTableType === "submitted") {
+      html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve" class="' + timeEntryTableType + '-time-entry-table-approve-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/approve\' method="POST" data-hours=' + res.data.timeEntry.publicHours + '><button class="btn btn-sm btn-link" type="submit">Approve</button></form>';
+      html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide" class="' + timeEntryTableType + '-time-entry-table-hide-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/hide\' method="POST" data-hours=' + res.data.timeEntry.publicHours + '><button class="btn btn-sm btn-link" type="submit">Hide</button></form>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject" class="reject-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmRejectTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.publicHours + '>Reject</button>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#editTimeEntryModal\' data-tabletype=' + timeEntryTableType + ' data-rownumber=' + timeEntryTableRowNumber + ' data-timeentry=' + res.data.timeEntry._id + ' data-date=' + res.data.timeEntry.publicDate + ' data-user=' + res.data.timeEntry.publicUser._id + ' data-company=' + res.data.timeEntry.publicCompany._id + ' data-hours=' + res.data.timeEntry.publicHours + ' data-description=' + res.data.timeEntry.publicDescription + '>' + editSVG + '</button>';
+    } else if (timeEntryTableType === "created") {
+      html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve" class="' + timeEntryTableType + '-time-entry-table-approve-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/approve\' method="POST" data-hours=' + res.data.timeEntry.hours + '><button class="btn btn-sm btn-link" type="submit">Approve</button></form>';
+      html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide" class="' + timeEntryTableType + '-time-entry-table-hide-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/hide\' method="POST" data-hours=' + res.data.timeEntry.hours + '><button class="btn btn-sm btn-link" type="submit">Hide</button></form>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Submit" class="submit-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmSubmitTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.hours + '>Submit</button>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Delete" class="delete-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmDeleteTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.hours + '>Delete</button>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#editTimeEntryModal\' data-tabletype=' + timeEntryTableType + ' data-rownumber=' + timeEntryTableRowNumber + ' data-timeentry=' + res.data.timeEntry._id + ' data-date=' + res.data.timeEntry.date + ' data-company=' + res.data.timeEntry.company._id + ' data-hours=' + res.data.timeEntry.hours + ' data-description=' + res.data.timeEntry.description + '>' + editSVG + '</button>';
+    }
+  } else {
+    html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Submit" class="submit-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmSubmitTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.hours + '>Submit</button>';
+    html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Delete" class="delete-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmDeleteTimeEntryModal\' data-timeentry=' + res.data.timeEntry._id + ' data-hours=' + res.data.timeEntry.hours + '>Delete</button>';
+    html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#editTimeEntryModal\' data-tabletype=' + timeEntryTableType + ' data-rownumber=' + timeEntryTableRowNumber + ' data-timeentry=' + res.data.timeEntry._id + ' data-date=' + res.data.timeEntry.date + ' data-company=' + res.data.timeEntry.company._id + ' data-hours=' + res.data.timeEntry.hours + ' data-description=' + res.data.timeEntry.description + '>' + editSVG + '</button>';
+  }
+  return html;
+}
+
+// Init table actions on load
+/*
+ * Ajax for time entry table button listeners, edit listener in editTimeEntry.js
+ * Actions Must be reinstantiated to new buttons when new buttons are added to the DOM via Ajax
+ */
+
+instantiateTimeEntryNewTableActions();
+instantiateHourLogOneTableActions();
+
+function instantiateTimeEntryNewTableActions() {
+  var createdTimeEntryTableApproveForm = '.created-time-entry-table-approve-form';
+  var createdTimeEntryTableHideForm = '.created-time-entry-table-hide-form';
+  var createdTimeEntryTableSubmitBtn = '.submit-created-time-entry-btn';
+  var createdTimeEntryTableDeleteBtn = '.delete-created-time-entry-btn';
+  instantiateTimeEntryTableActions("created", createdTimeEntryTableApproveForm, createdTimeEntryTableHideForm, "", createdTimeEntryTableSubmitBtn, createdTimeEntryTableDeleteBtn);
+}
+
+function instantiateHourLogOneTableActions() {
+  var approvedTimeEntryTableHideForm = '.approved-time-entry-table-hide-form';
+  var approvedTimeEntryTableRejectBtn = '.reject-approved-time-entry-btn';
+  instantiateTimeEntryTableActions("approved", "", approvedTimeEntryTableHideForm, approvedTimeEntryTableRejectBtn, "", "");
+  var hiddenTimeEntryTableApproveForm = '.hidden-time-entry-table-approve-form';
+  var hiddenTimeEntryTableRejectBtn = '.reject-hidden-time-entry-btn';
+  instantiateTimeEntryTableActions("hidden", hiddenTimeEntryTableApproveForm, "", hiddenTimeEntryTableRejectBtn, "", "");
+  var submittedTimeEntryTableApproveForm = '.submitted-time-entry-table-approve-form';
+  var submittedTimeEntryTableHideForm = '.submitted-time-entry-table-hide-form';
+  var submittedTimeEntryTableRejectBtn = '.reject-submitted-time-entry-btn';
+  instantiateTimeEntryTableActions("submitted", submittedTimeEntryTableApproveForm, submittedTimeEntryTableHideForm, submittedTimeEntryTableRejectBtn, "", "");
+}
+
+// Function to initialize listeners and actions on dynamically created time entry buttons
+function instantiateTimeEntryTableActions(timeEntryTableType, approveFormSelector, hideFormSelector, rejectBtnSelector, submitBtnSelector, deleteBtnSelector) {
+  if (timeEntryTableType === "approved") {
+    console.log(hideFormSelector, timeEntryTableType);
+    console.log(rejectBtnSelector, timeEntryTableType);
+    hideFormListener(hideFormSelector, timeEntryTableType);
+    confirmRejectBtnListener(rejectBtnSelector, timeEntryTableType);
+  } else if (timeEntryTableType === "hidden") {
+    console.log(approveFormSelector, timeEntryTableType);
+    console.log(rejectBtnSelector, timeEntryTableType);
+    approveFormListener(approveFormSelector, timeEntryTableType);
+    confirmRejectBtnListener(rejectBtnSelector, timeEntryTableType);
+  } else if (timeEntryTableType === "submitted") {
+    approveFormListener(approveFormSelector, timeEntryTableType);
+    hideFormListener(hideFormSelector, timeEntryTableType);
+    confirmRejectBtnListener(rejectBtnSelector, timeEntryTableType);
+  } else if (timeEntryTableType === "created") {
+    approveFormListener(approveFormSelector, timeEntryTableType);
+    hideFormListener(hideFormSelector, timeEntryTableType);
+    confirmDeleteBtnListener(deleteBtnSelector, timeEntryTableType);
+    confirmSubmitBtnListener(submitBtnSelector, timeEntryTableType);
+  }
+}
+
+// Approve listener
+function approveFormListener(form, timeEntryTableType) {
+  $(form).on('submit', function (e) {
+    var _this = this;
+
+    console.log('ajaxTimeEntryTableApprove');
+    e.preventDefault();
+    $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row($(this).closest('tr')).remove().draw();
+    console.log(this);
+    updateTotalTimeEntryTableHours(timeEntryTableType, $(this).data('hours'), 0);
+    _axios2.default.post(this.action).then(function (res) {
+      var receivingTimeEntryTableType = res.data.timeEntry.status;
+      var receivingTimeEntryTable = $('#' + receivingTimeEntryTableType + 'TimeEntryTable');
+      var receivingTimeEntryTableRowNumber = receivingTimeEntryTable.find('tr').length - 2;
+      receivingTimeEntryTable.DataTable().row.add(['' + _moment2.default.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD"), '<a href="/company/' + res.data.timeEntry.publicCompany.name + '">' + res.data.timeEntry.publicCompany.name + '</a>', res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + createTimeEntryTableActionButtonsHtml(res, receivingTimeEntryTableType, receivingTimeEntryTableRowNumber)]).draw().node().id = receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber;
+      updateTotalTimeEntryTableHours(receivingTimeEntryTableType, 0, $(_this).data('hours'));
+      instantiateTimeEntryTableActions(receivingTimeEntryTableType, '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Approve', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Hide', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Reject', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Submit', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Delete');
+      (0, _editTimeEntry.instantiateEditTimeEntryBtn)('#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Edit');
+    }).catch(console.error);
+  });
+}
+
+// Hide listener
+function hideFormListener(form, timeEntryTableType) {
+  $(form).on('submit', function (e) {
+    var _this2 = this;
+
+    console.log('ajaxTimeEntryTableHide');
+    e.preventDefault();
+    $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row($(this).closest('tr')).remove().draw();
+    updateTotalTimeEntryTableHours(timeEntryTableType, $(this).data('hours'), 0);
+    _axios2.default.post(this.action).then(function (res) {
+      var receivingTimeEntryTableType = res.data.timeEntry.status;
+      var receivingTimeEntryTable = $('#' + receivingTimeEntryTableType + 'TimeEntryTable');
+      var receivingTimeEntryTableRowNumber = receivingTimeEntryTable.find('tr').length - 2;
+      receivingTimeEntryTable.DataTable().row.add(['' + _moment2.default.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD"), '<a href="/company/' + res.data.timeEntry.publicCompany.name + '">' + res.data.timeEntry.publicCompany.name + '</a>', res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + createTimeEntryTableActionButtonsHtml(res, receivingTimeEntryTableType, receivingTimeEntryTableRowNumber)]).draw().node().id = receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber;
+      updateTotalTimeEntryTableHours(receivingTimeEntryTableType, 0, $(_this2).data('hours'));
+      instantiateTimeEntryTableActions(receivingTimeEntryTableType, '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Approve', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Hide', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Reject', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Submit', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Delete');
+      (0, _editTimeEntry.instantiateEditTimeEntryBtn)('#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Edit');
+    }).catch(console.error);
+  });
+}
+
+// Reject listener
+var rejectTimeEntryBtn = void 0;
+var rejectTimeEntryTableType = void 0;
+var rejectForm = '#confirmRejectTimeEntryForm';
+function confirmRejectBtnListener(button, timeEntryTableType) {
+  $(button).on("click", function () {
+    rejectTimeEntryBtn = this;
+    rejectTimeEntryTableType = timeEntryTableType;
+    console.log(rejectTimeEntryTableType);
+    $("#confirmRejectTimeEntryForm").attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/reject');
+  });
+}
+$(rejectForm).on('submit', function (e) {
+  console.log('ajaxTimeEntryTableReject');
+  e.preventDefault();
+  $('#' + rejectTimeEntryTableType + 'TimeEntryTable').DataTable().row($(rejectTimeEntryBtn).closest('tr')).remove().draw();
+  updateTotalTimeEntryTableHours(rejectTimeEntryTableType, $(rejectTimeEntryBtn).data('hours'), 0);
+  _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+});
+$('#confirmRejectTimeEntryBtn').on("click", function () {
+  $('#confirmRejectTimeEntryModal').modal('toggle');
+});
+
+// Submit listener
+var submitTimeEntryBtn = void 0;
+var submitTimeEntryTableType = void 0;
+var submitForm = '#confirmSubmitTimeEntryForm';
+function confirmSubmitBtnListener(button, timeEntryTableType) {
+  $(button).on("click", function () {
+    submitTimeEntryBtn = this;
+    submitTimeEntryTableType = timeEntryTableType;
+    $("#confirmSubmitTimeEntryForm").attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/submit');
+  });
+}
+$(submitForm).on('submit', function (e) {
+  console.log('ajaxTimeEntryTableSubmit');
+  e.preventDefault();
+  $('#' + submitTimeEntryTableType + 'TimeEntryTable').DataTable().row($(submitTimeEntryBtn).closest("tr")).remove().draw();
+  updateTotalTimeEntryTableHours(submitTimeEntryTableType, $(submitTimeEntryBtn).data('hours'), 0);
+  _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+});
+$('#confirmTimeEntrySubmitBtn').on("click", function () {
+  $('#confirmSubmitTimeEntryModal').modal('toggle');
+});
+
+// Delete listener
+var deleteTimeEntryBtn = void 0;
+var deleteTimeEntryTableType = void 0;
+var deleteForm = '#confirmDeleteTimeEntryForm';
+function confirmDeleteBtnListener(button, timeEntryTableType) {
+  $(button).on("click", function () {
+    deleteTimeEntryBtn = this;
+    deleteTimeEntryTableType = timeEntryTableType;
+    $("#confirmDeleteTimeEntryForm").attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/delete');
+  });
+}
+$(deleteForm).on('submit', function (e) {
+  console.log('ajaxTimeEntryTableDelete');
+  e.preventDefault();
+  $('#' + deleteTimeEntryTableType + 'TimeEntryTable').DataTable().row($(deleteTimeEntryBtn).closest("tr")).remove().draw();
+  updateTotalTimeEntryTableHours(deleteTimeEntryTableType, $(deleteTimeEntryBtn).data('hours'), 0);
+  _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+});
+$('#confirmTimeEntryDeleteBtn').on("click", function () {
+  $('#confirmDeleteTimeEntryModal').modal('toggle');
+});
+
+// Update total time entry table hours value
+function updateTotalTimeEntryTableHours(timeEntryTableType, oldHours, newHours) {
+  var adjudicatedTimeEntryCompany = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+
+  var uppercaseTimeEntryTableType = timeEntryTableType.charAt(0).toUpperCase() + timeEntryTableType.slice(1);
+  var totalTimeTableEntryHours = +$('#total' + uppercaseTimeEntryTableType + 'TimeEntryHours').html();
+  var newTotal = totalTimeTableEntryHours - (+oldHours - +newHours);
+  console.log(totalTimeTableEntryHours + ' - (' + oldHours + ' - ' + newHours + ') = ' + newTotal);
+  if (timeEntryTableType === "created") {
+    $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#total' + uppercaseTimeEntryTableType + 'TimeEntryHoursRow').data(['', '', '' + newTotal, '', '']).draw();
+  } else if (adjudicatedTimeEntryCompany) {
+    $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#total' + uppercaseTimeEntryTableType + 'TimeEntryHoursRow').data(['', '', '', '' + (totalTimeTableEntryHours - +oldHours), '', '']).draw();
+  } else {
+    $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#total' + uppercaseTimeEntryTableType + 'TimeEntryHoursRow').data(['', '', '', '' + newTotal, '', '']).draw();
+  }
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function editUserValidation() {
+  var editUserForm = $('.edit-user-form');
+  var firstNameInput = editUserForm.find('#firstName');
+  var lastNameInput = editUserForm.find('#lastName');
+  var firstName = firstNameInput.val();
+  var lastName = lastNameInput.val();
+
+  var hasError = false;
+
+  if (!firstName) {
+    hasError = true;
+    firstNameInput.closest('div').find('.invalid-feedback').html("First name required.");
+    firstNameInput.addClass('is-invalid');
+  } else {
+    firstNameInput.removeClass('is-invalid');
+  }
+
+  if (!lastName) {
+    hasError = true;
+    lastNameInput.closest('div').find('.invalid-feedback').html("Last name required.");
+    lastNameInput.addClass('is-invalid');
+  } else {
+    lastNameInput.removeClass('is-invalid');
+  }
+
+  if (hasError) {
+    throw new Error("Form not validated");
+  }
+}
+
+exports.default = editUserValidation;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(2);
-var normalizeHeaderName = __webpack_require__(164);
+var normalizeHeaderName = __webpack_require__(176);
 
 var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 var DEFAULT_CONTENT_TYPE = {
@@ -14906,10 +15295,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(8);
+    adapter = __webpack_require__(14);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(8);
+    adapter = __webpack_require__(14);
   }
   return adapter;
 }
@@ -14974,10 +15363,10 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 });
 
 module.exports = defaults;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(137)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(143)))
 
 /***/ }),
-/* 5 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14992,7 +15381,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 (function (factory) {
 	if (true) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(3), __webpack_require__(168)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(4), __webpack_require__(180)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
 			return factory($, window, document);
 		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -15023,7 +15412,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 6 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15032,8 +15421,105 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-function validateTimeEntryFormInput() {
-  var timeEntryForm = $('.timeEntryForm');
+var createCompanyForm = $('#createCompanyForm');
+var companyNameInput = createCompanyForm.find('#name');
+var companyAllTable = $('#companyAllTable');
+var companyNames = [];
+
+// Check for duplicates
+companyAllTable.find('.company-name a').each(function () {
+  companyNames.push(this.innerHTML.toLowerCase().trim());
+});
+
+function createCompanyValidation() {
+  var companyNameInputVal = companyNameInput.val().toLowerCase().trim();
+
+  var hasError = false;
+
+  if (!companyNameInputVal) {
+    hasError = true;
+    createCompanyForm.find('.invalid-feedback').html("Company name required.");
+    companyNameInput.addClass('is-invalid');
+  } else {
+    companyNameInput.removeClass('is-invalid');
+  }
+
+  if (companyNames.includes(companyNameInputVal)) {
+    hasError = true;
+    createCompanyForm.find('.invalid-feedback').html("Company name must be unique.");
+    companyNameInput.addClass('is-invalid');
+  } else {
+    companyNameInput.removeClass('is-invalid');
+  }
+
+  if (hasError) {
+    throw new Error("Form not validated");
+  }
+}
+
+exports.default = createCompanyValidation;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var editCompanyForm = $('#editCompanyForm');
+var companyNameInput = $('#companyName');
+var companyNames = [];
+
+// Check for duplicates
+$('.companies-json').find('p').each(function () {
+  companyNames.push(this.innerHTML.toLowerCase().trim());
+});
+
+function editCompanyValidation() {
+  var companyNameInputVal = companyNameInput.val().toLowerCase().trim();
+
+  var hasError = false;
+
+  if (!companyNameInputVal) {
+    hasError = true;
+    editCompanyForm.find('.invalid-feedback').html("Company name required.");
+    companyNameInput.addClass('is-invalid');
+  } else {
+    companyNameInput.removeClass('is-invalid');
+  }
+
+  if (companyNames.includes(companyNameInputVal)) {
+    hasError = true;
+    editCompanyForm.find('.invalid-feedback').html("Company name must be unique.");
+    companyNameInput.addClass('is-invalid');
+  } else {
+    companyNameInput.removeClass('is-invalid');
+  }
+
+  if (hasError) {
+    throw new Error("Form not validated");
+  }
+}
+
+exports.default = editCompanyValidation;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function createTimeEntryValidation() {
+  var timeEntryForm = $('.create-time-entry-form');
   var dateInput = timeEntryForm.find('#date');
   var companyInput = timeEntryForm.find('#company');
   var hoursInput = timeEntryForm.find('#hours');
@@ -15049,33 +15535,33 @@ function validateTimeEntryFormInput() {
   if (!dateVal) {
     hasError = true;
     dateInput.closest('div').find('.invalid-feedback').html("Date required.");
-    dateInput.addClass("is-invalid");
+    dateInput.addClass('is-invalid');
   } else {
-    dateInput.removeClass("is-invalid");
+    dateInput.removeClass('is-invalid');
   }
 
   if (!companyVal) {
     hasError = true;
     companyInput.closest('div').find('.invalid-feedback').html("Company required.");
-    companyInput.addClass("is-invalid");
+    companyInput.addClass('is-invalid');
   } else {
-    companyInput.removeClass("is-invalid");
+    companyInput.removeClass('is-invalid');
   }
 
   if (!hoursVal) {
     hasError = true;
     hoursInput.closest('div').find('.invalid-feedback').html("Hours required.");
-    hoursInput.addClass("is-invalid");
+    hoursInput.addClass('is-invalid');
   } else {
-    hoursInput.removeClass("is-invalid");
+    hoursInput.removeClass('is-invalid');
   }
 
   if (!descriptionVal) {
     hasError = true;
     descriptionInput.closest('div').find('.invalid-feedback').html("Description required.");
-    descriptionInput.addClass("is-invalid");
+    descriptionInput.addClass('is-invalid');
   } else {
-    descriptionInput.removeClass("is-invalid");
+    descriptionInput.removeClass('is-invalid');
   }
 
   if (hasError) {
@@ -15083,32 +15569,87 @@ function validateTimeEntryFormInput() {
   }
 }
 
-exports.default = validateTimeEntryFormInput;
+exports.default = createTimeEntryValidation;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 7 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function($) {
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function editTimeEntryValidation() {
+  var editTimeEntryModal = $('#editTimeEntryModal');
+  var dateInput = editTimeEntryModal.find('#date');
+  var companyInput = editTimeEntryModal.find('#company');
+  var hoursInput = editTimeEntryModal.find('#hours');
+  var descriptionInput = editTimeEntryModal.find('#description');
 
-module.exports = __webpack_require__(150);
+  var dateVal = dateInput.val();
+  var companyVal = companyInput.val();
+  var hoursVal = hoursInput.val();
+  var descriptionVal = descriptionInput.val();
+
+  var hasError = false;
+
+  if (!dateVal) {
+    hasError = true;
+    dateInput.closest('div').find('.invalid-feedback').html("Date required.");
+    dateInput.addClass('is-invalid');
+  } else {
+    dateInput.removeClass('is-invalid');
+  }
+
+  if (!companyVal) {
+    hasError = true;
+    companyInput.closest('div').find('.invalid-feedback').html("Company required.");
+    companyInput.addClass('is-invalid');
+  } else {
+    companyInput.removeClass('is-invalid');
+  }
+
+  if (!hoursVal) {
+    hasError = true;
+    hoursInput.closest('div').find('.invalid-feedback').html("Hours required.");
+    hoursInput.addClass('is-invalid');
+  } else {
+    hoursInput.removeClass('is-invalid');
+  }
+
+  if (!descriptionVal) {
+    hasError = true;
+    descriptionInput.closest('div').find('.invalid-feedback').html("Description required.");
+    descriptionInput.addClass('is-invalid');
+  } else {
+    descriptionInput.removeClass('is-invalid');
+  }
+
+  if (hasError) {
+    throw new Error("Form not validated");
+  }
+}
+
+exports.default = editTimeEntryValidation;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 8 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(2);
-var settle = __webpack_require__(156);
-var buildURL = __webpack_require__(159);
-var parseHeaders = __webpack_require__(165);
-var isURLSameOrigin = __webpack_require__(163);
-var createError = __webpack_require__(11);
-var btoa = typeof window !== 'undefined' && window.btoa && window.btoa.bind(window) || __webpack_require__(158);
+var settle = __webpack_require__(168);
+var buildURL = __webpack_require__(171);
+var parseHeaders = __webpack_require__(177);
+var isURLSameOrigin = __webpack_require__(175);
+var createError = __webpack_require__(17);
+var btoa = typeof window !== 'undefined' && window.btoa && window.btoa.bind(window) || __webpack_require__(170);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -15201,7 +15742,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(161);
+      var cookies = __webpack_require__(173);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ? cookies.read(config.xsrfCookieName) : undefined;
@@ -15272,10 +15813,10 @@ module.exports = function xhrAdapter(config) {
     request.send(requestData);
   });
 };
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(137)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(143)))
 
 /***/ }),
-/* 9 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15301,7 +15842,7 @@ Cancel.prototype.__CANCEL__ = true;
 module.exports = Cancel;
 
 /***/ }),
-/* 10 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15312,13 +15853,13 @@ module.exports = function isCancel(value) {
 };
 
 /***/ }),
-/* 11 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var enhanceError = __webpack_require__(155);
+var enhanceError = __webpack_require__(167);
 
 /**
  * Create an Error with the specified message, config, error code, and response.
@@ -15335,7 +15876,7 @@ module.exports = function createError(message, config, code, response) {
 };
 
 /***/ }),
-/* 12 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15352,7 +15893,7 @@ module.exports = function bind(fn, thisArg) {
 };
 
 /***/ }),
-/* 13 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29304,7 +29845,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 14 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29386,7 +29927,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 15 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29453,7 +29994,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 16 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29520,7 +30061,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 17 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29641,7 +30182,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 18 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29708,7 +30249,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 19 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29821,7 +30362,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 20 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29888,7 +30429,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 21 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30023,7 +30564,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 22 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30138,7 +30679,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 23 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30277,7 +30818,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 24 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30375,7 +30916,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 25 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30441,7 +30982,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 26 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30566,7 +31107,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 27 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30691,7 +31232,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 28 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30807,7 +31348,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 29 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30966,7 +31507,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 30 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31059,7 +31600,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 31 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31261,7 +31802,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 32 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31332,7 +31873,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 33 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31419,7 +31960,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 34 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31487,7 +32028,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 35 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31571,7 +32112,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 36 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31655,7 +32196,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 37 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31739,7 +32280,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 38 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31826,7 +32367,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 39 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31935,7 +32476,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 40 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32007,7 +32548,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 41 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32075,7 +32616,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 42 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32147,7 +32688,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 43 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32219,7 +32760,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 44 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32286,7 +32827,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 45 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32358,7 +32899,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 46 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32437,7 +32978,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 47 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32537,7 +33078,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 48 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32628,7 +33169,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 49 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32728,7 +33269,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 50 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32816,7 +33357,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 51 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32890,7 +33431,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 52 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33006,7 +33547,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 53 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33120,7 +33661,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 54 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33188,7 +33729,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 55 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33270,7 +33811,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 56 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33356,7 +33897,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 57 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33447,7 +33988,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 58 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33530,7 +34071,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 59 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33612,7 +34153,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 60 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33697,7 +34238,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 61 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33828,7 +34369,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 62 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33960,7 +34501,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 63 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34066,7 +34607,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 64 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34198,7 +34739,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 65 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34360,7 +34901,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 66 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34478,7 +35019,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 67 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34582,7 +35123,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 68 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34672,7 +35213,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 69 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34812,7 +35353,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 70 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34889,7 +35430,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 71 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34989,7 +35530,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 72 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35079,7 +35620,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 73 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35175,7 +35716,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 74 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35270,7 +35811,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 75 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35385,7 +35926,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 76 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35519,7 +36060,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 77 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35608,7 +36149,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 78 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35703,7 +36244,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 79 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35848,7 +36389,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 80 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35926,7 +36467,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 81 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36052,7 +36593,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 82 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36157,7 +36698,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 83 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36269,7 +36810,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 84 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36341,7 +36882,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 85 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36439,7 +36980,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 86 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36526,7 +37067,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 87 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36638,7 +37179,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 88 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36828,7 +37369,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 89 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36918,7 +37459,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 90 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37008,7 +37549,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 91 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37076,7 +37617,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 92 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37178,7 +37719,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 93 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37248,7 +37789,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 94 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37379,7 +37920,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 95 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37474,7 +38015,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 96 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37569,7 +38110,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 97 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37637,7 +38178,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 98 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37769,7 +38310,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 99 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37903,7 +38444,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 100 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37971,7 +38512,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 101 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38043,7 +38584,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 102 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38126,7 +38667,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 103 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38316,7 +38857,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 104 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38401,7 +38942,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 105 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38469,7 +39010,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 106 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38549,7 +39090,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 107 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38725,7 +39266,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 108 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38906,7 +39447,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 109 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38982,7 +39523,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 110 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39093,7 +39634,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 111 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39204,7 +39745,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 112 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39300,7 +39841,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 113 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39374,7 +39915,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 114 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39441,7 +39982,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 115 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39579,7 +40120,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 116 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39676,7 +40217,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 117 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39748,7 +40289,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 118 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39872,7 +40413,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 119 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39947,7 +40488,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 120 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40017,7 +40558,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 121 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40135,7 +40676,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 122 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40238,7 +40779,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 123 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40338,7 +40879,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 124 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40404,7 +40945,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 125 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40470,7 +41011,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 126 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40587,7 +41128,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 127 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40741,7 +41282,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 128 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40826,7 +41367,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 129 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40892,7 +41433,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 130 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40958,7 +41499,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 131 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41046,7 +41587,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 132 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41119,7 +41660,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 133 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41187,7 +41728,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 134 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41304,7 +41845,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 135 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41415,7 +41956,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 136 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41526,7 +42067,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 137 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41719,7 +42260,7 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 138 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44242,10 +44783,10 @@ Popper.Defaults = Defaults;
 
 exports.default = Popper;
 //# sourceMappingURL=popper.js.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(169)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(181)))
 
 /***/ }),
-/* 139 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44275,7 +44816,7 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 140 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44289,7 +44830,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function (global, factory) {
-  ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory(exports, __webpack_require__(1), __webpack_require__(138)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__(1), __webpack_require__(138)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+  ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory(exports, __webpack_require__(1), __webpack_require__(144)) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__(1), __webpack_require__(144)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : factory(global.bootstrap = {}, global.jQuery, global.Popper);
@@ -48201,19 +48742,119 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //# sourceMappingURL=bootstrap.js.map
 
 /***/ }),
-/* 141 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(3);
+var _axios = __webpack_require__(3);
 
-__webpack_require__(5);
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+$('#activateCompanyForm').on('submit', ajaxActivateCompanyForm);
+$('#deactivateCompanyForm').on('submit', ajaxDeactivateCompanyForm);
+
+function ajaxActivateCompanyForm(e) {
+  e.preventDefault();
+  _axios2.default.post(this.action).then(function (res) {
+    $('#activateCompanyBtn').addClass('d-none');
+    $('#editCompanyBtn').removeClass('d-none');
+  }).catch(console.error);
+}
+
+function ajaxDeactivateCompanyForm(e) {
+  e.preventDefault();
+  $('#editCompanyModal').modal('toggle');
+  _axios2.default
+  // .get() //TODO confirm no open hourlog, flashes
+  // .then(res => {
+  //
+  // })
+  .post(this.action).then(function (res) {
+    $('#activateCompanyBtn').removeClass('d-none');
+    $('#editCompanyBtn').addClass('d-none');
+  }).catch(console.error);
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 148 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+var _axios = __webpack_require__(3);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _createCompanyValidation = __webpack_require__(10);
+
+var _createCompanyValidation2 = _interopRequireDefault(_createCompanyValidation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+$('#createCompanyForm').on('submit', ajaxCreateCompany);
+function ajaxCreateCompany(e) {
+  e.preventDefault();
+  (0, _createCompanyValidation2.default)();
+  $('#createCompanyModal').modal('toggle');
+  _axios2.default.post(this.action, {
+    name: this.name.value
+  }).then(function (res) {
+    console.log(res.data);
+    $('#companyAllTable').DataTable().row.add(['<a href=\'/company/' + res.data.name + '\'>' + res.data.name + '</a>', '' + (res.data.status.charAt(0).toUpperCase() + res.data.status.slice(1))]).draw();
+  }).catch(console.error);
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+var _axios = __webpack_require__(3);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _editCompanyValidation = __webpack_require__(11);
+
+var _editCompanyValidation2 = _interopRequireDefault(_editCompanyValidation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+$('#editCompanyForm').on('submit', ajaxEditCompany);
+function ajaxEditCompany(e) {
+  e.preventDefault();
+  (0, _editCompanyValidation2.default)();
+  $('#editCompanyModal').modal('toggle');
+  _axios2.default.post(this.action, {
+    name: this.name.value
+  }).then(function (res) {
+    console.log(res.data);
+    $('.company-title').html(res.data.name);
+  }).catch(console.error);
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 150 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+__webpack_require__(4);
+
+__webpack_require__(9);
 
 // Datatables and table title
-var companyAllTable = $('#companyAllTable');
-companyAllTable.dataTable({
+$('#companyAllTable').dataTable({
   "dom": "<'row'<'col company-all-table-title'><'col company-all-table-filter'f>>" + "<'row'<'col-sm-12 company-all-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 company-all-table-paginate'p>>",
   "bFilter": true,
   "bLengthChange": false,
@@ -48226,119 +48867,45 @@ companyAllTable.dataTable({
 });
 
 $(".company-all-table-title").html('<h3>Companies</h3>' + '<button type="button" class="create-company-btn btn btn-primary" data-toggle="modal" data-target="#createCompanyModal">Add Company</button>');
-
-// createCompany modal submission validation
-var companyNames = [];
-
-companyAllTable.find('.companyName a').each(function () {
-  companyNames.push(this.innerHTML.toLowerCase().trim());
-});
-
-var createCompanyForm = $('#createCompanyForm');
-var companyNameInput = createCompanyForm.find('#companyName');
-createCompanyForm.on('submit', function (e) {
-  var companyNameInputVal = companyNameInput.val().toLowerCase().trim();
-  if (!companyNameInputVal) {
-    createCompanyForm.find(".invalid-feedback").html("Company Name required.");
-    companyNameInput.addClass("is-invalid");
-    e.preventDefault();
-  } else if (companyNames.includes(companyNameInputVal)) {
-    createCompanyForm.find(".invalid-feedback").html("Company Name must be unique.");
-    companyNameInput.addClass("is-invalid");
-    e.preventDefault();
-  } else {
-    companyNameInput.removeClass("is-invalid");
-  }
-});
-
-// Reset createCompany modal on close
-$('#createCompanyModal').on('hidden.bs.modal', function () {
-  companyNameInput.val('');
-  companyNameInput.removeClass("is-invalid");
-});
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 142 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-// editModal submission validation
-var editCompanyForm = $('#editCompanyForm');
-var companyNameInputField = $('#companyName');
-editCompanyForm.on('submit', function (e) {
-  var companyNameInputValue = companyNameInputField.val().toLowerCase().trim();
-  if (!companyNameInputValue) {
-    editCompanyForm.find(".invalid-feedback").html("Company Name required.");
-    companyNameInputField.addClass("is-invalid");
-    e.preventDefault();
-  } else {
-    companyNameInputField.removeClass("is-invalid");
-  }
+__webpack_require__(4);
+
+__webpack_require__(9);
+
+// Datatables and table title
+$('#companyOneTable').dataTable({
+  "dom": "<'row'<'col company-one-table-title'><'col company-one-table-filter'f>>" + "<'row'<'col-sm-12 company-one-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 company-one-table-paginate'p>>",
+  "bFilter": true,
+  "bInfo": false,
+  "paging": false,
+  "aaSorting": [[0, 'dsc']],
+  language: { sSearch: "", searchPlaceholder: "Search..." },
+  "columns": [{ "width": "15%" }, { "width": "15%" }, { "width": "50%" }, { "width": "10%" }, { "width": "10%" }]
 });
 
-// Reset editModal on close
-editCompanyForm.on('hidden.bs.modal', function () {
-  companyNameInputField.removeClass("is-invalid");
-});
-
-// Pass confirmModal payload for dynamic styles
-var confirmEditCompanyModal = $('#confirmEditCompanyModal');
-var confirmEditCompanyForm = $('#confirmEditCompanyForm');
-var recycledActionAttribute = confirmEditCompanyForm.attr("action");
-confirmEditCompanyModal.on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget);
-  var action = button.data('payload');
-  confirmEditCompanyModal.find('.modal-title').html(document.getElementById("confirmEditCompanyModal").getElementsByClassName("modal-title")[0].innerHTML + ' ' + action);
-  confirmEditCompanyForm.attr("action", confirmEditCompanyForm.attr("action") + action.toLowerCase());
-
-  var confirmEditCompanySubmit = $('.confirm-edit-company-submit');
-  confirmEditCompanySubmit.html(action);
-  if (action === "Delete") {
-    confirmEditCompanySubmit.addClass("btn-danger");
-  } else {
-    confirmEditCompanySubmit.addClass("btn-warning");
-  }
-});
-
-// confirmModal submission validation
-var confirmInputField = confirmEditCompanyModal.find('#confirm');
-confirmEditCompanyForm.on('submit', function (e) {
-
-  if (confirmInputField.val() !== confirmInputField.attr("placeholder")) {
-    confirmEditCompanyForm.find(".invalid-feedback").html("Input does not match company name.");
-    confirmInputField.addClass("is-invalid");
-    e.preventDefault();
-  } else {
-    confirmInputField.removeClass("is-invalid");
-  }
-});
-
-// Reset confirmModal on close
-confirmEditCompanyModal.on('hidden.bs.modal', function () {
-  confirmInputField.val('');
-  confirmInputField.removeClass("is-invalid");
-  confirmEditCompanyForm.attr("action", recycledActionAttribute);
-});
+$(".company-one-table-title").html('<h4>Hour Logs</h4>');
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 143 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/***/ }),
-/* 144 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var _axios = __webpack_require__(7);
+var _closeHourLogValidation = __webpack_require__(182);
+
+var _closeHourLogValidation2 = _interopRequireDefault(_closeHourLogValidation);
+
+var _axios = __webpack_require__(3);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -48349,36 +48916,42 @@ $('#openHourLogForm').on('submit', ajaxOpenHourLogForm);
 
 function ajaxCloseHourLogForm(e) {
   e.preventDefault();
-  _axios2.default
-  // .get() //TODO confirm no open submissions, flashes
-  // .then(res => {
-  //
-  // })
-  .post(this.action).then(function (res) {
-    $('#openHourLogButton').removeClass('d-none');
-    $('#closeHourLogButton').addClass('d-none');
+  (0, _closeHourLogValidation2.default)();
+  $('#closeHourLogModal').modal('toggle');
+  _axios2.default.post(this.action, {
+    title: this.title.value
+  }).then(function (res) {
+    if (!res.data.error) {
+      location.reload();
+    } else {
+      alert(res.data.error);
+    }
   }).catch(console.error);
 }
 
 function ajaxOpenHourLogForm(e) {
   e.preventDefault();
+  $('#openHourLogModal').modal('toggle');
   _axios2.default.post(this.action).then(function (res) {
-    $('#openHourLogButton').addClass('d-none');
-    $('#closeHourLogButton').removeClass('d-none');
+    if (res.data.updatedClosedHourLog) {
+      location.reload();
+    } else {
+      window.location.href = window.location.origin + '/hourLog/' + res.data._id;
+    }
   }).catch(console.error);
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 145 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(3);
+__webpack_require__(4);
 
-__webpack_require__(5);
+__webpack_require__(9);
 
 // Datatables and table title
 $('#hourLogAllTable').dataTable({
@@ -48397,17 +48970,41 @@ $(".hour-log-all-table-title").html('<h3>Hour Logs</h3>');
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 146 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var _formValidation = __webpack_require__(6);
+__webpack_require__(4);
 
-var _formValidation2 = _interopRequireDefault(_formValidation);
+$('#approvedTimeEntryTable, #hiddenTimeEntryTable, #submittedTimeEntryTable').dataTable({
+  "dom": "<'row'<'col user-all-table-title'><'col user-all-table-filter'f>>" + "<'row'<'col-sm-12 user-all-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 user-all-table-paginate'p>>",
+  "bFilter": false,
+  "paging": false,
+  "pagination": false,
+  "bInfo": false,
+  "aaSorting": [0, 'desc'],
+  "columns": [{ "width": "9%" }, { "width": "15%" }, { "width": "15%" }, { "width": "4%" }, { "width": "36%" }, { "width": "21%" }]
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
-var _axios = __webpack_require__(7);
+/***/ }),
+/* 155 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+var _createTimeEntryValidation = __webpack_require__(12);
+
+var _createTimeEntryValidation2 = _interopRequireDefault(_createTimeEntryValidation);
+
+var _timeEntryTableActions = __webpack_require__(6);
+
+var _editTimeEntry = __webpack_require__(5);
+
+var _axios = __webpack_require__(3);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -48418,13 +49015,14 @@ var _moment2 = _interopRequireDefault(_moment);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 $('#createTimeEntryForm').on('submit', ajaxAddCreatedTimeEntry);
+$('#createAndSubmitTimeEntryForm').on('submit', ajaxAddSubmittedTimeEntry);
 
 function ajaxAddCreatedTimeEntry(e) {
   var _this = this;
 
+  console.log("ajaxAddCreatedTimeEntry");
   e.preventDefault();
-  (0, _formValidation2.default)();
-
+  (0, _createTimeEntryValidation2.default)();
   _axios2.default.post(this.action, {
     date: this.date.value,
     company: this.company.value,
@@ -48432,56 +49030,232 @@ function ajaxAddCreatedTimeEntry(e) {
     description: this.description.value
   }).then(function (res) {
     var companyName = $(_this).find('option:selected').text();
-    var html = '<tr>\n          <td>' + (0, _moment2.default)(res.data.timeEntry.date).format("YYYY-MM-DD") + '</td>\n          <td>' + companyName + '</td>\n          <td>' + res.data.timeEntry.hours + '</td>\n          <td>' + res.data.timeEntry.description + '</td>';
-    if (res.data.admin === true) {
-      html += '<td><a href="">Approve</a>&nbsp&nbsp<a href="">Hide</a>&nbsp&nbsp<a href="">Submit</a>&nbsp&nbsp<a href="">Delete</a></td></tr>';
-    } else {
-      html += '<td><a href="">Submit</a>&nbsp&nbsp<a href="">Delete</a></td></tr>';
-    }
-    var lastRowInCreatedTimeEntriesTable = $('#lastRowInCreatedTimeEntriesTable');
-    lastRowInCreatedTimeEntriesTable.before(html);
-    var totalCreatedHours = $('#totalCreatedHours');
-    var newTotal = +totalCreatedHours.html() + +res.data.timeEntry.hours;
-    totalCreatedHours.html(newTotal);
-    $('#createTimeEntryForm #hours, #description').val('');
+    var companyTd = companyName;
+    if (res.data.admin) companyTd = "<a href=\"/company/" + companyName + "\">" + companyName + "</a>";
+    var createdTimeEntryTable = $('#createdTimeEntryTable');
+    var timeEntryTableType = "created";
+    var timeEntryTableRowNumber = createdTimeEntryTable.find('tr').length - 2;
+    createdTimeEntryTable.DataTable().row.add(["" + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), "" + companyTd, "" + res.data.timeEntry.hours, "" + res.data.timeEntry.description, "" + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw().node().id = timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber;
+    (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, 0, res.data.timeEntry.hours);
+    (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Approve", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Hide", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Reject", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Submit", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Delete");
+    (0, _editTimeEntry.instantiateEditTimeEntryBtn)("#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Edit");
+    createdTimeEntryTable.find('#hours, #description').val('test');
+  }).catch(console.error);
+}
+
+function ajaxAddSubmittedTimeEntry(e) {
+  console.log("ajaxAddSubmittedTimeEntry");
+  e.preventDefault();
+  (0, _createTimeEntryValidation2.default)();
+  _axios2.default.post(this.action, {
+    date: this.date.value,
+    company: this.company.value,
+    hourLog: this.hourLog.value,
+    hours: this.hours.value,
+    description: this.description.value
+  }).then(function (res) {
+    var submittedTimeEntryTable = $('#submittedTimeEntryTable');
+    var timeEntryTableType = "submitted";
+    var timeEntryTableRowNumber = submittedTimeEntryTable.find('tr').length - 2;
+    submittedTimeEntryTable.DataTable().row.add(["" + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), "<a href=\"/company/" + res.data.timeEntry.publicCompany.name + "\">" + res.data.timeEntry.publicCompany.name + "</a>", res.data.timeEntry.publicUser.firstName + " " + res.data.timeEntry.publicUser.lastName, "" + res.data.timeEntry.hours, "" + res.data.timeEntry.description, "" + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw().node().id = timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber;
+    (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, 0, res.data.timeEntry.hours);
+    (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Approve", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Hide", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Reject", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Submit", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Delete");
+    (0, _editTimeEntry.instantiateEditTimeEntryBtn)("#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Edit");
+    submittedTimeEntryTable.find('#hours, #description').val('test');
   }).catch(console.error);
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 147 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(167);
+__webpack_require__(179);
 
-$('#newTimeEntryForm').find('#date').datepicker({
+$('#createTimeEntryForm').find('#date').datepicker({
+  format: 'yyyy-mm-dd'
+});
+
+$('#editTimeEntryModal').find('#date').datepicker({
   format: 'yyyy-mm-dd'
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 148 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(3);
+__webpack_require__(4);
 
-__webpack_require__(5);
+$('#createdTimeEntryTable').dataTable({
+  "dom": "<'row'<'col user-all-table-title'><'col user-all-table-filter'f>>" + "<'row'<'col-sm-12 user-all-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 user-all-table-paginate'p>>",
+  "bFilter": false,
+  "paging": false,
+  "pagination": false,
+  "bInfo": false,
+  "aaSorting": [0, 'desc'],
+  "columns": [{ "width": "9%" }, { "width": "20%" }, { "width": "4%" }, { "width": "40%" }, { "width": "27%" }]
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 158 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+var _editUserValidation = __webpack_require__(7);
+
+var _editUserValidation2 = _interopRequireDefault(_editUserValidation);
+
+var _axios = __webpack_require__(3);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+instantiateEditUserButton();
+
+// Populate the user all edit modal with current data
+var editUserBtn = void 0;
+function instantiateEditUserButton() {
+  $('.edit-user-btn').on("click", function () {
+    editUserBtn = this;
+    $("#editUserAllForm").attr("action", '/api/v1/user/' + $(this).data('user') + '/edit/admin');
+    $("#company").val($(this).data('company'));
+    $("#status").val($(this).data('status'));
+    $("#role").val($(this).data('role'));
+    $("#firstName").val($(this).data('firstname'));
+    $("#lastName").val($(this).data('lastname'));
+    $("#email").attr('placeholder', $(this).data('email'));
+    $("#lastLogin").val($(this).data('lastlogin'));
+  });
+}
+
+// User all table ajax on submit
+$('#editUserAllForm').on('submit', ajaxEditUser);
+function ajaxEditUser(e) {
+  e.preventDefault();
+  (0, _editUserValidation2.default)();
+  $('#editUserModal').modal('toggle');
+  _axios2.default.post(this.action, {
+    company: this.company.value,
+    status: this.status.value,
+    role: this.role.value,
+    firstName: this.firstName.value,
+    lastName: this.lastName.value,
+    lastLogin: this.lastLogin.value
+  }).then(function (res) {
+    var date = '';
+    if (res.data.lastLogin !== "null") {
+      date = _moment2.default.utc(res.data.lastLogin).format("dddd, MMMM Do YYYY [at] h:mmA [UTC]");
+    }
+    $('#userAllTable').DataTable().row('#' + res.data.email).data([res.data.firstName + ' ' + res.data.lastName, '' + res.data.email, '<a href=\'/company/' + res.data.company._id + '\'>' + res.data.company.name + '</a>', '' + res.data.role, '' + date, '<a class="edit-user-btn center-me" data-toggle="modal" href="#editUserModal" data-user=' + res.data._id + ' data-company=' + res.data.company._id + ' data-status=' + res.data.status + ' data-role=' + res.data.role + ' data-firstName=' + res.data.firstName + ' data-lastName=' + res.data.lastName + ' data-email=' + res.data.email + ' data-lastlogin=' + res.data.lastLogin + '>Edit</a>']).draw();
+    instantiateEditUserButton();
+  }).catch(console.error);
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 159 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+var _editUserValidation = __webpack_require__(7);
+
+var _editUserValidation2 = _interopRequireDefault(_editUserValidation);
+
+var _axios = __webpack_require__(3);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Populate user account page with current data
+var company = $("#company");
+var status = $('#status');
+var role = $('#role');
+var firstName = $('#firstName');
+var lastName = $('#lastName');
+$(document).ready(function () {
+  if (window.location.href.indexOf("/user/one") > -1) {
+    company.val(company.attr('data-value'));
+    status.val(status.attr('data-value'));
+    role.val(role.attr('data-value'));
+  }
+});
+
+// My account edit ajax
+$('#editUserOneForm').on('submit', ajaxEditUser);
+function ajaxEditUser(e) {
+  e.preventDefault();
+  (0, _editUserValidation2.default)();
+  _axios2.default.post(this.action, {
+    firstName: this.firstName.value,
+    lastName: this.lastName.value
+  }).then(function (res) {
+    firstName.val(res.data.firstName);
+    lastName.val(res.data.lastName);
+  }).catch(console.error);
+}
+
+// My account edit ajax for admins
+$('#editUserOneFormAdmin').on('submit', ajaxEditUserAdmin);
+function ajaxEditUserAdmin(e) {
+  e.preventDefault();
+  (0, _editUserValidation2.default)();
+  _axios2.default.post(this.action, {
+    company: this.company.value,
+    status: this.status.value,
+    role: this.role.value,
+    firstName: this.firstName.value,
+    lastName: this.lastName.value
+  }).then(function (res) {
+    if (res.data.role !== "admin") {
+      location.reload();
+    } else {
+      company.val(res.data.company._id);
+      status.val(res.data.status);
+      role.val(res.data.role);
+      firstName.val(res.data.firstName);
+      lastName.val(res.data.lastName);
+      company.attr('data-value', res.data.company._id);
+      status.attr('data-value', res.data.status);
+      role.attr('data-value', res.data.role);
+    }
+  }).catch(console.error);
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 160 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+__webpack_require__(4);
 
 // Datatables and table title
 $('#userAllTable').dataTable({
   "dom": "<'row'<'col user-all-table-title'><'col user-all-table-filter'f>>" + "<'row'<'col-sm-12 user-all-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 user-all-table-paginate'p>>",
   "bFilter": true,
-  "bLengthChange": false,
+  "paging": false,
   "bInfo": false,
-  "aaSorting": [[0, 'asc']],
-  scrollY: 400,
-  scroller: true,
+  "aaSorting": [0, 'asc'],
   language: { sSearch: "", searchPlaceholder: "Search..." },
   "columns": [{ "width": "20%" }, { "width": "20%" }, { "width": "10%" }, { "width": "30%" }, { "width": "10%" }, { "width": "10%" }]
 });
@@ -48490,22 +49264,22 @@ $(".user-all-table-title").html('<h3>Users</h3>' + '<button type="button" class=
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 149 */
+/* 161 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 150 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(2);
-var bind = __webpack_require__(12);
-var Axios = __webpack_require__(152);
-var defaults = __webpack_require__(4);
+var bind = __webpack_require__(18);
+var Axios = __webpack_require__(164);
+var defaults = __webpack_require__(8);
 
 /**
  * Create an instance of Axios
@@ -48538,15 +49312,15 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(9);
-axios.CancelToken = __webpack_require__(151);
-axios.isCancel = __webpack_require__(10);
+axios.Cancel = __webpack_require__(15);
+axios.CancelToken = __webpack_require__(163);
+axios.isCancel = __webpack_require__(16);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(166);
+axios.spread = __webpack_require__(178);
 
 module.exports = axios;
 
@@ -48554,13 +49328,13 @@ module.exports = axios;
 module.exports.default = axios;
 
 /***/ }),
-/* 151 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Cancel = __webpack_require__(9);
+var Cancel = __webpack_require__(15);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -48617,18 +49391,18 @@ CancelToken.source = function source() {
 module.exports = CancelToken;
 
 /***/ }),
-/* 152 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var defaults = __webpack_require__(4);
+var defaults = __webpack_require__(8);
 var utils = __webpack_require__(2);
-var InterceptorManager = __webpack_require__(153);
-var dispatchRequest = __webpack_require__(154);
-var isAbsoluteURL = __webpack_require__(162);
-var combineURLs = __webpack_require__(160);
+var InterceptorManager = __webpack_require__(165);
+var dispatchRequest = __webpack_require__(166);
+var isAbsoluteURL = __webpack_require__(174);
+var combineURLs = __webpack_require__(172);
 
 /**
  * Create a new instance of Axios
@@ -48708,7 +49482,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 module.exports = Axios;
 
 /***/ }),
-/* 153 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48766,16 +49540,16 @@ InterceptorManager.prototype.forEach = function forEach(fn) {
 module.exports = InterceptorManager;
 
 /***/ }),
-/* 154 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(2);
-var transformData = __webpack_require__(157);
-var isCancel = __webpack_require__(10);
-var defaults = __webpack_require__(4);
+var transformData = __webpack_require__(169);
+var isCancel = __webpack_require__(16);
+var defaults = __webpack_require__(8);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -48832,7 +49606,7 @@ module.exports = function dispatchRequest(config) {
 };
 
 /***/ }),
-/* 155 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48858,13 +49632,13 @@ module.exports = function enhanceError(error, config, code, response) {
 };
 
 /***/ }),
-/* 156 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var createError = __webpack_require__(11);
+var createError = __webpack_require__(17);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -48884,7 +49658,7 @@ module.exports = function settle(resolve, reject, response) {
 };
 
 /***/ }),
-/* 157 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48910,7 +49684,7 @@ module.exports = function transformData(data, headers, fns) {
 };
 
 /***/ }),
-/* 158 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48951,7 +49725,7 @@ function btoa(input) {
 module.exports = btoa;
 
 /***/ }),
-/* 159 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49018,7 +49792,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 };
 
 /***/ }),
-/* 160 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49037,7 +49811,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 };
 
 /***/ }),
-/* 161 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49096,7 +49870,7 @@ function nonStandardBrowserEnv() {
 }();
 
 /***/ }),
-/* 162 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49118,7 +49892,7 @@ module.exports = function isAbsoluteURL(url) {
 };
 
 /***/ }),
-/* 163 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49187,7 +49961,7 @@ function nonStandardBrowserEnv() {
 }();
 
 /***/ }),
-/* 164 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49205,7 +49979,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 };
 
 /***/ }),
-/* 165 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49250,7 +50024,7 @@ module.exports = function parseHeaders(headers) {
 };
 
 /***/ }),
-/* 166 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49284,7 +50058,7 @@ module.exports = function spread(callback) {
 };
 
 /***/ }),
-/* 167 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51093,7 +51867,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 168 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51127,7 +51901,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 (function (factory) {
 	if (true) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(13)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(19)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
 			return factory($, window, document);
 		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -52386,7 +53160,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 169 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52416,256 +53190,306 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 170 */
+/* 182 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var closeHourLogModal = $('#closeHourLogModal');
+var closeHourLogForm = $('#closeHourLogForm');
+var hourLogTitleInput = closeHourLogForm.find('#title');
+
+function closeHourLogValidation() {
+  var hourLogInputVal = hourLogTitleInput.val().toLowerCase().trim();
+
+  var hasError = false;
+
+  if (!hourLogInputVal) {
+    hasError = true;
+    closeHourLogForm.find('.invalid-feedback').html("Hour log title required.");
+    hourLogTitleInput.addClass('is-invalid');
+  } else {
+    hourLogTitleInput.removeClass('is-invalid');
+  }
+
+  if (hasError) {
+    throw new Error("Form not validated");
+  }
+}
+
+closeHourLogModal.on('shown.bs.modal', function () {
+  $('#closeHourLogForm').find('#title').val(_moment2.default.utc(new Date()).format("YYYY-MM-DD"));
+});
+
+closeHourLogModal.on('hidden.bs.modal', function () {
+  hourLogTitleInput.removeClass('is-invalid');
+});
+
+exports.default = closeHourLogValidation;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./af": 14,
-	"./af.js": 14,
-	"./ar": 21,
-	"./ar-dz": 15,
-	"./ar-dz.js": 15,
-	"./ar-kw": 16,
-	"./ar-kw.js": 16,
-	"./ar-ly": 17,
-	"./ar-ly.js": 17,
-	"./ar-ma": 18,
-	"./ar-ma.js": 18,
-	"./ar-sa": 19,
-	"./ar-sa.js": 19,
-	"./ar-tn": 20,
-	"./ar-tn.js": 20,
-	"./ar.js": 21,
-	"./az": 22,
-	"./az.js": 22,
-	"./be": 23,
-	"./be.js": 23,
-	"./bg": 24,
-	"./bg.js": 24,
-	"./bm": 25,
-	"./bm.js": 25,
-	"./bn": 26,
-	"./bn.js": 26,
-	"./bo": 27,
-	"./bo.js": 27,
-	"./br": 28,
-	"./br.js": 28,
-	"./bs": 29,
-	"./bs.js": 29,
-	"./ca": 30,
-	"./ca.js": 30,
-	"./cs": 31,
-	"./cs.js": 31,
-	"./cv": 32,
-	"./cv.js": 32,
-	"./cy": 33,
-	"./cy.js": 33,
-	"./da": 34,
-	"./da.js": 34,
-	"./de": 37,
-	"./de-at": 35,
-	"./de-at.js": 35,
-	"./de-ch": 36,
-	"./de-ch.js": 36,
-	"./de.js": 37,
-	"./dv": 38,
-	"./dv.js": 38,
-	"./el": 39,
-	"./el.js": 39,
-	"./en-au": 40,
-	"./en-au.js": 40,
-	"./en-ca": 41,
-	"./en-ca.js": 41,
-	"./en-gb": 42,
-	"./en-gb.js": 42,
-	"./en-ie": 43,
-	"./en-ie.js": 43,
-	"./en-il": 44,
-	"./en-il.js": 44,
-	"./en-nz": 45,
-	"./en-nz.js": 45,
-	"./eo": 46,
-	"./eo.js": 46,
-	"./es": 49,
-	"./es-do": 47,
-	"./es-do.js": 47,
-	"./es-us": 48,
-	"./es-us.js": 48,
-	"./es.js": 49,
-	"./et": 50,
-	"./et.js": 50,
-	"./eu": 51,
-	"./eu.js": 51,
-	"./fa": 52,
-	"./fa.js": 52,
-	"./fi": 53,
-	"./fi.js": 53,
-	"./fo": 54,
-	"./fo.js": 54,
-	"./fr": 57,
-	"./fr-ca": 55,
-	"./fr-ca.js": 55,
-	"./fr-ch": 56,
-	"./fr-ch.js": 56,
-	"./fr.js": 57,
-	"./fy": 58,
-	"./fy.js": 58,
-	"./gd": 59,
-	"./gd.js": 59,
-	"./gl": 60,
-	"./gl.js": 60,
-	"./gom-latn": 61,
-	"./gom-latn.js": 61,
-	"./gu": 62,
-	"./gu.js": 62,
-	"./he": 63,
-	"./he.js": 63,
-	"./hi": 64,
-	"./hi.js": 64,
-	"./hr": 65,
-	"./hr.js": 65,
-	"./hu": 66,
-	"./hu.js": 66,
-	"./hy-am": 67,
-	"./hy-am.js": 67,
-	"./id": 68,
-	"./id.js": 68,
-	"./is": 69,
-	"./is.js": 69,
-	"./it": 70,
-	"./it.js": 70,
-	"./ja": 71,
-	"./ja.js": 71,
-	"./jv": 72,
-	"./jv.js": 72,
-	"./ka": 73,
-	"./ka.js": 73,
-	"./kk": 74,
-	"./kk.js": 74,
-	"./km": 75,
-	"./km.js": 75,
-	"./kn": 76,
-	"./kn.js": 76,
-	"./ko": 77,
-	"./ko.js": 77,
-	"./ky": 78,
-	"./ky.js": 78,
-	"./lb": 79,
-	"./lb.js": 79,
-	"./lo": 80,
-	"./lo.js": 80,
-	"./lt": 81,
-	"./lt.js": 81,
-	"./lv": 82,
-	"./lv.js": 82,
-	"./me": 83,
-	"./me.js": 83,
-	"./mi": 84,
-	"./mi.js": 84,
-	"./mk": 85,
-	"./mk.js": 85,
-	"./ml": 86,
-	"./ml.js": 86,
-	"./mn": 87,
-	"./mn.js": 87,
-	"./mr": 88,
-	"./mr.js": 88,
-	"./ms": 90,
-	"./ms-my": 89,
-	"./ms-my.js": 89,
-	"./ms.js": 90,
-	"./mt": 91,
-	"./mt.js": 91,
-	"./my": 92,
-	"./my.js": 92,
-	"./nb": 93,
-	"./nb.js": 93,
-	"./ne": 94,
-	"./ne.js": 94,
-	"./nl": 96,
-	"./nl-be": 95,
-	"./nl-be.js": 95,
-	"./nl.js": 96,
-	"./nn": 97,
-	"./nn.js": 97,
-	"./pa-in": 98,
-	"./pa-in.js": 98,
-	"./pl": 99,
-	"./pl.js": 99,
-	"./pt": 101,
-	"./pt-br": 100,
-	"./pt-br.js": 100,
-	"./pt.js": 101,
-	"./ro": 102,
-	"./ro.js": 102,
-	"./ru": 103,
-	"./ru.js": 103,
-	"./sd": 104,
-	"./sd.js": 104,
-	"./se": 105,
-	"./se.js": 105,
-	"./si": 106,
-	"./si.js": 106,
-	"./sk": 107,
-	"./sk.js": 107,
-	"./sl": 108,
-	"./sl.js": 108,
-	"./sq": 109,
-	"./sq.js": 109,
-	"./sr": 111,
-	"./sr-cyrl": 110,
-	"./sr-cyrl.js": 110,
-	"./sr.js": 111,
-	"./ss": 112,
-	"./ss.js": 112,
-	"./sv": 113,
-	"./sv.js": 113,
-	"./sw": 114,
-	"./sw.js": 114,
-	"./ta": 115,
-	"./ta.js": 115,
-	"./te": 116,
-	"./te.js": 116,
-	"./tet": 117,
-	"./tet.js": 117,
-	"./tg": 118,
-	"./tg.js": 118,
-	"./th": 119,
-	"./th.js": 119,
-	"./tl-ph": 120,
-	"./tl-ph.js": 120,
-	"./tlh": 121,
-	"./tlh.js": 121,
-	"./tr": 122,
-	"./tr.js": 122,
-	"./tzl": 123,
-	"./tzl.js": 123,
-	"./tzm": 125,
-	"./tzm-latn": 124,
-	"./tzm-latn.js": 124,
-	"./tzm.js": 125,
-	"./ug-cn": 126,
-	"./ug-cn.js": 126,
-	"./uk": 127,
-	"./uk.js": 127,
-	"./ur": 128,
-	"./ur.js": 128,
-	"./uz": 130,
-	"./uz-latn": 129,
-	"./uz-latn.js": 129,
-	"./uz.js": 130,
-	"./vi": 131,
-	"./vi.js": 131,
-	"./x-pseudo": 132,
-	"./x-pseudo.js": 132,
-	"./yo": 133,
-	"./yo.js": 133,
-	"./zh-cn": 134,
-	"./zh-cn.js": 134,
-	"./zh-hk": 135,
-	"./zh-hk.js": 135,
-	"./zh-tw": 136,
-	"./zh-tw.js": 136
+	"./af": 20,
+	"./af.js": 20,
+	"./ar": 27,
+	"./ar-dz": 21,
+	"./ar-dz.js": 21,
+	"./ar-kw": 22,
+	"./ar-kw.js": 22,
+	"./ar-ly": 23,
+	"./ar-ly.js": 23,
+	"./ar-ma": 24,
+	"./ar-ma.js": 24,
+	"./ar-sa": 25,
+	"./ar-sa.js": 25,
+	"./ar-tn": 26,
+	"./ar-tn.js": 26,
+	"./ar.js": 27,
+	"./az": 28,
+	"./az.js": 28,
+	"./be": 29,
+	"./be.js": 29,
+	"./bg": 30,
+	"./bg.js": 30,
+	"./bm": 31,
+	"./bm.js": 31,
+	"./bn": 32,
+	"./bn.js": 32,
+	"./bo": 33,
+	"./bo.js": 33,
+	"./br": 34,
+	"./br.js": 34,
+	"./bs": 35,
+	"./bs.js": 35,
+	"./ca": 36,
+	"./ca.js": 36,
+	"./cs": 37,
+	"./cs.js": 37,
+	"./cv": 38,
+	"./cv.js": 38,
+	"./cy": 39,
+	"./cy.js": 39,
+	"./da": 40,
+	"./da.js": 40,
+	"./de": 43,
+	"./de-at": 41,
+	"./de-at.js": 41,
+	"./de-ch": 42,
+	"./de-ch.js": 42,
+	"./de.js": 43,
+	"./dv": 44,
+	"./dv.js": 44,
+	"./el": 45,
+	"./el.js": 45,
+	"./en-au": 46,
+	"./en-au.js": 46,
+	"./en-ca": 47,
+	"./en-ca.js": 47,
+	"./en-gb": 48,
+	"./en-gb.js": 48,
+	"./en-ie": 49,
+	"./en-ie.js": 49,
+	"./en-il": 50,
+	"./en-il.js": 50,
+	"./en-nz": 51,
+	"./en-nz.js": 51,
+	"./eo": 52,
+	"./eo.js": 52,
+	"./es": 55,
+	"./es-do": 53,
+	"./es-do.js": 53,
+	"./es-us": 54,
+	"./es-us.js": 54,
+	"./es.js": 55,
+	"./et": 56,
+	"./et.js": 56,
+	"./eu": 57,
+	"./eu.js": 57,
+	"./fa": 58,
+	"./fa.js": 58,
+	"./fi": 59,
+	"./fi.js": 59,
+	"./fo": 60,
+	"./fo.js": 60,
+	"./fr": 63,
+	"./fr-ca": 61,
+	"./fr-ca.js": 61,
+	"./fr-ch": 62,
+	"./fr-ch.js": 62,
+	"./fr.js": 63,
+	"./fy": 64,
+	"./fy.js": 64,
+	"./gd": 65,
+	"./gd.js": 65,
+	"./gl": 66,
+	"./gl.js": 66,
+	"./gom-latn": 67,
+	"./gom-latn.js": 67,
+	"./gu": 68,
+	"./gu.js": 68,
+	"./he": 69,
+	"./he.js": 69,
+	"./hi": 70,
+	"./hi.js": 70,
+	"./hr": 71,
+	"./hr.js": 71,
+	"./hu": 72,
+	"./hu.js": 72,
+	"./hy-am": 73,
+	"./hy-am.js": 73,
+	"./id": 74,
+	"./id.js": 74,
+	"./is": 75,
+	"./is.js": 75,
+	"./it": 76,
+	"./it.js": 76,
+	"./ja": 77,
+	"./ja.js": 77,
+	"./jv": 78,
+	"./jv.js": 78,
+	"./ka": 79,
+	"./ka.js": 79,
+	"./kk": 80,
+	"./kk.js": 80,
+	"./km": 81,
+	"./km.js": 81,
+	"./kn": 82,
+	"./kn.js": 82,
+	"./ko": 83,
+	"./ko.js": 83,
+	"./ky": 84,
+	"./ky.js": 84,
+	"./lb": 85,
+	"./lb.js": 85,
+	"./lo": 86,
+	"./lo.js": 86,
+	"./lt": 87,
+	"./lt.js": 87,
+	"./lv": 88,
+	"./lv.js": 88,
+	"./me": 89,
+	"./me.js": 89,
+	"./mi": 90,
+	"./mi.js": 90,
+	"./mk": 91,
+	"./mk.js": 91,
+	"./ml": 92,
+	"./ml.js": 92,
+	"./mn": 93,
+	"./mn.js": 93,
+	"./mr": 94,
+	"./mr.js": 94,
+	"./ms": 96,
+	"./ms-my": 95,
+	"./ms-my.js": 95,
+	"./ms.js": 96,
+	"./mt": 97,
+	"./mt.js": 97,
+	"./my": 98,
+	"./my.js": 98,
+	"./nb": 99,
+	"./nb.js": 99,
+	"./ne": 100,
+	"./ne.js": 100,
+	"./nl": 102,
+	"./nl-be": 101,
+	"./nl-be.js": 101,
+	"./nl.js": 102,
+	"./nn": 103,
+	"./nn.js": 103,
+	"./pa-in": 104,
+	"./pa-in.js": 104,
+	"./pl": 105,
+	"./pl.js": 105,
+	"./pt": 107,
+	"./pt-br": 106,
+	"./pt-br.js": 106,
+	"./pt.js": 107,
+	"./ro": 108,
+	"./ro.js": 108,
+	"./ru": 109,
+	"./ru.js": 109,
+	"./sd": 110,
+	"./sd.js": 110,
+	"./se": 111,
+	"./se.js": 111,
+	"./si": 112,
+	"./si.js": 112,
+	"./sk": 113,
+	"./sk.js": 113,
+	"./sl": 114,
+	"./sl.js": 114,
+	"./sq": 115,
+	"./sq.js": 115,
+	"./sr": 117,
+	"./sr-cyrl": 116,
+	"./sr-cyrl.js": 116,
+	"./sr.js": 117,
+	"./ss": 118,
+	"./ss.js": 118,
+	"./sv": 119,
+	"./sv.js": 119,
+	"./sw": 120,
+	"./sw.js": 120,
+	"./ta": 121,
+	"./ta.js": 121,
+	"./te": 122,
+	"./te.js": 122,
+	"./tet": 123,
+	"./tet.js": 123,
+	"./tg": 124,
+	"./tg.js": 124,
+	"./th": 125,
+	"./th.js": 125,
+	"./tl-ph": 126,
+	"./tl-ph.js": 126,
+	"./tlh": 127,
+	"./tlh.js": 127,
+	"./tr": 128,
+	"./tr.js": 128,
+	"./tzl": 129,
+	"./tzl.js": 129,
+	"./tzm": 131,
+	"./tzm-latn": 130,
+	"./tzm-latn.js": 130,
+	"./tzm.js": 131,
+	"./ug-cn": 132,
+	"./ug-cn.js": 132,
+	"./uk": 133,
+	"./uk.js": 133,
+	"./ur": 134,
+	"./ur.js": 134,
+	"./uz": 136,
+	"./uz-latn": 135,
+	"./uz-latn.js": 135,
+	"./uz.js": 136,
+	"./vi": 137,
+	"./vi.js": 137,
+	"./x-pseudo": 138,
+	"./x-pseudo.js": 138,
+	"./yo": 139,
+	"./yo.js": 139,
+	"./zh-cn": 140,
+	"./zh-cn.js": 140,
+	"./zh-hk": 141,
+	"./zh-hk.js": 141,
+	"./zh-tw": 142,
+	"./zh-tw.js": 142
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -52681,102 +53505,61 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 170;
+webpackContext.id = 183;
 
 
 /***/ }),
-/* 171 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-
-__webpack_require__(140);
-
-__webpack_require__(149);
-
-__webpack_require__(148);
-
-__webpack_require__(141);
-
-__webpack_require__(142);
-
-__webpack_require__(145);
-
-__webpack_require__(144);
-
-__webpack_require__(143);
-
-__webpack_require__(147);
-
-__webpack_require__(6);
 
 __webpack_require__(146);
 
-__webpack_require__(175);
+__webpack_require__(161);
 
-/***/ }),
-/* 172 */,
-/* 173 */,
-/* 174 */,
-/* 175 */
-/***/ (function(module, exports, __webpack_require__) {
+__webpack_require__(160);
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {
+__webpack_require__(158);
 
-var _axios = __webpack_require__(7);
+__webpack_require__(159);
 
-var _axios2 = _interopRequireDefault(_axios);
+__webpack_require__(7);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+__webpack_require__(150);
 
-var createdTimeEntriesTable = $('#createdTimeEntriesTable');
+__webpack_require__(151);
 
-// Approve
-createdTimeEntriesTable.find('.approve').click(function (e) {
-  e.preventDefault();
-  $(this).closest("tr").remove();
-  _axios2.default.get(this.href).then(function (res) {
-    var totalCreatedHours = $('#totalCreatedHours');
-    var newTotal = +totalCreatedHours.html() - +res.data.hours;
-    totalCreatedHours.html(newTotal);
-  }).catch(console.error);
-});
+__webpack_require__(148);
 
-// Hide
-createdTimeEntriesTable.find('.hide').click(function (e) {
-  e.preventDefault();
-  $(this).closest("tr").remove();
-  _axios2.default.get(this.href).then(function (res) {
-    var totalCreatedHours = $('#totalCreatedHours');
-    var newTotal = +totalCreatedHours.html() - +res.data.hours;
-    totalCreatedHours.html(newTotal);
-  }).catch(console.error);
-});
+__webpack_require__(149);
 
-// Submit
-createdTimeEntriesTable.find('.submit').click(function (e) {
-  e.preventDefault();
-  $(this).closest("tr").remove();
-  _axios2.default.get(this.href).then(function (res) {
-    var totalCreatedHours = $('#totalCreatedHours');
-    var newTotal = +totalCreatedHours.html() - +res.data.hours;
-    totalCreatedHours.html(newTotal);
-  }).catch(console.error);
-});
+__webpack_require__(10);
 
-// Delete
-createdTimeEntriesTable.find('.delete').click(function (e) {
-  e.preventDefault();
-  $(this).closest("tr").remove();
-  _axios2.default.get(this.href).then(function (res) {
-    var totalCreatedHours = $('#totalCreatedHours');
-    var newTotal = +totalCreatedHours.html() - +res.data.hours;
-    totalCreatedHours.html(newTotal);
-  }).catch(console.error);
-});
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+__webpack_require__(11);
+
+__webpack_require__(147);
+
+__webpack_require__(153);
+
+__webpack_require__(154);
+
+__webpack_require__(152);
+
+__webpack_require__(157);
+
+__webpack_require__(156);
+
+__webpack_require__(155);
+
+__webpack_require__(5);
+
+__webpack_require__(12);
+
+__webpack_require__(13);
+
+__webpack_require__(6);
 
 /***/ })
 /******/ ]);

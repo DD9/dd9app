@@ -19,4 +19,7 @@ exports.moment = require('moment');
 const moment = require('moment');
 
 // Time conversion shortcuts
-exports.YYYYMMDD = (date) => moment(date).format("YYYY-MM-DD");
+exports.YYYYMMDD = (date) => moment.utc(date).format("YYYY-MM-DD");
+
+// Uppercase first letter of a string
+exports.capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);

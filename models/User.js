@@ -19,26 +19,26 @@ const userSchema = new Schema({
     unique: true,
     lowercase: true,
     trim: true,
-    validate: [validator.isEmail, 'Invalid Email Address'],
-    required: 'Please supply an email address'
+    validate: [validator.isEmail, "Invalid Email Address"],
+    required: "Please supply an email address"
   },
   signInCount: {
     type: Number,
   },
-  lastSignInAt: {
+  lastLogin: {
     type: Date
   },
-  lastSignInIP: {
+  lastLoginIP: {
     type: String
   },
   firstName: {
     type: String,
-    required: 'Please supply a first name',
+    required: "Please supply a first name",
     trim: true
   },
   lastName: {
     type: String,
-    required: 'Please supply a last name',
+    required: "Please supply a last name",
     trim: true
   },
   role: {
@@ -51,13 +51,9 @@ const userSchema = new Schema({
       "admin": false
     }],
   },
-  active: {
-    type: Boolean,
-    default: true
-  },
-  hourLogEmail: {
+  status: {
     type: String,
-    default: 'none'
+    default: "active"
   }
 },
   {

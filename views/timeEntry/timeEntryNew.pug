@@ -1,0 +1,100 @@
+extends ../index/layout
+
+include ./mixins/_createTimeEntry
+include ./mixins/_editTimeEntryModal
+
+block content
+  .container.new-time-entry-container
+    .my-5.py-1.px-3.bg-white.rounded.box-shadow
+      .row
+        .col.mt-2
+          h4 New Time Entries
+      table#createdTimeEntryTable.created-time-entry-table.table.table-sm.w-100
+        thead.thead-light
+          th.created-time-entry-th-date Date
+          th.created-time-entry-th-company Company
+          th.created-time-entry-th-hours Hours
+          th.created-time-entry-th-description Description
+          th.created-time-entry-th-actions
+        each timeEntry, rowNumber in timeEntries
+          tr(id=`createdTimeEntryTableRow${rowNumber}`)
+            td= h.YYYYMMDD(timeEntry.date)
+            if user.permissions[0].admin === true
+              td: a(href=`/company/${timeEntry.company.name}`) #{timeEntry.company.name}
+            else
+              td #{timeEntry.company.name}
+            td= timeEntry.hours
+            td= timeEntry.description
+            if user.permissions[0].admin
+              td
+                form.created-time-entry-table-approve-form.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/approve` method="POST" data-hours=timeEntry.hours)
+                  button.btn.btn-sm.btn-link(type='submit') Approve
+                form.created-time-entry-table-hide-form.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/hide` method="POST" data-hours=timeEntry.hours)
+                  button.btn.btn-sm.btn-link(type='submit') Hide
+                button.submit-created-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Submit
+                button.delete-created-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Delete
+                button.edit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#editTimeEntryModal'
+                  data-tabletype="created"
+                  data-rownumber=rowNumber
+                  data-timeentry=timeEntry._id
+                  data-date=timeEntry.date
+                  data-company=timeEntry.company._id
+                  data-hours=timeEntry.hours
+                  data-description=timeEntry.description)
+                  != h.icon('pencil')
+            else
+              td
+                button.submit-created-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Submit
+                button.delete-created-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Delete
+                button.edit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#editTimeEntryModal'
+                  data-tabletype="created"
+                  data-rownumber=rowNumber
+                  data-timeentry=timeEntry._id
+                  data-date=timeEntry.date
+                  data-company=timeEntry.company._id
+                  data-hours=timeEntry.hours
+                  data-description=timeEntry.description)
+                  != h.icon('pencil')
+
+        tr#totalCreatedTimeEntryHoursRow
+          td
+          td
+          td#totalCreatedTimeEntryHours= totalCreatedTimeEntryHours
+          td
+          td
+
+    .py-1.px-3.bg-white.rounded.box-shadow.time-entry-new-time-entry-card
+      .row
+        .col.mt-3.mb-2
+          h4 Add New Time Entry
+      +createTimeEntry()
+
+  #confirmSubmitTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmSubmitTimeEntryModal', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Confirm Submit
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#confirmSubmitTimeEntryForm.form(action=`/api/v1/timeEntry/:id/submit` method="POST")
+            p.text-center Are you sure you want to submit this time entry?
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button#confirmTimeEntrySubmitBtn.btn.btn-primary(type='submit' form='confirmSubmitTimeEntryForm') Ok
+
+  #confirmDeleteTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmDeleteTimeEntryModal', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Confirm Delete
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#confirmDeleteTimeEntryForm.form(action=`/api/v1/timeEntry/:id/delete` method="POST")
+            p.text-center Are you sure you want to delete this time entry?
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button#confirmTimeEntryDeleteBtn.btn.btn-primary(form='confirmDeleteTimeEntryForm') Ok
+  - hourLogOnePage = false
+  +editTimeEntryModal(hourLogOnePage)

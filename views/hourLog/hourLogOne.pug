@@ -1,0 +1,217 @@
+extends ../index/layout
+
+include ../timeEntry/mixins/_createAndsubmitTimeEntry
+include ../timeEntry/mixins/_editTimeEntryModal
+
+block content
+  .container.hour-log-one-container
+    .row
+      .col.d-inline-block
+        h2.company-one-title.d-inline <u>#{hourLog.title}</u> Hour Log for <u><a href="/company/#{hourLog.company.name}">#{hourLog.company.name}</a></u>
+        if h.YYYYMMDD(hourLog.dateClosed) === "1970-01-01"
+          button#closeHourLogButton.close-hour-log-btn.btn.btn-primary(data-toggle="modal" data-target="#closeHourLogModal") Close Hour Log
+          button#openHourLogButton.open-hour-log-btn.btn.btn-primary.d-none(data-toggle="modal" data-target="#openHourLogModal") Open Hour Log
+        else
+          button#openHourLogButton.open-hour-log-btn.btn.btn-primary(data-toggle="modal" data-target="#openHourLogModal") Open Hour Log
+          button#closeHourLogButton.close-hour-log-btn.btn.btn-primary.d-none(data-toggle="modal" data-target="#closeHourLogModal") Close Hour Log
+    .mt-4.mb-5.py-1.px-3.bg-white.rounded.box-shadow
+      .row
+        .col.mt-2
+          h4 Approved
+      table#approvedTimeEntryTable.hour-log-one-time-entry-table.table.table-sm.w-100
+        thead.thead-light
+          th.hour-log-one-time-entry-th-date Date
+          th.hour-log-one-time-entry-th-company Company
+          th.hour-log-one-time-entry-th-user User
+          th.hour-log-one-time-entry-th-hours Hours
+          th.hour-log-one-time-entry-th-description Description
+          th.hour-log-one-time-entry-th-actions
+        - rowNumber = 0;
+        each timeEntry in hourLog.timeEntries
+          if (timeEntry.status === "approved")
+            tr(id=`approvedTimeEntryTableRow${rowNumber}`)
+              td= h.YYYYMMDD(timeEntry.publicDate)
+              td: a(href=`/company/${timeEntry.publicCompany.name}`) #{timeEntry.publicCompany.name}
+              td= `${timeEntry.publicUser.firstName} ${timeEntry.publicUser.lastName}`
+              td= timeEntry.publicHours
+              td= timeEntry.publicDescription
+              if h.YYYYMMDD(hourLog.dateClosed) === "1970-01-01"
+                td
+                  form.approved-time-entry-table-hide-form.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/hide` method="POST" data-hours=timeEntry.publicHours)
+                    button.btn.btn-sm.btn-link(type='submit') Hide
+                  button.reject-approved-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmRejectTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.publicHours) Reject
+                  button.edit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#editTimeEntryModal'
+                  data-tabletype="approved"
+                  data-rownumber=rowNumber
+                  data-timeentry=timeEntry._id
+                  data-date=timeEntry.publicDate
+                  data-user=`${timeEntry.publicUser._id}`
+                  data-company=timeEntry.publicCompany._id
+                  data-hours=timeEntry.publicHours
+                  data-description=timeEntry.publicDescription)
+                    != h.icon('pencil')
+              else
+                td
+            - rowNumber += 1
+        tr#totalApprovedTimeEntryHoursRow
+          td
+          td
+          td
+          td#totalApprovedTimeEntryHours= hourLog.totalPublicHours
+          td
+          td
+
+    .my-5.py-1.px-3.bg-white.rounded.box-shadow
+      .row
+        .col.mt-2
+          h4 Hidden
+      table#hiddenTimeEntryTable.hour-log-one-time-entry-table.table.table-sm.w-100
+        thead.thead-light
+          th.hour-log-one-time-entry-th-date  Date
+          th.hour-log-one-time-entry-th-company  Company
+          th.hour-log-one-time-entry-th-user  User
+          th.hour-log-one-time-entry-th-hours  Hours
+          th.hour-log-one-time-entry-th-description  Description
+          th.hour-log-one-time-entry-th-actions
+        - rowNumber = 0;
+        each timeEntry in hourLog.timeEntries
+          if (timeEntry.status === "hidden")
+            tr(id=`hiddenTimeEntryTableRow${rowNumber}`)
+              td= h.YYYYMMDD(timeEntry.publicDate)
+              td: a(href=`/company/${timeEntry.publicCompany.name}`) #{timeEntry.publicCompany.name}
+              td= `${timeEntry.publicUser.firstName} ${timeEntry.publicUser.lastName}`
+              td= timeEntry.publicHours
+              td= timeEntry.publicDescription
+              if h.YYYYMMDD(hourLog.dateClosed) === "1970-01-01"
+                td
+                  form.hidden-time-entry-table-approve-form.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/approve` method="POST" data-hours=timeEntry.publicHours)
+                    button.btn.btn-sm.btn-link(type='submit') Approve
+                  button.reject-hidden-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmRejectTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.publicHours) Reject
+                  button.edit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#editTimeEntryModal'
+                  data-tabletype="hidden"
+                  data-rownumber=rowNumber
+                  data-timeentry=timeEntry._id
+                  data-date=timeEntry.publicDate
+                  data-user=`${timeEntry.publicUser._id}`
+                  data-company=timeEntry.publicCompany._id
+                  data-hours=timeEntry.publicHours
+                  data-description=timeEntry.publicDescription)
+                    != h.icon('pencil')
+              else
+                td
+            - rowNumber += 1
+        tr#totalHiddenTimeEntryHoursRow
+          td
+          td
+          td
+          td#totalHiddenTimeEntryHours= hourLog.totalHiddenHours
+          td
+          td
+
+    .my-5.py-1.px-3.bg-white.rounded.box-shadow
+      .row
+        .col.mt-2
+          h4 Submitted
+      table#submittedTimeEntryTable.hour-log-one-time-entry-table.table.table-sm.w-100
+        thead.thead-light
+          th.hour-log-one-time-entry-th-date  Date
+          th.hour-log-one-time-entry-th-company  Company
+          th.hour-log-one-time-entry-th-user  User
+          th.hour-log-one-time-entry-th-hours  Hours
+          th.hour-log-one-time-entry-th-description  Description
+          th.hour-log-one-time-entry-th-actions
+        - rowNumber = 0;
+        each timeEntry in hourLog.timeEntries
+          if (timeEntry.status === "submitted")
+            tr(id=`submittedTimeEntryTableRow${rowNumber}`)
+              td= h.YYYYMMDD(timeEntry.publicDate)
+              td: a(href=`/company/${timeEntry.publicCompany.name}`) #{timeEntry.publicCompany.name}
+              td= `${timeEntry.publicUser.firstName} ${timeEntry.publicUser.lastName}`
+              td= timeEntry.publicHours
+              td= timeEntry.publicDescription
+              if h.YYYYMMDD(hourLog.dateClosed) === "1970-01-01"
+                td
+                  form.submitted-time-entry-table-approve-form.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/approve` method="POST" data-hours=timeEntry.publicHours)
+                    button.btn.btn-sm.btn-link(type='submit') Approve
+                  form.submitted-time-entry-table-hide-form.form.d-inline(action=`/api/v1/timeEntry/${timeEntry._id}/hide` method="POST" data-hours=timeEntry.publicHours)
+                    button.btn.btn-sm.btn-link(type='submit') Hide
+                  button.reject-submitted-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmRejectTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.publicHours) Reject
+                  button.edit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#editTimeEntryModal'
+                  data-tabletype="submitted"
+                  data-rownumber=rowNumber
+                  data-timeentry=timeEntry._id
+                  data-date=timeEntry.publicDate
+                  data-user=`${timeEntry.publicUser._id}`
+                  data-company=timeEntry.publicCompany._id
+                  data-hours=timeEntry.publicHours
+                  data-description=timeEntry.publicDescription)
+                    != h.icon('pencil')
+              else
+                td
+            - rowNumber += 1
+        tr#totalSubmittedTimeEntryHoursRow
+          td
+          td
+          td
+          td#totalSubmittedTimeEntryHours= hourLog.totalSubmittedHours
+          td
+          td
+
+    .py-1.px-3.bg-white.rounded.box-shadow.hour-log-one-time-entry-card
+      .row
+        .col.mt-3.mb-2
+          h4.d-inline Submit New Time Entry for <u><a href="/company/#{hourLog.company.name}">#{hourLog.company.name}</a></u>
+          a.time-entry-collapse-anchor(data-toggle='collapse', href='#timeEntryCollapse', role='button', aria-expanded='false', aria-controls='timeEntryCollapse')
+            button.close(type='button', aria-label='Close')
+              span(aria-hidden='true') +
+      #timeEntryCollapse.collapse
+        +createAndsubmitTimeEntry()
+
+  #confirmRejectTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmRejectTimeEntryModal', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Confirm Reject
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#confirmRejectTimeEntryForm.form(action=`/api/v1/timeEntry/:id/reject` method="POST")
+            p.text-center Are you sure you want to reject this time entry?
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button#confirmRejectTimeEntryBtn.btn.btn-primary(form='confirmRejectTimeEntryForm') Ok
+  - hourLogOnePage = true
+
+  #closeHourLogModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='closeHourLogModal', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Close Hour Log
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#closeHourLogForm.form(action=`/hourLog/${hourLog._id}/close` method="POST" novalidate)
+            .form-group
+              label.col-form-label(for='title') Title
+              input#title.form-control(title='title' type='text' required maxlength="50" value=h.YYYYMMDD(new Date()))
+              .invalid-feedback Invalid form.
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button.btn.btn-primary(form='closeHourLogForm') Submit
+
+  #openHourLogModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='openHourLogModal', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Open Hour Log
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#openHourLogForm.form(action=`/hourLog/${hourLog._id}/open` method="POST" novalidate)
+            p.text-center All time entries will be reassigned to the current hour log.
+            p.text-center A new current hour log will be made for this company if one does not exist.
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button.btn.btn-primary(form='openHourLogForm') Submit
+
+  +editTimeEntryModal(hourLogOnePage)
