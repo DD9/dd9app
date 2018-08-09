@@ -45,7 +45,6 @@ const hourLogSchema = new Schema({
 
 hourLogSchema.index(
   { title: 1 },
-  { company: -1 }
 );
 
 module.exports = mongoose.model('HourLog', hourLogSchema);
