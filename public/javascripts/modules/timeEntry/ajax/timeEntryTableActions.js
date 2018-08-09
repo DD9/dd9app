@@ -106,7 +106,7 @@ function approveFormListener(form, timeEntryTableType) {
         const receivingTimeEntryTableRowNumber = receivingTimeEntryTable.find('tr').length-2;
         receivingTimeEntryTable.DataTable().row.add([
           `${moment.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD")}`,
-          `${res.data.timeEntry.publicCompany.name}`,
+          `<a href="/company/${res.data.timeEntry.publicCompany.name}">${res.data.timeEntry.publicCompany.name}</a>`,
           `${res.data.timeEntry.publicUser.firstName} ${res.data.timeEntry.publicUser.lastName}`,
           `${res.data.timeEntry.publicHours}`,
           `${res.data.timeEntry.publicDescription}`,
@@ -142,7 +142,7 @@ function hideFormListener(form, timeEntryTableType) {
         const receivingTimeEntryTableRowNumber = receivingTimeEntryTable.find('tr').length-2;
         receivingTimeEntryTable.DataTable().row.add([
           `${moment.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD")}`,
-          `${res.data.timeEntry.publicCompany.name}`,
+          `<a href="/company/${res.data.timeEntry.publicCompany.name}">${res.data.timeEntry.publicCompany.name}</a>`,
           `${res.data.timeEntry.publicUser.firstName} ${res.data.timeEntry.publicUser.lastName}`,
           `${res.data.timeEntry.publicHours}`,
           `${res.data.timeEntry.publicDescription}`,
@@ -171,10 +171,8 @@ function confirmRejectBtnListener(button, timeEntryTableType) {
   $(button).on("click", function () {
     rejectTimeEntryBtn = this;
     rejectTimeEntryTableType = timeEntryTableType;
+    console.log(rejectTimeEntryTableType);
     $("#confirmRejectTimeEntryForm").attr("action", `/api/v1/timeEntry/${$(this).data('timeentry')}/reject`);
-  });
-  $('#confirmRejectTimeEntryBtn').on("click", function () {
-    $('#confirmRejectTimeEntryModal').modal('toggle');
   });
 }
 $(rejectForm).on('submit', function(e) {
@@ -187,6 +185,9 @@ $(rejectForm).on('submit', function(e) {
     .then(res => {})
     .catch(console.error)
 });
+$('#confirmRejectTimeEntryBtn').on("click", function () {
+  $('#confirmRejectTimeEntryModal').modal('toggle');
+});
 
 // Submit listener
 let submitTimeEntryBtn;
@@ -198,9 +199,6 @@ function confirmSubmitBtnListener(button, timeEntryTableType) {
     submitTimeEntryTableType = timeEntryTableType;
     $("#confirmSubmitTimeEntryForm").attr("action", `/api/v1/timeEntry/${$(this).data('timeentry')}/submit`);
   });
-  $('#confirmCreatedTimeEntrySubmitBtn').on("click", function () {
-    $('#confirmSubmitTimeEntryModal').modal('toggle');
-  });
 }
 $(submitForm).on('submit', function(e) {
   console.log(`ajaxTimeEntryTableSubmit`);
@@ -209,30 +207,11 @@ $(submitForm).on('submit', function(e) {
   updateTotalTimeEntryTableHours(submitTimeEntryTableType, $(submitTimeEntryBtn).data('hours'), 0);
   axios
     .post(this.action)
-    .then(res => {
-      const receivingTimeEntryTableType = res.data.timeEntry.status;
-      const receivingTimeEntryTable = $(`#${receivingTimeEntryTableType}TimeEntryTable`);
-      const receivingTimeEntryTableRowNumber = receivingTimeEntryTable.find('tr').length-2;
-      receivingTimeEntryTable.DataTable().row.add([
-        `${moment.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD")}`,
-        `${res.data.timeEntry.publicCompany.name}`,
-        `${res.data.timeEntry.publicUser.firstName} ${res.data.timeEntry.publicUser.lastName}`,
-        `${res.data.timeEntry.publicHours}`,
-        `${res.data.timeEntry.publicDescription}`,
-        `${createTimeEntryTableActionButtonsHtml(res, receivingTimeEntryTableType, receivingTimeEntryTableRowNumber)}`
-      ]).draw().node().id = `${receivingTimeEntryTableType}TimeEntryTableRow${receivingTimeEntryTableRowNumber}`;
-      updateTotalTimeEntryTableHours(receivingTimeEntryTableType, 0, $(submitTimeEntryBtn).data('hours'));
-      instantiateTimeEntryTableActions(
-        receivingTimeEntryTableType,
-        `#${receivingTimeEntryTableType}TimeEntryTableRow${receivingTimeEntryTableRowNumber}Approve`,
-        `#${receivingTimeEntryTableType}TimeEntryTableRow${receivingTimeEntryTableRowNumber}Hide`,
-        `#${receivingTimeEntryTableType}TimeEntryTableRow${receivingTimeEntryTableRowNumber}Reject`,
-        `#${receivingTimeEntryTableType}TimeEntryTableRow${receivingTimeEntryTableRowNumber}Submit`,
-        `#${receivingTimeEntryTableType}TimeEntryTableRow${receivingTimeEntryTableRowNumber}Delete`,
-      );
-      instantiateEditTimeEntryBtn(`#${receivingTimeEntryTableType}TimeEntryTableRow${receivingTimeEntryTableRowNumber}Edit`);
-    })
+    .then(res => {})
     .catch(console.error)
+});
+$('#confirmTimeEntrySubmitBtn').on("click", function () {
+  $('#confirmSubmitTimeEntryModal').modal('toggle');
 });
 
 // Delete listener
@@ -261,7 +240,7 @@ $('#confirmTimeEntryDeleteBtn').on("click", function () {
 });
 
 // Update total time entry table hours value
-export function updateTotalTimeEntryTableHours(timeEntryTableType, oldHours, newHours) {
+export function updateTotalTimeEntryTableHours(timeEntryTableType, oldHours, newHours, adjudicatedTimeEntryCompany = false) {
   const uppercaseTimeEntryTableType = timeEntryTableType.charAt(0).toUpperCase() + timeEntryTableType.slice(1);
   const totalTimeTableEntryHours = +$(`#total${uppercaseTimeEntryTableType}TimeEntryHours`).html();
   const newTotal = (totalTimeTableEntryHours - (+oldHours - +newHours));
@@ -271,6 +250,15 @@ export function updateTotalTimeEntryTableHours(timeEntryTableType, oldHours, new
       ``,
       ``,
       `${newTotal}`,
+      ``,
+      ``
+    ]).draw();
+  } else if (adjudicatedTimeEntryCompany) {
+    $(`#${timeEntryTableType}TimeEntryTable`).DataTable().row(`#total${uppercaseTimeEntryTableType}TimeEntryHoursRow`).data([
+      ``,
+      ``,
+      ``,
+      `${totalTimeTableEntryHours - +oldHours}`,
       ``,
       ``
     ]).draw();

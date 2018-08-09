@@ -54,34 +54,49 @@ editTimeEntryModal.on('submit', function(e) {
     })
     .then(res => {
       if (timeEntryTableType === "created") {
+        let companyTd = res.data.timeEntry.company.name;
+        if (res.data.admin) companyTd = `<a href="/company/${res.data.timeEntry.company.name}">${res.data.timeEntry.company.name}</a>`;
         $(`#${timeEntryTableType}TimeEntryTable`).DataTable().row(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}`).data([
           `${moment.utc(res.data.timeEntry.date).format("YYYY-MM-DD")}`,
-          `${res.data.timeEntry.company.name}`,
+          `${companyTd}`,
           `${res.data.timeEntry.hours}`,
           `${res.data.timeEntry.description}`,
           `${createTimeEntryTableActionButtonsHtml(res, timeEntryTableType, timeEntryTableRowNumber)}`
         ]).draw();
         updateTotalTimeEntryTableHours(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.hours);
+        instantiateTimeEntryTableActions(
+          timeEntryTableType,
+          `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Approve`,
+          `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Hide`,
+          `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Reject`,
+          `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Submit`,
+          `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Delete`,
+        );
+        instantiateEditTimeEntryBtn(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit`);
+      } else if (res.data.adjudicatedTimeEntryCompany) {
+        $(`#${timeEntryTableType}TimeEntryTable`).DataTable().row(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}`).remove().draw();
+        updateTotalTimeEntryTableHours(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.publicHours, true);
       } else {
+        const companyTd = `<a href="/company/${res.data.timeEntry.publicCompany.name}">${res.data.timeEntry.publicCompany.name}</a>`;
         $(`#${timeEntryTableType}TimeEntryTable`).DataTable().row(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}`).data([
           `${moment.utc(res.data.timeEntry.date).format("YYYY-MM-DD")}`,
-          `${res.data.timeEntry.publicCompany.name}`,
+          `${companyTd}`,
           `${res.data.timeEntry.publicUser.firstName} ${res.data.timeEntry.publicUser.lastName}`,
           `${res.data.timeEntry.publicHours}`,
           `${res.data.timeEntry.publicDescription}`,
           `${createTimeEntryTableActionButtonsHtml(res, timeEntryTableType, timeEntryTableRowNumber)}`
         ]).draw();
         updateTotalTimeEntryTableHours(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.publicHours);
+        instantiateTimeEntryTableActions(
+          timeEntryTableType,
+          `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Approve`,
+          `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Hide`,
+          `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Reject`,
+          `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Submit`,
+          `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Delete`,
+        );
+        instantiateEditTimeEntryBtn(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit`);
       }
-      instantiateTimeEntryTableActions(
-        timeEntryTableType,
-        `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Approve`,
-        `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Hide`,
-        `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Reject`,
-        `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Submit`,
-        `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Delete`,
-      );
-      instantiateEditTimeEntryBtn(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit`);
     })
     .catch(console.error);
 });

@@ -52,12 +52,19 @@ exports.createAndSubmit = async (req, res) => {
     status: "submitted"
   }).save();
 
-  await HourLog.findOne({ _id: req.body.hourLog },
-    { $addToSet: { timeEntries: timeEntry._id } },
-    { $inc: { totalSubmittedHours: timeEntry.publicHours } }
+  console.log(req.body);
+
+  await HourLog.findOneAndUpdate(
+    { _id: req.body.hourLog },
+    {
+      $addToSet: { timeEntries: timeEntry._id },
+      $inc: { totalSubmittedHours: timeEntry.hours }
+    },
   );
 
-  res.redirect("/hourLog/5b5a56ac443bd381c0790a6a");
+  const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntry._id }).populate('publicCompany publicUser');
+
+  res.json({ timeEntry: populatedTimeEntry, admin: req.user.permissions[0].admin });
 };
 
 /*
@@ -68,7 +75,10 @@ exports.edit = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
 
-  if (timeEntry.status ==="created" && +timeEntry.user === +req.user._id) {
+  let adjudicatedTimeEntryCompany = false;
+
+  // If a user is editing a newly created time entry that he owns
+  if (!timeEntry.hourLog && timeEntry.user.toString() === req.user._id.toString()) {
     timeEntry.date = req.body.date;
     timeEntry.company = req.body.company;
     timeEntry.hours = req.body.hours;
@@ -77,21 +87,76 @@ exports.edit = async (req, res) => {
     timeEntry.publicCompany = req.body.company;
     timeEntry.publicHours = req.body.hours;
     timeEntry.publicDescription = req.body.description;
-  } else if (timeEntry.status !== "created" && req.user.permissions[0].admin === true) {
+
+  // If editing an admin is editing a time entry in an hour log
+  } else if (timeEntry.hourLog && req.user.permissions[0].admin === true) {
+
+    const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog });
+
+    // If transferring the time entry to another companies hour log
+    console.log(timeEntry.publicCompany.toString() !== req.body.company.toString());
+    if (timeEntry.publicCompany.toString() !== req.body.company.toString()) {
+      adjudicatedTimeEntryCompany = true;
+      await hourLog.update({ $pull: { timeEntries: timeEntry._id }});
+
+      let receivingHourLog = await HourLog.findOne({ title: "Current", company: req.body.company });
+      // If there's no current hour log for the company that a time entry is being transferred to
+      if (!receivingHourLog) {
+        console.log('creating hour log');
+        receivingHourLog = await (new HourLog({
+          company: req.body.company,
+          timeEntries: timeEntry._id,
+          dateClosed: new Date(0),
+        })).save();
+      } else if (receivingHourLog) {
+        await receivingHourLog.update({ $addToSet: { timeEntries: timeEntry._id }});
+      }
+      timeEntry.hourLog = receivingHourLog._id;
+
+      // Subtract current hours on sending hour log, add new hours to receiving hour log
+      if (timeEntry.status === "approved") {
+        hourLog.totalPublicHours -= timeEntry.publicHours;
+        receivingHourLog.totalPublicHours += req.body.hours;
+      } else if (timeEntry.status === "hidden") {
+        hourLog.totalHiddenHours -= timeEntry.publicHours;
+        receivingHourLog.totalHiddenHours += req.body.hours;
+      } else if (timeEntry.status === "submitted") {
+        hourLog.totalSubmittedHours -= timeEntry.publicHours;
+        receivingHourLog.totalSubmittedHours += req.body.hours;
+      }
+
+      await receivingHourLog.save();
+
+    // Else if not transferring but editing hours or other
+    } else {
+      console.log(`non transfer edit`);
+      if (timeEntry.status === "approved") {
+        hourLog.totalPublicHours = (hourLog.totalPublicHours - (timeEntry.publicHours - req.body.hours));
+      } else if (timeEntry.status === "hidden") {
+        hourLog.totalHiddenHours = (hourLog.totalHiddenHours - (timeEntry.publicHours - req.body.hours));
+      } else if (timeEntry.status === "submitted") {
+        hourLog.totalSubmittedHours = (hourLog.totalSubmittedHours - (timeEntry.publicHours - req.body.hours));
+      }
+    }
+
     timeEntry.publicDate = req.body.date;
     timeEntry.publicUser = req.body.user;
     timeEntry.publicCompany = req.body.company;
     timeEntry.publicHours = req.body.hours;
     timeEntry.publicDescription = req.body.description;
+
+    await hourLog.save();
+
+  // Catch unauthorized POST's
   } else {
     res.json({error: 'unauthorized'});
     return console.log(`unauthorized request: ${req.url} \n from user: ${req.user} \n with post body: ${JSON.stringify(req.body)}`);
   }
 
   await timeEntry.save();
-  const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntryId }).populate('user publicUser company publicCompany');
 
-  res.json({ timeEntry: populatedTimeEntry, admin: req.user.permissions[0].admin })
+  const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntryId }).populate('user publicUser company publicCompany');
+  res.json({ timeEntry: populatedTimeEntry, admin: req.user.permissions[0].admin, adjudicatedTimeEntryCompany: adjudicatedTimeEntryCompany})
 };
 
 exports.approve = async (req, res) => {
@@ -211,6 +276,7 @@ exports.reject = async (req, res) => {
   timeEntry.publicCompany = timeEntry.company;
   timeEntry.publicHours = timeEntry.hours;
   timeEntry.publicDescription = timeEntry.description;
+  timeEntry.hourLog = null;
 
   await hourLog.save();
   await timeEntry.save();

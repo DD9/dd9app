@@ -1,31 +1,41 @@
+import closeHourLogValidation from '../closeHourLogValidation'
+
 import axios from 'axios';
 
 $('#closeHourLogForm').on('submit', ajaxCloseHourLogForm);
 $('#openHourLogForm').on('submit', ajaxOpenHourLogForm);
 
-function ajaxOpenHourLogForm(e) {
+
+function ajaxCloseHourLogForm(e) {
   e.preventDefault();
+  closeHourLogValidation();
+  $('#closeHourLogModal').modal('toggle');
   axios
-    .post(this.action)
+    .post(this.action, {
+      title: this.title.value,
+    })
     .then(res => {
-      $('#openHourLogButton').addClass('d-none');
-      $('#closeHourLogButton').removeClass('d-none');
+      if (!res.data.error) {
+        location.reload();
+      } else {
+        alert(res.data.error);
+      }
     })
     .catch(console.error);
 }
 
-function ajaxCloseHourLogForm(e) {
+
+function ajaxOpenHourLogForm(e) {
   e.preventDefault();
-  $('#editUserModal').modal('toggle');
+  $('#openHourLogModal').modal('toggle');
   axios
-  // .get() //TODO confirm no open submissions, flashes
-  // .then(res => {
-  //
-  // })
     .post(this.action)
     .then(res => {
-      $('#openHourLogButton').removeClass('d-none');
-      $('#closeHourLogButton').addClass('d-none');
+      if (res.data.updatedClosedHourLog) {
+        location.reload();
+      } else {
+        window.location.href = `${window.location.origin}/hourLog/${res.data._id}`
+      }
     })
     .catch(console.error);
 }

@@ -1,6 +1,6 @@
 mixin createTimeEntry()
   hr
-  form#createTimeEntryForm.time-entry-form.form(action="/api/v1/timeEntry/create" method="POST" novalidate)
+  form#createTimeEntryForm.create-time-entry-form.form(action="/api/v1/timeEntry/create" method="POST" novalidate)
     .form-group.row
       label.col-sm-2.col-form-label(for='date') Date
       .col-sm-10

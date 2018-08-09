@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 183);
+/******/ 	return __webpack_require__(__webpack_require__.s = 184);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1901,7 +1901,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             try {
                 oldLocale = globalLocale._abbr;
                 var aliasedRequire = require;
-                __webpack_require__(182)("./" + name);
+                __webpack_require__(183)("./" + name);
                 getSetGlobalLocale(oldLocale);
             } catch (e) {}
         }
@@ -14900,11 +14900,107 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.instantiateEditTimeEntryBtn = instantiateEditTimeEntryBtn;
+
+var _editTimeEntryValidation = __webpack_require__(13);
+
+var _editTimeEntryValidation2 = _interopRequireDefault(_editTimeEntryValidation);
+
+var _timeEntryTableActions = __webpack_require__(6);
+
+var _axios = __webpack_require__(3);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*
+ * Ajax for time entry edit submits.
+ * Must be reinstantiated when new buttons are added to the DOM via Ajax.
+ */
+
+var editTimeEntryModal = $("#editTimeEntryModal");
+var editTimeEntryForm = $('#editTimeEntryForm');
+
+// Init edit buttons
+var anyEditTimeEntryBtn = '.edit-time-entry-btn';
+instantiateEditTimeEntryBtn(anyEditTimeEntryBtn);
+
+// Populate the time entry edit modal with current data
+var timeEntryTableType = void 0;
+var timeEntryTableRowNumber = void 0;
+var currentTimeEntryHours = void 0;
+function instantiateEditTimeEntryBtn(button) {
+  console.log('instantiating edit');
+  $(button).on("click", function () {
+    console.log('edit click');
+    timeEntryTableType = $(this).data('tabletype');
+    timeEntryTableRowNumber = $(this).data('rownumber');
+    currentTimeEntryHours = $(this).data('hours');
+    editTimeEntryForm.attr('action', '/api/v1/timeEntry/' + $(this).data('timeentry') + '/edit');
+    editTimeEntryModal.find('#date').val(_moment2.default.utc($(this).data('date')).format("YYYY-MM-DD"));
+    editTimeEntryModal.find('#company').val($(this).data('company'));
+    editTimeEntryModal.find('#user').val($(this).data('user'));
+    editTimeEntryModal.find('#hours').val($(this).data('hours'));
+    editTimeEntryModal.find('#description').val($(this).data('description'));
+  });
+}
+
+// Time entry edit modal ajax on submit
+editTimeEntryModal.on('submit', function (e) {
+  console.log('ajaxEditTimeEntry');
+  e.preventDefault();
+  (0, _editTimeEntryValidation2.default)();
+  $('#editTimeEntryModal').modal('toggle');
+  console.log(editTimeEntryForm.attr('action'));
+  console.log(editTimeEntryForm.find('#date').val());
+  _axios2.default.post(editTimeEntryForm.attr('action'), {
+    date: editTimeEntryForm.find('#date').val(),
+    company: editTimeEntryForm.find('#company').val(),
+    user: editTimeEntryForm.find('#user').val(),
+    hours: editTimeEntryForm.find('#hours').val(),
+    description: editTimeEntryForm.find('#description').val()
+  }).then(function (res) {
+    if (timeEntryTableType === "created") {
+      var companyTd = res.data.timeEntry.company.name;
+      if (res.data.admin) companyTd = '<a href="/company/' + res.data.timeEntry.company.name + '">' + res.data.timeEntry.company.name + '</a>';
+      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber).data(['' + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), '' + companyTd, '' + res.data.timeEntry.hours, '' + res.data.timeEntry.description, '' + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw();
+      (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.hours);
+      (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Submit', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Delete');
+      instantiateEditTimeEntryBtn('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit');
+    } else if (res.data.adjudicatedTimeEntryCompany) {
+      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber).remove().draw();
+      (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.publicHours, true);
+    } else {
+      var _companyTd = '<a href="/company/' + res.data.timeEntry.publicCompany.name + '">' + res.data.timeEntry.publicCompany.name + '</a>';
+      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber).data(['' + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), '' + _companyTd, res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw();
+      (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.publicHours);
+      (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Submit', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Delete');
+      instantiateEditTimeEntryBtn('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit');
+    }
+  }).catch(console.error);
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.createTimeEntryTableActionButtonsHtml = createTimeEntryTableActionButtonsHtml;
 exports.instantiateTimeEntryTableActions = instantiateTimeEntryTableActions;
 exports.updateTotalTimeEntryTableHours = updateTotalTimeEntryTableHours;
 
-var _editTimeEntry = __webpack_require__(11);
+var _editTimeEntry = __webpack_require__(5);
 
 var _axios = __webpack_require__(3);
 
@@ -15017,7 +15113,7 @@ function approveFormListener(form, timeEntryTableType) {
       var receivingTimeEntryTableType = res.data.timeEntry.status;
       var receivingTimeEntryTable = $('#' + receivingTimeEntryTableType + 'TimeEntryTable');
       var receivingTimeEntryTableRowNumber = receivingTimeEntryTable.find('tr').length - 2;
-      receivingTimeEntryTable.DataTable().row.add(['' + _moment2.default.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD"), '' + res.data.timeEntry.publicCompany.name, res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + createTimeEntryTableActionButtonsHtml(res, receivingTimeEntryTableType, receivingTimeEntryTableRowNumber)]).draw().node().id = receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber;
+      receivingTimeEntryTable.DataTable().row.add(['' + _moment2.default.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD"), '<a href="/company/' + res.data.timeEntry.publicCompany.name + '">' + res.data.timeEntry.publicCompany.name + '</a>', res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + createTimeEntryTableActionButtonsHtml(res, receivingTimeEntryTableType, receivingTimeEntryTableRowNumber)]).draw().node().id = receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber;
       updateTotalTimeEntryTableHours(receivingTimeEntryTableType, 0, $(_this).data('hours'));
       instantiateTimeEntryTableActions(receivingTimeEntryTableType, '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Approve', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Hide', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Reject', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Submit', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Delete');
       (0, _editTimeEntry.instantiateEditTimeEntryBtn)('#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Edit');
@@ -15038,7 +15134,7 @@ function hideFormListener(form, timeEntryTableType) {
       var receivingTimeEntryTableType = res.data.timeEntry.status;
       var receivingTimeEntryTable = $('#' + receivingTimeEntryTableType + 'TimeEntryTable');
       var receivingTimeEntryTableRowNumber = receivingTimeEntryTable.find('tr').length - 2;
-      receivingTimeEntryTable.DataTable().row.add(['' + _moment2.default.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD"), '' + res.data.timeEntry.publicCompany.name, res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + createTimeEntryTableActionButtonsHtml(res, receivingTimeEntryTableType, receivingTimeEntryTableRowNumber)]).draw().node().id = receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber;
+      receivingTimeEntryTable.DataTable().row.add(['' + _moment2.default.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD"), '<a href="/company/' + res.data.timeEntry.publicCompany.name + '">' + res.data.timeEntry.publicCompany.name + '</a>', res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + createTimeEntryTableActionButtonsHtml(res, receivingTimeEntryTableType, receivingTimeEntryTableRowNumber)]).draw().node().id = receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber;
       updateTotalTimeEntryTableHours(receivingTimeEntryTableType, 0, $(_this2).data('hours'));
       instantiateTimeEntryTableActions(receivingTimeEntryTableType, '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Approve', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Hide', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Reject', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Submit', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Delete');
       (0, _editTimeEntry.instantiateEditTimeEntryBtn)('#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Edit');
@@ -15054,10 +15150,8 @@ function confirmRejectBtnListener(button, timeEntryTableType) {
   $(button).on("click", function () {
     rejectTimeEntryBtn = this;
     rejectTimeEntryTableType = timeEntryTableType;
+    console.log(rejectTimeEntryTableType);
     $("#confirmRejectTimeEntryForm").attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/reject');
-  });
-  $('#confirmRejectTimeEntryBtn').on("click", function () {
-    $('#confirmRejectTimeEntryModal').modal('toggle');
   });
 }
 $(rejectForm).on('submit', function (e) {
@@ -15066,6 +15160,9 @@ $(rejectForm).on('submit', function (e) {
   $('#' + rejectTimeEntryTableType + 'TimeEntryTable').DataTable().row($(rejectTimeEntryBtn).closest('tr')).remove().draw();
   updateTotalTimeEntryTableHours(rejectTimeEntryTableType, $(rejectTimeEntryBtn).data('hours'), 0);
   _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+});
+$('#confirmRejectTimeEntryBtn').on("click", function () {
+  $('#confirmRejectTimeEntryModal').modal('toggle');
 });
 
 // Submit listener
@@ -15078,24 +15175,16 @@ function confirmSubmitBtnListener(button, timeEntryTableType) {
     submitTimeEntryTableType = timeEntryTableType;
     $("#confirmSubmitTimeEntryForm").attr("action", '/api/v1/timeEntry/' + $(this).data('timeentry') + '/submit');
   });
-  $('#confirmCreatedTimeEntrySubmitBtn').on("click", function () {
-    $('#confirmSubmitTimeEntryModal').modal('toggle');
-  });
 }
 $(submitForm).on('submit', function (e) {
   console.log('ajaxTimeEntryTableSubmit');
   e.preventDefault();
   $('#' + submitTimeEntryTableType + 'TimeEntryTable').DataTable().row($(submitTimeEntryBtn).closest("tr")).remove().draw();
   updateTotalTimeEntryTableHours(submitTimeEntryTableType, $(submitTimeEntryBtn).data('hours'), 0);
-  _axios2.default.post(this.action).then(function (res) {
-    var receivingTimeEntryTableType = res.data.timeEntry.status;
-    var receivingTimeEntryTable = $('#' + receivingTimeEntryTableType + 'TimeEntryTable');
-    var receivingTimeEntryTableRowNumber = receivingTimeEntryTable.find('tr').length - 2;
-    receivingTimeEntryTable.DataTable().row.add(['' + _moment2.default.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD"), '' + res.data.timeEntry.publicCompany.name, res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + createTimeEntryTableActionButtonsHtml(res, receivingTimeEntryTableType, receivingTimeEntryTableRowNumber)]).draw().node().id = receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber;
-    updateTotalTimeEntryTableHours(receivingTimeEntryTableType, 0, $(submitTimeEntryBtn).data('hours'));
-    instantiateTimeEntryTableActions(receivingTimeEntryTableType, '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Approve', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Hide', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Reject', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Submit', '#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Delete');
-    (0, _editTimeEntry.instantiateEditTimeEntryBtn)('#' + receivingTimeEntryTableType + 'TimeEntryTableRow' + receivingTimeEntryTableRowNumber + 'Edit');
-  }).catch(console.error);
+  _axios2.default.post(this.action).then(function (res) {}).catch(console.error);
+});
+$('#confirmTimeEntrySubmitBtn').on("click", function () {
+  $('#confirmSubmitTimeEntryModal').modal('toggle');
 });
 
 // Delete listener
@@ -15122,12 +15211,16 @@ $('#confirmTimeEntryDeleteBtn').on("click", function () {
 
 // Update total time entry table hours value
 function updateTotalTimeEntryTableHours(timeEntryTableType, oldHours, newHours) {
+  var adjudicatedTimeEntryCompany = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+
   var uppercaseTimeEntryTableType = timeEntryTableType.charAt(0).toUpperCase() + timeEntryTableType.slice(1);
   var totalTimeTableEntryHours = +$('#total' + uppercaseTimeEntryTableType + 'TimeEntryHours').html();
   var newTotal = totalTimeTableEntryHours - (+oldHours - +newHours);
   console.log(totalTimeTableEntryHours + ' - (' + oldHours + ' - ' + newHours + ') = ' + newTotal);
   if (timeEntryTableType === "created") {
     $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#total' + uppercaseTimeEntryTableType + 'TimeEntryHoursRow').data(['', '', '' + newTotal, '', '']).draw();
+  } else if (adjudicatedTimeEntryCompany) {
+    $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#total' + uppercaseTimeEntryTableType + 'TimeEntryHoursRow').data(['', '', '', '' + (totalTimeTableEntryHours - +oldHours), '', '']).draw();
   } else {
     $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#total' + uppercaseTimeEntryTableType + 'TimeEntryHoursRow').data(['', '', '', '' + newTotal, '', '']).draw();
   }
@@ -15135,7 +15228,7 @@ function updateTotalTimeEntryTableHours(timeEntryTableType, oldHours, newHours) 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15178,7 +15271,7 @@ exports.default = editUserValidation;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15273,7 +15366,7 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(143)))
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15319,7 +15412,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15368,7 +15461,7 @@ exports.default = createCompanyValidation;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15416,94 +15509,6 @@ exports.default = editCompanyValidation;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.instantiateEditTimeEntryBtn = instantiateEditTimeEntryBtn;
-
-var _editTimeEntryValidation = __webpack_require__(13);
-
-var _editTimeEntryValidation2 = _interopRequireDefault(_editTimeEntryValidation);
-
-var _timeEntryTableActions = __webpack_require__(5);
-
-var _axios = __webpack_require__(3);
-
-var _axios2 = _interopRequireDefault(_axios);
-
-var _moment = __webpack_require__(0);
-
-var _moment2 = _interopRequireDefault(_moment);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/*
- * Ajax for time entry edit submits.
- * Must be reinstantiated when new buttons are added to the DOM via Ajax.
- */
-
-var editTimeEntryModal = $("#editTimeEntryModal");
-var editTimeEntryForm = $('#editTimeEntryForm');
-
-// Init edit buttons
-var anyEditTimeEntryBtn = '.edit-time-entry-btn';
-instantiateEditTimeEntryBtn(anyEditTimeEntryBtn);
-
-// Populate the time entry edit modal with current data
-var timeEntryTableType = void 0;
-var timeEntryTableRowNumber = void 0;
-var currentTimeEntryHours = void 0;
-function instantiateEditTimeEntryBtn(button) {
-  console.log('instantiating edit');
-  $(button).on("click", function () {
-    console.log('edit click');
-    timeEntryTableType = $(this).data('tabletype');
-    timeEntryTableRowNumber = $(this).data('rownumber');
-    currentTimeEntryHours = $(this).data('hours');
-    editTimeEntryForm.attr('action', '/api/v1/timeEntry/' + $(this).data('timeentry') + '/edit');
-    editTimeEntryModal.find('#date').val(_moment2.default.utc($(this).data('date')).format("YYYY-MM-DD"));
-    editTimeEntryModal.find('#company').val($(this).data('company'));
-    editTimeEntryModal.find('#user').val($(this).data('user'));
-    editTimeEntryModal.find('#hours').val($(this).data('hours'));
-    editTimeEntryModal.find('#description').val($(this).data('description'));
-  });
-}
-
-// Time entry edit modal ajax on submit
-editTimeEntryModal.on('submit', function (e) {
-  console.log('ajaxEditTimeEntry');
-  e.preventDefault();
-  (0, _editTimeEntryValidation2.default)();
-  $('#editTimeEntryModal').modal('toggle');
-  console.log(editTimeEntryForm.attr('action'));
-  console.log(editTimeEntryForm.find('#date').val());
-  _axios2.default.post(editTimeEntryForm.attr('action'), {
-    date: editTimeEntryForm.find('#date').val(),
-    company: editTimeEntryForm.find('#company').val(),
-    user: editTimeEntryForm.find('#user').val(),
-    hours: editTimeEntryForm.find('#hours').val(),
-    description: editTimeEntryForm.find('#description').val()
-  }).then(function (res) {
-    if (timeEntryTableType === "created") {
-      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber).data(['' + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), '' + res.data.timeEntry.company.name, '' + res.data.timeEntry.hours, '' + res.data.timeEntry.description, '' + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw();
-      (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.hours);
-    } else {
-      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber).data(['' + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), '' + res.data.timeEntry.publicCompany.name, res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw();
-      (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.publicHours);
-    }
-    (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Submit', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Delete');
-    instantiateEditTimeEntryBtn('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit');
-  }).catch(console.error);
-});
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ }),
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -15514,11 +15519,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 function createTimeEntryValidation() {
-  var createTimeEntryForm = $('#createTimeEntryForm');
-  var dateInput = createTimeEntryForm.find('#date');
-  var companyInput = createTimeEntryForm.find('#company');
-  var hoursInput = createTimeEntryForm.find('#hours');
-  var descriptionInput = createTimeEntryForm.find('#description');
+  var timeEntryForm = $('.create-time-entry-form');
+  var dateInput = timeEntryForm.find('#date');
+  var companyInput = timeEntryForm.find('#company');
+  var hoursInput = timeEntryForm.find('#hours');
+  var descriptionInput = timeEntryForm.find('#description');
 
   var dateVal = dateInput.val();
   var companyVal = companyInput.val();
@@ -48786,7 +48791,7 @@ var _axios = __webpack_require__(3);
 
 var _axios2 = _interopRequireDefault(_axios);
 
-var _createCompanyValidation = __webpack_require__(9);
+var _createCompanyValidation = __webpack_require__(10);
 
 var _createCompanyValidation2 = _interopRequireDefault(_createCompanyValidation);
 
@@ -48801,7 +48806,7 @@ function ajaxCreateCompany(e) {
     name: this.name.value
   }).then(function (res) {
     console.log(res.data);
-    $('#companyAllTable').DataTable().row.add(['<a href=\'/company/' + res.data.name + '\'>' + res.data.name + '</a>', '' + (res.data.status.charAt(0).toUpperCase() + res.data.status.slice(1))]).draw();ed;
+    $('#companyAllTable').DataTable().row.add(['<a href=\'/company/' + res.data.name + '\'>' + res.data.name + '</a>', '' + (res.data.status.charAt(0).toUpperCase() + res.data.status.slice(1))]).draw();
   }).catch(console.error);
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
@@ -48817,7 +48822,7 @@ var _axios = __webpack_require__(3);
 
 var _axios2 = _interopRequireDefault(_axios);
 
-var _editCompanyValidation = __webpack_require__(10);
+var _editCompanyValidation = __webpack_require__(11);
 
 var _editCompanyValidation2 = _interopRequireDefault(_editCompanyValidation);
 
@@ -48846,7 +48851,7 @@ function ajaxEditCompany(e) {
 
 __webpack_require__(4);
 
-__webpack_require__(8);
+__webpack_require__(9);
 
 // Datatables and table title
 $('#companyAllTable').dataTable({
@@ -48873,7 +48878,7 @@ $(".company-all-table-title").html('<h3>Companies</h3>' + '<button type="button"
 
 __webpack_require__(4);
 
-__webpack_require__(8);
+__webpack_require__(9);
 
 // Datatables and table title
 $('#companyOneTable').dataTable({
@@ -48896,6 +48901,10 @@ $(".company-one-table-title").html('<h4>Hour Logs</h4>');
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
+var _closeHourLogValidation = __webpack_require__(182);
+
+var _closeHourLogValidation2 = _interopRequireDefault(_closeHourLogValidation);
+
 var _axios = __webpack_require__(3);
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -48905,25 +48914,30 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 $('#closeHourLogForm').on('submit', ajaxCloseHourLogForm);
 $('#openHourLogForm').on('submit', ajaxOpenHourLogForm);
 
-function ajaxOpenHourLogForm(e) {
+function ajaxCloseHourLogForm(e) {
   e.preventDefault();
-  _axios2.default.post(this.action).then(function (res) {
-    $('#openHourLogButton').addClass('d-none');
-    $('#closeHourLogButton').removeClass('d-none');
+  (0, _closeHourLogValidation2.default)();
+  $('#closeHourLogModal').modal('toggle');
+  _axios2.default.post(this.action, {
+    title: this.title.value
+  }).then(function (res) {
+    if (!res.data.error) {
+      location.reload();
+    } else {
+      alert(res.data.error);
+    }
   }).catch(console.error);
 }
 
-function ajaxCloseHourLogForm(e) {
+function ajaxOpenHourLogForm(e) {
   e.preventDefault();
-  $('#editUserModal').modal('toggle');
-  _axios2.default
-  // .get() //TODO confirm no open submissions, flashes
-  // .then(res => {
-  //
-  // })
-  .post(this.action).then(function (res) {
-    $('#openHourLogButton').removeClass('d-none');
-    $('#closeHourLogButton').addClass('d-none');
+  $('#openHourLogModal').modal('toggle');
+  _axios2.default.post(this.action).then(function (res) {
+    if (res.data.updatedClosedHourLog) {
+      location.reload();
+    } else {
+      window.location.href = window.location.origin + '/hourLog/' + res.data._id;
+    }
   }).catch(console.error);
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
@@ -48937,7 +48951,7 @@ function ajaxCloseHourLogForm(e) {
 
 __webpack_require__(4);
 
-__webpack_require__(8);
+__webpack_require__(9);
 
 // Datatables and table title
 $('#hourLogAllTable').dataTable({
@@ -48986,9 +49000,9 @@ var _createTimeEntryValidation = __webpack_require__(12);
 
 var _createTimeEntryValidation2 = _interopRequireDefault(_createTimeEntryValidation);
 
-var _timeEntryTableActions = __webpack_require__(5);
+var _timeEntryTableActions = __webpack_require__(6);
 
-var _editTimeEntry = __webpack_require__(11);
+var _editTimeEntry = __webpack_require__(5);
 
 var _axios = __webpack_require__(3);
 
@@ -49001,6 +49015,7 @@ var _moment2 = _interopRequireDefault(_moment);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 $('#createTimeEntryForm').on('submit', ajaxAddCreatedTimeEntry);
+$('#createAndSubmitTimeEntryForm').on('submit', ajaxAddSubmittedTimeEntry);
 
 function ajaxAddCreatedTimeEntry(e) {
   var _this = this;
@@ -49014,15 +49029,39 @@ function ajaxAddCreatedTimeEntry(e) {
     hours: this.hours.value,
     description: this.description.value
   }).then(function (res) {
+    var companyName = $(_this).find('option:selected').text();
+    var companyTd = companyName;
+    if (res.data.admin) companyTd = "<a href=\"/company/" + companyName + "\">" + companyName + "</a>";
     var createdTimeEntryTable = $('#createdTimeEntryTable');
     var timeEntryTableType = "created";
     var timeEntryTableRowNumber = createdTimeEntryTable.find('tr').length - 2;
-    var companyName = $(_this).find('option:selected').text();
-    createdTimeEntryTable.DataTable().row.add(["" + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), "" + companyName, "" + res.data.timeEntry.hours, "" + res.data.timeEntry.description, "" + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw().node().id = timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber;
+    createdTimeEntryTable.DataTable().row.add(["" + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), "" + companyTd, "" + res.data.timeEntry.hours, "" + res.data.timeEntry.description, "" + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw().node().id = timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber;
     (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, 0, res.data.timeEntry.hours);
     (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Approve", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Hide", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Reject", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Submit", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Delete");
     (0, _editTimeEntry.instantiateEditTimeEntryBtn)("#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Edit");
-    // $('#createTimeEntryForm #hours, #description').val('');
+    createdTimeEntryTable.find('#hours, #description').val('test');
+  }).catch(console.error);
+}
+
+function ajaxAddSubmittedTimeEntry(e) {
+  console.log("ajaxAddSubmittedTimeEntry");
+  e.preventDefault();
+  (0, _createTimeEntryValidation2.default)();
+  _axios2.default.post(this.action, {
+    date: this.date.value,
+    company: this.company.value,
+    hourLog: this.hourLog.value,
+    hours: this.hours.value,
+    description: this.description.value
+  }).then(function (res) {
+    var submittedTimeEntryTable = $('#submittedTimeEntryTable');
+    var timeEntryTableType = "submitted";
+    var timeEntryTableRowNumber = submittedTimeEntryTable.find('tr').length - 2;
+    submittedTimeEntryTable.DataTable().row.add(["" + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), "<a href=\"/company/" + res.data.timeEntry.publicCompany.name + "\">" + res.data.timeEntry.publicCompany.name + "</a>", res.data.timeEntry.publicUser.firstName + " " + res.data.timeEntry.publicUser.lastName, "" + res.data.timeEntry.hours, "" + res.data.timeEntry.description, "" + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw().node().id = timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber;
+    (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, 0, res.data.timeEntry.hours);
+    (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Approve", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Hide", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Reject", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Submit", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Delete");
+    (0, _editTimeEntry.instantiateEditTimeEntryBtn)("#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Edit");
+    submittedTimeEntryTable.find('#hours, #description').val('test');
   }).catch(console.error);
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
@@ -49072,7 +49111,7 @@ $('#createdTimeEntryTable').dataTable({
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var _editUserValidation = __webpack_require__(6);
+var _editUserValidation = __webpack_require__(7);
 
 var _editUserValidation2 = _interopRequireDefault(_editUserValidation);
 
@@ -49135,7 +49174,7 @@ function ajaxEditUser(e) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var _editUserValidation = __webpack_require__(6);
+var _editUserValidation = __webpack_require__(7);
 
 var _editUserValidation2 = _interopRequireDefault(_editUserValidation);
 
@@ -49240,7 +49279,7 @@ $(".user-all-table-title").html('<h3>Users</h3>' + '<button type="button" class=
 var utils = __webpack_require__(2);
 var bind = __webpack_require__(18);
 var Axios = __webpack_require__(164);
-var defaults = __webpack_require__(7);
+var defaults = __webpack_require__(8);
 
 /**
  * Create an instance of Axios
@@ -49358,7 +49397,7 @@ module.exports = CancelToken;
 "use strict";
 
 
-var defaults = __webpack_require__(7);
+var defaults = __webpack_require__(8);
 var utils = __webpack_require__(2);
 var InterceptorManager = __webpack_require__(165);
 var dispatchRequest = __webpack_require__(166);
@@ -49510,7 +49549,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(2);
 var transformData = __webpack_require__(169);
 var isCancel = __webpack_require__(16);
-var defaults = __webpack_require__(7);
+var defaults = __webpack_require__(8);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -53154,6 +53193,56 @@ module.exports = g;
 /* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var closeHourLogModal = $('#closeHourLogModal');
+var closeHourLogForm = $('#closeHourLogForm');
+var hourLogTitleInput = closeHourLogForm.find('#title');
+
+function closeHourLogValidation() {
+  var hourLogInputVal = hourLogTitleInput.val().toLowerCase().trim();
+
+  var hasError = false;
+
+  if (!hourLogInputVal) {
+    hasError = true;
+    closeHourLogForm.find('.invalid-feedback').html("Hour log title required.");
+    hourLogTitleInput.addClass('is-invalid');
+  } else {
+    hourLogTitleInput.removeClass('is-invalid');
+  }
+
+  if (hasError) {
+    throw new Error("Form not validated");
+  }
+}
+
+closeHourLogModal.on('shown.bs.modal', function () {
+  $('#closeHourLogForm').find('#title').val(_moment2.default.utc(new Date()).format("YYYY-MM-DD"));
+});
+
+closeHourLogModal.on('hidden.bs.modal', function () {
+  hourLogTitleInput.removeClass('is-invalid');
+});
+
+exports.default = closeHourLogValidation;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 183 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var map = {
 	"./af": 20,
 	"./af.js": 20,
@@ -53416,11 +53505,11 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 182;
+webpackContext.id = 183;
 
 
 /***/ }),
-/* 183 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53436,7 +53525,7 @@ __webpack_require__(158);
 
 __webpack_require__(159);
 
-__webpack_require__(6);
+__webpack_require__(7);
 
 __webpack_require__(150);
 
@@ -53446,9 +53535,9 @@ __webpack_require__(148);
 
 __webpack_require__(149);
 
-__webpack_require__(9);
-
 __webpack_require__(10);
+
+__webpack_require__(11);
 
 __webpack_require__(147);
 
@@ -53464,13 +53553,13 @@ __webpack_require__(156);
 
 __webpack_require__(155);
 
-__webpack_require__(11);
+__webpack_require__(5);
 
 __webpack_require__(12);
 
 __webpack_require__(13);
 
-__webpack_require__(5);
+__webpack_require__(6);
 
 /***/ })
 /******/ ]);

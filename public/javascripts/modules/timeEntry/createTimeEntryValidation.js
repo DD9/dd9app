@@ -1,9 +1,9 @@
 function createTimeEntryValidation() {
-  const createTimeEntryForm = $('#createTimeEntryForm');
-  const dateInput = createTimeEntryForm.find('#date');
-  const companyInput = createTimeEntryForm.find('#company');
-  const hoursInput = createTimeEntryForm.find('#hours');
-  const descriptionInput = createTimeEntryForm.find('#description');
+  const timeEntryForm = $('.create-time-entry-form');
+  const dateInput = timeEntryForm.find('#date');
+  const companyInput = timeEntryForm.find('#company');
+  const hoursInput = timeEntryForm.find('#hours');
+  const descriptionInput = timeEntryForm.find('#description');
 
   const dateVal = dateInput.val();
   const companyVal = companyInput.val();

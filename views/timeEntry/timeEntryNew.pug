@@ -19,7 +19,10 @@ block content
         each timeEntry, rowNumber in timeEntries
           tr(id=`createdTimeEntryTableRow${rowNumber}`)
             td= h.YYYYMMDD(timeEntry.date)
-            td= timeEntry.company.name
+            if user.permissions[0].admin === true
+              td: a(href=`/company/${timeEntry.company.name}`) #{timeEntry.company.name}
+            else
+              td #{timeEntry.company.name}
             td= timeEntry.hours
             td= timeEntry.description
             if user.permissions[0].admin
@@ -40,6 +43,7 @@ block content
                   data-description=timeEntry.description)
                   != h.icon('pencil')
             else
+              td
                 button.submit-created-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Submit
                 button.delete-created-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry=timeEntry._id data-hours=timeEntry.hours) Delete
                 button.edit-time-entry-btn.btn.btn-sm.btn-link(data-toggle='modal' data-target='#editTimeEntryModal'
@@ -77,7 +81,7 @@ block content
             p.text-center Are you sure you want to submit this time entry?
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-          button#confirmCreatedTimeEntrySubmitBtn.btn.btn-primary(type='submit' form='confirmSubmitTimeEntryForm') Ok
+          button#confirmTimeEntrySubmitBtn.btn.btn-primary(type='submit' form='confirmSubmitTimeEntryForm') Ok
 
   #confirmDeleteTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmDeleteTimeEntryModal', aria-hidden='true')
     .modal-dialog(role='document')

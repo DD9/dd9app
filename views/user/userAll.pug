@@ -14,7 +14,7 @@ block content
         tr(id=user.email)
           td= `${user.firstName} ${user.lastName}`
           td= user.email
-          td: a(href=`/company/${user.company._id}`) #{user.company.name}
+          td: a(href=`/company/${user.company.name}`) #{user.company.name}
           td= user.role
           if !user.lastLogin
             td

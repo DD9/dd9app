@@ -31,13 +31,37 @@ exports.one = async (req, res) => {
 
 exports.open = async (req, res) => {
   const hourLogId = req.params.id;
-  const hourLog = await HourLog.findOneAndUpdate({ _id: hourLogId }, { dateClosed: new Date(0) },  { new: true });
-  res.json(hourLog);
+
+  const closingHourLog = await HourLog.findOne({ _id: hourLogId });
+  const currentHourLog = await HourLog.findOne({ title: "Current", company: closingHourLog.company });
+
+  if (!currentHourLog) {
+    closingHourLog.title = "Current";
+    closingHourLog.dateClosed = new Date(0);
+    await closingHourLog.save();
+    return res.json({ updatedClosedHourLog: true });
+  } else {
+    currentHourLog.totalPublicHours += closingHourLog.totalPublicHours;
+    currentHourLog.totalHiddenHours += closingHourLog.totalHiddenHours;
+    await currentHourLog.update({ $addToSet: { timeEntries: closingHourLog.timeEntries }});
+    await closingHourLog.remove();
+    await currentHourLog.save();
+    return res.json(currentHourLog);
+  }
 };
 
 exports.close = async (req, res) => {
   const hourLogId = req.params.id;
-  const hourLog = await HourLog.findOneAndUpdate({ _id: hourLogId }, { dateClosed: new Date() }, { new: true });
+  const hourLog = await HourLog.findOne({ _id: hourLogId });
+
+  if (hourLog.totalSubmittedHours > 0) {
+    return res.json({ error: "Cannot close an hour log with submitted time entries."});
+  } else {
+    hourLog.title = req.body.title;
+    hourLog.dateClosed = new Date();
+    await hourLog.save();
+  }
+
   res.json(hourLog);
 };
 

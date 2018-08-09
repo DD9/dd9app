@@ -7,7 +7,7 @@ mixin editTimeEntryModal(hourLogOnePage)
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
         .modal-body
-          form#editTimeEntryForm.time-entry-form.form(action=`/api/v1/timeEntry/:id/edit` method="POST" novalidate)
+          form#editTimeEntryForm.edit-time-entry-form.form(action=`/api/v1/timeEntry/:id/edit` method="POST" novalidate)
             .form-group.row
               label.col-sm-2.col-form-label(for='date') Date
               .col-sm-10
