@@ -116,13 +116,13 @@ exports.edit = async (req, res) => {
       // Subtract current hours on sending hour log, add new hours to receiving hour log
       if (timeEntry.status === "approved") {
         hourLog.totalPublicHours -= timeEntry.publicHours;
-        receivingHourLog.totalPublicHours += req.body.hours;
+        receivingHourLog.totalPublicHours += +req.body.hours;
       } else if (timeEntry.status === "hidden") {
         hourLog.totalHiddenHours -= timeEntry.publicHours;
-        receivingHourLog.totalHiddenHours += req.body.hours;
+        receivingHourLog.totalHiddenHours += +req.body.hours;
       } else if (timeEntry.status === "submitted") {
         hourLog.totalSubmittedHours -= timeEntry.publicHours;
-        receivingHourLog.totalSubmittedHours += req.body.hours;
+        receivingHourLog.totalSubmittedHours += +req.body.hours;
       }
 
       await receivingHourLog.save();
