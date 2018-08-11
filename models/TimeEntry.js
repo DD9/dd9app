@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 const timeEntrySchema = new Schema({
   date: {
@@ -68,5 +69,6 @@ timeEntrySchema.index({
   status: 1,
   user: -1
 });
+
 
 module.exports = mongoose.model('TimeEntry', timeEntrySchema);
