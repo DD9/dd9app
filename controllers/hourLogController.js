@@ -14,18 +14,15 @@ exports.one = async (req, res) => {
   const companies = await Company.find({ status: "active" }).select('name').sort('name');
   const hourLog = await HourLog.findOne({ _id: hourLogId })
     .populate('company', 'name')
-    .populate({
-      path: 'timeEntries',
-      populate: [{
-        path: 'publicCompany',
-        model: 'Company',
-        select: 'name'
-      },{
-        path: 'publicUser',
-        model: 'User',
-        select: 'firstName lastName'
-      }]
+    .populate('timeEntries', 'publicUser publicCompany publicHours publicDescription')
+    .deepPopulate('timeEntries.publicUser timeEntries.publicCompany', function (err, records) {
+      if (err) {
+        console.log(err);
+      }
     });
+
+  console.log('\n');
+  console.log(hourLog);
   res.render("hourLog/hourLogOne", { title: hourLog.company.name, users, companies, hourLog });
 };
 
