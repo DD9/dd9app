@@ -26,7 +26,11 @@ block content
           tr
             td= h.YYYYMMDD(hourLog.dateOpened)
             td= (h.YYYYMMDD(hourLog.dateClosed) === "1970-01-01") ? '' : h.YYYYMMDD(hourLog.dateClosed)
-            td: a(href=`/hourLog/${hourLog._id}`) #{hourLog.title}
+            td: a(href=`/hourLog/${hourLog._id}`)
+              if (hourLog.totalSubmittedHours > 0)
+                | <b>#{hourLog.title}*</b>
+              else
+                | #{hourLog.title}
             td= hourLog.totalPublicHours
             td.hidden-hours-text-color= hourLog.totalHiddenHours
 

@@ -12,7 +12,8 @@ const userSchema = new Schema({
   },
   company: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Company'
+    ref: 'Company',
+    default: mongoose.Types.ObjectId("110000000000000000000000")
   },
   email: {
     type: String,

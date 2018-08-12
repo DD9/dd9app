@@ -12,7 +12,6 @@ function ajaxCreateCompany(e) {
       name: this.name.value,
     })
     .then(res => {
-      console.log(res.data);
       $('#companyAllTable').DataTable().row.add([
         `<a href='/company/${res.data.name}'>${res.data.name}</a>`,
         `${res.data.status.charAt(0).toUpperCase() + res.data.status.slice(1)}`,

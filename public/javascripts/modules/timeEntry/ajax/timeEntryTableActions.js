@@ -14,29 +14,29 @@ export function createTimeEntryTableActionButtonsHtml(res, timeEntryTableType, t
   let html = '';
   if (res.data.admin === true) {
     if (timeEntryTableType === "approved") {
-      html += `<form id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Hide" class="${timeEntryTableType}-time-entry-table-hide-form form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/hide' method="POST" data-hours=${res.data.timeEntry.publicHours}><button class="btn btn-sm btn-link" type="submit">Hide</button></form>`;
-      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Reject" class="reject-${timeEntryTableType}-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmRejectTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.publicHours}>Reject</button>`;
-      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#editTimeEntryModal' data-tabletype=${timeEntryTableType} data-rownumber=${timeEntryTableRowNumber} data-timeentry=${res.data.timeEntry._id} data-date=${res.data.timeEntry.publicDate} data-user=${res.data.timeEntry.publicUser._id} data-company=${res.data.timeEntry.publicCompany._id} data-hours=${res.data.timeEntry.publicHours} data-description=${res.data.timeEntry.publicDescription}>${editSVG}</button>`;
+      html += `<form id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Hide" class="${timeEntryTableType}-time-entry-table-hide-form form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/hide' method="POST" data-hours="${res.data.timeEntry.publicHours}"><button class="btn btn-sm btn-link" type="submit">Hide</button></form>`;
+      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Reject" class="reject-${timeEntryTableType}-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmRejectTimeEntryModal' data-timeentry="${res.data.timeEntry._id}" data-hours="${res.data.timeEntry.publicHours}">Reject</button>`;
+      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#editTimeEntryModal' data-tabletype=${timeEntryTableType} data-rownumber="${timeEntryTableRowNumber}" data-timeentry="${res.data.timeEntry._id}" data-date="${res.data.timeEntry.publicDate}" data-user="${res.data.timeEntry.publicUser._id}" data-company="${res.data.timeEntry.publicCompany._id}" data-hours="${res.data.timeEntry.publicHours}" data-description="${res.data.timeEntry.publicDescription}">${editSVG}</button>`;
     } else if (timeEntryTableType === "hidden") {
-      html += `<form id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Approve" class="time-entry-table-form-approve form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/approve' method="POST" data-hours=${res.data.timeEntry.publicHours}><button class="btn btn-sm btn-link" type="submit">Approve</button></form>`;
-      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Reject" class="reject-${timeEntryTableType}-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmRejectTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.publicHours}>Reject</button>`;
-      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#editTimeEntryModal' data-tabletype=${timeEntryTableType} data-rownumber=${timeEntryTableRowNumber} data-timeentry=${res.data.timeEntry._id} data-date=${res.data.timeEntry.publicDate} data-user=${res.data.timeEntry.publicUser._id} data-company=${res.data.timeEntry.publicCompany._id} data-hours=${res.data.timeEntry.publicHours} data-description=${res.data.timeEntry.publicDescription}>${editSVG}</button>`;
+      html += `<form id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Approve" class="time-entry-table-form-approve form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/approve' method="POST" data-hours="${res.data.timeEntry.publicHours}"><button class="btn btn-sm btn-link" type="submit">Approve</button></form>`;
+      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Reject" class="reject-${timeEntryTableType}-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmRejectTimeEntryModal' data-timeentry="${res.data.timeEntry._id}" data-hours="${res.data.timeEntry.publicHours}">Reject</button>`;
+      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#editTimeEntryModal' data-tabletype=${timeEntryTableType} data-rownumber="${timeEntryTableRowNumber}" data-timeentry="${res.data.timeEntry._id}" data-date="${res.data.timeEntry.publicDate}" data-user="${res.data.timeEntry.publicUser._id}" data-company="${res.data.timeEntry.publicCompany._id}" data-hours="${res.data.timeEntry.publicHours}" data-description="${res.data.timeEntry.publicDescription}">${editSVG}</button>`;
     } else if (timeEntryTableType === "submitted") {
-      html += `<form id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Approve" class="${timeEntryTableType}-time-entry-table-approve-form form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/approve' method="POST" data-hours=${res.data.timeEntry.publicHours}><button class="btn btn-sm btn-link" type="submit">Approve</button></form>`;
-      html += `<form id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Hide" class="${timeEntryTableType}-time-entry-table-hide-form form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/hide' method="POST" data-hours=${res.data.timeEntry.publicHours}><button class="btn btn-sm btn-link" type="submit">Hide</button></form>`;
-      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Reject" class="reject-${timeEntryTableType}-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmRejectTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.publicHours}>Reject</button>`;
-      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#editTimeEntryModal' data-tabletype=${timeEntryTableType} data-rownumber=${timeEntryTableRowNumber} data-timeentry=${res.data.timeEntry._id} data-date=${res.data.timeEntry.publicDate} data-user=${res.data.timeEntry.publicUser._id} data-company=${res.data.timeEntry.publicCompany._id} data-hours=${res.data.timeEntry.publicHours} data-description=${res.data.timeEntry.publicDescription}>${editSVG}</button>`;
+      html += `<form id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Approve" class="${timeEntryTableType}-time-entry-table-approve-form form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/approve' method="POST" data-hours="${res.data.timeEntry.publicHours}"><button class="btn btn-sm btn-link" type="submit">Approve</button></form>`;
+      html += `<form id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Hide" class="${timeEntryTableType}-time-entry-table-hide-form form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/hide' method="POST" data-hours="${res.data.timeEntry.publicHours}"><button class="btn btn-sm btn-link" type="submit">Hide</button></form>`;
+      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Reject" class="reject-${timeEntryTableType}-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmRejectTimeEntryModal' data-timeentry="${res.data.timeEntry._id}" data-hours="${res.data.timeEntry.publicHours}">Reject</button>`;
+      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#editTimeEntryModal' data-tabletype=${timeEntryTableType} data-rownumber="${timeEntryTableRowNumber}" data-timeentry="${res.data.timeEntry._id}" data-date="${res.data.timeEntry.publicDate}" data-user="${res.data.timeEntry.publicUser._id}" data-company="${res.data.timeEntry.publicCompany._id}" data-hours="${res.data.timeEntry.publicHours}" data-description="${res.data.timeEntry.publicDescription}">${editSVG}</button>`;
     } else if (timeEntryTableType === "created") {
-      html += `<form id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Approve" class="${timeEntryTableType}-time-entry-table-approve-form form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/approve' method="POST" data-hours=${res.data.timeEntry.hours}><button class="btn btn-sm btn-link" type="submit">Approve</button></form>`;
-      html += `<form id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Hide" class="${timeEntryTableType}-time-entry-table-hide-form form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/hide' method="POST" data-hours=${res.data.timeEntry.hours}><button class="btn btn-sm btn-link" type="submit">Hide</button></form>`;
-      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Submit" class="submit-${timeEntryTableType}-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.hours}>Submit</button>`;
-      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Delete" class="delete-${timeEntryTableType}-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.hours}>Delete</button>`;
-      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#editTimeEntryModal' data-tabletype=${timeEntryTableType} data-rownumber=${timeEntryTableRowNumber} data-timeentry=${res.data.timeEntry._id} data-date=${res.data.timeEntry.date} data-company=${res.data.timeEntry.company._id} data-hours=${res.data.timeEntry.hours} data-description=${res.data.timeEntry.description}>${editSVG}</button>`;
+      html += `<form id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Approve" class="${timeEntryTableType}-time-entry-table-approve-form form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/approve' method="POST" data-hours="${res.data.timeEntry.hours}"><button class="btn btn-sm btn-link" type="submit">Approve</button></form>`;
+      html += `<form id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Hide" class="${timeEntryTableType}-time-entry-table-hide-form form d-inline" action='/api/v1/timeEntry/${res.data.timeEntry._id}/hide' method="POST" data-hours="${res.data.timeEntry.hours}"><button class="btn btn-sm btn-link" type="submit">Hide</button></form>`;
+      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Submit" class="submit-${timeEntryTableType}-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry="${res.data.timeEntry._id}" data-hours="${res.data.timeEntry.hours}">Submit</button>`;
+      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Delete" class="delete-${timeEntryTableType}-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry="${res.data.timeEntry._id}" data-hours="${res.data.timeEntry.hours}">Delete</button>`;
+      html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#editTimeEntryModal' data-tabletype=${timeEntryTableType} data-rownumber="${timeEntryTableRowNumber}" data-timeentry="${res.data.timeEntry._id}" data-date="${res.data.timeEntry.date}" data-company="${res.data.timeEntry.company._id}" data-hours="${res.data.timeEntry.hours}" data-description="${res.data.timeEntry.description}">${editSVG}</button>`;
     }
   } else {
-    html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Submit" class="submit-${timeEntryTableType}-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.hours}>Submit</button>`;
-    html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Delete" class="delete-${timeEntryTableType}-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry=${res.data.timeEntry._id} data-hours=${res.data.timeEntry.hours}>Delete</button>`;
-    html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#editTimeEntryModal' data-tabletype=${timeEntryTableType} data-rownumber=${timeEntryTableRowNumber} data-timeentry=${res.data.timeEntry._id} data-date=${res.data.timeEntry.date} data-company=${res.data.timeEntry.company._id} data-hours=${res.data.timeEntry.hours} data-description=${res.data.timeEntry.description}>${editSVG}</button>`;
+    html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Submit" class="submit-${timeEntryTableType}-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmSubmitTimeEntryModal' data-timeentry="${res.data.timeEntry._id}" data-hours="${res.data.timeEntry.hours}">Submit</button>`;
+    html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Delete" class="delete-${timeEntryTableType}-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#confirmDeleteTimeEntryModal' data-timeentry="${res.data.timeEntry._id}" data-hours="${res.data.timeEntry.hours}">Delete</button>`;
+    html += `<button id="${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle='modal' data-target='#editTimeEntryModal' data-tabletype=${timeEntryTableType} data-rownumber="${timeEntryTableRowNumber}" data-timeentry="${res.data.timeEntry._id}" data-date="${res.data.timeEntry.date}" data-company="${res.data.timeEntry.company._id}" data-hours="${res.data.timeEntry.hours}" data-description="${res.data.timeEntry.description}">${editSVG}</button>`;
   }
   return html;
 }
@@ -69,13 +69,9 @@ function instantiateHourLogOneTableActions() {
 // Function to initialize listeners and actions on dynamically created time entry buttons
 export function instantiateTimeEntryTableActions(timeEntryTableType, approveFormSelector, hideFormSelector, rejectBtnSelector, submitBtnSelector, deleteBtnSelector) {
   if (timeEntryTableType === "approved") {
-    console.log(hideFormSelector, timeEntryTableType);
-    console.log(rejectBtnSelector, timeEntryTableType);
     hideFormListener(hideFormSelector, timeEntryTableType);
     confirmRejectBtnListener(rejectBtnSelector, timeEntryTableType)
   } else if (timeEntryTableType === "hidden") {
-    console.log(approveFormSelector, timeEntryTableType);
-    console.log(rejectBtnSelector, timeEntryTableType);
     approveFormListener(approveFormSelector, timeEntryTableType);
     confirmRejectBtnListener(rejectBtnSelector, timeEntryTableType)
   } else if (timeEntryTableType === "submitted") {
@@ -93,10 +89,8 @@ export function instantiateTimeEntryTableActions(timeEntryTableType, approveForm
 // Approve listener
 function approveFormListener(form, timeEntryTableType) {
   $(form).on('submit', function(e) {
-    console.log(`ajaxTimeEntryTableApprove`);
     e.preventDefault();
     $(`#${timeEntryTableType}TimeEntryTable`).DataTable().row($(this).closest('tr')).remove().draw();
-    console.log(this);
     updateTotalTimeEntryTableHours(timeEntryTableType, $(this).data('hours'), 0);
     axios
       .post(this.action)
@@ -106,7 +100,7 @@ function approveFormListener(form, timeEntryTableType) {
         const receivingTimeEntryTableRowNumber = receivingTimeEntryTable.find('tr').length-2;
         receivingTimeEntryTable.DataTable().row.add([
           `${moment.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD")}`,
-          `<a href="/company/${res.data.timeEntry.publicCompany.name}">${res.data.timeEntry.publicCompany.name}</a>`,
+          `<a href="/company/${res.data.timeEntry.publicCompany._id}">${res.data.timeEntry.publicCompany.name}</a>`,
           `${res.data.timeEntry.publicUser.firstName} ${res.data.timeEntry.publicUser.lastName}`,
           `${res.data.timeEntry.publicHours}`,
           `${res.data.timeEntry.publicDescription}`,
@@ -130,7 +124,6 @@ function approveFormListener(form, timeEntryTableType) {
 // Hide listener
 function hideFormListener(form, timeEntryTableType) {
   $(form).on('submit', function(e) {
-    console.log(`ajaxTimeEntryTableHide`);
     e.preventDefault();
     $(`#${timeEntryTableType}TimeEntryTable`).DataTable().row($(this).closest('tr')).remove().draw();
     updateTotalTimeEntryTableHours(timeEntryTableType, $(this).data('hours'), 0);
@@ -142,7 +135,7 @@ function hideFormListener(form, timeEntryTableType) {
         const receivingTimeEntryTableRowNumber = receivingTimeEntryTable.find('tr').length-2;
         receivingTimeEntryTable.DataTable().row.add([
           `${moment.utc(res.data.timeEntry.publicDate).format("YYYY-MM-DD")}`,
-          `<a href="/company/${res.data.timeEntry.publicCompany.name}">${res.data.timeEntry.publicCompany.name}</a>`,
+          `<a href="/company/${res.data.timeEntry.publicCompany._id}">${res.data.timeEntry.publicCompany.name}</a>`,
           `${res.data.timeEntry.publicUser.firstName} ${res.data.timeEntry.publicUser.lastName}`,
           `${res.data.timeEntry.publicHours}`,
           `${res.data.timeEntry.publicDescription}`,
@@ -171,12 +164,10 @@ function confirmRejectBtnListener(button, timeEntryTableType) {
   $(button).on("click", function () {
     rejectTimeEntryBtn = this;
     rejectTimeEntryTableType = timeEntryTableType;
-    console.log(rejectTimeEntryTableType);
     $("#confirmRejectTimeEntryForm").attr("action", `/api/v1/timeEntry/${$(this).data('timeentry')}/reject`);
   });
 }
 $(rejectForm).on('submit', function(e) {
-  console.log(`ajaxTimeEntryTableReject`);
   e.preventDefault();
   $(`#${rejectTimeEntryTableType}TimeEntryTable`).DataTable().row($(rejectTimeEntryBtn).closest('tr')).remove().draw();
   updateTotalTimeEntryTableHours(rejectTimeEntryTableType, $(rejectTimeEntryBtn).data('hours'), 0);
@@ -201,7 +192,6 @@ function confirmSubmitBtnListener(button, timeEntryTableType) {
   });
 }
 $(submitForm).on('submit', function(e) {
-  console.log(`ajaxTimeEntryTableSubmit`);
   e.preventDefault();
   $(`#${submitTimeEntryTableType}TimeEntryTable`).DataTable().row($(submitTimeEntryBtn).closest("tr")).remove().draw();
   updateTotalTimeEntryTableHours(submitTimeEntryTableType, $(submitTimeEntryBtn).data('hours'), 0);
@@ -226,7 +216,6 @@ function confirmDeleteBtnListener(button, timeEntryTableType) {
   });
 }
 $(deleteForm).on('submit', function(e) {
-  console.log(`ajaxTimeEntryTableDelete`);
   e.preventDefault();
   $(`#${deleteTimeEntryTableType}TimeEntryTable`).DataTable().row($(deleteTimeEntryBtn).closest("tr")).remove().draw();
   updateTotalTimeEntryTableHours(deleteTimeEntryTableType, $(deleteTimeEntryBtn).data('hours'), 0);
@@ -244,7 +233,6 @@ export function updateTotalTimeEntryTableHours(timeEntryTableType, oldHours, new
   const uppercaseTimeEntryTableType = timeEntryTableType.charAt(0).toUpperCase() + timeEntryTableType.slice(1);
   const totalTimeTableEntryHours = +$(`#total${uppercaseTimeEntryTableType}TimeEntryHours`).html();
   const newTotal = (totalTimeTableEntryHours - (+oldHours - +newHours));
-  console.log(`${totalTimeTableEntryHours} - (${oldHours} - ${newHours}) = ${newTotal}`);
   if (timeEntryTableType === "created") {
     $(`#${timeEntryTableType}TimeEntryTable`).DataTable().row(`#total${uppercaseTimeEntryTableType}TimeEntryHoursRow`).data([
       ``,

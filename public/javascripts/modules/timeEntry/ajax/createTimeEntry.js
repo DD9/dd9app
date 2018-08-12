@@ -23,7 +23,7 @@ function ajaxAddCreatedTimeEntry(e) {
     .then(res => {
       const companyName = $(this).find('option:selected').text();
       let companyTd = companyName;
-      if (res.data.admin) companyTd = `<a href="/company/${companyName}">${companyName}</a>`;
+      if (res.data.admin) companyTd = `<a href="/company/${res.data.timeEntry.company._id}">${companyName}</a>`;
       const createdTimeEntryTable = $('#createdTimeEntryTable');
       const timeEntryTableType = "created";
       const timeEntryTableRowNumber = createdTimeEntryTable.find('tr').length-2;

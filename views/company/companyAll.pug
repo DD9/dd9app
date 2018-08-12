@@ -9,7 +9,7 @@ block content
       tbody
         each company in companies
           tr
-            td.company-name: a(href=`/company/${company.name}`) #{company.name}
+            td.company-name: a(href=`/company/${company._id}`) #{company.name}
             td= h.capitalizeFirstLetter(company.status)
 
   #createCompanyModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='createCompanyModal', aria-hidden='true')

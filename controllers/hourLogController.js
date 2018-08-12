@@ -20,20 +20,18 @@ exports.one = async (req, res) => {
         console.log(err);
       }
     });
-
-  console.log('\n');
-  console.log(hourLog);
   res.render("hourLog/hourLogOne", { title: hourLog.company.name, users, companies, hourLog });
 };
 
 exports.open = async (req, res) => {
   const hourLogId = req.params.id;
 
-  const closingHourLog = await HourLog.findOne({ _id: hourLogId });
-  const currentHourLog = await HourLog.findOne({ title: "Current", company: closingHourLog.company });
+  const closingHourLog = await HourLog.findOne({ _id: hourLogId }).populate('timeEntries');
+  const currentHourLog = await HourLog.findOne({ title: "Current", company: closingHourLog.company }).populate('timeEntries');
 
   if (!currentHourLog) {
     closingHourLog.title = "Current";
+    closingHourLog.dateOpened = new Date();
     closingHourLog.dateClosed = new Date(0);
     await closingHourLog.save();
     return res.json({ updatedClosedHourLog: true });

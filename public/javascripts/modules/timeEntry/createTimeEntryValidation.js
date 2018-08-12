@@ -36,6 +36,14 @@ function createTimeEntryValidation() {
     hoursInput.removeClass('is-invalid');
   }
 
+  if (hoursVal.length > 6) {
+    hasError = true;
+    hoursInput.closest('div').find('.invalid-feedback').html("Hour input exceeded input size limit.");
+    hoursInput.addClass('is-invalid');
+  } else {
+    hoursInput.removeClass('is-invalid');
+  }
+
   if (!descriptionVal) {
     hasError = true;
     descriptionInput.closest('div').find('.invalid-feedback').html("Description required.");

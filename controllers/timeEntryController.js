@@ -52,8 +52,6 @@ exports.createAndSubmit = async (req, res) => {
     status: "submitted"
   }).save();
 
-  console.log(req.body);
-
   await HourLog.findOneAndUpdate(
     { _id: req.body.hourLog },
     {
@@ -77,6 +75,13 @@ exports.edit = async (req, res) => {
 
   let adjudicatedTimeEntryCompany = false;
 
+  console.log("1");
+  console.log(timeEntry);
+
+  console.log(!timeEntry.hourLog);
+
+  console.log(timeEntry.user.toString() === req.user._id.toString());
+
   // If a user is editing a newly created time entry that he owns
   if (!timeEntry.hourLog && timeEntry.user.toString() === req.user._id.toString()) {
     timeEntry.date = req.body.date;
@@ -88,13 +93,15 @@ exports.edit = async (req, res) => {
     timeEntry.publicHours = req.body.hours;
     timeEntry.publicDescription = req.body.description;
 
+    console.log("2");
+    console.log(timeEntry);
+
   // If editing an admin is editing a time entry in an hour log
   } else if (timeEntry.hourLog && req.user.permissions[0].admin === true) {
 
     const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog });
 
     // If transferring the time entry to another companies hour log
-    console.log(timeEntry.publicCompany.toString() !== req.body.company.toString());
     if (timeEntry.publicCompany.toString() !== req.body.company.toString()) {
       adjudicatedTimeEntryCompany = true;
       await hourLog.update({ $pull: { timeEntries: timeEntry._id }});
@@ -102,7 +109,6 @@ exports.edit = async (req, res) => {
       let receivingHourLog = await HourLog.findOne({ title: "Current", company: req.body.company });
       // If there's no current hour log for the company that a time entry is being transferred to
       if (!receivingHourLog) {
-        console.log('creating hour log');
         receivingHourLog = await (new HourLog({
           company: req.body.company,
           timeEntries: timeEntry._id,
@@ -129,7 +135,6 @@ exports.edit = async (req, res) => {
 
     // Else if not transferring but editing hours or other
     } else {
-      console.log(`non transfer edit`);
       if (timeEntry.status === "approved") {
         hourLog.totalPublicHours = (hourLog.totalPublicHours - (timeEntry.publicHours - req.body.hours));
       } else if (timeEntry.status === "hidden") {
@@ -156,6 +161,7 @@ exports.edit = async (req, res) => {
   await timeEntry.save();
 
   const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntryId }).populate('user publicUser company publicCompany');
+
   res.json({ timeEntry: populatedTimeEntry, admin: req.user.permissions[0].admin, adjudicatedTimeEntryCompany: adjudicatedTimeEntryCompany})
 };
 
@@ -167,7 +173,6 @@ exports.approve = async (req, res) => {
     const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog });
 
     hourLog.totalPublicHours += timeEntry.publicHours;
-    console.log(timeEntry.status);
     if (timeEntry.status === "hidden") {
       hourLog.totalHiddenHours -= timeEntry.publicHours;
     } else if (timeEntry.status === "submitted") {
@@ -255,9 +260,6 @@ exports.hide = async (req, res) => {
 };
 
 exports.reject = async (req, res) => {
-
-  console.log('rejecting');
-
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
   const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog });
@@ -270,13 +272,21 @@ exports.reject = async (req, res) => {
     hourLog.totalSubmittedHours -= timeEntry.publicHours;
   }
 
-  timeEntry.status = "created";
-  timeEntry.publicDate = timeEntry.date;
-  timeEntry.publicUser = timeEntry.user;
-  timeEntry.publicCompany = timeEntry.company;
-  timeEntry.publicHours = timeEntry.hours;
-  timeEntry.publicDescription = timeEntry.description;
-  timeEntry.hourLog = null;
+  timeEntry.status = "rejected";
+
+  const returnedTimeEntry = await new TimeEntry({
+    user: timeEntry.user,
+    company: timeEntry.company,
+    date: timeEntry.date,
+    hours: timeEntry.hours,
+    description: timeEntry.description,
+    publicUser: timeEntry.user,
+    publicCompany: timeEntry.company,
+    publicDate: timeEntry.date,
+    publicHours: timeEntry.hours,
+    publicDescription: timeEntry.description,
+    status: "created"
+  }).save();
 
   await hourLog.save();
   await timeEntry.save();

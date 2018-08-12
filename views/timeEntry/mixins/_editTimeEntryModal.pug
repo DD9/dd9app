@@ -28,12 +28,12 @@ mixin editTimeEntryModal(hourLogOnePage)
             .form-group.row
               label.col-sm-2.col-form-label(for='hours') Hours
               .col-sm-10
-                input#hours.form-control(name='hours' type='tel' required maxlength="5")
+                input#hours.form-control(name='hours' type='number' required)
                 .invalid-feedback Invalid form.
             .form-group.row
               label.col-sm-3.col-form-label(for='description') Description
               .col-sm-9
-                input#description.form-control(name='description' type='text' required maxlength="255")
+                input#description.form-control(name='description' type='text' required maxlength='255')
                 .invalid-feedback Invalid form.
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close

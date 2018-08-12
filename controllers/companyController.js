@@ -8,10 +8,10 @@ exports.all = async (req, res) => {
 };
 
 exports.one = async (req, res) => {
-  const companyName = req.params.name;
-  const company = await Company.findOne({ name: companyName }).select('name status');
+  const companyId = req.params.id;
+  const company = await Company.findOne({ _id: companyId }).select('name status');
   const companies = await Company.find().select('name');
-  const hourLogs = await HourLog.find({ company : company._id }).select('dateOpened dateClosed title totalPublicHours totalHiddenHours');
+  const hourLogs = await HourLog.find({ company : company._id }).select('dateOpened dateClosed title totalPublicHours totalHiddenHours totalSubmittedHours');
   res.render("company/companyOne", { title: company.name, company, companies, hourLogs });
 };
 

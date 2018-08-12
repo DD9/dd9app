@@ -15,7 +15,7 @@ block content
           tr
             td= h.YYYYMMDD(hourLog.dateOpened)
             td= (h.YYYYMMDD(hourLog.dateClosed) === "1970-01-01") ? '' : h.YYYYMMDD(hourLog.dateClosed)
-            td: a(href=`/company/${hourLog.company.name}`) #{hourLog.company.name}
+            td: a(href=`/company/${hourLog.company._id}`) #{hourLog.company.name}
             td: a(href=`/hourLog/${hourLog._id}`)
               if (hourLog.totalSubmittedHours > 0)
                 | <b>#{hourLog.title}*</b>

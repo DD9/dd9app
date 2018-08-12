@@ -9,7 +9,7 @@ mixin createAndSubmitTimeEntry()
     .form-group.row
       label.col-sm-2.col-form-label(for='hours') Hours
       .col-sm-10
-        input#hours.form-control(name='hours' type='tel' required maxlength="5")
+        input#hours.form-control(name='hours' type='number' required)
         .invalid-feedback Invalid form.
     .form-group.row
       label.col-sm-2.col-form-label(for='description') Description

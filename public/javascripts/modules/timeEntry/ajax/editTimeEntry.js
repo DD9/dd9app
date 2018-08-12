@@ -21,9 +21,7 @@ let timeEntryTableType;
 let timeEntryTableRowNumber;
 let currentTimeEntryHours;
 export function instantiateEditTimeEntryBtn(button) {
-  console.log(`instantiating edit`);
   $(button).on("click", function () {
-    console.log(`edit click`);
     timeEntryTableType = $(this).data('tabletype');
     timeEntryTableRowNumber = $(this).data('rownumber');
     currentTimeEntryHours = $(this).data('hours');
@@ -38,12 +36,9 @@ export function instantiateEditTimeEntryBtn(button) {
 
 // Time entry edit modal ajax on submit
 editTimeEntryModal.on('submit', function(e) {
-  console.log(`ajaxEditTimeEntry`);
   e.preventDefault();
   editTimeEntryValidation();
   $('#editTimeEntryModal').modal('toggle');
-  console.log(editTimeEntryForm.attr('action'));
-  console.log(editTimeEntryForm.find('#date').val());
   axios
     .post(editTimeEntryForm.attr('action'), {
       date: editTimeEntryForm.find('#date').val(),
@@ -55,7 +50,7 @@ editTimeEntryModal.on('submit', function(e) {
     .then(res => {
       if (timeEntryTableType === "created") {
         let companyTd = res.data.timeEntry.company.name;
-        if (res.data.admin) companyTd = `<a href="/company/${res.data.timeEntry.company.name}">${res.data.timeEntry.company.name}</a>`;
+        if (res.data.admin) companyTd = `<a href="/company/${res.data.timeEntry.company._id}">${res.data.timeEntry.company.name}</a>`;
         $(`#${timeEntryTableType}TimeEntryTable`).DataTable().row(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}`).data([
           `${moment.utc(res.data.timeEntry.date).format("YYYY-MM-DD")}`,
           `${companyTd}`,
@@ -77,7 +72,7 @@ editTimeEntryModal.on('submit', function(e) {
         $(`#${timeEntryTableType}TimeEntryTable`).DataTable().row(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}`).remove().draw();
         updateTotalTimeEntryTableHours(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.publicHours, true);
       } else {
-        const companyTd = `<a href="/company/${res.data.timeEntry.publicCompany.name}">${res.data.timeEntry.publicCompany.name}</a>`;
+        const companyTd = `<a href="/company/${res.data.timeEntry.publicCompany._id}">${res.data.timeEntry.publicCompany.name}</a>`;
         $(`#${timeEntryTableType}TimeEntryTable`).DataTable().row(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}`).data([
           `${moment.utc(res.data.timeEntry.date).format("YYYY-MM-DD")}`,
           `${companyTd}`,

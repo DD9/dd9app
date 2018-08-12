@@ -20,7 +20,7 @@ block content
           tr(id=`createdTimeEntryTableRow${rowNumber}`)
             td= h.YYYYMMDD(timeEntry.date)
             if user.permissions[0].admin === true
-              td: a(href=`/company/${timeEntry.company.name}`) #{timeEntry.company.name}
+              td: a(href=`/company/${timeEntry.company._id}`) #{timeEntry.company.name}
             else
               td #{timeEntry.company.name}
             td= timeEntry.hours

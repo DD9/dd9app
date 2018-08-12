@@ -12,7 +12,6 @@ function ajaxEditCompany(e) {
       name: this.name.value,
     })
     .then(res => {
-      console.log(res.data);
       $('.company-title').html(res.data.name);
     })
     .catch(console.error);
