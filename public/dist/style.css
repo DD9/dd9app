@@ -7866,15 +7866,13 @@ footer {
 .company-one-th-role {
   width: 10% !important; }
 
-.hour-log-all-table-paginate {
-  display: none; }
-
 .hour-log-all-table-title {
   margin-left: 10px; }
 
 .hour-log-all-table {
   font-size: 14px;
-  margin-top: 10px; }
+  margin-top: 10px;
+  padding-bottom: 20px; }
 
 .hour-log-all-th-date-opened {
   width: 12.5% !important; }

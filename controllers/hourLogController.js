@@ -4,8 +4,9 @@ const Company = mongoose.model('Company');
 const HourLog = mongoose.model('HourLog');
 
 exports.all = async (req, res) => {
-  const hourLogs = await HourLog.find().populate('company');
-  res.render("hourLog/hourLogAll", { title: "Hour Logs", hourLogs: hourLogs });
+  const openHourLogs = await HourLog.find({ dateClosed: new Date(0) }).populate('company');
+  const closedHourLogs = await HourLog.find({ dateClosed: { $ne: new Date(0) }}).populate('company').sort({'dateOpened': -1}).limit(100);
+  res.render("hourLog/hourLogAll", { title: "Hour Logs", openHourLogs, closedHourLogs });
 };
 
 exports.one = async (req, res) => {
