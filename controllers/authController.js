@@ -13,7 +13,7 @@ exports.googleAuth = passport.authenticate('google', {
 
 exports.googleAuthRedirect = passport.authenticate('google', {
     failureRedirect: '/auth/login',
-    failureFlash: 'Please login with a dd9.com email',
+    failureFlash: 'Please login with a dd9.com or designdivine.com email',
     successRedirect: '/',
 });
 

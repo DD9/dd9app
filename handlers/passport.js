@@ -23,7 +23,7 @@ passport.use(new GoogleStrategy({
     const googleLastName = profile.name.familyName;
 
     const emailDomain = googleEmail.split("@")[1];
-    if (emailDomain !== "dd9.com") {
+    if (emailDomain !== "dd9.com" || emailDomain !== "designdivine.com") {
       return done();
     }
 

@@ -14416,7 +14416,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var bind = __webpack_require__(18);
+var bind = __webpack_require__(17);
 
 /*global toString:true*/
 
@@ -14902,7 +14902,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.instantiateEditTimeEntryBtn = instantiateEditTimeEntryBtn;
 
-var _editTimeEntryValidation = __webpack_require__(13);
+var _editTimeEntryValidation = __webpack_require__(12);
 
 var _editTimeEntryValidation2 = _interopRequireDefault(_editTimeEntryValidation);
 
@@ -15278,10 +15278,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(14);
+    adapter = __webpack_require__(13);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(14);
+    adapter = __webpack_require__(13);
   }
   return adapter;
 }
@@ -15353,52 +15353,6 @@ module.exports = defaults;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/*! Bootstrap 4 styling wrapper for Scroller
- * ©2018 SpryMedia Ltd - datatables.net/license
- */
-
-(function (factory) {
-	if (true) {
-		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(4), __webpack_require__(180)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
-			return factory($, window, document);
-		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
-		// CommonJS
-		module.exports = function (root, $) {
-			if (!root) {
-				root = window;
-			}
-
-			if (!$ || !$.fn.dataTable) {
-				$ = require('datatables.net-bs4')(root, $).$;
-			}
-
-			if (!$.fn.dataTable.Scroller) {
-				require('datatables.net-scroller')(root, $);
-			}
-
-			return factory($, root, root.document);
-		};
-	} else {
-		// Browser
-		factory(jQuery, window, document);
-	}
-})(function ($, window, document, undefined) {
-
-	return $.fn.dataTable;
-});
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
 Object.defineProperty(exports, "__esModule", {
@@ -15444,7 +15398,7 @@ exports.default = createCompanyValidation;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15492,7 +15446,7 @@ exports.default = editCompanyValidation;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15564,7 +15518,7 @@ exports.default = createTimeEntryValidation;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15636,7 +15590,7 @@ exports.default = editTimeEntryValidation;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15647,7 +15601,7 @@ var settle = __webpack_require__(168);
 var buildURL = __webpack_require__(171);
 var parseHeaders = __webpack_require__(177);
 var isURLSameOrigin = __webpack_require__(175);
-var createError = __webpack_require__(17);
+var createError = __webpack_require__(16);
 var btoa = typeof window !== 'undefined' && window.btoa && window.btoa.bind(window) || __webpack_require__(170);
 
 module.exports = function xhrAdapter(config) {
@@ -15815,7 +15769,7 @@ module.exports = function xhrAdapter(config) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(143)))
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15841,7 +15795,7 @@ Cancel.prototype.__CANCEL__ = true;
 module.exports = Cancel;
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15852,7 +15806,7 @@ module.exports = function isCancel(value) {
 };
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15875,7 +15829,7 @@ module.exports = function createError(message, config, code, response) {
 };
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15890,6 +15844,52 @@ module.exports = function bind(fn, thisArg) {
     return fn.apply(thisArg, args);
   };
 };
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/*! Bootstrap 4 styling wrapper for Scroller
+ * ©2018 SpryMedia Ltd - datatables.net/license
+ */
+
+(function (factory) {
+	if (true) {
+		// AMD
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(4), __webpack_require__(180)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
+			return factory($, window, document);
+		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
+		// CommonJS
+		module.exports = function (root, $) {
+			if (!root) {
+				root = window;
+			}
+
+			if (!$ || !$.fn.dataTable) {
+				$ = require('datatables.net-bs4')(root, $).$;
+			}
+
+			if (!$.fn.dataTable.Scroller) {
+				require('datatables.net-scroller')(root, $);
+			}
+
+			return factory($, root, root.document);
+		};
+	} else {
+		// Browser
+		factory(jQuery, window, document);
+	}
+})(function ($, window, document, undefined) {
+
+	return $.fn.dataTable;
+});
 
 /***/ }),
 /* 19 */
@@ -48790,7 +48790,7 @@ var _axios = __webpack_require__(3);
 
 var _axios2 = _interopRequireDefault(_axios);
 
-var _createCompanyValidation = __webpack_require__(10);
+var _createCompanyValidation = __webpack_require__(9);
 
 var _createCompanyValidation2 = _interopRequireDefault(_createCompanyValidation);
 
@@ -48820,7 +48820,7 @@ var _axios = __webpack_require__(3);
 
 var _axios2 = _interopRequireDefault(_axios);
 
-var _editCompanyValidation = __webpack_require__(11);
+var _editCompanyValidation = __webpack_require__(10);
 
 var _editCompanyValidation2 = _interopRequireDefault(_editCompanyValidation);
 
@@ -48848,7 +48848,7 @@ function ajaxEditCompany(e) {
 
 __webpack_require__(4);
 
-__webpack_require__(9);
+__webpack_require__(18);
 
 // Datatables and table title
 $('#companyAllTable').dataTable({
@@ -48875,7 +48875,7 @@ $(".company-all-table-title").html('<h3>Companies</h3>' + '<button type="button"
 
 __webpack_require__(4);
 
-__webpack_require__(9);
+__webpack_require__(18);
 
 // Datatables and table title
 $('#companyOneTable').dataTable({
@@ -48997,7 +48997,7 @@ $('#approvedTimeEntryTable, #hiddenTimeEntryTable, #submittedTimeEntryTable').da
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var _createTimeEntryValidation = __webpack_require__(12);
+var _createTimeEntryValidation = __webpack_require__(11);
 
 var _createTimeEntryValidation2 = _interopRequireDefault(_createTimeEntryValidation);
 
@@ -49278,7 +49278,7 @@ $(".user-all-table-title").html('<h3>Users</h3>' + '<button type="button" class=
 
 
 var utils = __webpack_require__(2);
-var bind = __webpack_require__(18);
+var bind = __webpack_require__(17);
 var Axios = __webpack_require__(164);
 var defaults = __webpack_require__(8);
 
@@ -49313,9 +49313,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(15);
+axios.Cancel = __webpack_require__(14);
 axios.CancelToken = __webpack_require__(163);
-axios.isCancel = __webpack_require__(16);
+axios.isCancel = __webpack_require__(15);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -49335,7 +49335,7 @@ module.exports.default = axios;
 "use strict";
 
 
-var Cancel = __webpack_require__(15);
+var Cancel = __webpack_require__(14);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -49549,7 +49549,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(2);
 var transformData = __webpack_require__(169);
-var isCancel = __webpack_require__(16);
+var isCancel = __webpack_require__(15);
 var defaults = __webpack_require__(8);
 
 /**
@@ -49639,7 +49639,7 @@ module.exports = function enhanceError(error, config, code, response) {
 "use strict";
 
 
-var createError = __webpack_require__(17);
+var createError = __webpack_require__(16);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -53536,9 +53536,9 @@ __webpack_require__(148);
 
 __webpack_require__(149);
 
-__webpack_require__(10);
+__webpack_require__(9);
 
-__webpack_require__(11);
+__webpack_require__(10);
 
 __webpack_require__(147);
 
@@ -53556,9 +53556,9 @@ __webpack_require__(155);
 
 __webpack_require__(5);
 
-__webpack_require__(12);
+__webpack_require__(11);
 
-__webpack_require__(13);
+__webpack_require__(12);
 
 __webpack_require__(6);
 
