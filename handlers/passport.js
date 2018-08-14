@@ -21,21 +21,29 @@ passport.use(new GoogleStrategy({
     const googleEmail = profile.emails[0].value;
     const googleFirstName = profile.name.givenName;
     const googleLastName = profile.name.familyName;
-
     const emailDomain = googleEmail.split("@")[1];
-    if (emailDomain !== "dd9.com" || emailDomain !== "designdivine.com") {
+
+    if (emailDomain === "dd9.com") {
+      login();
+    } else if (emailDomain === "designdivine.com") {
+      login();
+    } else {
       return done();
     }
 
-    User.findOrCreate(
-      { email: googleEmail },
-      { firstName: googleFirstName,
-        lastName: googleLastName,
-        lastSignInAt: Date.now(),
-        $inc: { signInCount : 1 }
+    function login() {
+      User.findOrCreate(
+        { email: googleEmail },
+        {
+          firstName: googleFirstName,
+          lastName: googleLastName,
+          lastSignInAt: Date.now(),
+          $inc: {signInCount: 1}
         },
-      function (err, user) {return done(err, user);
-    });
+        function (err, user) {
+          return done(err, user);
+        });
+    }
   }
 ));
 
