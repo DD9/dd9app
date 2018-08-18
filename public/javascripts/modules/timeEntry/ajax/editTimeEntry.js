@@ -5,6 +5,7 @@
 
 import editTimeEntryValidation from '../editTimeEntryValidation';
 import { createTimeEntryTableActionButtonsHtml, instantiateTimeEntryTableActions, updateTotalTimeEntryTableHours } from "./timeEntryTableActions";
+import flash from '../../helpers/flasher';
 
 import axios from 'axios';
 import moment from 'moment';
@@ -91,6 +92,7 @@ editTimeEntryModal.on('submit', function(e) {
           `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Delete`,
         );
         instantiateEditTimeEntryBtn(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit`);
+        flash('success', "Time entry edited");
       }
     })
     .catch(console.error);

@@ -1,44 +1,16 @@
-function editTimeEntryValidation() {
-  const editTimeEntryModal = $('#editTimeEntryModal');
-  const dateInput = editTimeEntryModal.find('#date');
-  const companyInput = editTimeEntryModal.find('#company');
-  const hoursInput = editTimeEntryModal.find('#hours');
-  const descriptionInput = editTimeEntryModal.find('#description');
+const editTimeEntryModal = $('#editTimeEntryModal');
+const hoursInput = editTimeEntryModal.find('#hours');
+const descriptionInput = editTimeEntryModal.find('#description');
 
-  const dateVal = dateInput.val();
-  const companyVal = companyInput.val();
+function editTimeEntryValidation() {
   const hoursVal = hoursInput.val();
   const descriptionVal = descriptionInput.val();
 
   let hasError = false;
 
-  if (!dateVal) {
+  if (hoursVal.length > 6 || hoursVal.length < 1) {
     hasError = true;
-    dateInput.closest('div').find('.invalid-feedback').html("Date required.");
-    dateInput.addClass('is-invalid');
-  } else {
-    dateInput.removeClass('is-invalid');
-  }
-
-  if (!companyVal) {
-    hasError = true;
-    companyInput.closest('div').find('.invalid-feedback').html("Company required.");
-    companyInput.addClass('is-invalid');
-  } else {
-    companyInput.removeClass('is-invalid');
-  }
-
-  if (!hoursVal) {
-    hasError = true;
-    hoursInput.closest('div').find('.invalid-feedback').html("Hours required.");
-    hoursInput.addClass('is-invalid');
-  } else {
-    hoursInput.removeClass('is-invalid');
-  }
-
-  if (hoursVal.length > 6) {
-    hasError = true;
-    hoursInput.closest('div').find('.invalid-feedback').html("Hour input exceeded input size limit.");
+    hoursInput.closest('div').find('.invalid-feedback').html("Invalid hours input.");
     hoursInput.addClass('is-invalid');
   } else {
     hoursInput.removeClass('is-invalid');
@@ -56,6 +28,11 @@ function editTimeEntryValidation() {
     throw new Error("Form not validated");
   }
 }
+
+editTimeEntryModal.on('hidden.bs.modal', function () {
+  hoursInput.removeClass('is-invalid');
+  descriptionInput.removeClass('is-invalid');
+});
 
 export default editTimeEntryValidation
 

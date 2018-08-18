@@ -1,4 +1,5 @@
 import closeHourLogValidation from '../closeHourLogValidation'
+import flash from '../../helpers/flasher';
 
 import axios from 'axios';
 
@@ -17,12 +18,13 @@ function ajaxCloseHourLogForm(e) {
     .then(res => {
       if (!res.data.error) {
         location.reload();
+        flash('success', "Hour log successfully closed");
       } else {
-        alert(res.data.error);
+        flash('error', res.data.error);
       }
     })
     .catch(console.error);
-}
+  }
 
 
 function ajaxOpenHourLogForm(e) {
@@ -36,6 +38,7 @@ function ajaxOpenHourLogForm(e) {
       } else {
         window.location.href = `${window.location.origin}/hourLog/${res.data._id}`
       }
+    flash('success', "Hour log successfully opened");
     })
     .catch(console.error);
-}
+  }

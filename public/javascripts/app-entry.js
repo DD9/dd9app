@@ -1,6 +1,8 @@
 import 'bootstrap';
 import '../sass/style.scss';
 
+import './modules/helpers/flasher'
+
 import './modules/user/userAll'
 import './modules/user/ajax/editUserAll'
 import './modules/user/ajax/editUserOne'

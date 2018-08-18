@@ -29,6 +29,7 @@ companySchema.index(
 
 companySchema.index(
   { active: 1 },
+  { dateClosed: -1},
 );
 
 module.exports = mongoose.model('Company', companySchema);

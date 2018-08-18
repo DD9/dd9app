@@ -16,21 +16,23 @@ function editCompanyValidation() {
     hasError = true;
     editCompanyForm.find('.invalid-feedback').html("Company name required.");
     companyNameInput.addClass('is-invalid');
-  } else {
-    companyNameInput.removeClass('is-invalid');
   }
 
   if (companyNames.includes(companyNameInputVal)) {
     hasError = true;
     editCompanyForm.find('.invalid-feedback').html("Company name must be unique.");
     companyNameInput.addClass('is-invalid');
-  } else {
-    companyNameInput.removeClass('is-invalid');
   }
 
   if (hasError) {
     throw new Error("Form not validated");
+  } else {
+    companyNameInput.removeClass('is-invalid');
   }
 }
+
+$('#editCompanyModal').on('hidden.bs.modal', function () {
+  companyNameInput.removeClass('is-invalid');
+});
 
 export default editCompanyValidation

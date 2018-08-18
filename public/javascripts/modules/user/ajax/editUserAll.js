@@ -1,4 +1,5 @@
 import editUserValidation from '../editUserValidation';
+import flash from '../../helpers/flasher';
 
 import axios from 'axios';
 import moment from 'moment';
@@ -50,6 +51,7 @@ function ajaxEditUser(e) {
         `<a class="edit-user-btn center-me" data-toggle="modal" href="#editUserModal" data-user=${res.data._id} data-company=${res.data.company._id} data-status=${res.data.status} data-role=${res.data.role} data-firstName=${res.data.firstName} data-lastName=${res.data.lastName} data-email=${res.data.email} data-lastlogin=${res.data.lastLogin}>Edit</a>`
       ]).draw();
       instantiateEditUserButton();
+      flash('success', `Successfully edited ${res.data.email}`);
     })
     .catch(console.error);
 }

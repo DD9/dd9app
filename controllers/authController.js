@@ -12,9 +12,10 @@ exports.googleAuth = passport.authenticate('google', {
 });
 
 exports.googleAuthRedirect = passport.authenticate('google', {
-    failureRedirect: '/auth/login',
-    failureFlash: 'Please login with a dd9.com or designdivine.com email',
-    successRedirect: '/',
+  successRedirect: '/',
+  successFlash: 'You are now logged in',
+  failureRedirect: '/auth/login',
+  failureFlash: 'Please login with a dd9.com or designdivine.com email'
 });
 
 exports.loginForm = (req, res) => {
@@ -23,34 +24,45 @@ exports.loginForm = (req, res) => {
 
 exports.logout = (req, res) => {
   req.logout();
-  req.flash('success', 'You are now logged out!');
+  req.flash('success', 'You are now logged out');
   res.redirect('/auth/login');
 };
 
 exports.isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
+  } else {
+    req.flash('danger', 'Oops, you must be logged in to do that');
+    res.redirect('/auth/login');
   }
-  req.flash('danger', 'Oops, you must be logged in to do that');
-  res.redirect('/auth/login');
 };
 
 exports.isNotLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     return next();
+  } else {
+    req.flash('warning', 'Oops, You are already logged in');
+    res.redirect('/timeEntry/new');
   }
-  req.flash('warning', 'You are already logged in');
-  res.redirect('/timeEntry/new');
 };
 
+exports.isOwner = (req, res, next) => {
+  if (req.params.id === req.user._id.toString()) {
+    return next();
+  } else {
+    req.flash('warning', 'Oops, you are not the owner of that entity');
+    res.redirect('/timeEntry/new');
+  }
+};
 
 exports.isAdmin = (req, res, next) => {
   const isAdmin = req.user.permissions[0].admin;
   if (isAdmin) {
     return next();
+  } else {
+    req.flash('warning', 'Oops, you must be an admin to do that');
+    res.redirect('/timeEntry/new');
   }
-  req.flash('warning', 'Oops, you must be an admin to do that');
-  res.redirect('/timeEntry/new');
 };
 
 exports.filter = (req, res) => {

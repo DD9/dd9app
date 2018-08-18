@@ -1,24 +1,14 @@
 function createTimeEntryValidation() {
   const timeEntryForm = $('.create-time-entry-form');
-  const dateInput = timeEntryForm.find('#date');
   const companyInput = timeEntryForm.find('#company');
   const hoursInput = timeEntryForm.find('#hours');
   const descriptionInput = timeEntryForm.find('#description');
 
-  const dateVal = dateInput.val();
   const companyVal = companyInput.val();
   const hoursVal = hoursInput.val();
   const descriptionVal = descriptionInput.val();
 
   let hasError = false;
-
-  if (!dateVal) {
-    hasError = true;
-    dateInput.closest('div').find('.invalid-feedback').html("Date required.");
-    dateInput.addClass('is-invalid');
-  } else {
-    dateInput.removeClass('is-invalid');
-  }
 
   if (!companyVal) {
     hasError = true;
@@ -28,17 +18,9 @@ function createTimeEntryValidation() {
     companyInput.removeClass('is-invalid');
   }
 
-  if (!hoursVal) {
+  if (hoursVal.length > 6 || hoursVal.length < 1) {
     hasError = true;
-    hoursInput.closest('div').find('.invalid-feedback').html("Hours required.");
-    hoursInput.addClass('is-invalid');
-  } else {
-    hoursInput.removeClass('is-invalid');
-  }
-
-  if (hoursVal.length > 6) {
-    hasError = true;
-    hoursInput.closest('div').find('.invalid-feedback').html("Hour input exceeded input size limit.");
+    hoursInput.closest('div').find('.invalid-feedback').html("Invalid hours input.");
     hoursInput.addClass('is-invalid');
   } else {
     hoursInput.removeClass('is-invalid');

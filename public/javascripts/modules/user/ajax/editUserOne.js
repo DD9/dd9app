@@ -1,4 +1,5 @@
 import editUserValidation from '../editUserValidation';
+import flash from '../../helpers/flasher';
 
 import axios from 'axios';
 
@@ -16,7 +17,7 @@ $(document).ready(function () {
   }
 });
 
-// My account edit ajax
+// My account edit ajax for users
 $('#editUserOneForm').on('submit', ajaxEditUser);
 function ajaxEditUser(e) {
   e.preventDefault();
@@ -29,6 +30,7 @@ function ajaxEditUser(e) {
     .then(res => {
       firstName.val(res.data.firstName);
       lastName.val(res.data.lastName);
+      flash('success', `Successfully edited ${res.data.email}`);
     })
     .catch(console.error);
 }
@@ -59,6 +61,7 @@ function ajaxEditUserAdmin(e) {
         status.attr('data-value', res.data.status);
         role.attr('data-value', res.data.role);
       }
+      flash('success', `Successfully edited ${res.data.email}`);
     })
     .catch(console.error);
 }

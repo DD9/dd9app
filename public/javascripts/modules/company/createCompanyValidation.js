@@ -17,21 +17,24 @@ function createCompanyValidation() {
     hasError = true;
     createCompanyForm.find('.invalid-feedback').html("Company name required.");
     companyNameInput.addClass('is-invalid');
-  } else {
-    companyNameInput.removeClass('is-invalid');
   }
 
   if (companyNames.includes(companyNameInputVal)) {
     hasError = true;
     createCompanyForm.find('.invalid-feedback').html("Company name must be unique.");
     companyNameInput.addClass('is-invalid');
-  } else {
-    companyNameInput.removeClass('is-invalid');
   }
 
   if (hasError) {
     throw new Error("Form not validated");
+  } else {
+    companyNameInput.removeClass('is-invalid');
   }
 }
+
+$('#createCompanyModal').on('hidden.bs.modal', function () {
+  companyNameInput.removeClass('is-invalid');
+  companyNameInput.val('');
+});
 
 export default createCompanyValidation

@@ -4,6 +4,7 @@
  */
 
 import { instantiateEditTimeEntryBtn } from "./editTimeEntry"
+import flash from '../../helpers/flasher';
 
 import axios from 'axios';
 import moment from 'moment';
@@ -92,6 +93,7 @@ function approveFormListener(form, timeEntryTableType) {
     e.preventDefault();
     $(`#${timeEntryTableType}TimeEntryTable`).DataTable().row($(this).closest('tr')).remove().draw();
     updateTotalTimeEntryTableHours(timeEntryTableType, $(this).data('hours'), 0);
+    flash('success', "Time entry approved");
     axios
       .post(this.action)
       .then(res => {
@@ -127,6 +129,7 @@ function hideFormListener(form, timeEntryTableType) {
     e.preventDefault();
     $(`#${timeEntryTableType}TimeEntryTable`).DataTable().row($(this).closest('tr')).remove().draw();
     updateTotalTimeEntryTableHours(timeEntryTableType, $(this).data('hours'), 0);
+    flash('success', "Time entry hidden");
     axios
       .post(this.action)
       .then(res => {
@@ -173,7 +176,7 @@ $(rejectForm).on('submit', function(e) {
   updateTotalTimeEntryTableHours(rejectTimeEntryTableType, $(rejectTimeEntryBtn).data('hours'), 0);
   axios
     .post(this.action)
-    .then(res => {})
+    .then(flash('success', "Time entry rejected"))
     .catch(console.error)
 });
 $('#confirmRejectTimeEntryBtn').on("click", function () {
@@ -197,7 +200,7 @@ $(submitForm).on('submit', function(e) {
   updateTotalTimeEntryTableHours(submitTimeEntryTableType, $(submitTimeEntryBtn).data('hours'), 0);
   axios
     .post(this.action)
-    .then(res => {})
+    .then(flash('success', "Time entry submitted"))
     .catch(console.error)
 });
 $('#confirmTimeEntrySubmitBtn').on("click", function () {
@@ -221,7 +224,7 @@ $(deleteForm).on('submit', function(e) {
   updateTotalTimeEntryTableHours(deleteTimeEntryTableType, $(deleteTimeEntryBtn).data('hours'), 0);
   axios
     .post(this.action)
-    .then(res => {})
+    .then(flash('success', "Time entry deleted"))
     .catch(console.error)
 });
 $('#confirmTimeEntryDeleteBtn').on("click", function () {

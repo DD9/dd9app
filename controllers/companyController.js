@@ -17,27 +17,30 @@ exports.one = async (req, res) => {
 
 exports.create = async (req, res) => {
   const company = await (new Company(req.body)).save();
-  req.flash('success', `Successfully created ${company.name}`);
   res.json(company);
 };
 
 exports.edit = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOneAndUpdate({ _id: companyId }, req.body, { new: true }).select('name');
-  req.flash('success', `Successfully edited ${company.name}`);
+  const company = await Company.findOneAndUpdate({ _id: companyId }, req.body ).select('name');
   res.json(company);
 };
 
 exports.activate = async (req, res) => {
   const companyId = req.params.id;
   const company = await Company.findOneAndUpdate({ _id: companyId }, { status: "active" });
-  req.flash('success', `Successfully activated ${company.name}`);
-  res.json('');
+  res.json(company);
 };
 
 exports.deactivate = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOneAndUpdate({ _id: companyId }, { status: "inactive" });
-  req.flash('success', `Successfully deactivated ${company.name}`);
-  res.json('');
+  const company = await Company.findOne({ _id: companyId });
+  const openHourLog = await HourLog.findOne({ company: companyId, title: "Current", dateClosed: new Date(0)});
+  if (openHourLog) {
+    return res.json({ company, hasOpenHourLog: true })
+  } else {
+    company.status = "inactive";
+    await company.save();
+    return res.json({ company, hasOpenHourLog: false });
+  }
 };

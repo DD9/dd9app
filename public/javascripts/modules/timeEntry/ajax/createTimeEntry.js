@@ -1,6 +1,7 @@
 import createTimeEntryValidation from '../createTimeEntryValidation';
 import { createTimeEntryTableActionButtonsHtml, instantiateTimeEntryTableActions, updateTotalTimeEntryTableHours } from "./timeEntryTableActions";
 import { instantiateEditTimeEntryBtn } from "./editTimeEntry"
+import flash from '../../helpers/flasher';
 
 
 import axios from 'axios';
@@ -45,6 +46,7 @@ function ajaxAddCreatedTimeEntry(e) {
       );
       instantiateEditTimeEntryBtn(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit`);
       createdTimeEntryTable.find('#hours, #description').val('test');
+      flash('success', "Time entry created");
     })
     .catch(console.error);
 }
@@ -84,6 +86,7 @@ function ajaxAddSubmittedTimeEntry(e) {
       );
       instantiateEditTimeEntryBtn(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit`);
       submittedTimeEntryTable.find('#hours, #description').val('test');
+      flash('success', "Time entry submitted");
     })
     .catch(console.error);
 }

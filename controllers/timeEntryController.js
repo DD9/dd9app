@@ -75,13 +75,6 @@ exports.edit = async (req, res) => {
 
   let adjudicatedTimeEntryCompany = false;
 
-  console.log("1");
-  console.log(timeEntry);
-
-  console.log(!timeEntry.hourLog);
-
-  console.log(timeEntry.user.toString() === req.user._id.toString());
-
   // If a user is editing a newly created time entry that he owns
   if (!timeEntry.hourLog && timeEntry.user.toString() === req.user._id.toString()) {
     timeEntry.date = req.body.date;
@@ -92,9 +85,6 @@ exports.edit = async (req, res) => {
     timeEntry.publicCompany = req.body.company;
     timeEntry.publicHours = req.body.hours;
     timeEntry.publicDescription = req.body.description;
-
-    console.log("2");
-    console.log(timeEntry);
 
   // If editing an admin is editing a time entry in an hour log
   } else if (timeEntry.hourLog && req.user.permissions[0].admin === true) {

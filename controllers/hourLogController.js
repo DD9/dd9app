@@ -51,7 +51,7 @@ exports.close = async (req, res) => {
   const hourLog = await HourLog.findOne({ _id: hourLogId });
 
   if (hourLog.totalSubmittedHours > 0) {
-    return res.json({ error: "Cannot close an hour log with submitted time entries."});
+    return res.json({ error: "Cannot close an hour log with submitted time entries"});
   } else {
     hourLog.title = req.body.title;
     hourLog.dateClosed = new Date();

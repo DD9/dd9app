@@ -14,11 +14,11 @@ exports.one = async (req, res) => {
 };
 
 exports.edit = async (req, res) => {
-  const userId = req.params.id;
+  const userId = req.user._id;
   const user = await User.findOneAndUpdate(
     { _id: userId },
     { firstName: req.body.firstName, lastName: req.body.lastName },
-    {new: true}
+    { new: true }
   ).populate('company', 'name');
   await user.save();
   res.json(user);

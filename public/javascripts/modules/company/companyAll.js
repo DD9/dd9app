@@ -1,3 +1,5 @@
+import flash from '../helpers/flasher'
+
 import 'datatables.net-bs4';
 import 'datatables.net-scroller-bs4';
 

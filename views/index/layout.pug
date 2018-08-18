@@ -6,6 +6,7 @@ html
     link(rel="shortcut icon" type="image/png" href="/images/logos/favicon.ico")
     meta(name="viewport" content="width=device-width, initial-scale=1")
   body
+    .flasher.slider.closed
 
     if user
       header
@@ -13,15 +14,12 @@ html
 
     block messages
       if locals.flashes
-        .flash-container
-          - const categories = Object.keys(locals.flashes)
-            each category in categories
+        - const categories = Object.keys(locals.flashes)
+          each category in categories
+            .flasher.node-flash(class=`${category}`)
               each message in flashes[category]
-                - if (category === "error") category = "danger"
-                .alert(class=`alert-${category}` role="alert").alert-dismissible.fade.show.d-inline-block
-                  p.d-inline #{message}
-                  button.d-inline.close(data-dismiss="alert" aria-label="Close")
-                    span(aria-hidden="true") &times;
+                .flash-text.node-flash-text #{message}
+
     .content
       block content
 

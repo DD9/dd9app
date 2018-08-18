@@ -1,3 +1,5 @@
+import flash from '../../helpers/flasher';
+
 import axios from 'axios';
 
 import editCompanyValidation from '../editCompanyValidation';
@@ -12,7 +14,8 @@ function ajaxEditCompany(e) {
       name: this.name.value,
     })
     .then(res => {
-      $('.company-title').html(res.data.name);
+      $('.company-title').html(this.name.value);
+      flash('success', `${res.data.name} edited`);
     })
     .catch(console.error);
 }
