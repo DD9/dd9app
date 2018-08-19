@@ -1,6 +1,7 @@
 import createTimeEntryValidation from '../createTimeEntryValidation';
 import { createTimeEntryTableActionButtonsHtml, instantiateTimeEntryTableActions, updateTotalTimeEntryTableHours } from "./timeEntryTableActions";
 import { instantiateEditTimeEntryBtn } from "./editTimeEntry"
+import { instantiatePublicToggleBtn } from "./timeEntryPublicToggle"
 import flash from '../../helpers/flasher';
 
 
@@ -85,7 +86,7 @@ function ajaxAddSubmittedTimeEntry(e) {
         `#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Delete`,
       );
       instantiateEditTimeEntryBtn(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}Edit`);
-      submittedTimeEntryTable.find('#hours, #description').val('test');
+      instantiatePublicToggleBtn(`#${timeEntryTableType}TimeEntryTableRow${timeEntryTableRowNumber}publicToggle`);
       flash('success', "Time entry submitted");
     })
     .catch(console.error);

@@ -50,6 +50,17 @@ block content
                   data-hours=timeEntry.publicHours
                   data-description=timeEntry.publicDescription)
                     != h.icon('pencil')
+                  button.time-entry-public-hover.btn.btn-sm.btn-link(
+                  data-tabletype="approved"
+                  data-rownumber=rowNumber
+                  data-date=timeEntry.date
+                  data-user=`${timeEntry.user.firstName} ${timeEntry.user.lastName}`
+                  data-company=timeEntry.company.name
+                  data-hours=timeEntry.hours
+                  data-description=timeEntry.description)
+                    != h.icon('cog')
+
+
               else
                 td
             - rowNumber += 1
@@ -97,6 +108,17 @@ block content
                   data-hours=timeEntry.publicHours
                   data-description=timeEntry.publicDescription)
                     != h.icon('pencil')
+                  button.time-entry-public-hover.btn.btn-sm.btn-link(
+                    data-tabletype="hidden"
+                    data-rownumber=rowNumber
+                    data-date=timeEntry.date
+                    data-user=`${timeEntry.user.firstName} ${timeEntry.user.lastName}`
+                    data-company=timeEntry.company.name
+                    data-hours=timeEntry.hours
+                    data-description=timeEntry.description)
+                    != h.icon('cog')
+
+
               else
                 td
             - rowNumber += 1
@@ -112,6 +134,10 @@ block content
       .row
         .col.mt-2
           h4 Submitted
+        .col.mt-2.text-right
+          button.hour-log-one-all-action-btn.btn.btn-sm.btn-primary(data-toggle='modal' data-target='#confirmApproveAllSubmittedTimeEntryModal') Approve All
+          button.hour-log-one-all-action-btn.btn.btn-sm.btn-primary(data-toggle='modal' data-target='#confirmHideAllSubmittedTimeEntryModal') Hide All
+          button.hour-log-one-all-action-btn.btn.btn-sm.btn-primary(data-toggle='modal' data-target='#confirmRejectAllSubmittedTimeEntryModal') Reject All
       table#submittedTimeEntryTable.hour-log-one-time-entry-table.table.table-sm.w-100
         thead.thead-light
           th.hour-log-one-time-entry-th-date  Date
@@ -146,6 +172,17 @@ block content
                   data-hours=timeEntry.publicHours
                   data-description=timeEntry.publicDescription)
                     != h.icon('pencil')
+                  button.time-entry-public-hover.btn.btn-sm.btn-link(
+                  data-tabletype="submitted"
+                  data-rownumber=rowNumber
+                  data-date=timeEntry.date
+                  data-user=`${timeEntry.user.firstName} ${timeEntry.user.lastName}`
+                  data-company=timeEntry.company.name
+                  data-hours=timeEntry.hours
+                  data-description=timeEntry.description)
+                    != h.icon('cog')
+
+
               else
                 td
             - rowNumber += 1
@@ -167,20 +204,20 @@ block content
       #timeEntryCollapse.collapse
         +createAndSubmitTimeEntry()
 
-  #confirmRejectTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmRejectTimeEntryModal', aria-hidden='true')
+  #openHourLogModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='openHourLogModal', aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
         .modal-header
-          h5.modal-title Confirm Reject
+          h5.modal-title Open Hour Log
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
         .modal-body
-          form#confirmRejectTimeEntryForm.form(action=`/api/v1/timeEntry/:id/reject` method="POST")
-            p.text-center Are you sure you want to reject this time entry?
+          form#openHourLogForm.form(action=`/hourLog/${hourLog._id}/open` method="POST" novalidate)
+            p.text-center All time entries will be reassigned to the current hour log.
+            p.text-center A new current hour log will be made for this company if one does not exist.
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-          button#confirmRejectTimeEntryBtn.btn.btn-primary(form='confirmRejectTimeEntryForm') Ok
-  - hourLogOnePage = true
+          button.btn.btn-primary(form='openHourLogForm') Submit
 
   #closeHourLogModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='closeHourLogModal', aria-hidden='true')
     .modal-dialog(role='document')
@@ -199,19 +236,62 @@ block content
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
           button.btn.btn-primary(form='closeHourLogForm') Submit
 
-  #openHourLogModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='openHourLogModal', aria-hidden='true')
+  #confirmRejectTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmRejectTimeEntryModal', aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
         .modal-header
-          h5.modal-title Open Hour Log
+          h5.modal-title Confirm Reject
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
         .modal-body
-          form#openHourLogForm.form(action=`/hourLog/${hourLog._id}/open` method="POST" novalidate)
-            p.text-center All time entries will be reassigned to the current hour log.
-            p.text-center A new current hour log will be made for this company if one does not exist.
+          form#confirmRejectTimeEntryForm.form(action=`/api/v1/timeEntry/:id/reject` method="POST")
+            p.text-center Are you sure you want to reject this time entry?
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-          button.btn.btn-primary(form='openHourLogForm') Submit
+          button#confirmRejectTimeEntryBtn.btn.btn-primary(form='confirmRejectTimeEntryForm') Ok
 
+  #confirmApproveAllSubmittedTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmApproveAllSubmittedTimeEntryModal', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Confirm Approve All Submitted Entries
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#confirmApproveAllSubmittedTimeEntryForm.form(action=`/api/v1/timeEntry/hourLog/${hourLog._id}/approveAll/submitted/approved` method="POST")
+            p.text-center Are you sure you want to approve all submitted time entries?
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button#confirmTimeEntryApproveAllSubmittedBtn.btn.btn-primary(type='submit' form='confirmApproveAllSubmittedTimeEntryForm') Ok
+
+  #confirmHideAllSubmittedTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmHideAllSubmittedTimeEntryModal', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Confirm Hide All Submitted Entries
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#confirmHideAllSubmittedTimeEntryForm.form(action=`/api/v1/timeEntry/hourLog/${hourLog._id}/hideAll/submitted/hidden` method="POST")
+            p.text-center Are you sure you want to hide all submitted time entries?
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button#confirmHideAllTimeEntrySubmittedBtn.btn.btn-primary(type='submit' form='confirmHideAllSubmittedTimeEntryForm') Ok
+
+  #confirmRejectAllSubmittedTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmRejectAllSubmittedTimeEntryModal', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Confirm Reject All Submitted Entries
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#confirmRejectAllSubmittedTimeEntryForm.form(action=`/api/v1/timeEntry/hourLog/${hourLog._id}/rejectAll/submitted/rejected` method="POST")
+            p.text-center Are you sure you want to reject all submitted time entries?
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button#confirmRejectAllTimeEntrySubmittedBtn.btn.btn-primary(type='submit' form='confirmRejectAllSubmittedTimeEntryForm') Ok
+
+
+  - hourLogOnePage = true
   +editTimeEntryModal(hourLogOnePage)

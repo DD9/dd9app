@@ -1,4 +1,6 @@
 const flashContainer = $('.flasher');
+const callbackFlashTime = 1500;
+const reqFlashTime = 2500;
 
 function flash(status, message) {
   // Show
@@ -10,7 +12,7 @@ function flash(status, message) {
   const timeout = setTimeout(function() {
     flashContainer.addClass('closed');
     flashContainer.removeClass(status);
-    }, 3150);
+    }, callbackFlashTime);
 
   // Click through
   flashContainer.on('click', function() {
@@ -20,10 +22,10 @@ function flash(status, message) {
   });
 }
 
-// Global NodeJS flash functionality
+// Global NodeJS-express flash integration mimics JS flashes
 const nodeFlash = $('.node-flash');
 nodeFlash.addClass('slider');
-const timeout = setTimeout(function() { nodeFlash.addClass('closed'); }, 3150);
+const timeout = setTimeout(function() { nodeFlash.addClass('closed'); }, reqFlashTime);
 flashContainer.on('click', function() {
   clearTimeout(timeout);
   flashContainer.addClass('closed');

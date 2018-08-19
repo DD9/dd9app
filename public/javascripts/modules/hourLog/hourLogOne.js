@@ -11,10 +11,10 @@ $('#approvedTimeEntryTable, #hiddenTimeEntryTable, #submittedTimeEntryTable').da
   "aaSorting": [0,'desc'],
   "columns": [
     { "width": "9%"},
-    { "width": "15%"},
-    { "width": "15%"},
+    { "width": "14%"},
+    { "width": "13%"},
     { "width": "4%"},
     { "width": "36%"},
-    { "width": "21%"},
+    { "width": "24%"},
   ]
 });
