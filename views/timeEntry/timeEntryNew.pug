@@ -9,6 +9,12 @@ block content
       .row
         .col.mt-2
           h4 New Time Entries
+        .col.mt-2.text-right
+          if user.permissions[0].admin === true
+            button.time-entry-new-all-action-btn.btn.btn-sm.btn-primary(data-toggle='modal' data-target='#confirmApproveAllTimeEntryModal') Approve All
+            button.time-entry-new-all-action-btn.btn.btn-sm.btn-primary(data-toggle='modal' data-target='#confirmHideAllTimeEntryModal') Hide All
+          button.time-entry-new-all-action-btn.btn.btn-sm.btn-primary(data-toggle='modal' data-target='#confirmSubmitAllTimeEntryModal') Submit All
+          button.time-entry-new-all-action-btn.btn.btn-sm.btn-primary(data-toggle='modal' data-target='#confirmDeleteAllTimeEntryModal') Delete All
       table#createdTimeEntryTable.created-time-entry-table.table.table-sm.w-100
         thead.thead-light
           th.created-time-entry-th-date Date
@@ -68,6 +74,62 @@ block content
         .col.mt-3.mb-2
           h4 Add New Time Entry
       +createTimeEntry()
+
+  #confirmApproveAllTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmApproveAllTimeEntryModal', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Confirm Approve All
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#confirmApproveAllTimeEntryForm.form(action=`/api/v1/timeEntry/newTimeEntries/approveAll/approved` method="POST")
+            p.text-center Are you sure you want to approve all time entries?
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button#confirmTimeEntryApproveAllBtn.btn.btn-primary(type='submit' form='confirmApproveAllTimeEntryForm') Ok
+
+  #confirmHideAllTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmHideAllTimeEntryModal', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Confirm Hide All
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#confirmHideAllTimeEntryForm.form(action=`/api/v1/timeEntry/newTimeEntries/hideAll/hidden` method="POST")
+            p.text-center Are you sure you want to hide all time entries?
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button#confirmHideAllTimeEntrySubmitBtn.btn.btn-primary(type='submit' form='confirmHideAllTimeEntryForm') Ok
+
+  #confirmSubmitAllTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmSubmitAllTimeEntryModal', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Confirm Submit All
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#confirmSubmitAllTimeEntryForm.form(action=`/api/v1/timeEntry/newTimeEntries/submitAll/submitted` method="POST")
+            p.text-center Are you sure you want to submit all time entries?
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button#confirmSubmitAllTimeEntrySubmitBtn.btn.btn-primary(type='submit' form='confirmSubmitAllTimeEntryForm') Ok
+
+  #confirmDeleteAllTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmDeleteAllTimeEntryModal', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Confirm Delete All
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          form#confirmDeleteAllTimeEntryForm.form(action=`/api/v1/timeEntry/newTimeEntries/deleteAll/deleted` method="POST")
+            p.text-center Are you sure you want to delete all time entries?
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button#confirmDeleteAllTimeEntrySubmitBtn.btn.btn-primary(type='submit' form='confirmDeleteAllTimeEntryForm') Ok
 
   #confirmSubmitTimeEntryModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmSubmitTimeEntryModal', aria-hidden='true')
     .modal-dialog(role='document')

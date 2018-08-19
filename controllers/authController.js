@@ -69,8 +69,10 @@ exports.filter = (req, res) => {
   if (req.isAuthenticated()) {
     const isAdmin = req.user.permissions[0].admin;
     if (isAdmin) {
+      req.flash('success', `Welcome ${req.user.firstName} ${req.user.lastName}`);
       res.redirect('/hourLog/all');
     } else {
+      req.flash('success', `Welcome ${req.user.firstName} ${req.user.lastName}`);
       res.redirect('/timeEntry/new');
     }
   } else {

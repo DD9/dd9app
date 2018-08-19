@@ -60,7 +60,7 @@ exports.createAndSubmit = async (req, res) => {
     },
   );
 
-  const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntry._id }).populate('publicCompany publicUser');
+  const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntry._id }).populate('user publicUser company publicCompany');
 
   res.json({ timeEntry: populatedTimeEntry, admin: req.user.permissions[0].admin });
 };
@@ -254,17 +254,16 @@ exports.reject = async (req, res) => {
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
   const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog });
 
-  if (timeEntry.status === "approved") {
-    hourLog.totalPublicHours -= timeEntry.publicHours;
-  } else if (timeEntry.status === "hidden") {
-    hourLog.totalHiddenHours -= timeEntry.publicHours;
-  } else if (timeEntry.status === "submitted") {
-    hourLog.totalSubmittedHours -= timeEntry.publicHours;
-  }
+  console.log(timeEntry);
+  console.log(hourLog);
+
+  if (timeEntry.status === "approved") hourLog.totalPublicHours -= timeEntry.publicHours;
+  else if (timeEntry.status === "hidden") hourLog.totalHiddenHours -= timeEntry.publicHours;
+  else if (timeEntry.status === "submitted") hourLog.totalSubmittedHours -= timeEntry.publicHours;
 
   timeEntry.status = "rejected";
 
-  const returnedTimeEntry = await new TimeEntry({
+  await new TimeEntry({
     user: timeEntry.user,
     company: timeEntry.company,
     date: timeEntry.date,
@@ -332,3 +331,124 @@ exports.delete = async (req, res) => {
   const timeEntry = await TimeEntry.findOneAndDelete({ _id: timeEntryId });
   res.json(timeEntry);
 };
+
+/**
+ * timeEntry/new 'all' actions endpoint
+ */
+
+exports.allActionsFromNewTimeEntries = async (req, res) => {
+  const status = req.params.action;
+
+  if (status === "deleted") {
+    await TimeEntry.remove({ user: req.user._id, status: "created" });
+    return res.json('');
+  }
+
+  const timeEntries = await TimeEntry.find({ user: req.user._id, status: "created" });
+
+  for (let i = 0; i < timeEntries.length; i++) {
+    timeEntry = timeEntries[i];
+    await findOrCreateCurrentHourLog(status, timeEntry);
+    timeEntry.status = status;
+    await timeEntry.save();
+  }
+
+  res.json('');
+};
+
+/**
+ * hourLog/one 'all' actions endpoint for submitted timeEntries
+ */
+
+exports.submittedAllActionsFromHourLog = async (req, res) => {
+  const hourLogId = req.params.id;
+  const status = req.params.status;
+  let hours = 0;
+
+  const timeEntries = await TimeEntry.find({ hourLog: hourLogId, status: "submitted" });
+  const hourLog = await HourLog.findOne({ _id: hourLogId });
+
+  if (status === "rejected") {
+    for (let i = 0; i < timeEntries.length; i++) {
+      timeEntry = timeEntries[i];
+      timeEntry.status = status;
+      await timeEntry.save();
+
+      await new TimeEntry({
+        user: timeEntry.user,
+        company: timeEntry.company,
+        date: timeEntry.date,
+        hours: timeEntry.hours,
+        description: timeEntry.description,
+        publicUser: timeEntry.user,
+        publicCompany: timeEntry.company,
+        publicDate: timeEntry.date,
+        publicHours: timeEntry.hours,
+        publicDescription: timeEntry.description,
+        status: "created"
+      }).save();
+    }
+
+    hourLog.totalSubmittedHours = 0;
+    hourLog.save();
+    req.flash('success', `Successfully ${status} all time entries`);
+    res.redirect(req.get('referer'));
+  }
+
+  for (let i = 0; i < timeEntries.length; i++) {
+    timeEntry = timeEntries[i];
+    timeEntry.status = status;
+    hours += timeEntry.publicHours;
+    await timeEntry.save();
+  }
+
+  if (status === "approved") hourLog.totalPublicHours += hours;
+  else if (status === "hidden") hourLog.totalHiddenHours += hours;
+
+  hourLog.totalSubmittedHours = 0;
+  await hourLog.save();
+
+  req.flash('success', `Successfully ${status} all time entries`);
+  res.redirect(req.get('referer'));
+};
+
+/**
+ * Helper functions
+ */
+
+async function findOrCreateCurrentHourLog(status, timeEntry) {
+  let hourLogHoursUpdateParameter;
+  if (status === "approved") hourLogHoursUpdateParameter = "totalPublicHours";
+  else if (status === "hidden") hourLogHoursUpdateParameter = "totalHiddenHours";
+  else if (status === "submitted") hourLogHoursUpdateParameter = "totalSubmittedHours";
+
+  let hourLog = await HourLog.findOne({ title: "Current", company: timeEntry.company });
+
+  // If there's no current hourLog create one
+  if (!hourLog)
+  {
+    hourLog = await (new HourLog({
+      company: timeEntry.company,
+      timeEntries: timeEntry._id,
+      dateClosed: new Date(0)
+    }));
+    // Total approved, hidden, or submitted hours
+    hourLog[`${hourLogHoursUpdateParameter}`] = timeEntry.hours;
+    timeEntry.hourLog = hourLog._id;
+  }
+
+  // If there is a current hourLog append to it
+  else if (hourLog)
+  {
+    console.log(hourLog);
+    await hourLog.update({ $addToSet: { timeEntries: timeEntry._id }}, { new: true });
+
+    if (status === "approved") hourLog.totalPublicHours += timeEntry.hours;
+    else if (status === "hidden") hourLog.totalHiddenHours += timeEntry.hours;
+    else if (status === "submitted") hourLog.totalSubmittedHours += timeEntry.hours;
+
+    timeEntry.hourLog = hourLog._id;
+    console.log(hourLog);
+  }
+  await hourLog.save();
+}

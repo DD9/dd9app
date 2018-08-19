@@ -15,8 +15,8 @@ exports.one = async (req, res) => {
   const companies = await Company.find({ status: "active" }).select('name').sort('name');
   const hourLog = await HourLog.findOne({ _id: hourLogId })
     .populate('company', 'name')
-    .populate('timeEntries', 'publicUser publicCompany publicHours publicDescription')
-    .deepPopulate('timeEntries.publicUser timeEntries.publicCompany', function (err, records) {
+    .populate('timeEntries', 'user publicUser company publicCompany publicHours publicDescription')
+    .deepPopulate('timeEntries.user timeEntries.publicUser timeEntries.company timeEntries.publicCompany', function (err, records) {
       if (err) {
         console.log(err);
       }
@@ -30,16 +30,26 @@ exports.open = async (req, res) => {
   const closingHourLog = await HourLog.findOne({ _id: hourLogId }).populate('timeEntries');
   const currentHourLog = await HourLog.findOne({ title: "Current", company: closingHourLog.company }).populate('timeEntries');
 
-  if (!currentHourLog) {
+  if (!currentHourLog)
+  {
     closingHourLog.title = "Current";
     closingHourLog.dateOpened = new Date();
     closingHourLog.dateClosed = new Date(0);
     await closingHourLog.save();
     return res.json({ updatedClosedHourLog: true });
-  } else {
+  }
+  else if (currentHourLog)
+  {
     currentHourLog.totalPublicHours += closingHourLog.totalPublicHours;
     currentHourLog.totalHiddenHours += closingHourLog.totalHiddenHours;
     await currentHourLog.update({ $addToSet: { timeEntries: closingHourLog.timeEntries }});
+
+    for (let i = 0; i < closingHourLog.timeEntries.length; i++) {
+      timeEntry = closingHourLog.timeEntries[i];
+      timeEntry.hourLog = currentHourLog._id;
+      await timeEntry.save();
+    }
+
     await closingHourLog.remove();
     await currentHourLog.save();
     return res.json(currentHourLog);
@@ -50,53 +60,17 @@ exports.close = async (req, res) => {
   const hourLogId = req.params.id;
   const hourLog = await HourLog.findOne({ _id: hourLogId });
 
-  if (hourLog.totalSubmittedHours > 0) {
+  if (hourLog.totalSubmittedHours > 0)
+  {
     return res.json({ error: "Cannot close an hour log with submitted time entries"});
-  } else {
+  }
+  else
+  {
     hourLog.title = req.body.title;
     hourLog.dateClosed = new Date();
     await hourLog.save();
   }
 
   res.json(hourLog);
-};
-
-exports.timeEntries = async (req, res) => {
-  const hourLogId = req.params.id;
-  const hourLog = await HourLog.findOne({ _id: hourLogId })
-    .populate({
-      path: 'timeEntries',
-      populate: [{
-        path: 'publicCompany',
-        model: 'Company',
-        select: 'name'
-      },{
-        path: 'publicUser',
-        model: 'User',
-        select: 'firstName lastName'
-      }]
-    });
-
-  const approvedTimeEntries = [];
-  const hiddenTimeEntries = [];
-  const submittedTimeEntries = [];
-
-  for (let i = 0; i < hourLog.timeEntries.length; i++) {
-    let timeEntry = hourLog.timeEntries[i];
-    switch (timeEntry.status) {
-      case "approved":
-        approvedTimeEntries.push(timeEntry);
-        break;
-      case "hidden":
-        hiddenTimeEntries.push(timeEntry);
-        break;
-      case "submitted":
-        submittedTimeEntries.push(timeEntry);
-      default:
-        break;
-    }
-  }
-
-  res.json({ approvedTimeEntries, hiddenTimeEntries, submittedTimeEntries });
 };
 

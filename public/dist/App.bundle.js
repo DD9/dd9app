@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 185);
+/******/ 	return __webpack_require__(__webpack_require__.s = 187);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1901,7 +1901,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             try {
                 oldLocale = globalLocale._abbr;
                 var aliasedRequire = require;
-                __webpack_require__(184)("./" + name);
+                __webpack_require__(186)("./" + name);
                 getSetGlobalLocale(oldLocale);
             } catch (e) {}
         }
@@ -14412,6 +14412,54 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var flashContainer = $('.flasher');
+var callbackFlashTime = 1500;
+var reqFlashTime = 2500;
+
+function flash(status, message) {
+  // Show
+  flashContainer.addClass(status);
+  flashContainer[0].innerHTML = '<div class="flash-text">' + message + '</div>';
+  flashContainer.removeClass('closed');
+
+  // Timeout
+  var timeout = setTimeout(function () {
+    flashContainer.addClass('closed');
+    flashContainer.removeClass(status);
+  }, callbackFlashTime);
+
+  // Click through
+  flashContainer.on('click', function () {
+    clearTimeout(timeout);
+    flashContainer.addClass('closed');
+    flashContainer.removeClass(status);
+  });
+}
+
+// Global NodeJS-express flash integration mimics JS flashes
+var nodeFlash = $('.node-flash');
+nodeFlash.addClass('slider');
+var timeout = setTimeout(function () {
+  nodeFlash.addClass('closed');
+}, reqFlashTime);
+flashContainer.on('click', function () {
+  clearTimeout(timeout);
+  flashContainer.addClass('closed');
+});
+
+exports.default = flash;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -14711,16 +14759,16 @@ module.exports = {
 };
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(163);
+module.exports = __webpack_require__(165);
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14891,52 +14939,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var flashContainer = $('.flasher');
-
-function flash(status, message) {
-  // Show
-  flashContainer.addClass(status);
-  flashContainer[0].innerHTML = '<div class="flash-text">' + message + '</div>';
-  flashContainer.removeClass('closed');
-
-  // Timeout
-  var timeout = setTimeout(function () {
-    flashContainer.addClass('closed');
-    flashContainer.removeClass(status);
-  }, 3150);
-
-  // Click through
-  flashContainer.on('click', function () {
-    clearTimeout(timeout);
-    flashContainer.addClass('closed');
-    flashContainer.removeClass(status);
-  });
-}
-
-// Global NodeJS flash functionality
-var nodeFlash = $('.node-flash');
-nodeFlash.addClass('slider');
-var timeout = setTimeout(function () {
-  nodeFlash.addClass('closed');
-}, 3150);
-flashContainer.on('click', function () {
-  clearTimeout(timeout);
-  flashContainer.addClass('closed');
-});
-
-exports.default = flash;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -14954,11 +14956,13 @@ var _editTimeEntryValidation2 = _interopRequireDefault(_editTimeEntryValidation)
 
 var _timeEntryTableActions = __webpack_require__(7);
 
-var _flasher = __webpack_require__(5);
+var _timeEntryPublicToggle = __webpack_require__(158);
+
+var _flasher = __webpack_require__(2);
 
 var _flasher2 = _interopRequireDefault(_flasher);
 
-var _axios = __webpack_require__(3);
+var _axios = __webpack_require__(4);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -14968,11 +14972,12 @@ var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var editTimeEntryModal = $("#editTimeEntryModal"); /*
-                                                    * Ajax for time entry edit submits.
-                                                    * Must be reinstantiated when new buttons are added to the DOM via Ajax.
-                                                    */
+/*
+ * Ajax for time entry edit submits.
+ * Must be reinstantiated when new buttons are added to the DOM via Ajax.
+ */
 
+var editTimeEntryModal = $("#editTimeEntryModal");
 var editTimeEntryForm = $('#editTimeEntryForm');
 
 // Init edit buttons
@@ -14988,7 +14993,7 @@ function instantiateEditTimeEntryBtn(button) {
     timeEntryTableType = $(this).data('tabletype');
     timeEntryTableRowNumber = $(this).data('rownumber');
     currentTimeEntryHours = $(this).data('hours');
-    editTimeEntryForm.attr('action', '/api/v1/timeEntry/' + $(this).data('timeentry') + '/edit');
+    editTimeEntryForm.attr('action', "/api/v1/timeEntry/" + $(this).data('timeentry') + "/edit");
     editTimeEntryModal.find('#date').val(_moment2.default.utc($(this).data('date')).format("YYYY-MM-DD"));
     editTimeEntryModal.find('#company').val($(this).data('company'));
     editTimeEntryModal.find('#user').val($(this).data('user'));
@@ -15011,23 +15016,23 @@ editTimeEntryModal.on('submit', function (e) {
   }).then(function (res) {
     if (timeEntryTableType === "created") {
       var companyTd = res.data.timeEntry.company.name;
-      if (res.data.admin) companyTd = '<a href="/company/' + res.data.timeEntry.company._id + '">' + res.data.timeEntry.company.name + '</a>';
-      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber).data(['' + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), '' + companyTd, '' + res.data.timeEntry.hours, '' + res.data.timeEntry.description, '' + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw();
+      if (res.data.admin) companyTd = "<a href=\"/company/" + res.data.timeEntry.company._id + "\">" + res.data.timeEntry.company.name + "</a>";
+      $("#" + timeEntryTableType + "TimeEntryTable").DataTable().row("#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber).data(["" + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), "" + companyTd, "" + res.data.timeEntry.hours, "" + res.data.timeEntry.description, "" + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw();
       (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.hours);
-      (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Submit', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Delete');
-      instantiateEditTimeEntryBtn('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit');
+      (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Approve", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Hide", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Reject", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Submit", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Delete");
+      instantiateEditTimeEntryBtn("#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Edit");
     } else if (res.data.adjudicatedTimeEntryCompany) {
-      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber).remove().draw();
+      $("#" + timeEntryTableType + "TimeEntryTable").DataTable().row("#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber).remove().draw();
       (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.publicHours, true);
     } else {
-      var _companyTd = '<a href="/company/' + res.data.timeEntry.publicCompany._id + '">' + res.data.timeEntry.publicCompany.name + '</a>';
-      $('#' + timeEntryTableType + 'TimeEntryTable').DataTable().row('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber).data(['' + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), '' + _companyTd, res.data.timeEntry.publicUser.firstName + ' ' + res.data.timeEntry.publicUser.lastName, '' + res.data.timeEntry.publicHours, '' + res.data.timeEntry.publicDescription, '' + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw();
+      var _companyTd = "<a href=\"/company/" + res.data.timeEntry.publicCompany._id + "\">" + res.data.timeEntry.publicCompany.name + "</a>";
+      $("#" + timeEntryTableType + "TimeEntryTable").DataTable().row("#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber).data(["" + _moment2.default.utc(res.data.timeEntry.date).format("YYYY-MM-DD"), "" + _companyTd, res.data.timeEntry.publicUser.firstName + " " + res.data.timeEntry.publicUser.lastName, "" + res.data.timeEntry.publicHours, "" + res.data.timeEntry.publicDescription, "" + (0, _timeEntryTableActions.createTimeEntryTableActionButtonsHtml)(res, timeEntryTableType, timeEntryTableRowNumber)]).draw();
       (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, currentTimeEntryHours, res.data.timeEntry.publicHours);
-      (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Submit', '#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Delete');
-      instantiateEditTimeEntryBtn('#' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit');
-      (0, _flasher2.default)('success', "Time entry edited");
+      (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Approve", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Hide", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Reject", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Submit", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Delete");
+      instantiateEditTimeEntryBtn("#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Edit");
+      (0, _timeEntryPublicToggle.instantiatePublicToggleBtn)("#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "publicToggle");
     }
-  }).catch(console.error);
+  }).then((0, _flasher2.default)('success', "Successfully edited time entry")).catch(console.error);
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
@@ -15047,11 +15052,11 @@ exports.updateTotalTimeEntryTableHours = updateTotalTimeEntryTableHours;
 
 var _editTimeEntry = __webpack_require__(6);
 
-var _flasher = __webpack_require__(5);
+var _flasher = __webpack_require__(2);
 
 var _flasher2 = _interopRequireDefault(_flasher);
 
-var _axios = __webpack_require__(3);
+var _axios = __webpack_require__(4);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -15069,21 +15074,25 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function createTimeEntryTableActionButtonsHtml(res, timeEntryTableType, timeEntryTableRowNumber) {
   var editSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve"><image xlink:href="/images/icons/pencil.svg" x="0" y="0" width="100%" height="100%"/></svg>';
+  var publicToggleSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve"><image xlink:href="/images/icons/cog.svg" x="0" y="0" width="100%" height="100%"/></svg>';
   var html = '';
   if (res.data.admin === true) {
     if (timeEntryTableType === "approved") {
       html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide" class="' + timeEntryTableType + '-time-entry-table-hide-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/hide\' method="POST" data-hours="' + res.data.timeEntry.publicHours + '"><button class="btn btn-sm btn-link" type="submit">Hide</button></form>';
       html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject" class="reject-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmRejectTimeEntryModal\' data-timeentry="' + res.data.timeEntry._id + '" data-hours="' + res.data.timeEntry.publicHours + '">Reject</button>';
       html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#editTimeEntryModal\' data-tabletype=' + timeEntryTableType + ' data-rownumber="' + timeEntryTableRowNumber + '" data-timeentry="' + res.data.timeEntry._id + '" data-date="' + res.data.timeEntry.publicDate + '" data-user="' + res.data.timeEntry.publicUser._id + '" data-company="' + res.data.timeEntry.publicCompany._id + '" data-hours="' + res.data.timeEntry.publicHours + '" data-description="' + res.data.timeEntry.publicDescription + '">' + editSVG + '</button>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'publicToggle" class="time-entry-public-hover btn btn-sm btn-link" data-tabletype=' + timeEntryTableType + ' data-rownumber="' + timeEntryTableRowNumber + '" data-timeentry="' + res.data.timeEntry._id + '" data-date="' + res.data.timeEntry.date + '" data-user="' + res.data.timeEntry.user.firstName + ' ' + res.data.timeEntry.user.lastName + '" data-company="' + res.data.timeEntry.company.name + '" data-hours="' + res.data.timeEntry.hours + '" data-description="' + res.data.timeEntry.description + '">' + publicToggleSVG + '</button>';
     } else if (timeEntryTableType === "hidden") {
       html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve" class="time-entry-table-form-approve form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/approve\' method="POST" data-hours="' + res.data.timeEntry.publicHours + '"><button class="btn btn-sm btn-link" type="submit">Approve</button></form>';
       html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject" class="reject-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmRejectTimeEntryModal\' data-timeentry="' + res.data.timeEntry._id + '" data-hours="' + res.data.timeEntry.publicHours + '">Reject</button>';
       html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#editTimeEntryModal\' data-tabletype=' + timeEntryTableType + ' data-rownumber="' + timeEntryTableRowNumber + '" data-timeentry="' + res.data.timeEntry._id + '" data-date="' + res.data.timeEntry.publicDate + '" data-user="' + res.data.timeEntry.publicUser._id + '" data-company="' + res.data.timeEntry.publicCompany._id + '" data-hours="' + res.data.timeEntry.publicHours + '" data-description="' + res.data.timeEntry.publicDescription + '">' + editSVG + '</button>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'publicToggle" class="time-entry-public-hover btn btn-sm btn-link" data-tabletype=' + timeEntryTableType + ' data-rownumber="' + timeEntryTableRowNumber + '" data-timeentry="' + res.data.timeEntry._id + '" data-date="' + res.data.timeEntry.date + '" data-user="' + res.data.timeEntry.user.firstName + ' ' + res.data.timeEntry.user.lastName + '" data-company="' + res.data.timeEntry.company.name + '" data-hours="' + res.data.timeEntry.hours + '" data-description="' + res.data.timeEntry.description + '">' + publicToggleSVG + '</button>';
     } else if (timeEntryTableType === "submitted") {
       html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve" class="' + timeEntryTableType + '-time-entry-table-approve-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/approve\' method="POST" data-hours="' + res.data.timeEntry.publicHours + '"><button class="btn btn-sm btn-link" type="submit">Approve</button></form>';
       html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide" class="' + timeEntryTableType + '-time-entry-table-hide-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/hide\' method="POST" data-hours="' + res.data.timeEntry.publicHours + '"><button class="btn btn-sm btn-link" type="submit">Hide</button></form>';
       html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Reject" class="reject-' + timeEntryTableType + '-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#confirmRejectTimeEntryModal\' data-timeentry="' + res.data.timeEntry._id + '" data-hours="' + res.data.timeEntry.publicHours + '">Reject</button>';
       html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Edit" class="edit-time-entry-btn btn btn-sm btn-link" data-toggle=\'modal\' data-target=\'#editTimeEntryModal\' data-tabletype=' + timeEntryTableType + ' data-rownumber="' + timeEntryTableRowNumber + '" data-timeentry="' + res.data.timeEntry._id + '" data-date="' + res.data.timeEntry.publicDate + '" data-user="' + res.data.timeEntry.publicUser._id + '" data-company="' + res.data.timeEntry.publicCompany._id + '" data-hours="' + res.data.timeEntry.publicHours + '" data-description="' + res.data.timeEntry.publicDescription + '">' + editSVG + '</button>';
+      html += '<button id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'publicToggle" class="time-entry-public-hover btn btn-sm btn-link" data-tabletype=' + timeEntryTableType + ' data-rownumber="' + timeEntryTableRowNumber + '" data-timeentry="' + res.data.timeEntry._id + '" data-date="' + res.data.timeEntry.date + '" data-user="' + res.data.timeEntry.user.firstName + ' ' + res.data.timeEntry.user.lastName + '" data-company="' + res.data.timeEntry.company.name + '" data-hours="' + res.data.timeEntry.hours + '" data-description="' + res.data.timeEntry.description + '">' + publicToggleSVG + '</button>';
     } else if (timeEntryTableType === "created") {
       html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Approve" class="' + timeEntryTableType + '-time-entry-table-approve-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/approve\' method="POST" data-hours="' + res.data.timeEntry.hours + '"><button class="btn btn-sm btn-link" type="submit">Approve</button></form>';
       html += '<form id="' + timeEntryTableType + 'TimeEntryTableRow' + timeEntryTableRowNumber + 'Hide" class="' + timeEntryTableType + '-time-entry-table-hide-form form d-inline" action=\'/api/v1/timeEntry/' + res.data.timeEntry._id + '/hide\' method="POST" data-hours="' + res.data.timeEntry.hours + '"><button class="btn btn-sm btn-link" type="submit">Hide</button></form>';
@@ -15316,8 +15325,8 @@ exports.default = editUserValidation;
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
-var utils = __webpack_require__(2);
-var normalizeHeaderName = __webpack_require__(177);
+var utils = __webpack_require__(3);
+var normalizeHeaderName = __webpack_require__(179);
 
 var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 var DEFAULT_CONTENT_TYPE = {
@@ -15616,13 +15625,13 @@ exports.default = editTimeEntryValidation;
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
-var utils = __webpack_require__(2);
-var settle = __webpack_require__(169);
-var buildURL = __webpack_require__(172);
-var parseHeaders = __webpack_require__(178);
-var isURLSameOrigin = __webpack_require__(176);
+var utils = __webpack_require__(3);
+var settle = __webpack_require__(171);
+var buildURL = __webpack_require__(174);
+var parseHeaders = __webpack_require__(180);
+var isURLSameOrigin = __webpack_require__(178);
 var createError = __webpack_require__(17);
-var btoa = typeof window !== 'undefined' && window.btoa && window.btoa.bind(window) || __webpack_require__(171);
+var btoa = typeof window !== 'undefined' && window.btoa && window.btoa.bind(window) || __webpack_require__(173);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -15715,7 +15724,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(174);
+      var cookies = __webpack_require__(176);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ? cookies.read(config.xsrfCookieName) : undefined;
@@ -15832,7 +15841,7 @@ module.exports = function isCancel(value) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(168);
+var enhanceError = __webpack_require__(170);
 
 /**
  * Create an Error with the specified message, config, error code, and response.
@@ -15881,7 +15890,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 (function (factory) {
 	if (true) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(4), __webpack_require__(181)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(5), __webpack_require__(183)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
 			return factory($, window, document);
 		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -44802,7 +44811,7 @@ Popper.Defaults = Defaults;
 
 exports.default = Popper;
 //# sourceMappingURL=popper.js.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(182)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(184)))
 
 /***/ }),
 /* 146 */
@@ -48767,11 +48776,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var _flasher = __webpack_require__(5);
+var _flasher = __webpack_require__(2);
 
 var _flasher2 = _interopRequireDefault(_flasher);
 
-var _axios = __webpack_require__(3);
+var _axios = __webpack_require__(4);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -48811,11 +48820,11 @@ function ajaxDeactivateCompanyForm(e) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var _flasher = __webpack_require__(5);
+var _flasher = __webpack_require__(2);
 
 var _flasher2 = _interopRequireDefault(_flasher);
 
-var _axios = __webpack_require__(3);
+var _axios = __webpack_require__(4);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -48846,11 +48855,11 @@ function ajaxCreateCompany(e) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var _flasher = __webpack_require__(5);
+var _flasher = __webpack_require__(2);
 
 var _flasher2 = _interopRequireDefault(_flasher);
 
-var _axios = __webpack_require__(3);
+var _axios = __webpack_require__(4);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -48883,11 +48892,11 @@ function ajaxEditCompany(e) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var _flasher = __webpack_require__(5);
+var _flasher = __webpack_require__(2);
 
 var _flasher2 = _interopRequireDefault(_flasher);
 
-__webpack_require__(4);
+__webpack_require__(5);
 
 __webpack_require__(19);
 
@@ -48916,7 +48925,7 @@ $(".company-all-table-title").html('<h3>Companies</h3>' + '<button type="button"
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(4);
+__webpack_require__(5);
 
 __webpack_require__(19);
 
@@ -48926,7 +48935,7 @@ $('#companyOneTable').dataTable({
   "bFilter": true,
   "bInfo": false,
   "paging": false,
-  "aaSorting": [[0, 'dsc']],
+  "aaSorting": [[0, 'dsc'], [1, 'asc']],
   language: { sSearch: "", searchPlaceholder: "Search..." },
   "columns": [{ "width": "15%" }, { "width": "15%" }, { "width": "50%" }, { "width": "10%" }, { "width": "10%" }]
 });
@@ -48941,15 +48950,15 @@ $(".company-one-table-title").html('<h4>Hour Logs</h4>');
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var _closeHourLogValidation = __webpack_require__(183);
+var _closeHourLogValidation = __webpack_require__(185);
 
 var _closeHourLogValidation2 = _interopRequireDefault(_closeHourLogValidation);
 
-var _flasher = __webpack_require__(5);
+var _flasher = __webpack_require__(2);
 
 var _flasher2 = _interopRequireDefault(_flasher);
 
-var _axios = __webpack_require__(3);
+var _axios = __webpack_require__(4);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -48995,7 +49004,7 @@ function ajaxOpenHourLogForm(e) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(4);
+__webpack_require__(5);
 
 $('#openHourLogAllTable').dataTable({
   "dom": "<'row'<'col hour-log-all-table-title'><'col hour-log-all-table-filter'f>>" + "<'row'<'col-sm-12 hour-log-all-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 hour-log-all-table-paginate'p>>",
@@ -49026,7 +49035,7 @@ $('#closedHourLogAllTable').dataTable({
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(4);
+__webpack_require__(5);
 
 $('#approvedTimeEntryTable, #hiddenTimeEntryTable, #submittedTimeEntryTable').dataTable({
   "dom": "<'row'<'col user-all-table-title'><'col user-all-table-filter'f>>" + "<'row'<'col-sm-12 user-all-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 user-all-table-paginate'p>>",
@@ -49035,7 +49044,7 @@ $('#approvedTimeEntryTable, #hiddenTimeEntryTable, #submittedTimeEntryTable').da
   "pagination": false,
   "bInfo": false,
   "aaSorting": [0, 'desc'],
-  "columns": [{ "width": "9%" }, { "width": "15%" }, { "width": "15%" }, { "width": "4%" }, { "width": "36%" }, { "width": "21%" }]
+  "columns": [{ "width": "9%" }, { "width": "14%" }, { "width": "13%" }, { "width": "4%" }, { "width": "36%" }, { "width": "24%" }]
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
@@ -49054,11 +49063,13 @@ var _timeEntryTableActions = __webpack_require__(7);
 
 var _editTimeEntry = __webpack_require__(6);
 
-var _flasher = __webpack_require__(5);
+var _timeEntryPublicToggle = __webpack_require__(158);
+
+var _flasher = __webpack_require__(2);
 
 var _flasher2 = _interopRequireDefault(_flasher);
 
-var _axios = __webpack_require__(3);
+var _axios = __webpack_require__(4);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -49116,7 +49127,7 @@ function ajaxAddSubmittedTimeEntry(e) {
     (0, _timeEntryTableActions.updateTotalTimeEntryTableHours)(timeEntryTableType, 0, res.data.timeEntry.hours);
     (0, _timeEntryTableActions.instantiateTimeEntryTableActions)(timeEntryTableType, "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Approve", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Hide", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Reject", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Submit", "#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Delete");
     (0, _editTimeEntry.instantiateEditTimeEntryBtn)("#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "Edit");
-    submittedTimeEntryTable.find('#hours, #description').val('test');
+    (0, _timeEntryPublicToggle.instantiatePublicToggleBtn)("#" + timeEntryTableType + "TimeEntryTableRow" + timeEntryTableRowNumber + "publicToggle");
     (0, _flasher2.default)('success', "Time entry submitted");
   }).catch(console.error);
 }
@@ -49129,7 +49140,144 @@ function ajaxAddSubmittedTimeEntry(e) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(180);
+var _flasher = __webpack_require__(2);
+
+var _flasher2 = _interopRequireDefault(_flasher);
+
+var _axios = __webpack_require__(4);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+$('#confirmApproveAllTimeEntryForm').on('submit', ajaxSendApproveAll);
+$('#confirmHideAllTimeEntryForm').on('submit', ajaxSendHideAll);
+$('#confirmSubmitAllTimeEntryForm').on('submit', ajaxSendSubmitAll);
+$('#confirmDeleteAllTimeEntryForm').on('submit', ajaxSendDeleteAll);
+
+var createTimeEntryTable = $('#createdTimeEntryTable');
+var lastElement = createTimeEntryTable.find('tr:last');
+lastElement.prevAll('tr');
+
+function ajaxSendApproveAll(e) {
+  e.preventDefault();
+  $('#confirmApproveAllTimeEntryModal').modal('toggle');
+  _axios2.default.post(this.action).then(function (res) {
+    createTimeEntryTable.DataTable().rows(lastElement.prevAll('tr')).remove().draw();
+    createTimeEntryTable.DataTable().row('#totalCreatedTimeEntryHoursRow').data(['', '', '0', '', '']).draw();
+    (0, _flasher2.default)('success', "Successfully approved all time entries");
+  }).catch(console.error);
+}
+
+function ajaxSendHideAll(e) {
+  e.preventDefault();
+  $('#confirmHideAllTimeEntryModal').modal('toggle');
+  _axios2.default.post(this.action).then(function (res) {
+    createTimeEntryTable.DataTable().rows(lastElement.prevAll('tr')).remove().draw();
+    createTimeEntryTable.DataTable().row('#totalCreatedTimeEntryHoursRow').data(['', '', '0', '', '']).draw();
+    (0, _flasher2.default)('success', "Successfully hid all time entries");
+  }).catch(console.error);
+}
+
+function ajaxSendSubmitAll(e) {
+  e.preventDefault();
+  $('#confirmSubmitAllTimeEntryModal').modal('toggle');
+  _axios2.default.post(this.action).then(function (res) {
+    createTimeEntryTable.DataTable().rows(lastElement.prevAll('tr')).remove().draw();
+    createTimeEntryTable.DataTable().row('#totalCreatedTimeEntryHoursRow').data(['', '', '0', '', '']).draw();
+    (0, _flasher2.default)('success', "Successfully submitted all time entries");
+  }).catch(console.error);
+}
+
+function ajaxSendDeleteAll(e) {
+  e.preventDefault();
+  $('#confirmDeleteAllTimeEntryModal').modal('toggle');
+  _axios2.default.post(this.action).then(function (res) {
+    createTimeEntryTable.DataTable().rows(lastElement.prevAll('tr')).remove().draw();
+    createTimeEntryTable.DataTable().row('#totalCreatedTimeEntryHoursRow').data(['', '', '0', '', '']).draw();
+    (0, _flasher2.default)('success', "Successfully deleted all time entries");
+  }).catch(console.error);
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 158 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.instantiatePublicToggleBtn = instantiatePublicToggleBtn;
+var togglePublicBtns = '.time-entry-public-hover';
+
+var publicDate = void 0;
+var publicCompany = void 0;
+var publicUser = void 0;
+var publicHours = void 0;
+var publicDescription = void 0;
+
+instantiatePublicToggleBtn(togglePublicBtns);
+
+function instantiatePublicToggleBtn(togglePublicBtnSelector) {
+  var togglePublicBtn = $(togglePublicBtnSelector);
+  togglePublicBtn.hover(function () {
+    var row = $('#' + $(this).data('tabletype') + 'TimeEntryTableRow' + $(this).data('rownumber'));
+    row.css("background-color", '#ffa');
+
+    // Date
+    publicDate = $(row).find('td:eq(0)').html();
+    $(row).find('td:eq(0)').html($(this).data('date').split('T')[0]);
+
+    // Company
+    publicCompany = $(row).find('td:eq(1)').html();
+    $(row).find('td:eq(1)').html($(this).data('company'));
+
+    // User
+    publicUser = $(row).find('td:eq(2)').html();
+    $(row).find('td:eq(2)').html($(this).data('user'));
+
+    // Hours
+    publicHours = $(row).find('td:eq(3)').html();
+    $(row).find('td:eq(3)').html($(this).data('hours'));
+
+    // Description
+    publicDescription = $(row).find('td:eq(4)').html();
+    $(row).find('td:eq(4)').html($(this).data('description'));
+  },
+  // Off hover
+  function () {
+    var row = $('#' + $(this).data('tabletype') + 'TimeEntryTableRow' + $(this).data('rownumber'));
+    row.css("background-color", '#fff');
+
+    // Date
+    $(row).find('td:eq(0)').html(publicDate.split('T')[0]);
+
+    // Company
+    $(row).find('td:eq(1)').html(publicCompany);
+
+    // User
+    $(row).find('td:eq(2)').html(publicUser);
+
+    // Hours
+    $(row).find('td:eq(3)').html(publicHours);
+
+    // Description
+    $(row).find('td:eq(4)').html(publicDescription);
+  });
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 159 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+__webpack_require__(182);
 
 $('#createTimeEntryForm').find('#date').datepicker({
   format: 'yyyy-mm-dd'
@@ -49141,13 +49289,13 @@ $('#editTimeEntryModal').find('#date').datepicker({
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 158 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(4);
+__webpack_require__(5);
 
 $('#createdTimeEntryTable').dataTable({
   "dom": "<'row'<'col user-all-table-title'><'col user-all-table-filter'f>>" + "<'row'<'col-sm-12 user-all-table'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 user-all-table-paginate'p>>",
@@ -49161,7 +49309,7 @@ $('#createdTimeEntryTable').dataTable({
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 159 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49171,11 +49319,11 @@ var _editUserValidation = __webpack_require__(8);
 
 var _editUserValidation2 = _interopRequireDefault(_editUserValidation);
 
-var _flasher = __webpack_require__(5);
+var _flasher = __webpack_require__(2);
 
 var _flasher2 = _interopRequireDefault(_flasher);
 
-var _axios = __webpack_require__(3);
+var _axios = __webpack_require__(4);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -49229,7 +49377,7 @@ function ajaxEditUser(e) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 160 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49239,11 +49387,11 @@ var _editUserValidation = __webpack_require__(8);
 
 var _editUserValidation2 = _interopRequireDefault(_editUserValidation);
 
-var _flasher = __webpack_require__(5);
+var _flasher = __webpack_require__(2);
 
 var _flasher2 = _interopRequireDefault(_flasher);
 
-var _axios = __webpack_require__(3);
+var _axios = __webpack_require__(4);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -49308,13 +49456,13 @@ function ajaxEditUserAdmin(e) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 161 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(4);
+__webpack_require__(5);
 
 // Datatables and table title
 $('#userAllTable').dataTable({
@@ -49331,21 +49479,21 @@ $(".user-all-table-title").html('<h3>Users</h3>' + '<button type="button" class=
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 162 */
+/* 164 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 163 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 var bind = __webpack_require__(18);
-var Axios = __webpack_require__(165);
+var Axios = __webpack_require__(167);
 var defaults = __webpack_require__(9);
 
 /**
@@ -49380,14 +49528,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(15);
-axios.CancelToken = __webpack_require__(164);
+axios.CancelToken = __webpack_require__(166);
 axios.isCancel = __webpack_require__(16);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(179);
+axios.spread = __webpack_require__(181);
 
 module.exports = axios;
 
@@ -49395,7 +49543,7 @@ module.exports = axios;
 module.exports.default = axios;
 
 /***/ }),
-/* 164 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49458,18 +49606,18 @@ CancelToken.source = function source() {
 module.exports = CancelToken;
 
 /***/ }),
-/* 165 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var defaults = __webpack_require__(9);
-var utils = __webpack_require__(2);
-var InterceptorManager = __webpack_require__(166);
-var dispatchRequest = __webpack_require__(167);
-var isAbsoluteURL = __webpack_require__(175);
-var combineURLs = __webpack_require__(173);
+var utils = __webpack_require__(3);
+var InterceptorManager = __webpack_require__(168);
+var dispatchRequest = __webpack_require__(169);
+var isAbsoluteURL = __webpack_require__(177);
+var combineURLs = __webpack_require__(175);
 
 /**
  * Create a new instance of Axios
@@ -49549,13 +49697,13 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 module.exports = Axios;
 
 /***/ }),
-/* 166 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 function InterceptorManager() {
   this.handlers = [];
@@ -49607,14 +49755,14 @@ InterceptorManager.prototype.forEach = function forEach(fn) {
 module.exports = InterceptorManager;
 
 /***/ }),
-/* 167 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
-var transformData = __webpack_require__(170);
+var utils = __webpack_require__(3);
+var transformData = __webpack_require__(172);
 var isCancel = __webpack_require__(16);
 var defaults = __webpack_require__(9);
 
@@ -49673,7 +49821,7 @@ module.exports = function dispatchRequest(config) {
 };
 
 /***/ }),
-/* 168 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49699,7 +49847,7 @@ module.exports = function enhanceError(error, config, code, response) {
 };
 
 /***/ }),
-/* 169 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49725,13 +49873,13 @@ module.exports = function settle(resolve, reject, response) {
 };
 
 /***/ }),
-/* 170 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 /**
  * Transform the data for a request or a response
@@ -49751,7 +49899,7 @@ module.exports = function transformData(data, headers, fns) {
 };
 
 /***/ }),
-/* 171 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49792,13 +49940,13 @@ function btoa(input) {
 module.exports = btoa;
 
 /***/ }),
-/* 172 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 function encode(val) {
   return encodeURIComponent(val).replace(/%40/gi, '@').replace(/%3A/gi, ':').replace(/%24/g, '$').replace(/%2C/gi, ',').replace(/%20/g, '+').replace(/%5B/gi, '[').replace(/%5D/gi, ']');
@@ -49859,7 +50007,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 };
 
 /***/ }),
-/* 173 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49878,13 +50026,13 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 };
 
 /***/ }),
-/* 174 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 module.exports = utils.isStandardBrowserEnv() ?
 
@@ -49937,7 +50085,7 @@ function nonStandardBrowserEnv() {
 }();
 
 /***/ }),
-/* 175 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49959,13 +50107,13 @@ module.exports = function isAbsoluteURL(url) {
 };
 
 /***/ }),
-/* 176 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 module.exports = utils.isStandardBrowserEnv() ?
 
@@ -50028,13 +50176,13 @@ function nonStandardBrowserEnv() {
 }();
 
 /***/ }),
-/* 177 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 module.exports = function normalizeHeaderName(headers, normalizedName) {
   utils.forEach(headers, function processHeader(value, name) {
@@ -50046,13 +50194,13 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 };
 
 /***/ }),
-/* 178 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 /**
  * Parse headers into an object
@@ -50091,7 +50239,7 @@ module.exports = function parseHeaders(headers) {
 };
 
 /***/ }),
-/* 179 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -50125,7 +50273,7 @@ module.exports = function spread(callback) {
 };
 
 /***/ }),
-/* 180 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51934,7 +52082,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 181 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53227,7 +53375,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 182 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53257,7 +53405,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 183 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53307,7 +53455,7 @@ exports.default = closeHourLogValidation;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 184 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -53572,11 +53720,11 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 184;
+webpackContext.id = 186;
 
 
 /***/ }),
-/* 185 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53584,15 +53732,15 @@ webpackContext.id = 184;
 
 __webpack_require__(147);
 
-__webpack_require__(162);
+__webpack_require__(164);
 
-__webpack_require__(5);
+__webpack_require__(2);
+
+__webpack_require__(163);
 
 __webpack_require__(161);
 
-__webpack_require__(159);
-
-__webpack_require__(160);
+__webpack_require__(162);
 
 __webpack_require__(8);
 
@@ -53616,9 +53764,9 @@ __webpack_require__(155);
 
 __webpack_require__(153);
 
-__webpack_require__(158);
+__webpack_require__(160);
 
-__webpack_require__(157);
+__webpack_require__(159);
 
 __webpack_require__(156);
 
@@ -53629,6 +53777,10 @@ __webpack_require__(12);
 __webpack_require__(13);
 
 __webpack_require__(7);
+
+__webpack_require__(158);
+
+__webpack_require__(157);
 
 /***/ })
 /******/ ]);

@@ -7956,14 +7956,17 @@ footer {
 .hour-log-one-time-entry-card {
   margin-bottom: 40px; }
 
+.hour-log-one-all-action-btn {
+  margin-left: 10px; }
+
 .hour-log-one-time-entry-th-date {
   width: 9% !important; }
 
 .hour-log-one-time-entry-th-company {
-  width: 15% !important; }
+  width: 14% !important; }
 
 .hour-log-one-time-entry-th-user {
-  width: 15% !important; }
+  width: 13% !important; }
 
 .hour-log-one-time-entry-th-hours {
   width: 4% !important; }
@@ -7972,7 +7975,7 @@ footer {
   width: 36% !important; }
 
 .hour-log-one-time-entry-th-actions {
-  width: 21% !important; }
+  width: 24% !important; }
 
 .hour-log-one-time-entry-table td:nth-child(1) {
   padding-top: 11.9px !important;
@@ -8002,6 +8005,9 @@ footer {
 
 .new-time-entry-container {
   font-size: 15px; }
+
+.time-entry-new-all-action-btn {
+  margin-left: 10px; }
 
 .created-time-entry-th-date {
   width: 9% !important; }
@@ -8041,6 +8047,13 @@ footer {
   margin-bottom: 40px; }
 
 .edit-time-entry-btn svg {
+  padding-top: 4px;
+  width: 18px; }
+
+.time-entry-public-hover {
+  padding-left: 0; }
+
+.time-entry-public-hover svg {
   padding-top: 4px;
   width: 18px; }
 

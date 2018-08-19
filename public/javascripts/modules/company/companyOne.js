@@ -9,7 +9,7 @@ $('#companyOneTable').dataTable({
   "bFilter": true,
   "bInfo": false,
   "paging": false,
-  "aaSorting": [[0,'dsc']],
+  "aaSorting": [[0,'dsc'], [1,'asc']],
   language: {sSearch: "", searchPlaceholder: "Search..."},
   "columns": [
     { "width": "15%"},
