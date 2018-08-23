@@ -10,6 +10,8 @@ instantiatePublicToggleBtn(togglePublicBtns);
 
 export function instantiatePublicToggleBtn(togglePublicBtnSelector) {
   let togglePublicBtn = $(togglePublicBtnSelector);
+
+  // On hover
   togglePublicBtn.hover(
     function() {
       const row = $(`#${$(this).data('tabletype')}TimeEntryTableRow${$(this).data('rownumber')}`);
