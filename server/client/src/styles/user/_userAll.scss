@@ -1,0 +1,41 @@
+.user-all-table-paginate {
+  display: none;
+}
+
+.user-all-table-title {
+  margin-left: 10px;
+}
+
+.user-all-table-title h3 {
+  display: inline;
+}
+
+.create-user-btn {
+  margin-left: 20px;
+  margin-bottom: 12px;
+}
+
+.user-all-table {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+// Datatable table head lineup
+.user-all-th-name {
+  width: 20% !important;
+}
+.user-all-th-email {
+  width: 20% !important;
+}
+.user-all-th-company {
+  width: 10% !important;
+}
+.user-all-th-role {
+  width: 10% !important;
+}
+.user-all-th-last-login  {
+  width: 30% !important;
+}
+.user-all-th-edit {
+  width: 10% !important;
+}

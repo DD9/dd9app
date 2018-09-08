@@ -1,0 +1,70 @@
+.flasher {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 0;
+  z-index: 999;
+  width: 100%;
+}
+
+.flasher.primary {
+  background-color: #CDE5FE;
+  color: #064AAB;
+}
+
+.flasher.secondary {
+  background-color: #E2E3E5;
+  color: #383D41;
+}
+
+.flasher.success {
+  background-color: #D5EDDB;
+  color: #19564E;
+}
+
+.flasher.danger {
+  background-color: #F7D7DA;
+  color: #711D26;
+}
+
+.flasher.error {
+  background-color: #F7D7DA;
+  color: #711D26;
+}
+
+.flasher.warning {
+  background-color: #FFF2CF;
+  color: #84635D;
+}
+
+.flasher.info {
+  background-color: #D2ECF1;
+  color: #1265A5;
+}
+
+.flasher.light {
+  background-color: #FEFEFE;
+  color: #8187AA;
+}
+
+.flasher.dark {
+  background-color: #D6D8D9;
+  color: #1B1E21;
+}
+
+.flash-text {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.slider {
+  overflow-y: hidden;
+  height: 58px;
+  transition-property: all;
+  transition-duration: 0.5s;
+  transition-timing-function: cubic-bezier(0.5, 1, 0.5, 1);
+}
+
+.slider.closed {
+  height: 0;
+}

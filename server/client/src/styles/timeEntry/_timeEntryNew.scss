@@ -1,0 +1,53 @@
+.new-time-entry-container {
+  font-size: 15px;
+}
+
+.time-entry-new-all-action-btn {
+  margin-left: 10px;
+}
+
+// DataTable th alignment
+.created-time-entry-th-date {
+  width: 9% !important;
+}
+.created-time-entry-th-company {
+  width: 20% !important;
+}
+.created-time-entry-th-hours {
+  width: 4% !important;
+}
+.created-time-entry-th-description {
+  width: 40% !important;
+}
+.created-time-entry-th-actions  {
+  width: 27% !important;
+}
+
+// DataTable td alignment
+.created-time-entry-table td:nth-child(1) {
+  padding-top: 11.9px !important;
+  padding-bottom: 0 !important;
+}
+
+.created-time-entry-table td:nth-child(2) {
+  padding-top: 11.9px !important;
+  padding-bottom: 0 !important;
+}
+
+.created-time-entry-table td:nth-child(3) {
+  padding-top: 11.9px !important;
+  padding-bottom: 0 !important;
+}
+
+.created-time-entry-table td:nth-child(4) {
+  padding-top: 11.9px !important;
+  padding-bottom: 0 !important;
+}
+
+.created-time-entry-table td:nth-child(5) {
+  padding-bottom: 0 !important;
+}
+
+.time-entry-new-time-entry-card {
+  margin-bottom: 40px;
+}

@@ -1,0 +1,10 @@
+.bg-dd9-solid-red {
+  background-color: #710706;
+}
+
+.navbar ul li a {
+  color: #FFFFFF;
+}
+.navbar ul li a:hover {
+  background-color: #930A07;
+}
