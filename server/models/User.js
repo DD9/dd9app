@@ -10,6 +10,9 @@ const userSchema = new Schema({
     type: mongoose.Schema.ObjectId,
     auto: true,
   },
+  googleId: {
+    type: String,
+  },
   company: {
     type: mongoose.Schema.ObjectId,
     ref: 'Company',

@@ -1,6 +1,4 @@
 const passport = require('passport');
-const mongoose = require('mongoose');
-const User = mongoose.model('User');
 
 exports.googleAuth = passport.authenticate('google', {
   scope: [
@@ -14,18 +12,18 @@ exports.googleAuth = passport.authenticate('google', {
 exports.googleAuthRedirect = passport.authenticate('google', {
   successRedirect: '/',
   successFlash: 'You are now logged in',
-  failureRedirect: '/auth/login',
-  failureFlash: 'Please login with a dd9.com or designdivine.com email'
+  failureRedirect: '/login',
+  failureFlash: 'Please login with a dd9.com or designdivine.com email',
 });
 
-exports.getCurrentUser = (req, res) => {
+exports.currentUser = (req, res) => {
   res.send(req.user);
 };
 
 exports.logout = (req, res) => {
   req.logout();
   req.flash('success', 'You are now logged out');
-  res.redirect('/auth/login');
+  res.redirect('/');
 };
 
 exports.isLoggedIn = (req, res, next) => {
