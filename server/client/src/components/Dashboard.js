@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { BrowserRouter as Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import RequireAuth from './RequireAuth';
+
 class Dashboard extends Component {
   render() {
     return (
@@ -16,4 +18,4 @@ function mapStateToProps({ auth }) {
   return { auth };
 }
 
-export default connect(mapStateToProps)(Dashboard);
+export default RequireAuth(Dashboard);
