@@ -10,7 +10,7 @@ exports.googleAuth = passport.authenticate('google', {
 });
 
 exports.googleAuthRedirect = passport.authenticate('google', {
-  successRedirect: '/',
+  successRedirect: '/timeEntry/new',
   successFlash: 'You are now logged in',
   failureRedirect: '/login',
   failureFlash: 'Please login with a dd9.com or designdivine.com email',
@@ -23,7 +23,7 @@ exports.currentUser = (req, res) => {
 exports.logout = (req, res) => {
   req.logout();
   req.flash('success', 'You are now logged out');
-  res.redirect('/');
+  res.send();
 };
 
 exports.isLoggedIn = (req, res, next) => {

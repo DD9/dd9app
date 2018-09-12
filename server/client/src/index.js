@@ -13,7 +13,7 @@ import reducers from './reducers';
 const store = createStore(
   reducers,
   {
-    auth: { authenticated: localStorage.getItem('token') },
+    auth: { _id: localStorage.getItem('token') },
   },
   applyMiddleware(reduxThunk),
 );

@@ -1,21 +1,27 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Redirect } from 'react-router-dom';
+import { Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import RequireAuth from './RequireAuth';
+import Header from './Header';
+import TimeEntryNew from './timeEntries/TimeEntryNew';
+import HourLogAll from './hourLogs/HourLogAll';
+import Footer from './Footer';
 
 class Dashboard extends Component {
   render() {
     return (
       <div>
-        <p>You must log in to view the page</p>
+        <Header />
+        <Route path="/timeEntry/new" component={TimeEntryNew} />
+        <Route path="/hourLog/all" component={HourLogAll} />
+        <Footer />
       </div>
     );
   }
 }
 
 function mapStateToProps({ auth }) {
-  return { auth };
+  return { user: auth };
 }
 
-export default RequireAuth(Dashboard);
+export default withRouter(connect(mapStateToProps)(Dashboard));
