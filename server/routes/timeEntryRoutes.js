@@ -2,8 +2,7 @@ const authController = require('../controllers/authController');
 const timeEntryController = require('../controllers/timeEntryController');
 
 module.exports = router => {
-  // TimeEntry get and create endpoints
-  router.get('/timeEntry/new', authController.isLoggedIn, timeEntryController.new);
+  router.get('/api/v1/timeEntries/created', authController.isLoggedIn, timeEntryController.createdTimeEntries);
   router.post('/api/v1/timeEntry/create', authController.isLoggedIn, timeEntryController.create);
   router.post('/api/v1/timeEntry/createAndSubmit', authController.isLoggedIn, timeEntryController.createAndSubmit);
 
