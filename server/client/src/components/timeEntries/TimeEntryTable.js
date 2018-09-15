@@ -4,15 +4,11 @@ import ReactTable from 'react-table';
 
 import 'react-table/react-table.css';
 
-import { fetchCreatedTimeEntries } from '../../actions/timeEntry';
+import { getCreatedTimeEntries } from '../../actions/timeEntry';
 
 class TimeEntryTable extends Component {
   componentDidMount() {
-    this.props.fetchCreatedTimeEntries();
-  }
-
-  componentDidUpdate() {
-    console.log(this.props.createdTimeEntries);
+    this.props.getCreatedTimeEntries();
   }
 
   render() {
@@ -36,18 +32,18 @@ class TimeEntryTable extends Component {
 
     return (
       <ReactTable
-        data={this.props.createdTimeEntries.timeEntries}
+        data={this.props.newTimeEntries.createdTimeEntries}
         columns={columns}
         className="-striped -highlight"
         defaultPageSize={10}
-        minRows={1}
+        minRows={10}
       />
     );
   }
 }
 
-function mapStateToProps({ timeEntries }) {
-  return { createdTimeEntries: timeEntries };
+function mapStateToProps({ newTimeEntries }) {
+  return { newTimeEntries };
 }
 
-export default connect(mapStateToProps, { fetchCreatedTimeEntries })(TimeEntryTable);
+export default connect(mapStateToProps, { getCreatedTimeEntries })(TimeEntryTable);

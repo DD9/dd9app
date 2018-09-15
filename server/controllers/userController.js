@@ -4,8 +4,7 @@ const Company = mongoose.model('Company');
 
 exports.all = async (req, res) => {
   const users = await User.find().populate('company');
-  const companies = await Company.find({ status: "active" }).select('name').sort('name');
-  res.render("user/userAll", { title: "Users", users, companies });
+  res.json(users);
 };
 
 exports.one = async (req, res) => {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchCurrentUser } from '../actions/auth';
+import { getCurrentUser } from '../actions/auth';
 
 import '../styles/partials/app.css';
 import '../styles/partials/normalize.css';
@@ -13,7 +13,7 @@ import Dashboard from './Dashboard';
 
 class App extends Component {
   componentWillMount() {
-    this.props.fetchCurrentUser();
+    this.props.getCurrentUser();
   }
 
   render() {
@@ -30,4 +30,4 @@ class App extends Component {
   }
 }
 
-export default connect(null, { fetchCurrentUser })(App);
+export default connect(null, { getCurrentUser })(App);

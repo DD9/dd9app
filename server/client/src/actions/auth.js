@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { AUTH_USER, AUTH_ERROR } from './types';
 
-export const fetchCurrentUser = () => async dispatch => {
+export const getCurrentUser = () => async dispatch => {
   const res = await axios.get('/api/v1/current_user');
 
   console.log(res.data);

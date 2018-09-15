@@ -1,6 +1,9 @@
 # Secrets
 variables.env
 
+# Scripts
+v1_psql_import_scripts
+
 # Dependencies
 /node_modules
 

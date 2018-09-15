@@ -6,13 +6,13 @@ import moment from 'moment';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { fetchActiveCompanies } from '../../actions/company';
+import { getActiveCompanies } from '../../actions/company';
 import { createNewTimeEntry } from '../../actions/timeEntry';
 
 
 class TimeEntryForm extends Component {
   componentDidMount() {
-    this.props.fetchActiveCompanies();
+    this.props.getActiveCompanies();
 
     const datePicker = document.getElementsByClassName('react-datepicker__input-container')[0];
     datePicker.childNodes[0].setAttribute('readOnly', true);
@@ -144,7 +144,7 @@ function mapStateToProps({ companies }) {
   return { activeCompanies: companies };
 }
 
-export default connect(mapStateToProps, { fetchActiveCompanies, createNewTimeEntry })(reduxForm({
+export default connect(mapStateToProps, { getActiveCompanies, createNewTimeEntry })(reduxForm({
   form: 'timeEntryNew',
   validate,
 })(TimeEntryForm));
