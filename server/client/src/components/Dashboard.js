@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import '../styles/partials/tables.css';
+
 import Header from './Header';
 import UserAll from './users/UserAll';
-import TimeEntryNew from './timeEntries/TimeEntryNew';
+import CompanyAll from './companies/CompanyAll';
 import HourLogAll from './hourLogs/HourLogAll';
+import TimeEntryNew from './timeEntries/TimeEntryNew';
 import Footer from './Footer';
 
 class Dashboard extends Component {
@@ -14,8 +17,9 @@ class Dashboard extends Component {
       <div>
         <Header />
         <Route path="/user/all" component={UserAll} />
-        <Route path="/timeEntry/new" component={TimeEntryNew} />
+        <Route path="/company/all" component={CompanyAll} />
         <Route path="/hourLog/all" component={HourLogAll} />
+        <Route path="/timeEntry/new" component={TimeEntryNew} />
         <Footer />
       </div>
     );

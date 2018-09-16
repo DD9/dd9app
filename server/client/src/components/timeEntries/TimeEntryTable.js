@@ -16,7 +16,7 @@ class TimeEntryTable extends Component {
       Header: 'Date',
       accessor: 'date',
       Cell: date => (date.value.split('T')[0]),
-      maxWidth: 100,
+      maxWidth: 95,
     }, {
       Header: 'Company',
       accessor: 'company.name',
@@ -24,7 +24,7 @@ class TimeEntryTable extends Component {
     }, {
       Header: 'Hours',
       accessor: 'hours',
-      maxWidth: 75,
+      maxWidth: 70,
     }, {
       Header: 'Description',
       accessor: 'description',
@@ -36,7 +36,7 @@ class TimeEntryTable extends Component {
         columns={columns}
         className="-striped -highlight"
         defaultPageSize={10}
-        minRows={10}
+        minRows={5}
       />
     );
   }

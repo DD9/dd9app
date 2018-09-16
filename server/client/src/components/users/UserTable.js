@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 import 'react-table/react-table.css';
 
 import { getAllUsers } from '../../actions/user';
 
-class TimeEntryTable extends Component {
+class UserTable extends Component {
   componentDidMount() {
     this.props.getAllUsers();
   }
@@ -14,30 +16,42 @@ class TimeEntryTable extends Component {
   render() {
     const columns = [{
       Header: 'Name',
-      accessor: 'name',
-      maxWidth: 100,
+      id: 'name',
+      accessor: data => `${data.firstName} ${data.lastName}`,
+      maxWidth: 200,
     }, {
       Header: 'Email',
       accessor: 'email',
       maxWidth: 200,
     }, {
       Header: 'Company',
-      accessor: 'company',
-      maxWidth: 75,
+      id: 'company',
+      accessor: data => <Link to={`/company/${data.company._id}`}>{data.company.name}</Link>,
+      maxWidth: 150,
     }, {
       Header: 'Role',
       accessor: 'role',
+      maxWidth: 75,
+    }, {
+      Header: 'Status',
+      accessor: 'status',
+      maxWidth: 75,
     }, {
       Header: 'Last Login',
-      accessor: 'lastLogin',
+      id: 'lastLogin',
+      accessor: data => moment.utc(data.lastLogin).format("dddd, MMMM Do YYYY [at] h:mmA [UTC]"),
+    }, {
+      Header: '',
+      id: 'edit',
+      cell: data => moment.utc(data.lastLogin).format("dddd, MMMM Do YYYY [at] h:mmA [UTC]"),
     }];
 
     return (
       <ReactTable
-        // data={this.props.users}
+        data={this.props.users}
         columns={columns}
         className="-striped -highlight"
-        defaultPageSize={10}
+        defaultPageSize={20}
         minRows={10}
       />
     );
@@ -48,4 +62,4 @@ function mapStateToProps({ users }) {
   return { users };
 }
 
-export default connect(mapStateToProps, { getAllUsers })(TimeEntryTable);
+export default connect(mapStateToProps, { getAllUsers })(UserTable);

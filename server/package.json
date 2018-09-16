@@ -35,7 +35,7 @@
   "devDependencies": {
     "cli-progress": "^2.1.0",
     "concurrently": "^4.0.1",
-    "csv2json": "^1.4.2",
+    "csvtojson": "^2.0.8",
     "nodemon": "^1.18.4"
   }
 }

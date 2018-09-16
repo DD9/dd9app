@@ -3,11 +3,10 @@ import React, { Component } from 'react';
 import TimeEntryTable from './TimeEntryTable';
 import TimeEntryForm from './TimeEntryForm';
 
-import '../../styles/timeEntry/timeEntryNew.css';
-
 const TimeEntryNew = () => (
-  <div className="container time-entry-new-container">
+  <div className="container default-table-font-size">
     <TimeEntryTable />
+    <div className="m-4" />
     <TimeEntryForm />
   </div>
 );

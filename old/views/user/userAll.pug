@@ -21,7 +21,7 @@ block content
           else
             td= h.moment.utc(user.lastLogin).format("dddd, MMMM Do YYYY [at] h:mmA [UTC]")
           td.text-center
-            a.edit-user-btn(data-toggle="modal" href="#editUserModal"
+            a.edit-user-btn(data-toggle="modal" href="#UserEditModal"
               data-user=user._id
               data-company=user.company._id
               data-status=user.status
@@ -45,7 +45,7 @@ block content
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
-  #editUserModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='editUserModal', aria-hidden='true')
+  #UserEditModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='UserEditModal', aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
         .modal-header
