@@ -1,14 +1,29 @@
-import React from 'react';
+import React, {Component} from 'react';
+import { connect } from 'react-redux';
+
+import { getAllCompanies } from '../../actions/company';
 
 import CompanyCreate from './CompanyCreate';
 import CompanyTable from './CompanyTable';
 
-const CompanyAll = () => (
-  <div className="container default-table-font-size">
-    <CompanyCreate />
-    <div className="m-4" />
-    <CompanyTable />
-  </div>
-);
+class CompanyAll extends Component {
+  componentDidMount() {
+    this.props.getAllCompanies();
+  }
 
-export default CompanyAll;
+  render() {
+    return (
+      <div className="container default-table-font-size">
+        <CompanyCreate allCompanies={this.props.allCompanies} />
+        <div className="m-4" />
+        <CompanyTable allCompanies={this.props.allCompanies} />
+      </div>
+    );
+  }
+}
+
+function mapStateToProps({ companies }) {
+  return { allCompanies: companies };
+}
+
+export default connect(mapStateToProps, { getAllCompanies })(CompanyAll);

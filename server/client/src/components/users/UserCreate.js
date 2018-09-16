@@ -4,10 +4,10 @@ const UserCreate = () => (
   <div>
     <div>
       <h3 className="d-inline">Users</h3>
-      <button type="button" className="ml-3 mb-2 btn btn-primary" data-toggle="modal" data-target="#UserCreateModal">Add User</button>
+      <button type="button" className="ml-3 mb-2 btn btn-primary" data-toggle="modal" data-target="#userCreateModal">Add User</button>
     </div>
     <div>
-      <div className="modal fade" id="UserCreateModal" tabIndex={-1} role="dialog" aria-labelledby="UserCreateModal" aria-hidden="true">
+      <div className="modal fade" id="userCreateModal" tabIndex={-1} role="dialog" aria-labelledby="userCreateModal" aria-hidden="true">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">

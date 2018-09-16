@@ -51,8 +51,6 @@ class UserTable extends Component {
         data={this.props.users}
         columns={columns}
         className="-striped -highlight"
-        defaultPageSize={20}
-        minRows={10}
       />
     );
   }

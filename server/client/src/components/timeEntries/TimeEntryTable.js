@@ -15,7 +15,7 @@ class TimeEntryTable extends Component {
     const columns = [{
       Header: 'Date',
       accessor: 'date',
-      Cell: date => (date.value.split('T')[0]),
+      Cell: data => data.original.date.split('T')[0],
       maxWidth: 95,
     }, {
       Header: 'Company',
@@ -36,7 +36,6 @@ class TimeEntryTable extends Component {
         columns={columns}
         className="-striped -highlight"
         defaultPageSize={10}
-        minRows={5}
       />
     );
   }

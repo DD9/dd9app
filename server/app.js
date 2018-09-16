@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const flash = require('connect-flash');
 const routes = require('./routes/index');
-require('./handlers/passport');
+require('./helpers/passport');
 
 // Create our Express app
 const app = express();

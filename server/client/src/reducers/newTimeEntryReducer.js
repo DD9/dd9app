@@ -9,12 +9,11 @@ export default function(state = INITIAL_STATE, action) {
       return action.payload || false;
 
     case CREATE_NEW_TIME_ENTRY: {
-      let {createdTimeEntries, totalCreatedTimeEntryHours} = state;
-      console.log(action.payload);
+      const { createdTimeEntries } = state;
+      let { totalCreatedTimeEntryHours } = state;
       createdTimeEntries.push(action.payload.timeEntry);
       totalCreatedTimeEntryHours += action.payload.timeEntry.hours;
-      console.log({createdTimeEntries, totalCreatedTimeEntryHours});
-      return {createdTimeEntries, totalCreatedTimeEntryHours};
+      return { createdTimeEntries, totalCreatedTimeEntryHours };
     }
 
     default:

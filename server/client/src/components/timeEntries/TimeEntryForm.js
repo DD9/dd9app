@@ -11,13 +11,6 @@ import { createNewTimeEntry } from '../../actions/timeEntry';
 
 
 class TimeEntryForm extends Component {
-  componentDidMount() {
-    this.props.getActiveCompanies();
-
-    const datePicker = document.getElementsByClassName('react-datepicker__input-container')[0];
-    datePicker.childNodes[0].setAttribute('readOnly', true);
-  }
-
   onFormSubmit(formProps) {
     this.props.createNewTimeEntry(formProps);
   }
@@ -145,6 +138,6 @@ function mapStateToProps({ companies }) {
 }
 
 export default connect(mapStateToProps, { getActiveCompanies, createNewTimeEntry })(reduxForm({
-  form: 'timeEntryNew',
+  form: 'createNewTimeEntry',
   validate,
 })(TimeEntryForm));
