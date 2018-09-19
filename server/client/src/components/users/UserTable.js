@@ -15,35 +15,40 @@ class UserTable extends Component {
 
   render() {
     const columns = [{
-      Header: 'Name',
-      id: 'name',
-      accessor: data => `${data.firstName} ${data.lastName}`,
-      maxWidth: 200,
-    }, {
-      Header: 'Email',
-      accessor: 'email',
-      maxWidth: 200,
-    }, {
-      Header: 'Company',
-      id: 'company',
-      accessor: data => <Link to={`/company/${data.company._id}`}>{data.company.name}</Link>,
-      maxWidth: 150,
-    }, {
-      Header: 'Role',
-      accessor: 'role',
-      maxWidth: 75,
-    }, {
-      Header: 'Status',
-      accessor: 'status',
-      maxWidth: 75,
-    }, {
-      Header: 'Last Login',
-      id: 'lastLogin',
-      accessor: data => moment.utc(data.lastLogin).format("dddd, MMMM Do YYYY [at] h:mmA [UTC]"),
-    }, {
-      Header: '',
-      id: 'edit',
-      cell: data => moment.utc(data.lastLogin).format("dddd, MMMM Do YYYY [at] h:mmA [UTC]"),
+      Header: () => (
+        <span className="table-title">Users</span>
+      ),
+      columns: [{
+        Header: 'Name',
+        id: 'name',
+        accessor: data => `${data.firstName} ${data.lastName}`,
+        maxWidth: 200,
+      }, {
+        Header: 'Email',
+        accessor: 'email',
+        maxWidth: 200,
+      }, {
+        Header: 'Company',
+        id: 'company',
+        accessor: data => <Link to={`/company/${data.company._id}`}>{data.company.name}</Link>,
+        maxWidth: 150,
+      }, {
+        Header: 'Role',
+        accessor: 'role',
+        maxWidth: 75,
+      }, {
+        Header: 'Status',
+        accessor: 'status',
+        maxWidth: 75,
+      }, {
+        Header: 'Last Login',
+        id: 'lastLogin',
+        accessor: data => moment.utc(data.lastLogin).format('dddd, MMMM Do YYYY [at] h:mmA [UTC]'),
+      }, {
+        Header: '',
+        id: 'edit',
+        cell: data => moment.utc(data.lastLogin).format('dddd, MMMM Do YYYY [at] h:mmA [UTC]'),
+      }],
     }];
 
     return (
@@ -51,6 +56,13 @@ class UserTable extends Component {
         data={this.props.users}
         columns={columns}
         className="-striped -highlight"
+        noDataText="Loading..."
+        defaultSorted={[
+          {
+            id: 'name',
+            asc: true,
+          },
+        ]}
       />
     );
   }

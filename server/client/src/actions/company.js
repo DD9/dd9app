@@ -4,8 +4,6 @@ import { GET_ALL_COMPANIES, GET_COMPANY, GET_ACTIVE_COMPANIES, CREATE_COMPANY, E
 export const getAllCompanies = () => async dispatch => {
   const res = await axios.get('/api/v1/companies/all');
 
-  console.log(res.data);
-
   dispatch({ type: GET_ALL_COMPANIES, payload: res.data });
 };
 
@@ -32,4 +30,3 @@ export const editCompany = formProps => async dispatch => {
 
   dispatch({ type: EDIT_COMPANY, payload: res.data });
 };
-

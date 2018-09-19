@@ -31,9 +31,8 @@ class CompanyCreate extends Component {
   render() {
     const { handleSubmit } = this.props;
     return (
-      <div>
-        <div>
-          <h3 className="d-inline">Companies</h3>
+      <div className="py-1 px-3 bg-white rounded box-shadow">
+        <div className="pt-2">
           <button type="button" className="ml-3 mb-2 btn btn-primary" data-toggle="modal" data-target="#companyCreateModal">Add Company</button>
         </div>
         <div>

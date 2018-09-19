@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Redirect, withRouter } from 'react-router-dom';
+import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import '../styles/partials/tables.css';
@@ -17,11 +17,14 @@ class Dashboard extends Component {
     return (
       <div>
         <Header />
-        <Route path="/user/all" component={UserAll} />
-        <Route path="/company/all" component={CompanyAll} />
-        <Route path="/company/:id" component={CompanyOne} />
-        <Route path="/hourLog/all" component={HourLogAll} />
-        <Route path="/timeEntry/new" component={TimeEntryNew} />
+        <Switch>
+          <Route path="/user/all" component={UserAll} />
+          <Route path="/company/all" component={CompanyAll} />
+          <Route path="/company/:id" component={CompanyOne} />
+          <Route path="/hourLog/all" component={HourLogAll} />
+          <Route path="/timeEntry/new" component={TimeEntryNew} />
+          <Redirect to="/timeEntry/new" />
+        </Switch>
         <Footer />
       </div>
     );

@@ -9,7 +9,7 @@ import { getAllCompanies, getCompany, editCompany } from '../../actions/company'
 class CompanyCreate extends Component {
   componentDidMount() {
     this.props.getAllCompanies();
-    this.props.getCompany(match.);
+    // this.props.getCompany(match.);
 
     $('#companyEditModal').on('hidden.bs.modal', () => {
       this.props.reset();

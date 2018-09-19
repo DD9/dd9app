@@ -7,4 +7,6 @@ export const CREATE_COMPANY = 'create_company';
 export const EDIT_COMPANY = 'edit_company';
 export const GET_ACTIVE_COMPANIES = 'get_active_companies';
 export const GET_CREATED_TIME_ENTRIES = 'get_created_time_entries';
+export const GET_OPEN_HOUR_LOGS = 'get_open_hour_logs';
+export const GET_CLOSED_HOUR_LOGS = 'get_closed_hour_logs';
 export const CREATE_NEW_TIME_ENTRY = 'create_new_time_entry';

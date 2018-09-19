@@ -1,5 +1,5 @@
 /* eslint-disable no-trailing-spaces */
-import { GET_CREATED_TIME_ENTRIES, CREATE_NEW_TIME_ENTRY } from '../actions/types';
+import { GET_CREATED_TIME_ENTRIES, CREATE_NEW_TIME_ENTRY } from '../../actions/types';
 
 const INITIAL_STATE = { createdTimeEntries: [], totalCreatedTimeEntryHours: 0 };
 

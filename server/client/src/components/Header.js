@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
@@ -27,7 +27,7 @@ const Header = ({ user, logout, history }) => {
   };
 
   return (
-    <div className="container mb-4 mt-3 px-1">
+    <div className="container mt-4 mb-5 px-1">
       <nav className="navbar bg-dd9-solid-red text-white shadow-sm px-0 py-0">
         <ul className="nav">
           {renderContent()}

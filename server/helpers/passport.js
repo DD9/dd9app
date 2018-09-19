@@ -18,22 +18,16 @@ passport.use(new GoogleStrategy({
 },
 // Do after successful Google authentication
 (accessToken, refreshToken, profile, done) => {
-  const googleId = profile.id;
   const googleEmail = profile.emails[0].value;
   const googleFirstName = profile.name.givenName;
   const googleLastName = profile.name.familyName;
 
-  const emailDomain = googleEmail.split('@')[1];
-  if (emailDomain === 'dd9.com') {
-    login();
-  } else if (emailDomain === 'designdivine.com') {
-    login();
-  } else {
-    return done();
-  }
-
   async function login() {
-    const existingUser = await User.findOne({ googleId: profile.id });
+    console.log('logging in');
+
+    const existingUser = await User.findOne({ email: googleEmail });
+
+    console.log(existingUser);
 
     if (existingUser) {
       return done(null, existingUser);
@@ -42,7 +36,6 @@ passport.use(new GoogleStrategy({
     const user = await new User(
       {
         email: googleEmail,
-        googleId: profile.id,
         firstName: googleFirstName,
         lastName: googleLastName,
         lastSignInAt: Date.now(),
@@ -50,6 +43,15 @@ passport.use(new GoogleStrategy({
     ).save();
 
     done(null, user);
+  }
+
+  const emailDomain = googleEmail.split('@')[1];
+  if (emailDomain === 'dd9.com') {
+    login();
+  } else if (emailDomain === 'designdivine.com') {
+    login();
+  } else {
+    return done();
   }
 }));
 

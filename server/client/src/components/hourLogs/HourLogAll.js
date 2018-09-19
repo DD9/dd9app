@@ -1,17 +1,29 @@
 import React, { Component } from 'react';
-// import { BrowserRouter as Redirect } from 'react-router-dom';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
+
+import { getOpenHourLogs, getClosedHourLogs } from '../../actions/hourLog';
+
+import HourLogTable from './HourLogTable';
 
 class HourLogAll extends Component {
+  componentDidMount() {
+    this.props.getOpenHourLogs();
+    this.props.getClosedHourLogs();
+  }
+
   render() {
     return (
-      <p>hour logs all</p>
+      <div className="container table-font-size">
+        <HourLogTable tableTitle="Open Hour Logs" hourLogs={this.props.openHourLogs} />
+        <div className="m-5" />
+        <HourLogTable tableTitle="Closed Hour Logs" hourLogs={this.props.closedHourLogs} />
+      </div>
     );
   }
 }
 
-// function mapStateToProps({ auth }) {
-//   return { auth };
-// }
+function mapStateToProps({ openHourLogs, closedHourLogs }) {
+  return { openHourLogs, closedHourLogs };
+}
 
-export default HourLogAll;
+export default connect(mapStateToProps, { getOpenHourLogs, getClosedHourLogs })(HourLogAll);

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { getAllCompanies } from '../../actions/company';
 
-import CompanyCreate from './CompanyCreate';
+import CompanyTableControls from './CompanyTableControls';
 import CompanyTable from './CompanyTable';
 
 class CompanyAll extends Component {
@@ -13,10 +13,9 @@ class CompanyAll extends Component {
 
   render() {
     return (
-      <div className="container default-table-font-size">
-        <CompanyCreate allCompanies={this.props.allCompanies} />
-        <div className="m-4" />
+      <div className="container table-font-size">
         <CompanyTable allCompanies={this.props.allCompanies} />
+        <CompanyTableControls allCompanies={this.props.allCompanies} />
       </div>
     );
   }

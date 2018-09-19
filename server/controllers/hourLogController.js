@@ -3,10 +3,14 @@ const User = mongoose.model('User');
 const Company = mongoose.model('Company');
 const HourLog = mongoose.model('HourLog');
 
-exports.all = async (req, res) => {
+exports.openHourLogs = async (req, res) => {
   const openHourLogs = await HourLog.find({ dateClosed: new Date(0) }).populate('company');
-  const closedHourLogs = await HourLog.find({ dateClosed: { $ne: new Date(0) }}).populate('company').sort({'dateOpened': -1}).limit(100);
-  res.render("hourLog/hourLogAll", { title: "Hour Logs", openHourLogs, closedHourLogs });
+  res.json(openHourLogs);
+};
+
+exports.closedHourLogs = async (req, res) => {
+  const closedHourLogs = await HourLog.find({ dateClosed: { $ne: new Date(0) } }).populate('company').sort({'dateOpened': -1});
+  res.json(closedHourLogs);
 };
 
 exports.one = async (req, res) => {

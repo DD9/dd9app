@@ -1,13 +1,12 @@
 import React from 'react';
 
-import UserCreate from './UserCreate';
 import UserTable from './UserTable';
+import UserTableControls from './UserTableControls';
 
 const UserAll = () => (
-  <div className="container default-table-font-size">
-    <UserCreate />
-    <div className="m-4"/>
+  <div className="container table-font-size">
     <UserTable />
+    <UserTableControls />
   </div>
 );
 

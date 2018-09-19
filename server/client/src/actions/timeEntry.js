@@ -4,8 +4,6 @@ import { GET_CREATED_TIME_ENTRIES, CREATE_NEW_TIME_ENTRY } from './types';
 export const getCreatedTimeEntries = () => async dispatch => {
   const res = await axios.get('/api/v1/timeEntries/created');
 
-  console.log(res.data);
-
   dispatch({ type: GET_CREATED_TIME_ENTRIES, payload: res.data });
 };
 

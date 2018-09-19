@@ -11,6 +11,11 @@ import { createNewTimeEntry } from '../../actions/timeEntry';
 
 
 class TimeEntryForm extends Component {
+  componentDidMount() {
+    const datePicker = document.getElementsByClassName('react-datepicker__input-container')[0];
+    datePicker.childNodes[0].setAttribute('readOnly', true);
+  }
+
   onFormSubmit(formProps) {
     this.props.createNewTimeEntry(formProps);
   }
@@ -70,10 +75,10 @@ class TimeEntryForm extends Component {
   render() {
     const { handleSubmit } = this.props;
     return (
-      <div className="py-1 px-3 bg-white rounded box-shadow time-entry-new-time-entry-card">
+      <div className="py-1 px-3 bg-white rounded box-shadow">
         <div className="row">
           <div className="col mt-3 mb-2">
-            <h4>Add New Time Entry</h4>
+            <h5>Add New Time Entry</h5>
           </div>
         </div>
         <hr />
