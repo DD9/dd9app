@@ -10,7 +10,8 @@ const UserTableControls = () => (
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">New User</h5><button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+              <h5 className="modal-title">New User</h5><button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
             <div className="modal-body">
               <p className="text-center">Users are managed via GSuite.</p>
               <p className="text-center">Users must have an @dd9.com or @designdivine email to login.</p>

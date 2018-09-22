@@ -3,6 +3,10 @@ import { BrowserRouter, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getCurrentUser } from '../actions/auth';
 
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
+
 import '../styles/partials/app.css';
 import '../styles/partials/normalize.css';
 

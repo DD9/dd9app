@@ -12,12 +12,23 @@ import { createNewTimeEntry } from '../../actions/timeEntry';
 
 class TimeEntryForm extends Component {
   componentDidMount() {
+    this.props.getActiveCompanies();
+    this.props.initialize({
+      company: -1,
+    });
+
     const datePicker = document.getElementsByClassName('react-datepicker__input-container')[0];
     datePicker.childNodes[0].setAttribute('readOnly', true);
   }
 
   onFormSubmit(formProps) {
     this.props.createNewTimeEntry(formProps);
+    this.props.initialize({
+      date: formProps.date,
+      company: formProps.company,
+      hours: '',
+      description: '',
+    });
   }
 
   renderDateField(field) {
@@ -28,31 +39,31 @@ class TimeEntryForm extends Component {
           {...field.input}
           className={`form-control custom-form-width ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`}
           dateFormat="YYYY-MM-DD"
-          selected={field.input.value ? moment(field.input.value) : moment()}
-          value={moment()}
+          selected={field.input.value ? moment(field.input.value) : ''}
         />
         <div className="invalid-feedback">{field.meta.error}</div>
       </div>
     );
   }
 
-  renderCompanyField(field) {
+  renderSelectField(field) {
     return (
       <div className="form-group col-md-4">
         <label htmlFor={field.name}>{field.label}</label>
         <select {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`}>
+          <option value="-1" disabled>Select a company</option>
           {
-              field.activeCompanies
-                ? field.activeCompanies.map((company) => (<option key={company._id} value={company._id}>{company.name}</option>))
-                : ''
-            }
+            field.selectOptions
+              ? field.selectOptions.map((options) => (<option key={options._id} value={options._id}>{options.name}</option>))
+              : ''
+          }
         </select>
         <div className="invalid-feedback">{field.meta.error}</div>
       </div>
     );
   }
 
-  renderHoursField(field) {
+  renderNumberField(field) {
     return (
       <div className="form-group col-md-4">
         <label htmlFor={field.name}>{field.label}</label>
@@ -62,7 +73,7 @@ class TimeEntryForm extends Component {
     );
   }
 
-  renderDescriptionField(field) {
+  renderTextField(field) {
     return (
       <div className="form-group">
         <label htmlFor={field.name}>{field.label}</label>
@@ -73,7 +84,7 @@ class TimeEntryForm extends Component {
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, activeCompanies } = this.props;
     return (
       <div className="py-1 px-3 bg-white rounded box-shadow">
         <div className="row">
@@ -92,19 +103,19 @@ class TimeEntryForm extends Component {
             <Field
               label="Company"
               name="company"
-              activeCompanies={this.props.activeCompanies}
-              component={this.renderCompanyField}
+              selectOptions={activeCompanies}
+              component={this.renderSelectField}
             />
             <Field
               label="Hours"
               name="hours"
-              component={this.renderHoursField}
+              component={this.renderNumberField}
             />
           </div>
           <Field
             label="Description"
             name="description"
-            component={this.renderDescriptionField}
+            component={this.renderTextField}
           />
           <div className="form-group row">
             <div className="col-sm-10">
@@ -120,13 +131,11 @@ class TimeEntryForm extends Component {
 function validate(values) {
   const errors = {};
 
-  console.log(values);
-
   if (!values.date) {
     errors.date = 'Enter a date.';
   }
-  if (!values.company) {
-    errors.company = 'Enter company.';
+  if (!values.company || values.company === -1) {
+    errors.company = 'Select company.';
   }
   if (!values.hours) {
     errors.hours = 'Enter some hours.';
@@ -138,8 +147,8 @@ function validate(values) {
   return errors;
 }
 
-function mapStateToProps({ companies }) {
-  return { activeCompanies: companies };
+function mapStateToProps({ auth, companies }) {
+  return { auth, activeCompanies: companies };
 }
 
 export default connect(mapStateToProps, { getActiveCompanies, createNewTimeEntry })(reduxForm({

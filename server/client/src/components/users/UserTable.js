@@ -7,6 +7,7 @@ import moment from 'moment';
 import 'react-table/react-table.css';
 
 import { getAllUsers } from '../../actions/user';
+import UserTableEditFormModal from './UserTableEditFormModal';
 
 class UserTable extends Component {
   componentDidMount() {
@@ -21,7 +22,7 @@ class UserTable extends Component {
       columns: [{
         Header: 'Name',
         id: 'name',
-        accessor: data => `${data.firstName} ${data.lastName}`,
+        accessor: user => `${user.firstName} ${user.lastName}`,
         maxWidth: 200,
       }, {
         Header: 'Email',
@@ -30,24 +31,36 @@ class UserTable extends Component {
       }, {
         Header: 'Company',
         id: 'company',
-        accessor: data => <Link to={`/company/${data.company._id}`}>{data.company.name}</Link>,
+        accessor: user => <Link to={`/company/${user.company._id}`}>{user.company.name}</Link>,
         maxWidth: 150,
       }, {
         Header: 'Role',
-        accessor: 'role',
+        id: 'role',
+        accessor: user => user.role.charAt(0).toUpperCase() + user.role.slice(1),
         maxWidth: 75,
       }, {
         Header: 'Status',
-        accessor: 'status',
+        id: 'status',
+        accessor: user => user.status.charAt(0).toUpperCase() + user.status.slice(1),
         maxWidth: 75,
       }, {
         Header: 'Last Login',
         id: 'lastLogin',
-        accessor: data => moment.utc(data.lastLogin).format('dddd, MMMM Do YYYY [at] h:mmA [UTC]'),
+        accessor: user => {
+          if (!user.lastLogin) {
+            return '';
+          }
+          return moment.utc(user.lastLogin).format('dddd, MMMM Do YYYY [at] h:mmA [UTC]');
+        },
       }, {
         Header: '',
         id: 'edit',
-        cell: data => moment.utc(data.lastLogin).format('dddd, MMMM Do YYYY [at] h:mmA [UTC]'),
+        accessor: user => (
+          <div>
+            <UserTableEditFormModal user={user} form={`user-adminEdit-form-${user._id}`} />
+          </div>
+        ),
+        maxWidth: 39,
       }],
     }];
 

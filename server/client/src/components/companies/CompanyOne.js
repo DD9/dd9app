@@ -1,10 +1,10 @@
 import React from 'react';
 
-import CompanyEdit from './CompanyEdit';
+import CompanyOneControls from './CompanyOneControls';
 
 const companyOne = () => (
   <div className="container table-font-size">
-    <CompanyEdit />
+    <CompanyOneControls />
   </div>
 );
 
