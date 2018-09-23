@@ -1,3 +1,8 @@
+/**
+ * Set default authentication properties to load initial state.
+ * Non-authed & Non-admin users will still be redirected from pages on second render.
+ */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -10,7 +15,10 @@ import reducers from './reducers';
 const store = createStore(
   reducers,
   {
-    auth: { _id: localStorage.getItem('token') },
+    auth: {
+      _id: localStorage.getItem('token'),
+      permissions: [{ admin: true }],
+    },
   },
   applyMiddleware(reduxThunk),
 );

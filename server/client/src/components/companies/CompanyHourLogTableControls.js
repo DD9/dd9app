@@ -3,22 +3,20 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import $ from 'jquery';
 
-import { getAllCompanies, getCompany, editCompany } from '../../actions/company';
+import { editCompany } from '../../actions/company';
+import underConstruction from '../../static/images/under_construction.png';
 
 
 class CompanyCreate extends Component {
   componentDidMount() {
-    this.props.getAllCompanies();
-    // this.props.getCompany(match.);
-
     $('#companyEditModal').on('hidden.bs.modal', () => {
       this.props.reset();
     });
   }
 
   onFormSubmit(formProps) {
-    this.props.editCompany(formProps)
-      .then($('#companyEditModal').modal('hide'));
+    this.props.editCompany(this.props.companyId, formProps);
+    $('#companyEditModal').modal('hide');
   }
 
   renderField(field) {
@@ -32,20 +30,19 @@ class CompanyCreate extends Component {
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const { initialValues, handleSubmit } = this.props;
     return (
-      <div>
-        <div>
-          <h3 className="d-inline">Companies</h3>
+      <div className="py-1 px-3 bg-white rounded box-shadow">
+        <div className="pt-2">
           <button type="button" className="ml-3 mb-2 btn btn-primary" data-toggle="modal" data-target="#companyEditModal">Edit</button>
-          <button type="button" className="ml-3 mb-2 btn btn-secondary">Deactivate</button>
+          <button type="button" className="ml-3 mb-2 btn btn-secondary" data-toggle="modal" data-target="#companyDeactivateModal">Deactivate</button>
         </div>
         <div>
           <div className="modal fade" id="companyEditModal" tabIndex={-1} role="dialog" aria-labelledby="companyEditModal" aria-hidden="true">
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">Edit: </h5>
+                  <h5 className="modal-title">Edit {initialValues.name}</h5>
                   <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div className="modal-body">
@@ -65,7 +62,28 @@ class CompanyCreate extends Component {
             </div>
           </div>
         </div>
+        <div>
+          <div className="modal fade" id="companyDeactivateModal" tabIndex={-1} role="dialog" aria-labelledby="companyDeactivateModal" aria-hidden="true">
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Deactivate {initialValues.name}</h5>
+                  <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div className="modal-body">
+                  <div className="modal-body">
+                    <img src={underConstruction} alt="Under Construction" />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
     );
   }
 }
@@ -78,7 +96,7 @@ function validate(values, props) {
   }
 
   let nameValue = '';
-  let companyNames = props.allCompanies.map(company => company.name.toLowerCase().trim());
+  const companyNames = props.companies.map(company => company.name.toLowerCase().trim());
   if (values.name) {
     nameValue = values.name.toLowerCase().trim();
   }
@@ -89,11 +107,8 @@ function validate(values, props) {
   return errors;
 }
 
-function mapStateToProps({ companies }) {
-  return { allCompanies: companies };
-}
-
-export default connect(mapStateToProps, { getAllCompanies, editCompany })(reduxForm({
+export default connect(null, { editCompany })(reduxForm({
   form: 'editCompany',
+  enableReinitialize: true,
   validate,
 })(CompanyCreate));

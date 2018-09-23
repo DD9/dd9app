@@ -11,6 +11,7 @@ import UserOne from './users/UserOne';
 import CompanyAll from './companies/CompanyAll';
 import CompanyOne from './companies/CompanyOne';
 import HourLogAll from './hourLogs/HourLogAll';
+import HourLogOne from './hourLogs/HourLogOne';
 import TimeEntryNew from './timeEntries/TimeEntryNew';
 import Footer from './Footer';
 
@@ -25,7 +26,7 @@ class Dashboard extends Component {
           <AdminRoute path="/company/all" component={CompanyAll} />
           <AdminRoute path="/company/:id" component={CompanyOne} />
           <AdminRoute path="/hourLog/all" component={HourLogAll} />
-          <AdminRoute path="/hourLog/one" component={HourLogOne} />
+          <AdminRoute path="/hourLog/:id" component={HourLogOne} />
           <Route path="/timeEntry/new" component={TimeEntryNew} />
           <Redirect to="/timeEntry/new" />
         </Switch>
