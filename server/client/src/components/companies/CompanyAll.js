@@ -12,17 +12,18 @@ class CompanyAll extends Component {
   }
 
   render() {
+    const { companies } = this.props;
     return (
       <div className="container table-font-size">
-        <CompanyTable allCompanies={this.props.allCompanies} />
-        <CompanyTableControls allCompanies={this.props.allCompanies} />
+        <CompanyTable companies={companies} />
+        <CompanyTableControls companies={companies} />
       </div>
     );
   }
 }
 
 function mapStateToProps({ companies }) {
-  return { allCompanies: companies };
+  return { companies };
 }
 
 export default connect(mapStateToProps, { getAllCompanies })(CompanyAll);

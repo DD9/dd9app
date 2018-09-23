@@ -20,7 +20,6 @@ const PublicOnlyRoute = ({ component: Component, auth, ...rest }) => (
 );
 
 function mapStateToProps({ auth }) {
-  console.log(auth);
   return { auth: auth._id };
 }
 

@@ -12,11 +12,12 @@ class HourLogAll extends Component {
   }
 
   render() {
+    const { openHourLogs, closedHourLogs } = this.props;
     return (
       <div className="container table-font-size">
-        <HourLogTable tableTitle="Open Hour Logs" hourLogs={this.props.openHourLogs} />
+        <HourLogTable tableTitle="Open Hour Logs" hourLogs={openHourLogs} />
         <div className="m-5" />
-        <HourLogTable tableTitle="Closed Hour Logs" hourLogs={this.props.closedHourLogs} />
+        <HourLogTable tableTitle="Closed Hour Logs" hourLogs={closedHourLogs} />
       </div>
     );
   }

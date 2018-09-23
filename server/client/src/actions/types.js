@@ -1,7 +1,10 @@
 export const AUTH_USER = 'auth_user';
 export const AUTH_ERROR = 'auth_error';
-export const GET_ALL_USERS = 'get_all_users';
-export const ADMINEDIT_USER = 'adminEdit_users';
+export const GET_USERS = 'get_users';
+export const GET_USER = 'get_user';
+export const ADMIN_EDIT_USERS = 'admin_edit_users';
+export const ADMIN_EDIT_USER = 'admin_edit_user';
+export const EDIT_USER = 'edit_user';
 export const GET_ALL_COMPANIES = 'get_all_companies';
 export const GET_COMPANY = 'get_company';
 export const CREATE_COMPANY = 'create_company';

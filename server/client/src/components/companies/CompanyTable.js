@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-const CompanyTable = ({ allCompanies }) => {
+const CompanyTable = ({ companies }) => {
   const columns = [{
     Header: () => (
       <span className="table-title">Companies</span>
@@ -21,7 +21,7 @@ const CompanyTable = ({ allCompanies }) => {
 
   return (
     <ReactTable
-      data={allCompanies}
+      data={companies}
       columns={columns}
       className="-striped -highlight"
       defaultSorted={[

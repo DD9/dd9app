@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
+
 import { getCurrentUser } from '../actions/auth';
 
 import 'bootstrap';

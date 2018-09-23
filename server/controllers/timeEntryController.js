@@ -5,18 +5,11 @@ const TimeEntry = mongoose.model('TimeEntry');
 
 exports.createdTimeEntries = async (req, res) => {
   const createdTimeEntries = await TimeEntry.find({ status: 'created', user: req.user._id }).populate('company', 'name');
-
-  let totalCreatedTimeEntryHours = 0;
-  for (let i = 0; i < createdTimeEntries.length; i++) {
-    const timeEntry = createdTimeEntries[i];
-    totalCreatedTimeEntryHours += timeEntry.hours;
-  }
-
-  res.json({ createdTimeEntries, totalCreatedTimeEntryHours });
+  res.json(createdTimeEntries);
 };
 
 exports.create = async (req, res) => {
-  const timeEntry = await new TimeEntry({
+  const newTimeEntry = await new TimeEntry({
     user: req.user._id,
     company: req.body.company,
     date: req.body.date,
@@ -30,9 +23,9 @@ exports.create = async (req, res) => {
     status: 'created',
   }).save();
 
-  const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntry._id }).populate('user company');
+  const populatedTimeEntry = await TimeEntry.findOne({ _id: newTimeEntry._id }).populate('company', 'name');
 
-  res.json({ timeEntry: populatedTimeEntry, admin: req.user.permissions[0].admin });
+  res.json(populatedTimeEntry);
 };
 
 exports.createAndSubmit = async (req, res) => {

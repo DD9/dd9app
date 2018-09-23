@@ -4,19 +4,13 @@ import { reduxForm, Field } from 'redux-form';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 
-import 'react-datepicker/dist/react-datepicker.css';
-
-import { getActiveCompanies } from '../../actions/company';
 import { createNewTimeEntry } from '../../actions/timeEntry';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 
 class TimeEntryForm extends Component {
   componentDidMount() {
-    this.props.getActiveCompanies();
-    this.props.initialize({
-      company: -1,
-    });
-
     const datePicker = document.getElementsByClassName('react-datepicker__input-container')[0];
     datePicker.childNodes[0].setAttribute('readOnly', true);
   }
@@ -147,11 +141,7 @@ function validate(values) {
   return errors;
 }
 
-function mapStateToProps({ auth, companies }) {
-  return { auth, activeCompanies: companies };
-}
-
-export default connect(mapStateToProps, { getActiveCompanies, createNewTimeEntry })(reduxForm({
+export default connect(null, { createNewTimeEntry })(reduxForm({
   form: 'createNewTimeEntry',
   validate,
 })(TimeEntryForm));

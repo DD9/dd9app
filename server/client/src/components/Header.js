@@ -33,7 +33,7 @@ const Header = ({ user, logout, history }) => {
           {renderContent()}
         </ul>
         <ul className="nav justify-content-end">
-          <li className="nav-item"><Link className="nav-link text-white" to={`/user/${user.id}`}>{user.email}</Link></li>
+          <li className="nav-item"><Link className="nav-link text-white" to={`/user/${user._id}`}>{user.email}</Link></li>
           <li className="nav-item"><a className="nav-link" onClick={() => logout(history)}>logout</a></li>
         </ul>
       </nav>

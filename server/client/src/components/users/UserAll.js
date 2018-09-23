@@ -1,13 +1,31 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { getUsers } from '../../actions/user';
+import { getActiveCompanies } from '../../actions/company';
 
 import UserTable from './UserTable';
 import UserTableControls from './UserTableControls';
 
-const UserAll = () => (
-  <div className="container table-font-size">
-    <UserTable />
-    <UserTableControls />
-  </div>
-);
+class UserAll extends Component {
+  componentDidMount() {
+    this.props.getUsers();
+    this.props.getActiveCompanies();
+  }
 
-export default UserAll;
+  render() {
+    const { users, activeCompanies } = this.props;
+    return (
+      <div className="container table-font-size">
+        <UserTable users={users} activeCompanies={activeCompanies} />
+        <UserTableControls />
+      </div>
+    );
+  }
+}
+
+function mapStateToProps({ users, activeCompanies }) {
+  return { users, activeCompanies };
+}
+
+export default connect(mapStateToProps, { getUsers, getActiveCompanies })(UserAll);

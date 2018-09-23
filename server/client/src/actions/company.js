@@ -10,13 +10,13 @@ export const getAllCompanies = () => async dispatch => {
 export const getCompany = id => async dispatch => {
   const res = await axios.get(`/api/v1/companies/${id}`);
 
-  dispatch({ type: GET_ACTIVE_COMPANIES, payload: res.data });
+  dispatch({ type: GET_COMPANY, payload: res.data });
 };
 
 export const getActiveCompanies = () => async dispatch => {
   const res = await axios.get('/api/v1/companies/active');
 
-  dispatch({ type: GET_COMPANY, payload: res.data });
+  dispatch({ type: GET_ACTIVE_COMPANIES, payload: res.data });
 };
 
 export const createCompany = formProps => async dispatch => {

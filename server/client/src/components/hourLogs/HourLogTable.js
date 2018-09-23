@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 import 'react-table/react-table.css';
 
 const HourLogTable = ({ tableTitle, hourLogs }) => {
-  console.log(hourLogs);
-
   const columns = [{
     Header: () => (
       <span className="table-title">{tableTitle}</span>
@@ -20,7 +18,6 @@ const HourLogTable = ({ tableTitle, hourLogs }) => {
       Header: 'Date Closed',
       accessor: 'dateClosed',
       Cell: data => {
-        console.log(data.original.dateClosed);
         if (data.original.dateClosed === '1970-01-01T00:00:00.000Z') {
           return '';
         }

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const User = mongoose.model('User');
-const Company = mongoose.model('Company');
 
 exports.all = async (req, res) => {
   const users = await User.find().populate('company', 'name');
@@ -9,8 +8,9 @@ exports.all = async (req, res) => {
 };
 
 exports.one = async (req, res) => {
-  const companies = await Company.find({ status: 'active' }).select('name').sort('name');
-  res.render('user/userOne', { title: 'My Account', companies });
+  const userId = req.user._id;
+  const user = await User.findOne({ _id: userId }).populate('company', 'name');
+  res.json(user);
 };
 
 exports.edit = async (req, res) => {

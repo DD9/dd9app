@@ -73,7 +73,7 @@ function validate(values, props) {
   }
 
   let nameValue = '';
-  const companyNames = props.allCompanies.map(company => company.name.toLowerCase().trim());
+  const companyNames = props.companies.map(company => company.name.toLowerCase().trim());
   if (values.name) {
     nameValue = values.name.toLowerCase().trim();
   }
