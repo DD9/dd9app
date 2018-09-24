@@ -15,8 +15,6 @@ exports.closedHourLogs = async (req, res) => {
 
 exports.one = async (req, res) => {
   const hourLogId = req.params.id;
-  const users = await User.find({ status: "active" }).select('firstName lastName').sort('firstName');
-  const companies = await Company.find({ status: "active" }).select('name').sort('name');
   const hourLog = await HourLog.findOne({ _id: hourLogId })
     .populate('company', 'name')
     .populate('timeEntries', 'user publicUser company publicCompany publicHours publicDescription')

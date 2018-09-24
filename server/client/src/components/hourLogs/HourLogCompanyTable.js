@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-const CompanyHourLogTable = ({ tableTitle, companyHourLogs }) => {
+const HourLogCompanyTable = ({ tableTitle, companyHourLogs }) => {
   const columns = [{
     Header: () => (
       <span className="table-title">{tableTitle}</span>
@@ -55,4 +55,4 @@ const CompanyHourLogTable = ({ tableTitle, companyHourLogs }) => {
   );
 };
 
-export default CompanyHourLogTable;
+export default HourLogCompanyTable;

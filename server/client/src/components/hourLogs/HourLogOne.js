@@ -14,9 +14,12 @@ class HourLogOne extends Component {
     const { openHourLogs, closedHourLogs } = this.props;
     return (
       <div className="container table-font-size">
+        <div className="m-5" />
         <HourLogTable tableTitle="Open Hour Logs" hourLogs={openHourLogs} />
         <div className="m-5" />
         <HourLogTable tableTitle="Closed Hour Logs" hourLogs={closedHourLogs} />
+        <div className="m-5" />
+        <div className="m-5" />
       </div>
     );
   }

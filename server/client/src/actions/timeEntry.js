@@ -1,10 +1,16 @@
 import axios from 'axios';
-import { GET_CREATED_TIME_ENTRIES, CREATE_NEW_TIME_ENTRY } from './types';
+import { GET_CREATED_TIME_ENTRIES, GET_AHS_TIME_ENTRIES, CREATE_NEW_TIME_ENTRY } from './types';
 
 export const getCreatedTimeEntries = () => async dispatch => {
   const res = await axios.get('/api/v1/timeEntries/created');
 
   dispatch({ type: GET_CREATED_TIME_ENTRIES, payload: res.data });
+};
+
+export const getAHSTimeEntries = () => async dispatch => {
+  const res = await axios.get('/api/v1/timeEntries/ahs');
+
+  dispatch({ type: GET_AHS_TIME_ENTRIES, payload: res.data });
 };
 
 export const createNewTimeEntry = formProps => async dispatch => {

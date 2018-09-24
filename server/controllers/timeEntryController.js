@@ -3,7 +3,7 @@ const Company = mongoose.model('Company');
 const HourLog = mongoose.model('HourLog');
 const TimeEntry = mongoose.model('TimeEntry');
 
-exports.createdTimeEntries = async (req, res) => {
+exports.created = async (req, res) => {
   const createdTimeEntries = await TimeEntry.find({ status: 'created', user: req.user._id }).populate('company', 'name');
   res.json(createdTimeEntries);
 };

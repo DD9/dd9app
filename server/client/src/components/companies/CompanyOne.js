@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import $ from 'jquery';
 
 import { getCompanyHourLogs, getAllCompanies } from '../../actions/company';
 
-import CompanyHourLogTable from './CompanyHourLogTable';
-import CompanyHourLogTableControls from './CompanyHourLogTableControls';
+import CompanyHourLogTable from '../hourLogs/HourLogCompanyTable';
+import CompanyHourLogTableControls from '../hourLogs/HourLogCompanyTableControls';
 
 class CompanyOne extends Component {
   componentDidMount() {

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { getActiveCompanies } from '../../actions/company';
 import { getCreatedTimeEntries } from '../../actions/timeEntry';
 
-import TimeEntryTable from './TimeEntryTable';
+import TimeEntryCreatedTable from './timeEntryTables/TimeEntryCreatedTable';
 import TimeEntryForm from './TimeEntryForm';
 
 class TimeEntryNew extends Component {
@@ -17,7 +17,7 @@ class TimeEntryNew extends Component {
     const { createdTimeEntries, activeCompanies } = this.props;
     return (
       <div className="container table-font-size">
-        <TimeEntryTable createdTimeEntries={createdTimeEntries} />
+        <TimeEntryCreatedTable timeEntries={createdTimeEntries} />
         <TimeEntryForm activeCompanies={activeCompanies} initialValues={{ company: -1 }} />
       </div>
     );

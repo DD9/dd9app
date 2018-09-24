@@ -4,34 +4,33 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
 
-const TimeEntryTable = ({ createdTimeEntries }) => {
+const TimeEntryApprovedTable = ({ timeEntries }) => {
   const columns = [{
     Header: () => (
-      <span className="table-title">New Time Entries</span>
+      <span className="table-title">Approved Time Entries</span>
     ),
     columns: [{
       Header: 'Date',
       id: 'date',
-      accessor: 'date',
-      Cell: data => data.original.date.split('T')[0],
+      Cell: data => data.original.publicDate.split('T')[0],
       maxWidth: 95,
     }, {
       Header: 'Company',
-      accessor: 'company.name',
+      accessor: 'publicCompany.name',
       maxWidth: 200,
     }, {
       Header: 'Hours',
-      accessor: 'hours',
+      accessor: 'publicHours',
       maxWidth: 70,
     }, {
       Header: 'Description',
-      accessor: 'description',
+      accessor: 'publicDescription',
     }],
   }];
 
   return (
     <ReactTable
-      data={createdTimeEntries}
+      data={timeEntries}
       columns={columns}
       className="-striped -highlight"
       defaultPageSize={10}
@@ -46,4 +45,4 @@ const TimeEntryTable = ({ createdTimeEntries }) => {
   );
 };
 
-export default TimeEntryTable;
+export default TimeEntryApprovedTable;
