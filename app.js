@@ -38,7 +38,7 @@ app.use(flash());
 // Inject our own routes
 app.use('/', routes);
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'staging' || 'production') {
   // Express will serve up client assets from the build folder
   app.use(express.static('client/build'));
 
