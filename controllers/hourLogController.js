@@ -9,7 +9,7 @@ exports.openHourLogs = async (req, res) => {
 };
 
 exports.closedHourLogs = async (req, res) => {
-  const closedHourLogs = await HourLog.find({ dateClosed: { $ne: new Date(0) } }).populate('company').sort({'dateOpened': -1});
+  const closedHourLogs = await HourLog.find({ dateClosed: { $ne: new Date(0) } }).populate('company').limit(200).sort({'dateOpened': -1});
   res.json(closedHourLogs);
 };
 
