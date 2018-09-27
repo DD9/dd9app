@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-const deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 const timeEntrySchema = new Schema({
   date: {

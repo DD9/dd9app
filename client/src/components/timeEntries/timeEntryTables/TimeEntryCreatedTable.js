@@ -2,6 +2,7 @@ import React from 'react';
 import ReactTable from 'react-table';
 
 import 'react-table/react-table.css';
+import { Link } from 'react-router-dom';
 
 
 const TimeEntryCreatedTable = ({ timeEntries }) => {
@@ -17,6 +18,7 @@ const TimeEntryCreatedTable = ({ timeEntries }) => {
     }, {
       Header: 'Company',
       accessor: 'company.name',
+      Cell: data => <Link to={`/company/${data.original.company._id}`}>{data.original.company.name}</Link>,
       maxWidth: 200,
     }, {
       Header: 'Hours',
@@ -34,7 +36,7 @@ const TimeEntryCreatedTable = ({ timeEntries }) => {
       columns={columns}
       className="-striped -highlight"
       defaultPageSize={10}
-      noDataText="Loading..."
+      noDataText="Empty"
       defaultSorted={[
         {
           id: 'date',

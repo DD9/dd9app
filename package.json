@@ -2,7 +2,7 @@
   "name": "server",
   "version": "0.1.0",
   "description": "",
-  "main": "start.js",
+  "main": "",
   "engines": {
     "node": "9.8.0",
     "npm": "6.4.1"

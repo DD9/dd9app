@@ -8,6 +8,7 @@ import companyHourLogReducer from './companies/companyHourLogReducer';
 import companyActiveReducer from './companies/companyActiveReducer';
 import hourLogOpenReducer from './hourLogs/hourLogOpenReducer';
 import hourLogClosedReducer from './hourLogs/hourLogClosedReducer';
+import hourLogOneReducer from './hourLogs/hourLogOneReducer';
 import timeEntryNewReducer from './timeEntries/timeEntryNewReducer';
 
 export default combineReducers({
@@ -20,5 +21,6 @@ export default combineReducers({
   companyHourLogs: companyHourLogReducer,
   openHourLogs: hourLogOpenReducer,
   closedHourLogs: hourLogClosedReducer,
+  hourLog: hourLogOneReducer,
   createdTimeEntries: timeEntryNewReducer,
 });

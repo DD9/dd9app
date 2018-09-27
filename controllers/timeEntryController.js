@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Company = mongoose.model('Company');
 const HourLog = mongoose.model('HourLog');
 const TimeEntry = mongoose.model('TimeEntry');
 
@@ -41,20 +40,20 @@ exports.createAndSubmit = async (req, res) => {
     publicDate: req.body.date,
     publicHours: req.body.hours,
     publicDescription: req.body.description,
-    status: "submitted"
+    status: 'submitted',
   }).save();
 
   await HourLog.findOneAndUpdate(
     { _id: req.body.hourLog },
     {
       $addToSet: { timeEntries: timeEntry._id },
-      $inc: { totalSubmittedHours: timeEntry.hours }
+      $inc: { totalSubmittedHours: timeEntry.hours },
     },
   );
 
   const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntry._id }).populate('user publicUser company publicCompany');
 
-  res.json({ timeEntry: populatedTimeEntry, admin: req.user.permissions[0].admin });
+  res.json(populatedTimeEntry);
 };
 
 /*
