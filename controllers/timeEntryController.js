@@ -3,7 +3,10 @@ const HourLog = mongoose.model('HourLog');
 const TimeEntry = mongoose.model('TimeEntry');
 
 exports.created = async (req, res) => {
-  const createdTimeEntries = await TimeEntry.find({ status: 'created', user: req.user._id }).populate('company', 'name');
+  const createdTimeEntries = await TimeEntry.find({ status: 'created', user: req.user._id })
+    .populate('publicCompany', 'name')
+    .populate('publicUser', 'firstName lastName');
+
   res.json(createdTimeEntries);
 };
 
@@ -22,7 +25,9 @@ exports.create = async (req, res) => {
     status: 'created',
   }).save();
 
-  const populatedTimeEntry = await TimeEntry.findOne({ _id: newTimeEntry._id }).populate('company', 'name');
+  const populatedTimeEntry = await TimeEntry.findOne({ _id: newTimeEntry._id })
+    .populate('publicCompany', 'name')
+    .populate('publicUser', 'firstName lastName');
 
   res.json(populatedTimeEntry);
 };

@@ -4,20 +4,13 @@ import { connect } from 'react-redux';
 import { getHourLog } from '../../actions/hourLog';
 
 import HourLogOneControls from './HourLogOneControls';
-import TimeEntryApprovedTable from '../timeEntries/timeEntryTables/TimeEntryApprovedTable';
-import TimeEntryHiddenTable from '../timeEntries/timeEntryTables/TimeEntryHiddenTable';
-import TimeEntrySubmittedTable from '../timeEntries/timeEntryTables/TimeEntrySubmittedTable';
+import TimeEntryTable from '../timeEntries/TimeEntryTable';
 import HourLogOneSubmitTimeEntry from './HourLogOneSubmitTimeEntry';
 
 
 class HourLogOne extends Component {
   componentDidMount() {
     this.props.getHourLog(this.props.match.params.id);
-  }
-
-  componentDidUpdate() {
-    console.log('component updating');
-    console.log(this.props.hourLog);
   }
 
   render() {
@@ -27,11 +20,23 @@ class HourLogOne extends Component {
       <div className="container table-font-size">
         <HourLogOneControls />
         <div className="m-5" />
-        <TimeEntryApprovedTable timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved')} />
+        <TimeEntryTable
+          tableTitle="Approved Time Entries"
+          timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved')}
+          defaultPageSize={5}
+        />
         <div className="m-5" />
-        <TimeEntryHiddenTable timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'hidden')} />
+        <TimeEntryTable
+          tableTitle="Hidden Time Entries"
+          timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'hidden')}
+          defaultPageSize={5}
+        />
         <div className="m-5" />
-        <TimeEntrySubmittedTable timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'submitted')} />
+        <TimeEntryTable
+          tableTitle="Submitted Time Entries"
+          timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'submitted')}
+          defaultPageSize={5}
+        />
         <div className="m-5" />
         <HourLogOneSubmitTimeEntry company={hourLog.company || ''} hourLogId={match.params.id} />
       </div>

@@ -47,7 +47,7 @@ const UserTable = ({ users, activeCompanies }) => {
       },
     }, {
       Header: '',
-      id: 'edit',
+      id: 'editUser',
       accessor: user => (
         <div>
           <UserTableAdminEditFormModal
