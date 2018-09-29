@@ -35,7 +35,6 @@ exports.create = async (req, res) => {
 exports.edit = async (req, res) => {
   const companyId = req.params.id;
   const company = await Company.findOneAndUpdate({ _id: companyId }, { name: req.body.name }, { new: true }).select('name status');
-  console.log(company);
   res.json(company);
 };
 

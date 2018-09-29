@@ -273,42 +273,49 @@ exports.submit = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
 
-  if (timeEntry.hourLog) {
-    const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog });
+  // The user must own the timeEntry or be an admin to submit it
+  if (req.user.permissions[0].admin || timeEntry.user.toString() === req.user._id.toString()) {
+    if (timeEntry.hourLog) {
+      const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog });
 
-    hourLog.totalSubmittedHours += timeEntry.publicHours;
-    if (timeEntry.status === 'approved') {
-      hourLog.totalPublicHours -= timeEntry.publicHours;
-    } else if (timeEntry.status === 'hidden') {
-      hourLog.totalHiddenHours -= timeEntry.publicHours;
+      hourLog.totalSubmittedHours += timeEntry.publicHours;
+      if (timeEntry.status === 'approved') {
+        hourLog.totalPublicHours -= timeEntry.publicHours;
+      } else if (timeEntry.status === 'hidden') {
+        hourLog.totalHiddenHours -= timeEntry.publicHours;
+      }
+
+      await timeEntry.update({ $set: { status: 'submitted' } }, { new: true });
+      await hourLog.save();
+      await timeEntry.save();
+
+      res.json(timeEntry);
+    } else if (!timeEntry.hourLog) {
+      let hourLog = await HourLog.findOne({ title: 'Current', company: timeEntry.company });
+
+      if (!hourLog) {
+        hourLog = await (new HourLog({
+          company: timeEntry.company,
+          timeEntries: timeEntry._id,
+          dateClosed: new Date(0),
+          totalSubmittedHours: timeEntry.hours,
+        }));
+        timeEntry.hourLog = hourLog._id;
+      } else if (hourLog) {
+        await hourLog.update({ $addToSet: { timeEntries: timeEntry._id } }, { new: true });
+        hourLog.totalSubmittedHours += timeEntry.hours;
+        timeEntry.hourLog = hourLog._id;
+      }
+      await timeEntry.update({ $set: { status: 'submitted' } }, { new: true });
+      await hourLog.save();
+      await timeEntry.save();
+
+      res.json(timeEntry);
     }
-
-    await timeEntry.update({ $set: { status: 'submitted' } }, { new: true });
-    await hourLog.save();
-    await timeEntry.save();
-
-    res.json(timeEntry);
-  } else if (!timeEntry.hourLog) {
-    let hourLog = await HourLog.findOne({ title: 'Current', company: timeEntry.company });
-
-    if (!hourLog) {
-      hourLog = await (new HourLog({
-        company: timeEntry.company,
-        timeEntries: timeEntry._id,
-        dateClosed: new Date(0),
-        totalSubmittedHours: timeEntry.hours,
-      }));
-      timeEntry.hourLog = hourLog._id;
-    } else if (hourLog) {
-      await hourLog.update({ $addToSet: { timeEntries: timeEntry._id } }, { new: true });
-      hourLog.totalSubmittedHours += timeEntry.hours;
-      timeEntry.hourLog = hourLog._id;
-    }
-    await timeEntry.update({ $set: { status: 'submitted' } }, { new: true });
-    await hourLog.save();
-    await timeEntry.save();
-
-    res.json(timeEntry);
+    // Else throw an error
+  } else {
+    res.json({ error: 'unauthorized' });
+    return console.log(`unauthorized request: ${req.url} \n from user: ${req.user} \n with post body: ${JSON.stringify(req.body)}`);
   }
 };
 

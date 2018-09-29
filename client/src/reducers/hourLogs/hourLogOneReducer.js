@@ -9,7 +9,7 @@ import {
   REJECT_TIME_ENTRY,
 } from '../../actions/types';
 
-const INITIAL_STATE = [];
+const INITIAL_STATE = { timeEntries: [] };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {

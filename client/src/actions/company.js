@@ -35,7 +35,7 @@ export const createCompany = formProps => async dispatch => {
 
 export const editCompany = (companyId, formProps) => async dispatch => {
   const companyEdit = await axios.post(`/api/v1/company/${companyId}/edit`, formProps);
-  const company = await axios.get(`/api/v1/company/${companyId}/hourLogs`);
+  const company = await axios.get(`/api/v1/company/${companyId}`);
 
   await dispatch({ type: EDIT_COMPANY, payload: companyEdit.data });
   await dispatch({ type: GET_COMPANY, payload: company.data });

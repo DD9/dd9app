@@ -14,7 +14,7 @@ class CompanyOne extends Component {
   }
 
   renderContent() {
-    const { company, companyHourLogs, companies } = this.props;
+    const { company, companyHourLogs, match, companies } = this.props;
     if (!companyHourLogs[0] || companyHourLogs[0].company._id !== match.params.id) {
       return (
         <div>

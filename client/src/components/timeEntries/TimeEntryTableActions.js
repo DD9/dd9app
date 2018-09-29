@@ -35,6 +35,7 @@ class TimeEntryTableActions extends Component {
     this.props.deleteTimeEntry(this.props.timeEntry._id);
   }
 
+
   renderTimeEntryTableActionButtons() {
     const { auth, timeEntry } = this.props;
     if (auth.permissions[0].admin && timeEntry.status === 'created') {

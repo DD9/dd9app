@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import 'react-table/react-table.css';
 
 import TimeEntryTableActions from './TimeEntryTableActions';
+import TimeEntryTableBulkActions from './TimeEntryTableBulkActions'
 
 const TimeEntryTable = ({
   tableTitle, auth, timeEntries, activeUsers, activeCompanies, defaultPageSize,
@@ -18,18 +19,18 @@ const TimeEntryTable = ({
       columns: [{
         Header: 'Date',
         id: 'date',
-        Cell: timeEntry => timeEntry.original.publicDate.split('T')[0],
+        Cell: timeEntry => <span title={timeEntry.original.publicDate}>{timeEntry.original.publicDate.split('T')[0]}</span>,
         maxWidth: 95,
       }, {
         Header: 'Company',
         accessor: 'publicCompany.name',
         Cell: timeEntry => {
           if (auth.permissions[0].admin) {
-            return <Link to={`/company/${timeEntry.original.publicCompany._id}`}>{timeEntry.original.publicCompany.name}</Link>
+            return <span title={timeEntry.original.publicCompany.name}><Link to={`/company/${timeEntry.original.publicCompany._id}`}>{timeEntry.original.publicCompany.name}</Link></span>;
           }
-          return timeEntry.original.publicCompany.name;
+          return <span title={timeEntry.original.publicCompany.name}>{timeEntry.original.publicCompany.name}</span>;
         },
-        maxWidth: 150,
+        maxWidth: 175,
       }, {
         Header: 'Hours',
         accessor: 'publicHours',
@@ -56,6 +57,16 @@ const TimeEntryTable = ({
           </div>
         ),
         maxWidth: 150,
+        Footer: (
+          <div className="text-center">
+            <TimeEntryTableBulkActions
+              auth={auth}
+              tableTitle={tableTitle}
+              activeUsers={activeUsers}
+              activeCompanies={activeCompanies}
+            />
+          </div>
+        ),
       }],
     }];
   } else {
@@ -66,18 +77,18 @@ const TimeEntryTable = ({
       columns: [{
         Header: 'Date',
         id: 'date',
-        Cell: timeEntry => timeEntry.original.publicDate.split('T')[0],
+        Cell: timeEntry => <span title={timeEntry.original.publicDate}>{timeEntry.original.publicDate.split('T')[0]}</span>,
         maxWidth: 95,
       }, {
         Header: 'User',
         id: 'publicUser',
         Cell: timeEntry => `${timeEntry.original.publicUser.firstName} ${timeEntry.original.publicUser.lastName}`,
-        maxWidth: 150,
+        maxWidth: 125,
       }, {
         Header: 'Company',
         accessor: 'publicCompany.name',
         Cell: timeEntry => <Link to={`/company/${timeEntry.original.publicCompany._id}`}>{timeEntry.original.publicCompany.name}</Link>,
-        maxWidth: 150,
+        maxWidth: 175,
       }, {
         Header: 'Hours',
         accessor: 'publicHours',
@@ -104,6 +115,16 @@ const TimeEntryTable = ({
           </div>
         ),
         maxWidth: 120,
+        Footer: (
+          <div className="text-center">
+            <TimeEntryTableBulkActions
+              auth={auth}
+              tableTitle={tableTitle}
+              activeUsers={activeUsers}
+              activeCompanies={activeCompanies}
+            />
+          </div>
+        ),
       }],
     }];
   }
