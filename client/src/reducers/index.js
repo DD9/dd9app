@@ -5,6 +5,7 @@ import userAllReducer from './users/userAllReducer';
 import userActiveReducer from './users/userActiveReducer';
 import userOneReducer from './users/userOneReducer';
 import companyAllReducer from './companies/companyAllReducer';
+import companyOneReducer from './companies/companyOneReducer';
 import companyHourLogReducer from './companies/companyHourLogReducer';
 import companyActiveReducer from './companies/companyActiveReducer';
 import hourLogOpenReducer from './hourLogs/hourLogOpenReducer';
@@ -19,6 +20,7 @@ export default combineReducers({
   activeUsers: userActiveReducer,
   user: userOneReducer,
   companies: companyAllReducer,
+  company: companyOneReducer,
   activeCompanies: companyActiveReducer,
   companyHourLogs: companyHourLogReducer,
   openHourLogs: hourLogOpenReducer,

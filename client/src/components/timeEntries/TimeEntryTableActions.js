@@ -169,7 +169,7 @@ class TimeEntryTableActions extends Component {
                 </div>
                 <div className="modal-body">
                   <form id={`time-entry-confirm-reject-form-${timeEntry._id}`} className="form" onSubmit={this.onRejectTimeEntryClick.bind(this)}>
-                    <p className="text-center">Are you sure you want to delete this time entry?</p>
+                    <p className="text-center">Are you sure you want to reject this time entry?</p>
                   </form>
                 </div>
                 <div className="modal-footer">

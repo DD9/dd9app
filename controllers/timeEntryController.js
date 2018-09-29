@@ -91,8 +91,6 @@ exports.adjudicate = async (req, res) => {
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
   const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog }).populate('timeEntries');
 
-  console.log(hourLog);
-
   // If transferring the time entry to another companies hour log
   if (timeEntry.publicCompany.toString() !== req.body.company.toString()) {
     await hourLog.update({ $pull: { timeEntries: timeEntry._id } });
@@ -133,8 +131,6 @@ exports.adjudicate = async (req, res) => {
     hourLog.totalSubmittedHours -= (timeEntry.publicHours - req.body.hours);
   }
 
-  console.log(req.body);
-
   timeEntry.publicDate = req.body.date;
   timeEntry.publicUser = req.body.user;
   timeEntry.publicCompany = req.body.company;
@@ -154,7 +150,7 @@ exports.approve = async (req, res) => {
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
 
   if (timeEntry.hourLog) {
-    const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog });
+    const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog }).populate('timeEntries');
 
     hourLog.totalPublicHours += timeEntry.publicHours;
     if (timeEntry.status === 'hidden') {
@@ -201,7 +197,7 @@ exports.hide = async (req, res) => {
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
 
   if (timeEntry.hourLog) {
-    const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog });
+    const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog }).populate('timeEntries');
 
     hourLog.totalHiddenHours += timeEntry.publicHours;
     if (timeEntry.status === 'approved') {
@@ -246,13 +242,13 @@ exports.hide = async (req, res) => {
 exports.reject = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
-  const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog });
+  const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog }).populate('timeEntries');
 
   if (timeEntry.status === 'approved') hourLog.totalPublicHours -= timeEntry.publicHours;
   else if (timeEntry.status === 'hidden') hourLog.totalHiddenHours -= timeEntry.publicHours;
   else if (timeEntry.status === 'submitted') hourLog.totalSubmittedHours -= timeEntry.publicHours;
 
-  timeEntry.status = 'rejected';
+  await timeEntry.update({ $set: { status: 'rejected' } });
 
   await new TimeEntry({
     user: timeEntry.user,
@@ -269,7 +265,6 @@ exports.reject = async (req, res) => {
   }).save();
 
   await hourLog.save();
-  await timeEntry.save();
 
   res.json(timeEntry);
 };

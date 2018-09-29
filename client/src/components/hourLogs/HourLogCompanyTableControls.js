@@ -15,7 +15,7 @@ class CompanyCreate extends Component {
   }
 
   onFormSubmit(formProps) {
-    this.props.editCompany(this.props.companyId, formProps);
+    this.props.editCompany(this.props.company._id, formProps);
     $('#companyEditModal').modal('hide');
   }
 
@@ -30,7 +30,7 @@ class CompanyCreate extends Component {
   }
 
   render() {
-    const { initialValues, handleSubmit } = this.props;
+    const { company, handleSubmit } = this.props;
     return (
       <div className="py-1 px-3 bg-white rounded box-shadow">
         <div className="pt-2">
@@ -42,7 +42,7 @@ class CompanyCreate extends Component {
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">Edit {initialValues.name}</h5>
+                  <h5 className="modal-title">Edit {company.name}</h5>
                   <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div className="modal-body">
@@ -67,7 +67,7 @@ class CompanyCreate extends Component {
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">Deactivate {initialValues.name}</h5>
+                  <h5 className="modal-title">Deactivate {company.name}</h5>
                   <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div className="modal-body">

@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { GET_ALL_COMPANIES, GET_COMPANY, GET_COMPANY_HOUR_LOGS, GET_ACTIVE_COMPANIES, CREATE_COMPANY, EDIT_COMPANY } from './types';
+import {
+  GET_ALL_COMPANIES, GET_COMPANY, GET_COMPANY_HOUR_LOGS, GET_ACTIVE_COMPANIES, CREATE_COMPANY, EDIT_COMPANY,
+} from './types';
 
 export const getAllCompanies = () => async dispatch => {
   const res = await axios.get('/api/v1/companies/all');
@@ -8,7 +10,7 @@ export const getAllCompanies = () => async dispatch => {
 };
 
 export const getCompany = companyId => async dispatch => {
-  const res = await axios.get(`/api/v1/companies/${companyId}`);
+  const res = await axios.get(`/api/v1/company/${companyId}`);
 
   dispatch({ type: GET_COMPANY, payload: res.data });
 };
@@ -33,8 +35,8 @@ export const createCompany = formProps => async dispatch => {
 
 export const editCompany = (companyId, formProps) => async dispatch => {
   const companyEdit = await axios.post(`/api/v1/company/${companyId}/edit`, formProps);
-  const companyHourlogs = await axios.get(`/api/v1/company/${companyId}/hourLogs`);
+  const company = await axios.get(`/api/v1/company/${companyId}/hourLogs`);
 
   await dispatch({ type: EDIT_COMPANY, payload: companyEdit.data });
-  await dispatch({ type: GET_COMPANY_HOUR_LOGS, payload: companyHourlogs.data });
+  await dispatch({ type: GET_COMPANY, payload: company.data });
 };

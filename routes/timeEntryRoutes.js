@@ -3,8 +3,8 @@ const timeEntryController = require('../controllers/timeEntryController');
 
 module.exports = router => {
   router.get('/api/v1/timeEntries/created', authController.isLoggedIn, timeEntryController.created);
-  router.post('/api/v1/timeEntry/create', authController.isLoggedIn, authController.isAdmin, timeEntryController.create);
-  router.post('/api/v1/timeEntry/createAndSubmit', authController.isLoggedIn, timeEntryController.createAndSubmit);
+  router.post('/api/v1/timeEntry/create', authController.isLoggedIn, timeEntryController.create);
+  router.post('/api/v1/timeEntry/createAndSubmit', authController.isLoggedIn, authController.isAdmin, timeEntryController.createAndSubmit);
   router.post('/api/v1/timeEntry/:id/edit', authController.isLoggedIn, timeEntryController.edit);
   router.post('/api/v1/timeEntry/:id/adjudicate', authController.isLoggedIn, authController.isAdmin, timeEntryController.adjudicate);
   router.post('/api/v1/timeEntry/:id/approve', authController.isLoggedIn, authController.isAdmin, timeEntryController.approve);

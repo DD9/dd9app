@@ -44,7 +44,7 @@ const HourLogCompanyTable = ({ tableTitle, companyHourLogs }) => {
       data={companyHourLogs}
       columns={columns}
       className="-striped -highlight"
-      noDataText="Loading..."
+      noDataText="Empty"
       defaultSorted={[
         {
           id: 'dateOpened',
