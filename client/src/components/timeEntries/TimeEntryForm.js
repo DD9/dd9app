@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
+import $ from 'jquery';
 
 import { createNewTimeEntry } from '../../actions/timeEntry';
 
@@ -11,8 +12,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 class TimeEntryForm extends Component {
   componentDidMount() {
-    const datePicker = document.getElementsByClassName('react-datepicker__input-container')[0];
-    datePicker.childNodes[0].setAttribute('readOnly', true);
+    $('.react-datepicker__input-container')[0].childNodes[0].setAttribute('readOnly', true);
   }
 
   onFormSubmit(formProps) {
@@ -40,15 +40,15 @@ class TimeEntryForm extends Component {
     );
   }
 
-  renderSelectField(field) {
+  renderCompanySelectField(field) {
     return (
       <div className="form-group col-md-4">
         <label htmlFor={field.name}>{field.label}</label>
         <select {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`}>
-          <option value="-1" disabled>Select a company</option>
+          <option value="-1" disabled>{`Select a ${field.label.toLowerCase()}`}</option>
           {
             field.selectOptions
-              ? field.selectOptions.map((options) => (<option key={options._id} value={options._id}>{options.name}</option>))
+              ? field.selectOptions.map((option) => (<option key={option._id} value={option._id}>{option.name}</option>))
               : ''
           }
         </select>
@@ -98,7 +98,7 @@ class TimeEntryForm extends Component {
               label="Company"
               name="company"
               selectOptions={activeCompanies}
-              component={this.renderSelectField}
+              component={this.renderCompanySelectField}
             />
             <Field
               label="Hours"
@@ -131,8 +131,11 @@ function validate(values) {
   if (!values.company || values.company === -1) {
     errors.company = 'Select company.';
   }
-  if (!values.hours) {
-    errors.hours = 'Enter some hours.';
+  if (!values.hours || values.hours <= 0) {
+    errors.hours = 'Enter a value greater than 0.';
+  }
+  if (values.hours > 100) {
+    errors.hours = 'Enter a value greater than 100.';
   }
   if (!values.description) {
     errors.description = 'Enter a description.';

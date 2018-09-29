@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import authReducer from './auth/authReducer';
 import { reducer as reduxForm } from 'redux-form';
 import userAllReducer from './users/userAllReducer';
+import userActiveReducer from './users/userActiveReducer';
 import userOneReducer from './users/userOneReducer';
 import companyAllReducer from './companies/companyAllReducer';
 import companyHourLogReducer from './companies/companyHourLogReducer';
@@ -15,6 +16,7 @@ export default combineReducers({
   auth: authReducer,
   form: reduxForm,
   users: userAllReducer,
+  activeUsers: userActiveReducer,
   user: userOneReducer,
   companies: companyAllReducer,
   activeCompanies: companyActiveReducer,

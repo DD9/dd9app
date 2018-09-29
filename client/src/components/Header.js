@@ -6,10 +6,10 @@ import * as actions from '../actions/auth';
 
 import '../styles/partials/header.css';
 
-const Header = ({ user, logout, history }) => {
+const Header = ({ auth, logout, history }) => {
   const renderContent = () => {
-    if (!user.permissions) return;
-    switch (user.permissions[0].admin) {
+    if (!auth.permissions) return;
+    switch (auth.permissions[0].admin) {
       case null:
         return;
       case false:
@@ -33,7 +33,7 @@ const Header = ({ user, logout, history }) => {
           {renderContent()}
         </ul>
         <ul className="nav justify-content-end">
-          <li className="nav-item"><Link className="nav-link text-white" to={`/user/${user._id}`}>{user.email}</Link></li>
+          <li className="nav-item"><Link className="nav-link text-white" to={`/user/${auth._id}`}>{auth.email}</Link></li>
           <li className="nav-item"><a className="nav-link" onClick={() => logout(history)}>logout</a></li>
         </ul>
       </nav>
@@ -41,8 +41,4 @@ const Header = ({ user, logout, history }) => {
   );
 };
 
-function mapStateToProps({ auth }) {
-  return { user: auth };
-}
-
-export default withRouter(connect(mapStateToProps, actions)(Header));
+export default withRouter(connect(null, actions)(Header));

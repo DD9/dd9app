@@ -17,9 +17,10 @@ import Footer from './Footer';
 
 class Dashboard extends Component {
   render() {
+    const { auth } = this.props;
     return (
       <div>
-        <Header />
+        <Header auth={auth} />
         <Switch>
           <AdminRoute path="/user/all" component={UserAll} />
           <Route path="/user/:id" component={UserOne} />
@@ -27,7 +28,7 @@ class Dashboard extends Component {
           <AdminRoute path="/company/:id" component={CompanyOne} />
           <AdminRoute path="/hourLog/all" component={HourLogAll} />
           <AdminRoute path="/hourLog/:id" component={HourLogOne} />
-          <Route path="/timeEntry/new" component={TimeEntryNew} />
+          <Route path="/timeEntry/new" render={(props) => <TimeEntryNew {...props} auth={auth} />} />
           <Redirect to="/timeEntry/new" />
         </Switch>
         <Footer />
@@ -37,7 +38,7 @@ class Dashboard extends Component {
 }
 
 function mapStateToProps({ auth }) {
-  return { user: auth };
+  return { auth };
 }
 
 export default withRouter(connect(mapStateToProps)(Dashboard));

@@ -1,31 +1,40 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { getActiveCompanies } from '../../actions/company';
 import { getCreatedTimeEntries } from '../../actions/timeEntry';
+import { getActiveUsers } from '../../actions/user';
+import { getActiveCompanies } from '../../actions/company';
 
 import TimeEntryTable from './TimeEntryTable';
 import TimeEntryForm from './TimeEntryForm';
 
 class TimeEntryNew extends Component {
   componentDidMount() {
-    this.props.getActiveCompanies();
     this.props.getCreatedTimeEntries();
+    this.props.getActiveUsers();
+    this.props.getActiveCompanies();
   }
 
   render() {
-    const { createdTimeEntries, activeCompanies } = this.props;
+    const { auth, createdTimeEntries, activeUsers, activeCompanies } = this.props;
     return (
       <div className="container table-font-size">
-        <TimeEntryTable tableTitle="New Time Entries" timeEntries={createdTimeEntries} defaultPageSize={10} />
+        <TimeEntryTable
+          auth={auth}
+          tableTitle="New Time Entries"
+          timeEntries={createdTimeEntries}
+          activeUsers={activeUsers}
+          activeCompanies={activeCompanies}
+          defaultPageSize={10}
+        />
         <TimeEntryForm activeCompanies={activeCompanies} initialValues={{ company: -1 }} />
       </div>
     );
   }
 }
 
-function mapStateToProps({ activeCompanies, createdTimeEntries }) {
-  return { activeCompanies, createdTimeEntries };
+function mapStateToProps({ createdTimeEntries, activeUsers, activeCompanies }) {
+  return { createdTimeEntries, activeUsers, activeCompanies };
 }
 
-export default connect(mapStateToProps, { getActiveCompanies, getCreatedTimeEntries })(TimeEntryNew);
+export default connect(mapStateToProps, { getCreatedTimeEntries, getActiveUsers, getActiveCompanies })(TimeEntryNew);

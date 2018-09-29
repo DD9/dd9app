@@ -7,34 +7,49 @@ import HourLogOneControls from './HourLogOneControls';
 import TimeEntryTable from '../timeEntries/TimeEntryTable';
 import HourLogOneSubmitTimeEntry from './HourLogOneSubmitTimeEntry';
 
+import { getActiveUsers } from '../../actions/user';
+import { getActiveCompanies } from '../../actions/company';
+
 
 class HourLogOne extends Component {
   componentDidMount() {
-    this.props.getHourLog(this.props.match.params.id);
+    const { match } = this.props;
+    this.props.getHourLog(match.params.id);
+    this.props.getActiveUsers();
+    this.props.getActiveCompanies();
   }
 
   render() {
-    const { hourLog, match } = this.props;
+    const { auth, hourLog, activeUsers, activeCompanies, match } = this.props;
     if (!hourLog.timeEntries || hourLog._id !== match.params.id) hourLog.timeEntries = [];
     return (
       <div className="container table-font-size">
         <HourLogOneControls />
         <div className="m-5" />
         <TimeEntryTable
+          auth={auth}
           tableTitle="Approved Time Entries"
           timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved')}
+          activeUsers={activeUsers}
+          activeCompanies={activeCompanies}
           defaultPageSize={5}
         />
         <div className="m-5" />
         <TimeEntryTable
+          auth={auth}
           tableTitle="Hidden Time Entries"
           timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'hidden')}
+          activeUsers={activeUsers}
+          activeCompanies={activeCompanies}
           defaultPageSize={5}
         />
         <div className="m-5" />
         <TimeEntryTable
+          auth={auth}
           tableTitle="Submitted Time Entries"
           timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'submitted')}
+          activeUsers={activeUsers}
+          activeCompanies={activeCompanies}
           defaultPageSize={5}
         />
         <div className="m-5" />
@@ -44,8 +59,8 @@ class HourLogOne extends Component {
   }
 }
 
-function mapStateToProps({ hourLog }) {
-  return { hourLog };
+function mapStateToProps({ hourLog, activeUsers, activeCompanies }) {
+  return { hourLog, activeUsers, activeCompanies };
 }
 
-export default connect(mapStateToProps, { getHourLog })(HourLogOne);
+export default connect(mapStateToProps, { getHourLog, getActiveUsers, getActiveCompanies })(HourLogOne);

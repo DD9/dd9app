@@ -7,7 +7,8 @@ import { getCurrentUser } from '../../actions/auth';
 
 class UserOneAdminEditForm extends Component {
   onFormSubmit(formProps) {
-    this.props.adminEditUser(formProps, this.props.auth._id);
+    const { auth, user } = this.props;
+    this.props.adminEditUser(user._id, auth._id, formProps);
   }
 
   renderSelectField(field) {

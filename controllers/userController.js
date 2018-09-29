@@ -7,6 +7,11 @@ exports.all = async (req, res) => {
   res.json(users);
 };
 
+exports.active = async (req, res) => {
+  const users = await User.find({ status: 'active' }).select('firstName lastName').sort('firstName');
+  res.json(users);
+};
+
 exports.one = async (req, res) => {
   const userId = req.user._id;
   const user = await User.findOne({ _id: userId }).populate('company', 'name');

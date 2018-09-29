@@ -8,6 +8,11 @@ exports.all = async (req, res) => {
   res.json(companies);
 };
 
+exports.active = async (req, res) => {
+  const companies = await Company.find({ status: 'active' }).select('name').sort('name');
+  res.json(companies);
+};
+
 exports.one = async (req, res) => {
   const companyId = req.params.id;
   const company = await Company.findOne({ _id: companyId }).select('name status');
@@ -20,11 +25,6 @@ exports.hourLogs = async (req, res) => {
     .populate('company', 'name')
     .select('company dateOpened dateClosed title totalPublicHours totalHiddenHours totalSubmittedHours');
   res.json(hourLogs);
-};
-
-exports.active = async (req, res) => {
-  const companies = await Company.find({ status: 'active' }).select('name').sort('name');
-  res.json(companies);
 };
 
 exports.create = async (req, res) => {

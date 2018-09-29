@@ -8,8 +8,9 @@ import { getCurrentUser } from '../../actions/auth';
 
 class UserTableAdminEditFormModal extends Component {
   onFormSubmit(formProps) {
-    this.props.adminEditUsers(formProps, this.props.auth._id);
-    $(`#user-admin-edit-modal-${formProps.userId}`).modal('hide');
+    const { auth, user } = this.props;
+    this.props.adminEditUsers(user._id, auth._id, formProps);
+    $(`#user-admin-edit-modal-${user._id}`).modal('hide');
   }
 
   renderSelectField(field) {
@@ -59,7 +60,7 @@ class UserTableAdminEditFormModal extends Component {
     return (
       <div>
         <button type="button" className="btn-link" data-toggle="modal" data-target={`#user-admin-edit-modal-${user._id}`}>
-          <i className="fa fa-pencil-square-o" />
+          <i className="fa fa-pencil-square-o" aria-hidden="true" />
         </button>
         <div>
           <div className="modal fade" id={`user-admin-edit-modal-${user._id}`} tabIndex={-1} role="dialog" aria-labelledby={`#user-admin-edit-modal-${user._id}`} aria-hidden="true">

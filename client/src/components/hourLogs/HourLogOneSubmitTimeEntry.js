@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 
-import { submitNewTimeEntryFromHourLog } from '../../actions/timeEntry';
+import { createAndSubmitTimeEntry } from '../../actions/timeEntry';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -19,7 +19,7 @@ class HourLogOneSubmitTimeEntry extends Component {
   onFormSubmit(formProps) {
     formProps.company = this.props.company._id;
     formProps.hourLog = this.props.hourLogId;
-    this.props.submitNewTimeEntryFromHourLog(formProps);
+    this.props.createAndSubmitTimeEntry(formProps);
     this.props.initialize({
       date: formProps.date,
       company: this.props.company._id,
@@ -118,7 +118,7 @@ function validate(values) {
   return errors;
 }
 
-export default connect(null, { submitNewTimeEntryFromHourLog })(reduxForm({
+export default connect(null, { createAndSubmitTimeEntry })(reduxForm({
   form: 'submitTimeEntry',
   validate,
 })(HourLogOneSubmitTimeEntry));
