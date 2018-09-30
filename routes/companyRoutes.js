@@ -8,6 +8,6 @@ module.exports = router => {
   router.get('/api/v1/company/:id/hourLogs', authController.isLoggedIn, authController.isAdmin, companyController.hourLogs);
   router.post('/api/v1/company/create', authController.isLoggedIn, authController.isAdmin, companyController.create);
   router.post('/api/v1/company/:id/edit', authController.isLoggedIn, authController.isAdmin, companyController.edit);
-  router.post('/company/:id/activate', authController.isLoggedIn, authController.isAdmin, companyController.activate);
-  router.post('/company/:id/deactivate', authController.isLoggedIn, authController.isAdmin, companyController.deactivate);
+  router.post('/api/v1/company/:id/activate', authController.isLoggedIn, authController.isAdmin, companyController.activate);
+  router.post('/api/v1/company/:id/deactivate', authController.isLoggedIn, authController.isAdmin, companyController.deactivate);
 };

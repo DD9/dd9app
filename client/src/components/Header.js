@@ -26,6 +26,10 @@ const Header = ({ auth, logout, history }) => {
     }
   };
 
+  const logoutClick = () => {
+    logout(history);
+  };
+
   return (
     <div className="container mt-4 mb-5 px-1">
       <nav className="navbar bg-dd9-solid-red text-white shadow-sm px-0 py-0">
@@ -34,7 +38,7 @@ const Header = ({ auth, logout, history }) => {
         </ul>
         <ul className="nav justify-content-end">
           <li className="nav-item"><Link className="nav-link text-white" to={`/user/${auth._id}`}>{auth.email}</Link></li>
-          <li className="nav-item"><a className="nav-link" onClick={() => logout(history)}>logout</a></li>
+          <li className="nav-item"><a className="nav-link" onClick={() => logoutClick()}>logout</a></li>
         </ul>
       </nav>
     </div>

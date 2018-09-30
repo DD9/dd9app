@@ -40,18 +40,18 @@ exports.edit = async (req, res) => {
 
 exports.activate = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOneAndUpdate({ _id: companyId }, { status: 'active' });
+  const company = await Company.findOneAndUpdate({ _id: companyId }, { status: 'active' }, { new: true });
   res.json(company);
 };
 
 exports.deactivate = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOne({ _id: companyId });
+  const company = await Company.findOne({ _id: companyId }).select('name status');
   const openHourLog = await HourLog.findOne({ company: companyId, title: 'Current', dateClosed: new Date(0) });
   if (openHourLog) {
-    return res.json({ company, hasOpenHourLog: true });
+    return res.json(company);
   }
   company.status = 'inactive';
   await company.save();
-  return res.json({ company, hasOpenHourLog: false });
+  return res.json(company);
 };

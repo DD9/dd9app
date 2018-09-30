@@ -25,7 +25,7 @@ const HourLogCompanyTable = ({ tableTitle, companyHourLogs }) => {
       },
       maxWidth: 120,
     }, {
-      Header: 'Title',
+      Header: 'Hour Log Titles',
       id: 'title',
       accessor: data => <Link to={`/hourLog/${data._id}`}>{data.title}</Link>,
     }, {

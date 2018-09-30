@@ -18,14 +18,14 @@ class CompanyOne extends Component {
     if (!companyHourLogs[0] || companyHourLogs[0].company._id !== match.params.id) {
       return (
         <div>
-          <CompanyHourLogTable tableTitle={`${company.name || ''} Hour Logs`} companyHourLogs={[]} />
+          <CompanyHourLogTable tableTitle={`${company.name || ''} - ${company.status || ''}`} companyHourLogs={[]} />
           <CompanyHourLogTableControls company={company} companies={[]} initialValues={{ name: company.name }} />
         </div>
       );
     }
     return (
       <div>
-        <CompanyHourLogTable tableTitle={`${company.name || ''} Hour Logs`} companyHourLogs={companyHourLogs} />
+        <CompanyHourLogTable tableTitle={`${company.name || ''} - ${company.status.toString().toUpperCase() || ''}`} companyHourLogs={companyHourLogs} />
         <CompanyHourLogTableControls company={company} companies={companies} initialValues={{ name: company.name }} />
       </div>
     );

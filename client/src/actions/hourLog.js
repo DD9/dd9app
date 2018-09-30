@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import { GET_OPEN_HOUR_LOGS, GET_CLOSED_HOUR_LOGS, GET_HOUR_LOG } from './types';
 
 export const getOpenHourLogs = () => async dispatch => {

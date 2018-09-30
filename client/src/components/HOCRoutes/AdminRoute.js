@@ -2,7 +2,9 @@ import React from 'react';
 import { Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-const AdminRoute = ({ component: Component, admin, auth, ...rest }) => (
+const AdminRoute = ({
+  component: Component, admin, auth, ...rest
+}) => (
   <Route
     {...rest}
     render={props => (admin ? (

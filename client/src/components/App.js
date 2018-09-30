@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 
 import { getCurrentUser } from '../actions/auth';
 
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import '../styles/partials/app.css';
 import '../styles/partials/normalize.css';
@@ -30,6 +32,7 @@ class App extends Component {
             <AuthedRoute path="/" component={Dashboard} />
           </Switch>
         </BrowserRouter>
+        <ToastContainer />
       </div>
     );
   }

@@ -39,7 +39,7 @@ exports.requireLogin = (req, res, next) => {
     return next();
   }
   req.flash('warning', 'Oops, You are already logged in');
-  res.redirect('/timeEntry/new');
+  res.send();
 };
 
 exports.isOwner = (req, res, next) => {
@@ -47,7 +47,7 @@ exports.isOwner = (req, res, next) => {
     return next();
   }
   req.flash('warning', 'Oops, you are not the owner of that entity');
-  res.redirect('/timeEntry/new');
+  res.send();
 };
 
 exports.isAdmin = (req, res, next) => {
@@ -56,5 +56,5 @@ exports.isAdmin = (req, res, next) => {
     return next();
   }
   req.flash('warning', 'Oops, you must be an admin to do that');
-  res.redirect('/timeEntry/new');
+  res.send();
 };

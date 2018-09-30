@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
+
 import {
-  GET_ALL_COMPANIES, GET_COMPANY, GET_COMPANY_HOUR_LOGS, GET_ACTIVE_COMPANIES, CREATE_COMPANY, EDIT_COMPANY,
+  GET_ALL_COMPANIES, GET_COMPANY, GET_COMPANY_HOUR_LOGS, GET_ACTIVE_COMPANIES, CREATE_COMPANY, EDIT_COMPANY, ACTIVATE_COMPANY, DEACTIVATE_COMPANY,
 } from './types';
 
 export const getAllCompanies = () => async dispatch => {
@@ -30,13 +32,61 @@ export const getActiveCompanies = () => async dispatch => {
 export const createCompany = formProps => async dispatch => {
   const res = await axios.post('/api/v1/company/create', formProps);
 
+  toast.success(`${res.data.name} successfully created`, {
+    position: 'top-right',
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  });
+
   dispatch({ type: CREATE_COMPANY, payload: res.data });
 };
 
 export const editCompany = (companyId, formProps) => async dispatch => {
-  const companyEdit = await axios.post(`/api/v1/company/${companyId}/edit`, formProps);
-  const company = await axios.get(`/api/v1/company/${companyId}`);
+  const res = await axios.post(`/api/v1/company/${companyId}/edit`, formProps);
 
-  await dispatch({ type: EDIT_COMPANY, payload: companyEdit.data });
-  await dispatch({ type: GET_COMPANY, payload: company.data });
+  toast.success(`${res.data.name} successfully edited`, {
+    position: 'top-right',
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  });
+
+  await dispatch({ type: EDIT_COMPANY, payload: res.data });
+};
+
+export const activateCompany = companyId => async dispatch => {
+  const res = await axios.post(`/api/v1/company/${companyId}/activate`);
+
+  toast.success(`${res.data.name} successfully activated`, {
+    position: 'top-right',
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  });
+
+  dispatch({ type: ACTIVATE_COMPANY, payload: res.data });
+};
+
+export const deactivateCompany = companyId => async dispatch => {
+  const res = await axios.post(`/api/v1/company/${companyId}/deactivate`);
+
+  if (res.data.status === 'active') {
+    toast.error('Error: cannot deactivate a company with an open hour log', {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  }
+
+  dispatch({ type: DEACTIVATE_COMPANY, payload: res.data });
 };

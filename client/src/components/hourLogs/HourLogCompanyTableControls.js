@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import $ from 'jquery';
 
-import { editCompany } from '../../actions/company';
-import underConstruction from '../../static/images/under_construction.png';
-
+import { editCompany, activateCompany, deactivateCompany } from '../../actions/company';
 
 class CompanyCreate extends Component {
   componentDidMount() {
@@ -14,9 +12,28 @@ class CompanyCreate extends Component {
     });
   }
 
-  onFormSubmit(formProps) {
+  onCompanyEditFormSubmit(formProps) {
     this.props.editCompany(this.props.company._id, formProps);
     $('#companyEditModal').modal('hide');
+  }
+
+  onCompanyActivateFormSubmit() {
+    this.props.activateCompany(this.props.company._id);
+    $('#companyActivateModal').modal('hide');
+  }
+
+  onCompanyDeactivateFormSubmit() {
+    this.props.deactivateCompany(this.props.company._id);
+    $('#companyDeactivateModal').modal('hide');
+  }
+
+  renderActivateDeactivateButtons() {
+    const { company } = this.props;
+    console.log(company);
+    if (company.status === 'active') {
+      return <button type="button" className="ml-3 mb-2 btn btn-secondary" data-toggle="modal" data-target="#companyDeactivateModal">Deactivate</button>;
+    }
+    return <button type="button" className="ml-3 mb-2 btn btn-primary" data-toggle="modal" data-target="#companyActivateModal">Activate</button>;
   }
 
   renderField(field) {
@@ -35,7 +52,7 @@ class CompanyCreate extends Component {
       <div className="py-1 px-3 bg-white rounded box-shadow">
         <div className="pt-2">
           <button type="button" className="ml-3 mb-2 btn btn-primary" data-toggle="modal" data-target="#companyEditModal">Edit</button>
-          <button type="button" className="ml-3 mb-2 btn btn-secondary" data-toggle="modal" data-target="#companyDeactivateModal">Deactivate</button>
+          {this.renderActivateDeactivateButtons()}
         </div>
         <div>
           <div className="modal fade" id="companyEditModal" tabIndex={-1} role="dialog" aria-labelledby="companyEditModal" aria-hidden="true">
@@ -46,7 +63,7 @@ class CompanyCreate extends Component {
                   <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div className="modal-body">
-                  <form id="companyEditForm" className="form" onSubmit={handleSubmit(this.onFormSubmit.bind(this))}>
+                  <form id="companyEditForm" className="form" onSubmit={handleSubmit(this.onCompanyEditFormSubmit.bind(this))}>
                     <Field
                       label="Name"
                       name="name"
@@ -63,27 +80,52 @@ class CompanyCreate extends Component {
           </div>
         </div>
         <div>
-          <div className="modal fade" id="companyDeactivateModal" tabIndex={-1} role="dialog" aria-labelledby="companyDeactivateModal" aria-hidden="true">
+          <div className="modal fade" id="companyActivateModal" tabIndex={-1} role="dialog" aria-labelledby="companyActivateModal" aria-hidden="true">
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">Deactivate {company.name}</h5>
+                  <h5 className="modal-title">Confirm Company Activation </h5>
                   <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div className="modal-body">
                   <div className="modal-body">
-                    <img src={underConstruction} alt="Under Construction" />
+                    <form id="companyActivateForm" className="form" onSubmit={handleSubmit(this.onCompanyActivateFormSubmit.bind(this))}>
+                      <p>Are you sure you want to activate {company.name}?</p>
+                    </form>
                   </div>
                 </div>
                 <div className="modal-footer">
                   <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+                  <button className="btn btn-primary" type="submit" form="companyActivateForm">Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="modal fade" id="companyDeactivateModal" tabIndex={-1} role="dialog" aria-labelledby="companyDeactivateModal" aria-hidden="true">
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Confirm Company Deactivation </h5>
+                  <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div className="modal-body">
+                  <div className="modal-body">
+                    <form id="companyDeactivateForm" className="form" onSubmit={handleSubmit(this.onCompanyDeactivateFormSubmit.bind(this))}>
+                      <p>Are you sure you want to deactivate {company.name}?</p>
+                    </form>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+                  <button className="btn btn-primary" type="submit" form="companyDeactivateForm">Submit</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
     );
   }
 }
@@ -107,7 +149,7 @@ function validate(values, props) {
   return errors;
 }
 
-export default connect(null, { editCompany })(reduxForm({
+export default connect(null, { editCompany, activateCompany, deactivateCompany })(reduxForm({
   form: 'editCompany',
   enableReinitialize: true,
   validate,

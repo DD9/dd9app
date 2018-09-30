@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
+
 import { AUTH_USER, AUTH_ERROR } from './types';
 
 export const getCurrentUser = () => async dispatch => {
@@ -8,6 +10,17 @@ export const getCurrentUser = () => async dispatch => {
     localStorage.setItem('token', res.data._id);
   } catch (err) {
     dispatch({ type: AUTH_ERROR, payload: 'Error fetching current user' });
+  }
+
+  if (res.data) {
+    toast.info(`Welcome ${res.data.firstName} ${res.data.lastName}`, {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
   }
 
   dispatch({ type: AUTH_USER, payload: res.data });
@@ -22,6 +35,16 @@ export const logout = history => async dispatch => {
     dispatch({ type: AUTH_ERROR, payload: 'Error logging out' });
   }
 
-  history.push('/login');
+  await history.push('/login');
+
+  toast.info('Goodbye!', {
+    position: 'top-right',
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  });
+
   dispatch({ type: AUTH_USER, payload: res.data });
 };

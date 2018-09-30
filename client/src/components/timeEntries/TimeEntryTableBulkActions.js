@@ -171,7 +171,7 @@ class TimeEntryBulkTableActions extends Component {
           <TimeEntryTableActionConfirmModal
             modalId="time-entry-confirm-reject-all-from-approved-modal"
             modalTitle="Confirm Reject All"
-            formId="time-entry-confirm-hide-all-from-approved-form"
+            formId="time-entry-confirm-reject-all-from-approved-form"
             modalBody="Are you sure you want to reject all time entries in this table?"
             onSubmit={this.onRejectAllFromApprovedClick}
           />
