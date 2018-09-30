@@ -69,7 +69,7 @@ class HourLogOneSubmitTimeEntry extends Component {
       <div className="py-1 px-3 bg-white rounded box-shadow">
         <div className="row">
           <div className="col mt-3 mb-2">
-            <h5>Submit New Time Entry for <Link to={`/company/${company._id}`}>{company.name}</Link></h5>
+            <h5>Submit New Time Entry for <Link to={`/company/${company._id}`}><i>{company.name}</i></Link></h5>
           </div>
         </div>
         <hr />

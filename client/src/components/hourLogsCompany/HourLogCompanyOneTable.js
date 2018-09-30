@@ -27,7 +27,12 @@ const HourLogCompanyTable = ({ tableTitle, companyHourLogs }) => {
     }, {
       Header: 'Hour Log Titles',
       id: 'title',
-      accessor: data => <Link to={`/hourLog/${data._id}`}>{data.title}</Link>,
+      accessor: data => {
+        if (data.totalSubmittedHours > 0) {
+          return <Link to={`/hourLog/company/${data._id}`}><b>{data.title}*</b></Link>;
+        }
+        return <Link to={`/hourLog/company/${data._id}`}>{data.title}</Link>;
+      },
     }, {
       Header: 'Hours',
       accessor: 'totalPublicHours',
@@ -35,6 +40,7 @@ const HourLogCompanyTable = ({ tableTitle, companyHourLogs }) => {
     }, {
       Header: 'Hidden',
       accessor: 'totalHiddenHours',
+      Cell: data => <span style={{ color: '#AAAAAA' }}>{data.original.totalHiddenHours}</span>,
       maxWidth: 100,
     }],
   }];

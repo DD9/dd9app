@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import { getHourLog } from '../../actions/hourLog';
 
@@ -9,6 +10,7 @@ import HourLogOneSubmitTimeEntry from './HourLogOneSubmitTimeEntry';
 
 import { getActiveUsers } from '../../actions/user';
 import { getActiveCompanies } from '../../actions/company';
+import $ from "jquery";
 
 
 class HourLogOne extends Component {
@@ -19,12 +21,21 @@ class HourLogOne extends Component {
     this.props.getActiveCompanies();
   }
 
+  componentDidUpdate() {
+    $('.time-entry-table-bulk-action').attr('disabled', false);
+  }
+
   render() {
-    const { auth, hourLog, activeUsers, activeCompanies, match } = this.props;
-    if (!hourLog.timeEntries || hourLog._id !== match.params.id) hourLog.timeEntries = [];
+    const {
+      auth, hourLog, activeUsers, activeCompanies, match,
+    } = this.props;
+    if (!hourLog.timeEntries || hourLog._id !== match.params.id) {
+      hourLog.timeEntries = [];
+      hourLog.title = '';
+    }
     return (
       <div className="container table-font-size">
-        <HourLogOneControls />
+        <HourLogOneControls hourLog={hourLog} initialValues={{ title: moment.utc().format('YYYY-MM-DD') }} />
         <div className="m-5" />
         <TimeEntryTable
           auth={auth}

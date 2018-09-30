@@ -29,7 +29,6 @@ class CompanyCreate extends Component {
 
   renderActivateDeactivateButtons() {
     const { company } = this.props;
-    console.log(company);
     if (company.status === 'active') {
       return <button type="button" className="ml-3 mb-2 btn btn-secondary" data-toggle="modal" data-target="#companyDeactivateModal">Deactivate</button>;
     }
@@ -40,7 +39,7 @@ class CompanyCreate extends Component {
     return (
       <div className="form-group">
         <label className="col-form-label" htmlFor={field.name}>{field.label}</label>
-        <input id="companyNameInput" {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" />
+        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" />
         <div className="invalid-feedback">{field.meta.error}</div>
       </div>
     );
