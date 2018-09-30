@@ -2,6 +2,7 @@ const authController = require('../controllers/authController');
 const timeEntryController = require('../controllers/timeEntryController');
 
 module.exports = router => {
+  // Standard timeEntry endpoints
   router.get('/api/v1/timeEntries/created', authController.isLoggedIn, timeEntryController.created);
   router.post('/api/v1/timeEntry/create', authController.isLoggedIn, timeEntryController.create);
   router.post('/api/v1/timeEntry/createAndSubmit', authController.isLoggedIn, authController.isAdmin, timeEntryController.createAndSubmit);
@@ -13,14 +14,12 @@ module.exports = router => {
   router.post('/api/v1/timeEntry/:id/submit', authController.isLoggedIn, timeEntryController.submit);
   router.post('/api/v1/timeEntry/:id/delete', authController.isLoggedIn, timeEntryController.delete);
 
-  // timeEntry/new 'all' action endpoints
-  router.post('/api/v1/timeEntry/newTimeEntries/approveAll/:action', authController.isLoggedIn, authController.isAdmin, timeEntryController.allActionsFromNewTimeEntries);
-  router.post('/api/v1/timeEntry/newTimeEntries/hideAll/:action', authController.isLoggedIn, authController.isAdmin, timeEntryController.allActionsFromNewTimeEntries);
-  router.post('/api/v1/timeEntry/newTimeEntries/submitAll/:action', authController.isLoggedIn, timeEntryController.allActionsFromNewTimeEntries);
-  router.post('/api/v1/timeEntry/newTimeEntries/deleteAll/:action', authController.isLoggedIn, timeEntryController.allActionsFromNewTimeEntries);
+  // newTimeEntry bulk actions
+  router.post('/api/v1/timeEntry/newTimeEntryBulkAction/approveAll/:status', authController.isLoggedIn, authController.isAdmin, timeEntryController.newTimeEntryBulkAction);
+  router.post('/api/v1/timeEntry/newTimeEntryBulkAction/hideAll/:status', authController.isLoggedIn, authController.isAdmin, timeEntryController.newTimeEntryBulkAction);
+  router.post('/api/v1/timeEntry/newTimeEntryBulkAction/submitAll/:status', authController.isLoggedIn, timeEntryController.newTimeEntryBulkAction);
+  router.post('/api/v1/timeEntry/newTimeEntryBulkAction/deleteAll/:status', authController.isLoggedIn, timeEntryController.newTimeEntryBulkAction);
 
-  // hourLog/one 'all' action endpoints for submitted timeEntries
-  router.post('/api/v1/timeEntry/hourLog/:id/approveAll/submitted/:status', authController.isLoggedIn, authController.isAdmin, timeEntryController.submittedAllActionsFromHourLog);
-  router.post('/api/v1/timeEntry/hourLog/:id/hideAll/submitted/:status', authController.isLoggedIn, authController.isAdmin, timeEntryController.submittedAllActionsFromHourLog);
-  router.post('/api/v1/timeEntry/hourLog/:id/rejectAll/submitted/:status', authController.isLoggedIn, authController.isAdmin, timeEntryController.submittedAllActionsFromHourLog);
+  // timeEntry bulk actions endpoint for hourLog/one timeEntryTables
+  router.post('/api/v1/timeEntry/timeEntryInHourLogBulkAction/:hourLogId/:currentStatus/:receivingStatus', authController.isLoggedIn, authController.isAdmin, timeEntryController.timeEntryInHourLogBulkAction);
 };

@@ -8,7 +8,8 @@ import {
   HIDE_TIME_ENTRY,
   REJECT_TIME_ENTRY,
   SUBMIT_TIME_ENTRY,
-  DELETE_TIME_ENTRY, 
+  DELETE_TIME_ENTRY,
+  NEW_TIME_ENTRY_BULK_ACTION,
 } from '../../actions/types';
 
 const INITIAL_STATE = [];
@@ -44,6 +45,9 @@ export default function(state = INITIAL_STATE, action) {
 
     case DELETE_TIME_ENTRY:
       return state.filter(timeEntry => timeEntry._id !== action.payload._id);
+
+    case NEW_TIME_ENTRY_BULK_ACTION:
+      return [];
 
     default:
       return state;

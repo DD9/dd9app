@@ -7,6 +7,7 @@ import {
   APPROVE_TIME_ENTRY,
   HIDE_TIME_ENTRY,
   REJECT_TIME_ENTRY,
+  TIME_ENTRY_IN_HOUR_LOG_BULK_ACTION,
 } from '../../actions/types';
 
 const INITIAL_STATE = { timeEntries: [] };
@@ -77,6 +78,9 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         timeEntries: state.timeEntries.filter(timeEntry => timeEntry._id !== action.payload._id),
       };
+
+    case TIME_ENTRY_IN_HOUR_LOG_BULK_ACTION:
+      return state;
 
     default:
       return state;

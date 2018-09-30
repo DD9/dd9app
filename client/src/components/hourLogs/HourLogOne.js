@@ -30,6 +30,7 @@ class HourLogOne extends Component {
           auth={auth}
           tableTitle="Approved Time Entries"
           timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved')}
+          match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
           defaultPageSize={5}
@@ -39,6 +40,7 @@ class HourLogOne extends Component {
           auth={auth}
           tableTitle="Hidden Time Entries"
           timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'hidden')}
+          match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
           defaultPageSize={5}
@@ -48,6 +50,7 @@ class HourLogOne extends Component {
           auth={auth}
           tableTitle="Submitted Time Entries"
           timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'submitted')}
+          match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
           defaultPageSize={5}

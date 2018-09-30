@@ -8,7 +8,7 @@ import TimeEntryTableActions from './TimeEntryTableActions';
 import TimeEntryTableBulkActions from './TimeEntryTableBulkActions'
 
 const TimeEntryTable = ({
-  tableTitle, auth, timeEntries, activeUsers, activeCompanies, defaultPageSize,
+  auth, tableTitle, timeEntries, match, activeUsers, activeCompanies, defaultPageSize,
 }) => {
   let columns;
   if (tableTitle === 'New Time Entries') {
@@ -120,6 +120,7 @@ const TimeEntryTable = ({
             <TimeEntryTableBulkActions
               auth={auth}
               tableTitle={tableTitle}
+              match={match}
               activeUsers={activeUsers}
               activeCompanies={activeCompanies}
             />

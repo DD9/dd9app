@@ -325,12 +325,10 @@ exports.delete = async (req, res) => {
   res.json(timeEntry);
 };
 
-/**
- * timeEntry/new 'all' actions endpoint
- */
+exports.newTimeEntryBulkAction = async (req, res) => {
+  const { status } = req.params;
 
-exports.allActionsFromNewTimeEntries = async (req, res) => {
-  const status = req.params.action;
+  console.log(status);
 
   if (status === 'deleted') {
     await TimeEntry.remove({ user: req.user._id, status: 'created' });
@@ -340,8 +338,8 @@ exports.allActionsFromNewTimeEntries = async (req, res) => {
   const timeEntries = await TimeEntry.find({ user: req.user._id, status: 'created' });
 
   for (let i = 0; i < timeEntries.length; i++) {
-    timeEntry = timeEntries[i];
-    await findOrCreateCurrentHourLog(status, timeEntry);
+    const timeEntry = timeEntries[i];
+    await createOrFindAndUpdateCurrentHourLog(status, timeEntry);
     timeEntry.status = status;
     await timeEntry.save();
   }
@@ -349,22 +347,28 @@ exports.allActionsFromNewTimeEntries = async (req, res) => {
   res.json('');
 };
 
-/**
- * hourLog/one 'all' actions endpoint for submitted timeEntries
- */
+exports.timeEntryInHourLogBulkAction = async (req, res) => {
+  const { hourLogId, currentStatus, receivingStatus } = req.params;
 
-exports.submittedAllActionsFromHourLog = async (req, res) => {
-  const hourLogId = req.params.id;
-  const status = req.params.status;
+  let currentHourLogHoursUpdateParameter;
+  if (currentStatus === 'approved') currentHourLogHoursUpdateParameter = 'totalPublicHours';
+  else if (currentStatus === 'hidden') currentHourLogHoursUpdateParameter = 'totalHiddenHours';
+  else if (currentStatus === 'submitted') currentHourLogHoursUpdateParameter = 'totalSubmittedHours';
+
+  let receivingHourLogHoursUpdateParameter;
+  if (receivingStatus === 'approved') receivingHourLogHoursUpdateParameter = 'totalPublicHours';
+  else if (receivingStatus === 'hidden') receivingHourLogHoursUpdateParameter = 'totalHiddenHours';
+  else if (receivingStatus === 'submitted') receivingHourLogHoursUpdateParameter = 'totalSubmittedHours';
+
   let hours = 0;
 
-  const timeEntries = await TimeEntry.find({ hourLog: hourLogId, status: 'submitted' });
-  const hourLog = await HourLog.findOne({ _id: hourLogId });
+  const timeEntries = await TimeEntry.find({ hourLog: hourLogId, status: currentStatus });
+  const hourLog = await HourLog.findOne({ _id: hourLogId }).populate('timeEntries');
 
-  if (status === 'rejected') {
+  if (receivingStatus === 'rejected') {
     for (let i = 0; i < timeEntries.length; i++) {
-      timeEntry = timeEntries[i];
-      timeEntry.status = status;
+      const timeEntry = timeEntries[i];
+      timeEntry.status = receivingStatus;
       await timeEntry.save();
 
       await new TimeEntry({
@@ -382,34 +386,30 @@ exports.submittedAllActionsFromHourLog = async (req, res) => {
       }).save();
     }
 
-    hourLog.totalSubmittedHours = 0;
+    hourLog[`${currentHourLogHoursUpdateParameter}`] = 0;
     hourLog.save();
-    req.flash('success', `Successfully ${status} all time entries`);
-    res.redirect(req.get('referer'));
+    res.json('');
   }
 
   for (let i = 0; i < timeEntries.length; i++) {
-    timeEntry = timeEntries[i];
-    timeEntry.status = status;
+    const timeEntry = timeEntries[i];
+    timeEntry.status = receivingStatus;
     hours += timeEntry.publicHours;
     await timeEntry.save();
   }
 
-  if (status === 'approved') hourLog.totalPublicHours += hours;
-  else if (status === 'hidden') hourLog.totalHiddenHours += hours;
-
-  hourLog.totalSubmittedHours = 0;
+  hourLog[`${currentHourLogHoursUpdateParameter}`] = 0;
+  hourLog[`${receivingHourLogHoursUpdateParameter}`] += hours;
   await hourLog.save();
 
-  req.flash('success', `Successfully ${status} all time entries`);
-  res.redirect(req.get('referer'));
+  res.json('');
 };
 
 /**
  * Helper functions
  */
 
-async function findOrCreateCurrentHourLog(status, timeEntry) {
+async function createOrFindAndUpdateCurrentHourLog(status, timeEntry) {
   let hourLogHoursUpdateParameter;
   if (status === 'approved') hourLogHoursUpdateParameter = 'totalPublicHours';
   else if (status === 'hidden') hourLogHoursUpdateParameter = 'totalHiddenHours';
@@ -431,7 +431,6 @@ async function findOrCreateCurrentHourLog(status, timeEntry) {
 
   // If there is a current hourLog append to it
   else if (hourLog) {
-    console.log(hourLog);
     await hourLog.update({ $addToSet: { timeEntries: timeEntry._id } }, { new: true });
 
     if (status === 'approved') hourLog.totalPublicHours += timeEntry.hours;
@@ -439,7 +438,6 @@ async function findOrCreateCurrentHourLog(status, timeEntry) {
     else if (status === 'submitted') hourLog.totalSubmittedHours += timeEntry.hours;
 
     timeEntry.hourLog = hourLog._id;
-    console.log(hourLog);
   }
   await hourLog.save();
 }

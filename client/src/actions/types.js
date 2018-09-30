@@ -25,3 +25,5 @@ export const HIDE_TIME_ENTRY = 'hide_time_entry';
 export const REJECT_TIME_ENTRY = 'reject_time_entry';
 export const SUBMIT_TIME_ENTRY = 'submit_time_entry';
 export const DELETE_TIME_ENTRY = 'delete_time_entry';
+export const NEW_TIME_ENTRY_BULK_ACTION = 'new_time_entry_bulk_action';
+export const TIME_ENTRY_IN_HOUR_LOG_BULK_ACTION = 'time_entry_in_hour_log_bulk_action';

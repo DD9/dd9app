@@ -7,6 +7,7 @@ import {
 } from '../../actions/timeEntry';
 
 import TimeEntryTableEditFormModal from './TimeEntryTableEditFormModal';
+import TimeEntryTableActionConfirmModal from './TimeEntryTableActionConfirmModal';
 
 class TimeEntryTableActions extends Component {
   onApproveTimeEntryClick() {
@@ -17,19 +18,19 @@ class TimeEntryTableActions extends Component {
     this.props.hideTimeEntry(this.props.timeEntry._id);
   }
 
-  onRejectTimeEntryClick(e) {
+  onRejectTimeEntryClick = e => {
     e.preventDefault();
     $(`#time-entry-confirm-reject-modal-${this.props.timeEntry._id}`).modal('hide');
     this.props.rejectTimeEntry(this.props.timeEntry._id);
   }
 
-  onSubmitTimeEntryClick(e) {
+  onSubmitTimeEntryClick = e => {
     e.preventDefault();
     $(`#time-entry-confirm-submit-modal-${this.props.timeEntry._id}`).modal('hide');
     this.props.submitTimeEntry(this.props.timeEntry._id);
   }
 
-  onDeleteTimeEntryClick(e) {
+  onDeleteTimeEntryClick = e => {
     e.preventDefault();
     $(`#time-entry-confirm-delete-modal-${this.props.timeEntry._id}`).modal('hide');
     this.props.deleteTimeEntry(this.props.timeEntry._id);
@@ -141,66 +142,27 @@ class TimeEntryTableActions extends Component {
             description: timeEntry.publicDescription,
           }}
         />
-        <div>
-          <div className="modal fade" id={`time-entry-confirm-submit-modal-${timeEntry._id}`} tabIndex={-1} role="dialog" aria-labelledby={`#time-entry-confirm-submit-modal-${timeEntry._id}`} aria-hidden="true">
-            <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Confirm Submit</h5><button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div className="modal-body">
-                  <form id={`time-entry-confirm-submit-form-${timeEntry._id}`} className="form" onSubmit={this.onSubmitTimeEntryClick.bind(this)}>
-                    <p className="text-center">Are you sure you want to submit this time entry?</p>
-                  </form>
-                </div>
-                <div className="modal-footer">
-                  <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-                  <button className="btn btn-primary" type="submit" form={`time-entry-confirm-submit-form-${timeEntry._id}`}>Submit</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="modal fade" id={`time-entry-confirm-reject-modal-${timeEntry._id}`} tabIndex={-1} role="dialog" aria-labelledby={`#time-entry-confirm-reject-modal-${timeEntry._id}`} aria-hidden="true">
-            <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Confirm Reject</h5><button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div className="modal-body">
-                  <form id={`time-entry-confirm-reject-form-${timeEntry._id}`} className="form" onSubmit={this.onRejectTimeEntryClick.bind(this)}>
-                    <p className="text-center">Are you sure you want to reject this time entry?</p>
-                  </form>
-                </div>
-                <div className="modal-footer">
-                  <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-                  <button className="btn btn-primary" type="submit" form={`time-entry-confirm-reject-form-${timeEntry._id}`}>Submit</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="modal fade" id={`time-entry-confirm-delete-modal-${timeEntry._id}`} tabIndex={-1} role="dialog" aria-labelledby={`#time-entry-confirm-delete-modal-${timeEntry._id}`} aria-hidden="true">
-            <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Confirm Delete</h5><button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div className="modal-body">
-                  <form id={`time-entry-confirm-delete-form-${timeEntry._id}`} className="form" onSubmit={this.onDeleteTimeEntryClick.bind(this)}>
-                    <p className="text-center">Are you sure you want to delete this time entry?</p>
-                  </form>
-                </div>
-                <div className="modal-footer">
-                  <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-                  <button className="btn btn-primary" type="submit" form={`time-entry-confirm-delete-form-${timeEntry._id}`}>Submit</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TimeEntryTableActionConfirmModal
+          modalId={`time-entry-confirm-submit-modal-${timeEntry._id}`}
+          modalTitle="Confirm Submit"
+          formId={`time-entry-confirm-submit-form-${timeEntry._id}`}
+          modalBody="Are you sure you want to submit this time entry?"
+          onSubmit={this.onSubmitTimeEntryClick}
+        />
+        <TimeEntryTableActionConfirmModal
+          modalId={`time-entry-confirm-reject-modal-${timeEntry._id}`}
+          modalTitle="Confirm Reject"
+          formId={`time-entry-confirm-reject-form-${timeEntry._id}`}
+          modalBody="Are you sure you want to reject this time entry?"
+          onSubmit={this.onRejectTimeEntryClick}
+        />
+        <TimeEntryTableActionConfirmModal
+          modalId={`time-entry-confirm-delete-modal-${timeEntry._id}`}
+          modalTitle="Confirm Delete"
+          formId={`time-entry-confirm-delete-form-${timeEntry._id}`}
+          modalBody="Are you sure you want to delete this time entry?"
+          onSubmit={this.onDeleteTimeEntryClick}
+        />
       </div>
     );
   }
