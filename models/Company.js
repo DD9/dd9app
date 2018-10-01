@@ -1,35 +1,35 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 const companySchema = new Schema({
   _id: {
     type: mongoose.Schema.ObjectId,
-    auto: true
+    auto: true,
   },
   name: {
     type: String,
-    required: "Please supply a company name",
-    maxlength: 100
+    required: 'Please supply a company name',
+    maxlength: 100,
   },
   status: {
     type: String,
-    default: "active"
-  }
+    default: 'active',
+  },
 },
-  {
-    timestamps: true
-  }
-);
+{
+  timestamps: true,
+});
 
 // Unique index on company names to server side validate duplicate company names
 companySchema.index(
   { name: 1 },
-  { unique: true }
+  { unique: true },
 );
 
 companySchema.index(
   { active: 1 },
-  { dateClosed: -1},
+  { dateClosed: -1 },
 );
 
 module.exports = mongoose.model('Company', companySchema);

@@ -1,16 +1,21 @@
 const mongoose = require('mongoose');
+
 const User = mongoose.model('User');
-const Company = mongoose.model('Company');
 
 exports.all = async (req, res) => {
-  const users = await User.find().populate('company');
-  const companies = await Company.find({ status: "active" }).select('name').sort('name');
-  res.render("user/userAll", { title: "Users", users, companies });
+  const users = await User.find().populate('company', 'name');
+  res.json(users);
+};
+
+exports.active = async (req, res) => {
+  const users = await User.find({ status: 'active' }).select('firstName lastName').sort('firstName');
+  res.json(users);
 };
 
 exports.one = async (req, res) => {
-  const companies = await Company.find({ status: "active" }).select('name').sort('name');
-  res.render("user/userOne", { title: "My Account", companies });
+  const userId = req.user._id;
+  const user = await User.findOne({ _id: userId }).populate('company', 'name');
+  res.json(user);
 };
 
 exports.edit = async (req, res) => {
@@ -18,24 +23,25 @@ exports.edit = async (req, res) => {
   const user = await User.findOneAndUpdate(
     { _id: userId },
     { firstName: req.body.firstName, lastName: req.body.lastName },
-    { new: true }
+    { new: true },
   ).populate('company', 'name');
   await user.save();
   res.json(user);
 };
 
-exports.editAdmin = async (req, res) => {
-  const userId = req.params.id;
-  const user = await User.findOneAndUpdate({ _id: userId }, req.body, {new: true}).populate('company', 'name');
+exports.adminEdit = async (req, res) => {
+  console.log(req.body);
+  const { userId } = req.body;
+  const user = await User.findOneAndUpdate({ _id: userId }, req.body, { new: true }).populate('company', 'name');
 
   await user.permissions.pop();
-  if (req.body.role === "admin") {
+  if (req.body.role === 'admin') {
     await user.permissions.push({
-      'admin': true
+      admin: true,
     });
   } else {
     await user.permissions.push({
-      'admin': false
+      admin: false,
     });
   }
   await user.save();

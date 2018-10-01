@@ -1,73 +1,72 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const deepPopulate = require('mongoose-deep-populate')(mongoose);
+
+const { Schema } = mongoose;
 
 const timeEntrySchema = new Schema({
   date: {
     type: Date,
-    required: "Date required."
+    required: 'Date required.',
   },
   _id: {
     type: mongoose.Schema.ObjectId,
-    auto: true
+    auto: true,
   },
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
-    required: "User required."
+    required: 'User required.',
   },
   company: {
     type: mongoose.Schema.ObjectId,
     ref: 'Company',
-    required: "Company required."
+    required: 'Company required.',
   },
   hourLog: {
     type: mongoose.Schema.ObjectId,
-    ref: 'HourLog'
+    ref: 'HourLog',
   },
   hours: {
     type: Number,
-    required: "Hours required."
+    required: 'Hours required.',
   },
   description: {
     type: String,
-    required: "Description required."
+    required: 'Description required.',
   },
   status: {
     type: String,
-    required: "Status required."
+    required: 'Status required.',
   },
   publicUser: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
-    required: "Public user required."
+    required: 'Public user required.',
   },
   publicCompany: {
     type: mongoose.Schema.ObjectId,
     ref: 'Company',
-    required: "Public company required."
+    required: 'Public company required.',
   },
   publicDate: {
     type: Date,
-    required: "Public date required."
+    required: 'Public date required.',
   },
   publicHours: {
     type: Number,
-    required: "Public hours required."
+    required: 'Public hours required.',
   },
   publicDescription: {
     type: String,
-    required: "Public description required."
-  }
+    required: 'Public description required.',
+  },
 },
-  {
-    timestamps: true
-  }
-);
+{
+  timestamps: true,
+});
 
 timeEntrySchema.index({
   status: 1,
-  user: -1
+  user: -1,
 });
 
 

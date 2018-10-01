@@ -1,7 +1,12 @@
-.idea/
-node_modules
-.DS_Store
-data/
+# Secrets
 variables.env
+
+# Scripts
 v1_psql_import_scripts
-dd9app-devpack
+
+# Dependencies
+/node_modules
+
+# Misc
+.idea/
+.DS_Store

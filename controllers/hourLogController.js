@@ -1,51 +1,50 @@
 const mongoose = require('mongoose');
-const User = mongoose.model('User');
-const Company = mongoose.model('Company');
+
 const HourLog = mongoose.model('HourLog');
 
-exports.all = async (req, res) => {
+exports.openHourLogs = async (req, res) => {
   const openHourLogs = await HourLog.find({ dateClosed: new Date(0) }).populate('company');
-  const closedHourLogs = await HourLog.find({ dateClosed: { $ne: new Date(0) }}).populate('company').sort({'dateOpened': -1}).limit(100);
-  res.render("hourLog/hourLogAll", { title: "Hour Logs", openHourLogs, closedHourLogs });
+  res.json(openHourLogs);
+};
+
+exports.closedHourLogs = async (req, res) => {
+  const closedHourLogs = await HourLog.find({ dateClosed: { $ne: new Date(0) } }).populate('company').limit(200).sort({ dateOpened: -1 });
+  res.json(closedHourLogs);
 };
 
 exports.one = async (req, res) => {
-  const hourLogId = req.params.id;
-  const users = await User.find({ status: "active" }).select('firstName lastName').sort('firstName');
-  const companies = await Company.find({ status: "active" }).select('name').sort('name');
+  const { hourLogId } = req.params
   const hourLog = await HourLog.findOne({ _id: hourLogId })
     .populate('company', 'name')
     .populate('timeEntries', 'user publicUser company publicCompany publicHours publicDescription')
-    .deepPopulate('timeEntries.user timeEntries.publicUser timeEntries.company timeEntries.publicCompany', function (err, records) {
+    .deepPopulate('timeEntries.user timeEntries.publicUser timeEntries.company timeEntries.publicCompany', err => {
       if (err) {
         console.log(err);
       }
     });
-  res.render("hourLog/hourLogOne", { title: hourLog.company.name, users, companies, hourLog });
+  res.json(hourLog);
 };
 
 exports.open = async (req, res) => {
-  const hourLogId = req.params.id;
+  const { hourLogId } = req.params;
 
   const closingHourLog = await HourLog.findOne({ _id: hourLogId }).populate('timeEntries');
-  const currentHourLog = await HourLog.findOne({ title: "Current", company: closingHourLog.company }).populate('timeEntries');
+  const currentHourLog = await HourLog.findOne({ title: 'Current', company: closingHourLog.company }).populate('timeEntries');
 
-  if (!currentHourLog)
-  {
-    closingHourLog.title = "Current";
+  if (!currentHourLog) {
+    closingHourLog.title = 'Current';
     closingHourLog.dateOpened = new Date();
     closingHourLog.dateClosed = new Date(0);
     await closingHourLog.save();
-    return res.json({ updatedClosedHourLog: true });
+    return res.json(closingHourLog);
   }
-  else if (currentHourLog)
-  {
+  if (currentHourLog) {
     currentHourLog.totalPublicHours += closingHourLog.totalPublicHours;
     currentHourLog.totalHiddenHours += closingHourLog.totalHiddenHours;
-    await currentHourLog.update({ $addToSet: { timeEntries: closingHourLog.timeEntries }});
+    await currentHourLog.updateOne({ $addToSet: { timeEntries: closingHourLog.timeEntries } });
 
     for (let i = 0; i < closingHourLog.timeEntries.length; i++) {
-      timeEntry = closingHourLog.timeEntries[i];
+      const timeEntry = closingHourLog.timeEntries[i];
       timeEntry.hourLog = currentHourLog._id;
       await timeEntry.save();
     }
@@ -57,20 +56,21 @@ exports.open = async (req, res) => {
 };
 
 exports.close = async (req, res) => {
-  const hourLogId = req.params.id;
-  const hourLog = await HourLog.findOne({ _id: hourLogId });
+  const { hourLogId } = req.params;
+  const hourLog = await HourLog.findOne({ _id: hourLogId })
 
-  if (hourLog.totalSubmittedHours > 0)
-  {
-    return res.json({ error: "Cannot close an hour log with submitted time entries"});
+  if (hourLog.totalSubmittedHours > 0 || req.body.title.toLowerCase() === 'current') {
+    return res.json(hourLog);
   }
-  else
-  {
-    hourLog.title = req.body.title;
-    hourLog.dateClosed = new Date();
-    await hourLog.save();
+
+  if (hourLog.totalPublicHours === 0 && hourLog.totalHiddenHours === 0 && hourLog.totalSubmittedHours === 0) {
+    await hourLog.remove();
+    return res.json({ redirectUrl: `/company/${hourLog.company._id}`, companyId: hourLog.company._id });
   }
+
+  hourLog.title = req.body.title;
+  hourLog.dateClosed = new Date();
+  await hourLog.save();
 
   res.json(hourLog);
 };
-

@@ -1,22 +1,23 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 const deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 const hourLogSchema = new Schema({
   dateOpened: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   dateClosed: {
-    type: Date
+    type: Date,
   },
   _id: {
     type: mongoose.Schema.ObjectId,
-    auto: true
+    auto: true,
   },
   company: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Company'
+    ref: 'Company',
   },
   timeEntries: [{
     type: mongoose.Schema.ObjectId,
@@ -24,25 +25,24 @@ const hourLogSchema = new Schema({
   }],
   title: {
     type: String,
-    default: "Current"
+    default: 'Current',
   },
   totalPublicHours: {
     type: Number,
-    default: 0
+    default: 0,
   },
   totalHiddenHours: {
     type: Number,
-    default: 0
+    default: 0,
   },
   totalSubmittedHours: {
     type: Number,
-    default: 0
-  }
+    default: 0,
+  },
 },
-  {
-    timestamps: true
-  }
-);
+{
+  timestamps: true,
+});
 
 hourLogSchema.index(
   { title: 1 },
@@ -57,12 +57,12 @@ hourLogSchema.plugin(deepPopulate, {
       select: 'firstName lastName',
     },
     'timeEntries.company': {
-      select: 'name'
+      select: 'name',
     },
     'timeEntries.publicCompany': {
-      select: 'name'
-    }
-  }
+      select: 'name',
+    },
+  },
 });
 
 module.exports = mongoose.model('HourLog', hourLogSchema);
