@@ -6,7 +6,7 @@ import $ from 'jquery';
 
 import { openHourLog, closeHourLog } from '../../actions/hourLog';
 
-class HourLogOneControls extends Component {
+class HourLogCompanyOneControls extends Component {
   componentDidMount() {
     $('#closeHourLogModal').on('hidden.bs.modal', () => {
       this.props.reset();
@@ -19,7 +19,7 @@ class HourLogOneControls extends Component {
   }
 
   onHourLogCloseFormSubmit(formProps) {
-    this.props.closeHourLog(this.props.hourLog._id, formProps);
+    this.props.closeHourLog(this.props.hourLog._id, formProps, this.props.history);
     $('#closeHourLogModal').modal('hide');
   }
 
@@ -98,6 +98,7 @@ class HourLogOneControls extends Component {
                       name="title"
                       component={this.renderField}
                     />
+                    <p className="text-center">(Closing an empty hour log will trigger its deletion)</p>
                   </form>
                 </div>
                 <div className="modal-footer">
@@ -131,4 +132,4 @@ export default withRouter(connect(null, { closeHourLog, openHourLog })(reduxForm
   form: 'closeHourLog',
   enableReinitialize: true,
   validate,
-})(HourLogOneControls)));
+})(HourLogCompanyOneControls)));

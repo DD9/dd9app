@@ -23,7 +23,7 @@ exports.currentUser = (req, res) => {
 exports.logout = (req, res) => {
   req.logout();
   req.flash('success', 'You are now logged out');
-  res.send();
+  res.send('You are now logged out');
 };
 
 exports.isLoggedIn = (req, res, next) => {
@@ -31,7 +31,7 @@ exports.isLoggedIn = (req, res, next) => {
     return next();
   }
   req.flash('danger', 'Oops, you must be logged in to do that');
-  res.redirect('/auth/login');
+  res.send('Oops, you must be logged in to do that');
 };
 
 exports.requireLogin = (req, res, next) => {
@@ -39,7 +39,7 @@ exports.requireLogin = (req, res, next) => {
     return next();
   }
   req.flash('warning', 'Oops, You are already logged in');
-  res.send();
+  res.send('Oops, You are already logged in');
 };
 
 exports.isOwner = (req, res, next) => {
@@ -47,7 +47,7 @@ exports.isOwner = (req, res, next) => {
     return next();
   }
   req.flash('warning', 'Oops, you are not the owner of that entity');
-  res.send();
+  res.send('Oops, you are not the owner of that entity');
 };
 
 exports.isAdmin = (req, res, next) => {
@@ -56,5 +56,5 @@ exports.isAdmin = (req, res, next) => {
     return next();
   }
   req.flash('warning', 'Oops, you must be an admin to do that');
-  res.send();
+  res.send('Oops, you must be an admin to do that');
 };

@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import '../styles/partials/app.css';
 import '../styles/partials/normalize.css';
+import '../styles/partials/toasts.css';
 
 import AuthedRoute from './HOCRoutes/AuthedRoute';
 import PublicOnlyRoute from './HOCRoutes/PublicOnlyRoute';

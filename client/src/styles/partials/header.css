@@ -2,8 +2,14 @@
   background-color: #710706;
 }
 
+.dropdown-menu {
+  background-color: #710706;
+  width: 200px;
+}
+
 .navbar ul li a {
   color: #FFFFFF;
+  font-size: 15px;
 }
 .navbar ul li a:hover {
   background-color: #930A07;

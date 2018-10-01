@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import $ from 'jquery';
 
 import { getCreatedTimeEntries } from '../../actions/timeEntry';
 import { getActiveUsers } from '../../actions/user';
@@ -15,8 +16,14 @@ class TimeEntryNew extends Component {
     this.props.getActiveCompanies();
   }
 
+  componentDidUpdate() {
+    $('.time-entry-table-bulk-action').attr('disabled', false);
+  }
+
   render() {
-    const { auth, createdTimeEntries, activeUsers, activeCompanies } = this.props;
+    const {
+      auth, createdTimeEntries, activeUsers, activeCompanies,
+    } = this.props;
     return (
       <div className="container table-font-size">
         <TimeEntryTable

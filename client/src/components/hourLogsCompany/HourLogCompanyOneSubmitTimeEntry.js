@@ -10,10 +10,13 @@ import { createAndSubmitTimeEntry } from '../../actions/timeEntry';
 import 'react-datepicker/dist/react-datepicker.css';
 
 
-class HourLogOneSubmitTimeEntry extends Component {
+class HourLogCompanyOneSubmitTimeEntry extends Component {
   componentDidMount() {
-    const datePicker = document.getElementsByClassName('react-datepicker__input-container')[0];
-    datePicker.childNodes[0].setAttribute('readOnly', true);
+    const { hourLogTitle } = this.props;
+    if (hourLogTitle === 'Current') {
+      const datePicker = document.getElementsByClassName('react-datepicker__input-container')[0];
+      datePicker.childNodes[0].setAttribute('readOnly', true);
+    }
   }
 
   onFormSubmit(formProps) {
@@ -64,7 +67,10 @@ class HourLogOneSubmitTimeEntry extends Component {
   }
 
   render() {
-    const { company, handleSubmit } = this.props;
+    const { hourLogTitle, company, handleSubmit } = this.props;
+    if (hourLogTitle !== 'Current') {
+      return <div />;
+    }
     return (
       <div className="py-1 px-3 bg-white rounded box-shadow">
         <div className="row">
@@ -121,4 +127,4 @@ function validate(values) {
 export default connect(null, { createAndSubmitTimeEntry })(reduxForm({
   form: 'submitTimeEntry',
   validate,
-})(HourLogOneSubmitTimeEntry));
+})(HourLogCompanyOneSubmitTimeEntry));

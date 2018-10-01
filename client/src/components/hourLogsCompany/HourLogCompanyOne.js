@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import $ from 'jquery';
+
+
+import HourLogCompanyOneControls from './HourLogCompanyOneControls';
+import TimeEntryTable from '../timeEntries/TimeEntryTable';
+import HourLogCompanyOneSubmitTimeEntry from './HourLogCompanyOneSubmitTimeEntry';
 
 import { getHourLog } from '../../actions/hourLog';
-
-import HourLogOneControls from './HourLogOneControls';
-import TimeEntryTable from '../timeEntries/TimeEntryTable';
-import HourLogOneSubmitTimeEntry from './HourLogOneSubmitTimeEntry';
-
 import { getActiveUsers } from '../../actions/user';
 import { getActiveCompanies } from '../../actions/company';
-import $ from "jquery";
 
 
-class HourLogOne extends Component {
+class HourLogCompanyOne extends Component {
   componentDidMount() {
     const { match } = this.props;
     this.props.getHourLog(match.params.id);
@@ -35,10 +35,11 @@ class HourLogOne extends Component {
     }
     return (
       <div className="container table-font-size">
-        <HourLogOneControls hourLog={hourLog} initialValues={{ title: moment.utc().format('YYYY-MM-DD') }} />
+        <HourLogCompanyOneControls hourLog={hourLog} initialValues={{ title: moment.utc().format('YYYY-MM-DD') }} />
         <div className="m-5" />
         <TimeEntryTable
           auth={auth}
+          hourLogTitle={hourLog.title}
           tableTitle="Approved Time Entries"
           timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved')}
           match={match}
@@ -49,6 +50,7 @@ class HourLogOne extends Component {
         <div className="m-5" />
         <TimeEntryTable
           auth={auth}
+          hourLogTitle={hourLog.title}
           tableTitle="Hidden Time Entries"
           timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'hidden')}
           match={match}
@@ -59,6 +61,7 @@ class HourLogOne extends Component {
         <div className="m-5" />
         <TimeEntryTable
           auth={auth}
+          hourLogTitle={hourLog.title}
           tableTitle="Submitted Time Entries"
           timeEntries={hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'submitted')}
           match={match}
@@ -67,7 +70,7 @@ class HourLogOne extends Component {
           defaultPageSize={5}
         />
         <div className="m-5" />
-        <HourLogOneSubmitTimeEntry company={hourLog.company || ''} hourLogId={match.params.id} />
+        <HourLogCompanyOneSubmitTimeEntry company={hourLog.company || ''} hourLogTitle={hourLog.title} hourLogId={match.params.id} />
       </div>
     );
   }
@@ -77,4 +80,4 @@ function mapStateToProps({ hourLog, activeUsers, activeCompanies }) {
   return { hourLog, activeUsers, activeCompanies };
 }
 
-export default connect(mapStateToProps, { getHourLog, getActiveUsers, getActiveCompanies })(HourLogOne);
+export default connect(mapStateToProps, { getHourLog, getActiveUsers, getActiveCompanies })(HourLogCompanyOne);

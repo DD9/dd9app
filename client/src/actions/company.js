@@ -86,6 +86,15 @@ export const deactivateCompany = companyId => async dispatch => {
       pauseOnHover: true,
       draggable: true,
     });
+  } else {
+    toast.success(`${res.data.name} successfully deactivated`, {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
   }
 
   dispatch({ type: DEACTIVATE_COMPANY, payload: res.data });

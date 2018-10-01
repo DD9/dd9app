@@ -2,6 +2,8 @@
 
 import {
   GET_HOUR_LOG,
+  OPEN_HOUR_LOG,
+  CLOSE_HOUR_LOG,
   CREATE_AND_SUBMIT_TIME_ENTRY,
   ADJUDICATE_TIME_ENTRY,
   APPROVE_TIME_ENTRY,
@@ -16,6 +18,12 @@ export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case GET_HOUR_LOG:
       return action.payload || false;
+
+    case OPEN_HOUR_LOG:
+      return state;
+
+    case CLOSE_HOUR_LOG:
+      return state;
 
     case CREATE_AND_SUBMIT_TIME_ENTRY: {
       return {

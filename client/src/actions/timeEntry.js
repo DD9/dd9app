@@ -220,7 +220,7 @@ export const deleteAllNewTimeEntries = () => async dispatch => {
 
 export const hideFromApprovedTimeEntries = hourLogId => async dispatch => {
   const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${hourLogId}/approved/hidden`);
-  const hourLog = await axios.get(`/api/v1/hourLog/${hourLogId}`);
+  const hourLog = await axios.get(`/api/v1/hourLog/company/${hourLogId}`);
 
   toast.info('Hid all Approved Time Entries', {
     position: 'top-right',
@@ -237,7 +237,7 @@ export const hideFromApprovedTimeEntries = hourLogId => async dispatch => {
 
 export const rejectFromApprovedTimeEntries = hourLogId => async dispatch => {
   const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${hourLogId}/approved/rejected`);
-  const hourLog = await axios.get(`/api/v1/hourLog/${hourLogId}`);
+  const hourLog = await axios.get(`/api/v1/hourLog/company/${hourLogId}`);
 
   toast.info('Rejected all Approved Time Entries', {
     position: 'top-right',
@@ -254,7 +254,7 @@ export const rejectFromApprovedTimeEntries = hourLogId => async dispatch => {
 
 export const approveFromHiddenTimeEntries = hourLogId => async dispatch => {
   const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${hourLogId}/hidden/approved`);
-  const hourLog = await axios.get(`/api/v1/hourLog/${hourLogId}`);
+  const hourLog = await axios.get(`/api/v1/hourLog/company/${hourLogId}`);
 
   toast.info('Approved all Hidden Time Entries', {
     position: 'top-right',
@@ -271,7 +271,7 @@ export const approveFromHiddenTimeEntries = hourLogId => async dispatch => {
 
 export const rejectFromHiddenTimeEntries = hourLogId => async dispatch => {
   const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${hourLogId}/hidden/rejected`);
-  const hourLog = await axios.get(`/api/v1/hourLog/${hourLogId}`);
+  const hourLog = await axios.get(`/api/v1/hourLog/company/${hourLogId}`);
 
   toast.info('Rejected all Hidden Time Entries', {
     position: 'top-right',
@@ -288,7 +288,7 @@ export const rejectFromHiddenTimeEntries = hourLogId => async dispatch => {
 
 export const approveFromSubmittedTimeEntries = hourLogId => async dispatch => {
   const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${hourLogId}/submitted/approved`);
-  const hourLog = await axios.get(`/api/v1/hourLog/${hourLogId}`);
+  const hourLog = await axios.get(`/api/v1/hourLog/company/${hourLogId}`);
 
   toast.info('Approved all Submitted Time Entries', {
     position: 'top-right',
@@ -305,7 +305,7 @@ export const approveFromSubmittedTimeEntries = hourLogId => async dispatch => {
 
 export const hideFromSubmittedTimeEntries = hourLogId => async dispatch => {
   const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${hourLogId}/submitted/hidden`);
-  const hourLog = await axios.get(`/api/v1/hourLog/${hourLogId}`);
+  const hourLog = await axios.get(`/api/v1/hourLog/company/${hourLogId}`);
 
   toast.info('Hid all Submitted Time Entries', {
     position: 'top-right',
@@ -322,7 +322,7 @@ export const hideFromSubmittedTimeEntries = hourLogId => async dispatch => {
 
 export const rejectFromSubmittedTimeEntries = hourLogId => async dispatch => {
   const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${hourLogId}/submitted/rejected`);
-  const hourLog = await axios.get(`/api/v1/hourLog/${hourLogId}`);
+  const hourLog = await axios.get(`/api/v1/hourLog/company/${hourLogId}`);
 
   toast.info('Rejected all Submitted Time Entries', {
     position: 'top-right',

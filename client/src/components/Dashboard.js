@@ -12,8 +12,9 @@ import UserAll from './users/UserAll';
 import UserOne from './users/UserOne';
 import CompanyAll from './companies/CompanyAll';
 import CompanyOne from './companies/CompanyOne';
-import HourLogAll from './hourLogs/HourLogAll';
-import HourLogOne from './hourLogs/HourLogOne';
+import HourLogCompanyAll from './hourLogsCompany/HourLogCompanyAll';
+import HourLogCompanyOne from './hourLogsCompany/HourLogCompanyOne';
+import HourLogContractorAll from './hourLogsContractor/HourLogContractorAll';
 import TimeEntryNew from './timeEntries/TimeEntryNew';
 import Footer from './Footer';
 
@@ -28,8 +29,9 @@ class Dashboard extends Component {
           <Route path="/user/:id" component={UserOne} />
           <AdminRoute path="/company/all" component={CompanyAll} />
           <AdminRoute path="/company/:id" component={CompanyOne} />
-          <AdminRoute path="/hourLog/all" component={HourLogAll} />
-          <AdminRoute path="/hourLog/:id" component={HourLogOne} />
+          <AdminRoute path="/hourLog/company/all" component={HourLogCompanyAll} />
+          <AdminRoute path="/hourLog/contractor/all" component={HourLogContractorAll} />
+          <AdminRoute path="/hourLog/company/:id" component={HourLogCompanyOne} />
           <Route path="/timeEntry/new" render={(props) => <TimeEntryNew {...props} auth={auth} />} />
           <Redirect to="/timeEntry/new" />
         </Switch>
