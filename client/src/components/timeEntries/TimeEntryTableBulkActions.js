@@ -128,7 +128,7 @@ class TimeEntryBulkTableActions extends Component {
     } if (tableTitle === 'Approved Time Entries') {
       return (
         <div className="d-inline">
-          <button type="button" className="btn-link time-entry-table-bulk-action" title="Submit All" data-toggle="modal" data-target="#time-entry-confirm-hide-all-from-approved-modal">H</button>
+          <button type="button" className="btn-link time-entry-table-bulk-action" title="Hide All" data-toggle="modal" data-target="#time-entry-confirm-hide-all-from-approved-modal">H</button>
           <button type="button" className="btn-link time-entry-table-bulk-action" title="Reject All" data-toggle="modal" data-target="#time-entry-confirm-reject-all-from-approved-modal">R</button>
         </div>
       );
