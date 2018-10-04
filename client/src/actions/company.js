@@ -38,7 +38,7 @@ export const createCompany = formProps => async dispatch => {
     hideProgressBar: true,
     closeOnClick: true,
     pauseOnHover: true,
-    draggable: true,
+    draggable: true
   });
 
   dispatch({ type: CREATE_COMPANY, payload: res.data });
