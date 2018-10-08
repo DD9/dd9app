@@ -35,7 +35,7 @@ class HourLogCompanyOne extends Component {
     }
     return (
       <div className="container table-font-size">
-        <HourLogCompanyOneControls hourLog={hourLog} initialValues={{ title: moment.utc().format('YYYY-MM-DD') }} />
+        <HourLogCompanyOneControls hourLog={hourLog} initialValues={hourLog.title === 'Current' ? { title: moment.utc().format('YYYY-MM-DD') } : { title: hourLog.title } } />
         <div className="m-5" />
         <TimeEntryTable
           auth={auth}
@@ -45,7 +45,6 @@ class HourLogCompanyOne extends Component {
           match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
-          defaultPageSize={5}
         />
         <div className="m-5" />
         <TimeEntryTable
@@ -56,7 +55,6 @@ class HourLogCompanyOne extends Component {
           match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
-          defaultPageSize={5}
         />
         <div className="m-5" />
         <TimeEntryTable
@@ -67,7 +65,6 @@ class HourLogCompanyOne extends Component {
           match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
-          defaultPageSize={5}
         />
         <div className="m-5" />
         <HourLogCompanyOneSubmitTimeEntry company={hourLog.company || ''} hourLogTitle={hourLog.title} hourLogId={match.params.id} />

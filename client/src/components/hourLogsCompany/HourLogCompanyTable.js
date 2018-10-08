@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-const HourLogCompanyTable = ({ tableTitle, hourLogs }) => {
+const HourLogCompanyTable = ({ tableTitle, hourLogs, showPagination, defaultPageSize }) => {
   const columns = [{
     Header: () => (
       <span className="table-title">{tableTitle}</span>
@@ -28,6 +28,7 @@ const HourLogCompanyTable = ({ tableTitle, hourLogs }) => {
       Header: 'Company',
       id: 'company',
       accessor: data => <Link to={`/company/${data.company._id}`}>{data.company.name}</Link>,
+      sortMethod: ((a, b) => (a.props.children > b.props.children ? 1 : -1)),
     }, {
       Header: 'Title',
       id: 'title',
@@ -37,6 +38,7 @@ const HourLogCompanyTable = ({ tableTitle, hourLogs }) => {
         }
         return <Link to={`/hourLog/company/${data._id}`}>{data.title}</Link>;
       },
+      sortMethod: ((a, b) => (a.props.children > b.props.children ? 1 : -1)),
     }, {
       Header: 'Hours',
       accessor: 'totalPublicHours',
@@ -53,6 +55,8 @@ const HourLogCompanyTable = ({ tableTitle, hourLogs }) => {
     <ReactTable
       data={hourLogs}
       columns={columns}
+      showPagination={showPagination}
+      defaultPageSize={defaultPageSize}
       className="-striped -highlight"
       noDataText="Loading..."
       defaultSorted={[

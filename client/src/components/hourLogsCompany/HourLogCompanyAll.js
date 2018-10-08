@@ -15,7 +15,7 @@ class HourLogCompanyAll extends Component {
     const { openHourLogs, closedHourLogs } = this.props;
     return (
       <div className="container table-font-size">
-        <HourLogCompanyTable tableTitle="Open Hour Logs" hourLogs={openHourLogs} />
+        <HourLogCompanyTable tableTitle="Open Hour Logs" hourLogs={openHourLogs} showPagination={false} defaultPageSize={-1} />
         <div className="m-5" />
         <HourLogCompanyTable tableTitle="Closed Hour Logs" hourLogs={closedHourLogs} />
       </div>

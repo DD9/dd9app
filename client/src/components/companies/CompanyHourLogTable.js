@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-const HourLogCompanyOneTable = ({ tableTitle, companyHourLogs }) => {
+const CompanyHourLogTable = ({ tableTitle, companyHourLogs }) => {
   const columns = [{
     Header: () => (
       <span className="table-title">{tableTitle}</span>
@@ -49,6 +49,8 @@ const HourLogCompanyOneTable = ({ tableTitle, companyHourLogs }) => {
     <ReactTable
       data={companyHourLogs}
       columns={columns}
+      showPagination={false}
+      defaultPageSize={-1}
       className="-striped -highlight"
       noDataText="Empty"
       defaultSorted={[
@@ -61,4 +63,4 @@ const HourLogCompanyOneTable = ({ tableTitle, companyHourLogs }) => {
   );
 };
 
-export default HourLogCompanyOneTable;
+export default CompanyHourLogTable;

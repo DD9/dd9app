@@ -151,6 +151,7 @@ exports.approve = async (req, res) => {
 
   if (timeEntry.hourLog) {
     const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog }).populate('timeEntries');
+    console.log(timeEntry.hourLog);
 
     hourLog.totalPublicHours += timeEntry.publicHours;
     if (timeEntry.status === 'hidden') {

@@ -25,6 +25,7 @@ const UserTable = ({ users, activeCompanies }) => {
       Header: 'Company',
       id: 'company',
       accessor: user => <Link to={`/company/${user.company._id}`}>{user.company.name}</Link>,
+      sortMethod: ((a, b) => (a.props.children > b.props.children ? 1 : -1)),
       maxWidth: 150,
     }, {
       Header: 'Role',
@@ -45,6 +46,12 @@ const UserTable = ({ users, activeCompanies }) => {
         }
         return moment.utc(user.lastLogin).format('dddd, MMMM Do YYYY [at] h:mmA [UTC]');
       },
+      sortMethod: ((a, b) => {
+        if (!a || !b) return 0;
+        const aEpoch = moment(a, 'dddd, MMMM Do YYYY [at] h:mmA [UTC]').unix();
+        const bEpoch = moment(b, 'dddd, MMMM Do YYYY [at] h:mmA [UTC]').unix();
+        return aEpoch > bEpoch ? 1 : -1;
+      }),
     }, {
       Header: '',
       id: 'editUser',
@@ -73,6 +80,8 @@ const UserTable = ({ users, activeCompanies }) => {
     <ReactTable
       data={users}
       columns={columns}
+      showPagination={false}
+      defaultPageSize={-1}
       className="-striped -highlight"
       noDataText="Loading..."
       defaultSorted={[

@@ -23,6 +23,8 @@ const CompanyTable = ({ companies }) => {
     <ReactTable
       data={companies}
       columns={columns}
+      showPagination={false}
+      defaultPageSize={-1}
       className="-striped -highlight"
       defaultSorted={[
         {

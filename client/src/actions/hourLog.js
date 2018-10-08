@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 import {
-  GET_OPEN_HOUR_LOGS, GET_CLOSED_HOUR_LOGS, GET_HOUR_LOG, OPEN_HOUR_LOG, CLOSE_HOUR_LOG, GET_COMPANY_HOUR_LOGS,
+  GET_OPEN_HOUR_LOGS, GET_CLOSED_HOUR_LOGS, GET_HOUR_LOG, OPEN_HOUR_LOG, CLOSE_HOUR_LOG, GET_COMPANY_HOUR_LOGS, EDIT_HOUR_LOG,
 } from './types';
 
 export const getOpenHourLogs = () => async dispatch => {
@@ -51,7 +51,7 @@ export const closeHourLog = (hourLogId, formProps, history) => async dispatch =>
   const closeHourLogRes = await axios.post(`/api/v1/hourLog/company/${hourLogId}/close`, formProps);
 
   if (closeHourLogRes.data.title === 'Current') {
-    toast.error('Error: cannot close an hour log with submitted time entries', {
+    toast.error('Error: failed to close hour log', {
       position: 'top-right',
       autoClose: 5000,
       hideProgressBar: true,
@@ -71,7 +71,6 @@ export const closeHourLog = (hourLogId, formProps, history) => async dispatch =>
       pauseOnHover: true,
       draggable: true,
     });
-    console.log(closeHourLogRes);
     const getCompanyHourLogs = await axios.get(`/api/v1/company/${closeHourLogRes.data.companyId}/hourLogs`);
     history.push(closeHourLogRes.data.redirectUrl);
     dispatch({ type: GET_COMPANY_HOUR_LOGS, payload: getCompanyHourLogs.data });
@@ -88,4 +87,10 @@ export const closeHourLog = (hourLogId, formProps, history) => async dispatch =>
     dispatch({ type: CLOSE_HOUR_LOG, payload: closeHourLogRes.data });
     dispatch({ type: GET_HOUR_LOG, payload: hourLog.data });
   }
+};
+
+export const editHourLog = (hourLogId, formProps) => async dispatch => {
+  const res = await axios.post(`/api/v1/hourLog/company/${hourLogId}/edit`, formProps);
+
+  dispatch({ type: EDIT_HOUR_LOG, payload: res.data });
 };

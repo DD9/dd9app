@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 
 import { getCompany, getCompanyHourLogs, getAllCompanies } from '../../actions/company';
 
-import HourLogCompanyOneTable from '../hourLogsCompany/HourLogCompanyOneTable';
-import HourLogCompanyOneTableControls from '../hourLogsCompany/HourLogCompanyOneTableControls';
+import CompanyHourLogTable from './CompanyHourLogTable';
+import CompanyHourLogTableControls from './CompanyHourLogTableControls';
 
 class CompanyOne extends Component {
   componentDidMount() {
@@ -18,15 +18,15 @@ class CompanyOne extends Component {
     if (!companyHourLogs[0] || companyHourLogs[0].company._id !== match.params.id) {
       return (
         <div>
-          <HourLogCompanyOneTable tableTitle={''} companyHourLogs={[]} />
-          <HourLogCompanyOneTableControls company={company} companies={[]} initialValues={{ name: company.name }} />
+          <CompanyHourLogTable tableTitle={''} companyHourLogs={[]} />
+          <CompanyHourLogTableControls company={company} companies={[]} initialValues={{ name: company.name }} />
         </div>
       );
     }
     return (
       <div>
-        <HourLogCompanyOneTable tableTitle={`${company.name || ''} - ${company.status.toString().toUpperCase() || ''}`} companyHourLogs={companyHourLogs} />
-        <HourLogCompanyOneTableControls company={company} companies={companies} initialValues={{ name: company.name }} />
+        <CompanyHourLogTable tableTitle={`${company.name || ''} - ${company.status.toString().toUpperCase() || ''}`} companyHourLogs={companyHourLogs} />
+        <CompanyHourLogTableControls company={company} companies={companies} initialValues={{ name: company.name }} />
       </div>
     );
   }

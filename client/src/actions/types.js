@@ -18,6 +18,7 @@ export const GET_CLOSED_HOUR_LOGS = 'get_closed_hour_logs';
 export const GET_HOUR_LOG = 'get_hour_log';
 export const OPEN_HOUR_LOG = 'open_hour_log';
 export const CLOSE_HOUR_LOG = 'close_hour_log';
+export const EDIT_HOUR_LOG = 'edit_hour_log';
 export const GET_COMPANY_HOUR_LOGS = 'get_company_hour_logs';
 export const GET_CREATED_TIME_ENTRIES = 'get_created_time_entries';
 export const CREATE_NEW_TIME_ENTRY = 'create_new_time_entry';

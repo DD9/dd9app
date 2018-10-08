@@ -4,6 +4,7 @@ import {
   GET_HOUR_LOG,
   OPEN_HOUR_LOG,
   CLOSE_HOUR_LOG,
+  EDIT_HOUR_LOG,
   CREATE_AND_SUBMIT_TIME_ENTRY,
   ADJUDICATE_TIME_ENTRY,
   APPROVE_TIME_ENTRY,
@@ -24,6 +25,12 @@ export default function(state = INITIAL_STATE, action) {
 
     case CLOSE_HOUR_LOG:
       return state;
+
+    case EDIT_HOUR_LOG:
+      return {
+        ...state,
+        title: action.payload.title,
+      };
 
     case CREATE_AND_SUBMIT_TIME_ENTRY: {
       return {
