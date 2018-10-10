@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import authReducer from './auth/authReducer';
 import { reducer as reduxForm } from 'redux-form';
+import authReducer from './auth/authReducer';
 import userAllReducer from './users/userAllReducer';
 import userActiveReducer from './users/userActiveReducer';
 import userOneReducer from './users/userOneReducer';

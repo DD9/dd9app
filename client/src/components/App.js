@@ -10,9 +10,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 
-import '../styles/partials/app.css';
-import '../styles/partials/normalize.css';
-import '../styles/partials/toasts.css';
+import '../styles/partials/app.scss';
+import '../styles/partials/normalize.scss';
+import '../styles/partials/toasts.scss';
 
 import AuthedRoute from './HOCRoutes/AuthedRoute';
 import PublicOnlyRoute from './HOCRoutes/PublicOnlyRoute';

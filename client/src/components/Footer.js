@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../styles/partials/footer.css';
+import '../styles/partials/footer.scss';
 import dd9AppLogo from '../static/images/dd9app_logo.png';
 
 const Footer = () => (

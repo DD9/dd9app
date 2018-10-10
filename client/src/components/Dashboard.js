@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import '../styles/partials/tables.css';
+import '../styles/partials/tables.scss';
 
 import AdminRoute from './HOCRoutes/AdminRoute';
 import Header from './Header';

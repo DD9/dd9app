@@ -11,6 +11,7 @@ import reduxThunk from 'redux-thunk';
 
 import App from './components/App';
 import reducers from './reducers';
+import * as serviceWorker from './serviceWorker';
 
 const store = createStore(
   reducers,
@@ -27,3 +28,5 @@ ReactDOM.render(
   <Provider store={store}><App /></Provider>,
   document.querySelector('#root'),
 );
+
+serviceWorker.unregister();

@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 
 import * as actions from '../actions/auth';
 
-import '../styles/partials/header.css';
+import '../styles/partials/header.scss';
 
 const Header = ({ auth, logout, history }) => {
   const renderContent = () => {
