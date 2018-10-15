@@ -15,9 +15,20 @@ class HourLogCompanyAll extends Component {
     const { openHourLogs, closedHourLogs } = this.props;
     return (
       <div className="container table-font-size">
-        <HourLogCompanyTable tableTitle="Open Hour Logs" hourLogs={openHourLogs} showPagination={false} defaultPageSize={-1} />
+        <HourLogCompanyTable
+          tableTitle="Open Hour Logs"
+          hourLogs={openHourLogs}
+          showPagination={false}
+          key={openHourLogs.length}
+          defaultPageSize={openHourLogs.length}
+          minRows={openHourLogs.length === 0 ? 20 : openHourLogs.length}
+        />
         <div className="m-5" />
-        <HourLogCompanyTable tableTitle="Closed Hour Logs" hourLogs={closedHourLogs} />
+        <HourLogCompanyTable
+          key={closedHourLogs}
+          tableTitle="Closed Hour Logs"
+          hourLogs={closedHourLogs}
+        />
       </div>
     );
   }

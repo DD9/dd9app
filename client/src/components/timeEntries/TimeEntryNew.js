@@ -32,6 +32,9 @@ class TimeEntryNew extends Component {
           timeEntries={createdTimeEntries}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
+          key={createdTimeEntries}
+          defaultPageSize={createdTimeEntries.length}
+          minRows={createdTimeEntries.length}
         />
         <TimeEntryForm activeCompanies={activeCompanies} initialValues={{ company: -1 }} />
       </div>

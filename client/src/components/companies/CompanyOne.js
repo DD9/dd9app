@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { getCompany, getCompanyHourLogs, getAllCompanies } from '../../actions/company';
 
+import SpinnerClipLoader from '../SpinnerClipLoader';
 import CompanyHourLogTable from './CompanyHourLogTable';
 import CompanyHourLogTableControls from './CompanyHourLogTableControls';
 
@@ -14,18 +15,25 @@ class CompanyOne extends Component {
   }
 
   renderContent() {
-    const { company, companyHourLogs, match, companies } = this.props;
+    const {
+      company, companyHourLogs, match, companies,
+    } = this.props;
     if (!companyHourLogs[0] || companyHourLogs[0].company._id !== match.params.id) {
       return (
         <div>
-          <CompanyHourLogTable tableTitle={''} companyHourLogs={[]} />
-          <CompanyHourLogTableControls company={company} companies={[]} initialValues={{ name: company.name }} />
+          <SpinnerClipLoader />
         </div>
       );
     }
     return (
       <div>
-        <CompanyHourLogTable tableTitle={`${company.name || ''} - ${company.status.toString().toUpperCase() || ''}`} companyHourLogs={companyHourLogs} />
+        <CompanyHourLogTable
+          tableTitle={`${company.name || ''} - ${company.status.toString().toUpperCase() || ''}`}
+          companyHourLogs={companyHourLogs}
+          key={companyHourLogs}
+          defaultPageSize={companyHourLogs.length}
+          minRows={companyHourLogs.length}
+        />
         <CompanyHourLogTableControls company={company} companies={companies} initialValues={{ name: company.name }} />
       </div>
     );

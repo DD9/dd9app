@@ -5,6 +5,7 @@ import { reduxForm, Field } from 'redux-form';
 import $ from 'jquery';
 
 import { openHourLog, closeHourLog, editHourLog } from '../../actions/hourLog';
+import TimeEntryExportedTable from "../timeEntries/TimeEntryExportedTable";
 
 class HourLogCompanyOneControls extends Component {
   onHourLogOpenFormSubmit() {
@@ -39,6 +40,7 @@ class HourLogCompanyOneControls extends Component {
           <h3 className="d-inline"><span style={{ textDecoration: 'underline' }}>{hourLog.title}</span> Hour Log for </h3>
           <Link className="nav-link d-inline p-0" to={`/company/${hourLog.company._id}`} style={{ fontSize: '24px' }}><i>{hourLog.company.name}</i></Link>
           <div className="pull-right">
+            <button type="button" className="btn btn-primary mr-2" data-toggle="modal" data-target="#exportApprovedHoursModal">Export</button>
             <button type="button" className="btn btn-primary mr-2" data-toggle="modal" data-target="#editHourLogModal">Edit</button>
             <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#openHourLogModal">Open</button>
           </div>
@@ -58,7 +60,7 @@ class HourLogCompanyOneControls extends Component {
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, timeEntries } = this.props;
     return (
       <div className="py-1 px-3 bg-white rounded box-shadow">
         <div className="py-2">
@@ -132,6 +134,24 @@ class HourLogCompanyOneControls extends Component {
                 <div className="modal-footer">
                   <button className="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                   <button className="btn btn-primary" type="submit" form="editHourLogForm">Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="modal fade" id="exportApprovedHoursModal" tabIndex={-1} role="dialog" aria-labelledby="exportApprovedHoursModal" aria-hidden="true">
+            <div className="modal-dialog modal-lg" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Export Hour Log</h5>
+                  <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div className="modal-body">
+                  <TimeEntryExportedTable timeEntries={timeEntries} />
+                </div>
+                <div className="modal-footer">
+                  <button className="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                 </div>
               </div>
             </div>

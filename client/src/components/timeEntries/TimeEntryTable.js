@@ -8,13 +8,18 @@ import TimeEntryTableActions from './TimeEntryTableActions';
 import TimeEntryTableBulkActions from './TimeEntryTableBulkActions';
 
 const TimeEntryTable = ({
-  auth, hourLogTitle, tableTitle, timeEntries, match, activeUsers, activeCompanies,
+  auth, hourLogTitle, tableTitle, timeEntries, match, activeUsers, activeCompanies, defaultPageSize, minRows,
 }) => {
+
   let columns;
+
+  /**
+   * New Time Entries Table
+   */
   if (tableTitle === 'New Time Entries') {
     columns = [{
       Header: () => (
-        <span className="table-title">{tableTitle}</span>
+        <span className="table-title-font-size">{tableTitle}</span>
       ),
       columns: [{
         Header: 'Date',
@@ -78,7 +83,8 @@ const TimeEntryTable = ({
         data={timeEntries}
         columns={columns}
         showPagination={false}
-        defaultPageSize={-1}
+        defaultPageSize={defaultPageSize}
+        minRows={minRows}
         className="-striped -highlight"
         noDataText="Empty"
         defaultSorted={[
@@ -89,10 +95,15 @@ const TimeEntryTable = ({
         ]}
       />
     );
-  } if (hourLogTitle !== 'Current') {
+  }
+
+  /**
+   * Closed HourLog timeEntry tables
+   */
+  if (hourLogTitle !== 'Current') {
     columns = [{
       Header: () => (
-        <span className="table-title">{tableTitle}</span>
+        <span className="table-title-font-size">{tableTitle}</span>
       ),
       columns: [{
         Header: 'Date',
@@ -130,7 +141,8 @@ const TimeEntryTable = ({
         data={timeEntries}
         columns={columns}
         showPagination={false}
-        defaultPageSize={-1}
+        defaultPageSize={defaultPageSize}
+        minRows={minRows}
         className="-striped -highlight"
         noDataText="Empty"
         defaultSorted={[
@@ -167,9 +179,13 @@ const TimeEntryTable = ({
       />
     );
   }
+
+  /**
+   * Open HourLog timeEntry tables default
+   */
   columns = [{
     Header: () => (
-      <span className="table-title">{tableTitle}</span>
+      <span className="table-title-font-size">{tableTitle}</span>
     ),
     columns: [{
       Header: 'Date',
@@ -231,7 +247,8 @@ const TimeEntryTable = ({
       data={timeEntries}
       columns={columns}
       showPagination={false}
-      defaultPageSize={-1}
+      defaultPageSize={defaultPageSize}
+      minRows={minRows}
       className="-striped -highlight"
       noDataText="Empty"
       defaultSorted={[

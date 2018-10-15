@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-const HourLogCompanyTable = ({ tableTitle, hourLogs, showPagination, defaultPageSize }) => {
+const HourLogCompanyTable = ({ tableTitle, hourLogs, showPagination, defaultPageSize, minRows }) => {
   const columns = [{
     Header: () => (
-      <span className="table-title">{tableTitle}</span>
+      <span className="table-title-font-size">{tableTitle}</span>
     ),
     columns: [{
       Header: 'Date Opened',
@@ -57,6 +57,7 @@ const HourLogCompanyTable = ({ tableTitle, hourLogs, showPagination, defaultPage
       columns={columns}
       showPagination={showPagination}
       defaultPageSize={defaultPageSize}
+      minRows={minRows}
       className="-striped -highlight"
       noDataText="Loading..."
       defaultSorted={[

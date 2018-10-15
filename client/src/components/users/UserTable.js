@@ -7,10 +7,10 @@ import UserTableAdminEditFormModal from './UserTableAdminEditFormModal';
 
 import 'react-table/react-table.css';
 
-const UserTable = ({ users, activeCompanies }) => {
+const UserTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
   const columns = [{
     Header: () => (
-      <span className="table-title">Users</span>
+      <span className="table-title-font-size">Users</span>
     ),
     columns: [{
       Header: 'Name',
@@ -81,7 +81,8 @@ const UserTable = ({ users, activeCompanies }) => {
       data={users}
       columns={columns}
       showPagination={false}
-      defaultPageSize={-1}
+      defaultPageSize={defaultPageSize}
+      minRows={minRows}
       className="-striped -highlight"
       noDataText="Loading..."
       defaultSorted={[

@@ -17,7 +17,7 @@ class UserAll extends Component {
     const { users, activeCompanies } = this.props;
     return (
       <div className="container table-font-size">
-        <UserTable users={users} activeCompanies={activeCompanies} />
+        <UserTable key={users} users={users} activeCompanies={activeCompanies} defaultPageSize={users.length} minRows={users.length === 0 ? 20 : users.length} />
         <UserTableControls />
       </div>
     );
