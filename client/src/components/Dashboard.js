@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import '../styles/partials/tables.css';
+import '../styles/partials/tables.scss';
 
 import AdminRoute from './HOCRoutes/AdminRoute';
 import Header from './Header';
@@ -12,9 +12,9 @@ import UserAll from './users/UserAll';
 import UserOne from './users/UserOne';
 import CompanyAll from './companies/CompanyAll';
 import CompanyOne from './companies/CompanyOne';
-import HourLogCompanyAll from './hourLogsCompany/HourLogCompanyAll';
-import HourLogCompanyOne from './hourLogsCompany/HourLogCompanyOne';
-import HourLogContractorAll from './hourLogsContractor/HourLogContractorAll';
+import CompanyAllHourLog from './companyHourLogs/CompanyAllHourLog';
+import CompanyOneHourLog from './companyHourLogs/CompanyOneHourLog';
+import ContractorAllHourLog from './contractorHourLogs/ContractorAllHourLog';
 import TimeEntryNew from './timeEntries/TimeEntryNew';
 import Footer from './Footer';
 
@@ -28,10 +28,10 @@ class Dashboard extends Component {
           <AdminRoute path="/user/all" component={UserAll} />
           <Route path="/user/:id" component={UserOne} />
           <AdminRoute path="/company/all" component={CompanyAll} />
-          <AdminRoute path="/company/:id" component={CompanyOne} />
-          <AdminRoute path="/hourLog/company/all" component={HourLogCompanyAll} />
-          <AdminRoute path="/hourLog/contractor/all" component={HourLogContractorAll} />
-          <AdminRoute path="/hourLog/company/:id" component={HourLogCompanyOne} />
+          <AdminRoute path="/company/:companyId" component={CompanyOne} />
+          <AdminRoute path="/hourLog/company/all" component={CompanyAllHourLog} />
+          <AdminRoute path="/hourLog/contractor/all" component={ContractorAllHourLog} />
+          <AdminRoute path="/hourLog/company/:companyHourLogId" component={CompanyOneHourLog} />
           <Route path="/timeEntry/new" render={(props) => <TimeEntryNew {...props} auth={auth} />} />
           <Redirect to="/timeEntry/new" />
         </Switch>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import '../styles/partials/login.css';
+import '../styles/partials/login.scss';
 import dd9AppLogo from '../static/images/dd9app_logo.png';
 
 class Login extends Component {

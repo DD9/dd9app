@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -7,10 +7,10 @@ import UserTableAdminEditFormModal from './UserTableAdminEditFormModal';
 
 import 'react-table/react-table.css';
 
-const UserTable = ({ users, activeCompanies }) => {
+const UserTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
   const columns = [{
     Header: () => (
-      <span className="table-title">Users</span>
+      <span className="table-title-font-size">Users</span>
     ),
     columns: [{
       Header: 'Name',
@@ -20,17 +20,18 @@ const UserTable = ({ users, activeCompanies }) => {
     }, {
       Header: 'Email',
       accessor: 'email',
-      maxWidth: 200,
+      maxWidth: 175,
     }, {
       Header: 'Company',
       id: 'company',
       accessor: user => <Link to={`/company/${user.company._id}`}>{user.company.name}</Link>,
+      sortMethod: ((a, b) => (a.props.children > b.props.children ? 1 : -1)),
       maxWidth: 150,
     }, {
       Header: 'Role',
       id: 'role',
       accessor: user => user.role.charAt(0).toUpperCase() + user.role.slice(1),
-      maxWidth: 75,
+      maxWidth: 100,
     }, {
       Header: 'Status',
       id: 'status',
@@ -45,6 +46,12 @@ const UserTable = ({ users, activeCompanies }) => {
         }
         return moment.utc(user.lastLogin).format('dddd, MMMM Do YYYY [at] h:mmA [UTC]');
       },
+      sortMethod: ((a, b) => {
+        if (!a || !b) return 0;
+        const aEpoch = moment(a, 'dddd, MMMM Do YYYY [at] h:mmA [UTC]').unix();
+        const bEpoch = moment(b, 'dddd, MMMM Do YYYY [at] h:mmA [UTC]').unix();
+        return aEpoch > bEpoch ? 1 : -1;
+      }),
     }, {
       Header: '',
       id: 'editUser',
@@ -73,6 +80,9 @@ const UserTable = ({ users, activeCompanies }) => {
     <ReactTable
       data={users}
       columns={columns}
+      showPagination={false}
+      defaultPageSize={defaultPageSize}
+      minRows={minRows}
       className="-striped -highlight"
       noDataText="Loading..."
       defaultSorted={[

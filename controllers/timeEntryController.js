@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const HourLog = mongoose.model('HourLog');
+const CompanyHourLog = mongoose.model('CompanyHourLog');
 const TimeEntry = mongoose.model('TimeEntry');
 
 exports.created = async (req, res) => {
@@ -37,7 +37,7 @@ exports.createAndSubmit = async (req, res) => {
   const timeEntry = await new TimeEntry({
     user: req.user._id,
     company: req.body.company,
-    hourLog: req.body.hourLog,
+    companyHourLog: req.body.companyHourLog,
     date: req.body.date,
     hours: req.body.hours,
     description: req.body.description,
@@ -49,8 +49,8 @@ exports.createAndSubmit = async (req, res) => {
     status: 'submitted',
   }).save();
 
-  await HourLog.findOneAndUpdate(
-    { _id: req.body.hourLog },
+  await CompanyHourLog.findOneAndUpdate(
+    { _id: req.body.companyHourLog },
     {
       $addToSet: { timeEntries: timeEntry._id },
       $inc: { totalSubmittedHours: timeEntry.hours },
@@ -67,7 +67,7 @@ exports.edit = async (req, res) => {
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
 
   // The timeEntry must be 'new' and a user must own the timeEntry to edit it
-  if (!timeEntry.hourLog && timeEntry.user.toString() === req.user._id.toString()) {
+  if (!timeEntry.companyHourLog && timeEntry.user.toString() === req.user._id.toString()) {
     timeEntry.date = req.body.date;
     timeEntry.company = req.body.company;
     timeEntry.hours = req.body.hours;
@@ -89,46 +89,46 @@ exports.edit = async (req, res) => {
 exports.adjudicate = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
-  const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog }).populate('timeEntries');
+  const companyHourLog = await CompanyHourLog.findOne({ _id: timeEntry.companyHourLog }).populate('timeEntries');
 
   // If transferring the time entry to another companies hour log
   if (timeEntry.publicCompany.toString() !== req.body.company.toString()) {
-    await hourLog.update({ $pull: { timeEntries: timeEntry._id } });
+    await companyHourLog.update({ $pull: { timeEntries: timeEntry._id } });
 
-    let receivingHourLog = await HourLog.findOne({ title: 'Current', company: req.body.company });
+    let receivingCompanyHourLog = await CompanyHourLog.findOne({ title: 'Current', company: req.body.company });
     // If there's no current hour log for the company that a time entry is being transferred to, create one
-    if (!receivingHourLog) {
-      receivingHourLog = await (new HourLog({
+    if (!receivingCompanyHourLog) {
+      receivingCompanyHourLog = await (new CompanyHourLog({
         company: req.body.company,
         timeEntries: timeEntry._id,
         dateClosed: new Date(0),
       })).save();
-    } else if (receivingHourLog) {
-      await receivingHourLog.update({ $addToSet: { timeEntries: timeEntry._id } });
+    } else if (receivingCompanyHourLog) {
+      await receivingCompanyHourLog.update({ $addToSet: { timeEntries: timeEntry._id } });
     }
-    timeEntry.hourLog = receivingHourLog._id;
+    timeEntry.companyHourLog = receivingCompanyHourLog._id;
 
     // Subtract current hours on sending hour log, add new hours to receiving hour log
     if (timeEntry.status === 'approved') {
-      hourLog.totalPublicHours -= timeEntry.publicHours;
-      receivingHourLog.totalPublicHours += +req.body.hours;
+      companyHourLog.totalPublicHours -= timeEntry.publicHours;
+      receivingCompanyHourLog.totalPublicHours += +req.body.hours;
     } else if (timeEntry.status === 'hidden') {
-      hourLog.totalHiddenHours -= timeEntry.publicHours;
-      receivingHourLog.totalHiddenHours += +req.body.hours;
+      companyHourLog.totalHiddenHours -= timeEntry.publicHours;
+      receivingCompanyHourLog.totalHiddenHours += +req.body.hours;
     } else if (timeEntry.status === 'submitted') {
-      hourLog.totalSubmittedHours -= timeEntry.publicHours;
-      receivingHourLog.totalSubmittedHours += +req.body.hours;
+      companyHourLog.totalSubmittedHours -= timeEntry.publicHours;
+      receivingCompanyHourLog.totalSubmittedHours += +req.body.hours;
     }
 
-    await receivingHourLog.save();
+    await receivingCompanyHourLog.save();
 
     // Else if not transferring but still adjudicating the timeEntry
   } else if (timeEntry.status === 'approved') {
-    hourLog.totalPublicHours -= (timeEntry.publicHours - req.body.hours);
+    companyHourLog.totalPublicHours -= (timeEntry.publicHours - req.body.hours);
   } else if (timeEntry.status === 'hidden') {
-    hourLog.totalHiddenHours -= (timeEntry.publicHours - req.body.hours);
+    companyHourLog.totalHiddenHours -= (timeEntry.publicHours - req.body.hours);
   } else if (timeEntry.status === 'submitted') {
-    hourLog.totalSubmittedHours -= (timeEntry.publicHours - req.body.hours);
+    companyHourLog.totalSubmittedHours -= (timeEntry.publicHours - req.body.hours);
   }
 
   timeEntry.publicDate = req.body.date;
@@ -137,7 +137,7 @@ exports.adjudicate = async (req, res) => {
   timeEntry.publicHours = req.body.hours;
   timeEntry.publicDescription = req.body.description;
 
-  await hourLog.save();
+  await companyHourLog.save();
   await timeEntry.save();
 
   const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntryId }).populate('user publicUser company publicCompany');
@@ -149,41 +149,42 @@ exports.approve = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
 
-  if (timeEntry.hourLog) {
-    const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog }).populate('timeEntries');
+  if (timeEntry.companyHourLog) {
+    const companyHourLog = await CompanyHourLog.findOne({ _id: timeEntry.companyHourLog }).populate('timeEntries');
+    console.log(timeEntry.companyHourLog);
 
-    hourLog.totalPublicHours += timeEntry.publicHours;
+    companyHourLog.totalPublicHours += timeEntry.publicHours;
     if (timeEntry.status === 'hidden') {
-      hourLog.totalHiddenHours -= timeEntry.publicHours;
+      companyHourLog.totalHiddenHours -= timeEntry.publicHours;
     } else if (timeEntry.status === 'submitted') {
-      hourLog.totalSubmittedHours -= timeEntry.publicHours;
+      companyHourLog.totalSubmittedHours -= timeEntry.publicHours;
     }
 
     await timeEntry.update({ $set: { status: 'approved' } }, { new: true });
-    await hourLog.save();
+    await companyHourLog.save();
     await timeEntry.save();
 
     const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntryId }).populate('user publicUser company publicCompany');
 
     res.json(populatedTimeEntry);
-  } else if (!timeEntry.hourLog) {
-    let hourLog = await HourLog.findOne({ title: 'Current', company: timeEntry.company });
+  } else if (!timeEntry.companyHourLog) {
+    let companyHourLog = await CompanyHourLog.findOne({ title: 'Current', company: timeEntry.company });
 
-    if (!hourLog) {
-      hourLog = await (new HourLog({
+    if (!companyHourLog) {
+      companyHourLog = await (new CompanyHourLog({
         company: timeEntry.company,
         timeEntries: timeEntry._id,
         dateClosed: new Date(0),
         totalPublicHours: timeEntry.hours,
       }));
-      timeEntry.hourLog = hourLog._id;
-    } else if (hourLog) {
-      await hourLog.update({ $addToSet: { timeEntries: timeEntry._id } }, { new: true });
-      hourLog.totalPublicHours += timeEntry.hours;
-      timeEntry.hourLog = hourLog._id;
+      timeEntry.companyHourLog = companyHourLog._id;
+    } else if (companyHourLog) {
+      await companyHourLog.update({ $addToSet: { timeEntries: timeEntry._id } }, { new: true });
+      companyHourLog.totalPublicHours += timeEntry.hours;
+      timeEntry.companyHourLog = companyHourLog._id;
     }
     await timeEntry.update({ $set: { status: 'approved' } }, { new: true });
-    await hourLog.save();
+    await companyHourLog.save();
     await timeEntry.save();
 
     const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntryId }).populate('user publicUser company publicCompany');
@@ -196,41 +197,41 @@ exports.hide = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
 
-  if (timeEntry.hourLog) {
-    const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog }).populate('timeEntries');
+  if (timeEntry.companyHourLog) {
+    const companyHourLog = await CompanyHourLog.findOne({ _id: timeEntry.companyHourLog }).populate('timeEntries');
 
-    hourLog.totalHiddenHours += timeEntry.publicHours;
+    companyHourLog.totalHiddenHours += timeEntry.publicHours;
     if (timeEntry.status === 'approved') {
-      hourLog.totalPublicHours -= timeEntry.publicHours;
+      companyHourLog.totalPublicHours -= timeEntry.publicHours;
     } else if (timeEntry.status === 'submitted') {
-      hourLog.totalSubmittedHours -= timeEntry.publicHours;
+      companyHourLog.totalSubmittedHours -= timeEntry.publicHours;
     }
 
     await timeEntry.update({ $set: { status: 'hidden' } }, { new: true });
-    await hourLog.save();
+    await companyHourLog.save();
     await timeEntry.save();
 
     const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntryId }).populate('user publicUser company publicCompany');
 
     res.json(populatedTimeEntry);
-  } else if (!timeEntry.hourLog) {
-    let hourLog = await HourLog.findOne({ title: 'Current', company: timeEntry.company });
+  } else if (!timeEntry.companyHourLog) {
+    let companyHourLog = await CompanyHourLog.findOne({ title: 'Current', company: timeEntry.company });
 
-    if (!hourLog) {
-      hourLog = await (new HourLog({
+    if (!companyHourLog) {
+      companyHourLog = await (new CompanyHourLog({
         company: timeEntry.company,
         timeEntries: timeEntry._id,
         dateClosed: new Date(0),
         totalHiddenHours: timeEntry.hours,
       }));
-      timeEntry.hourLog = hourLog._id;
-    } else if (hourLog) {
-      await hourLog.update({ $addToSet: { timeEntries: timeEntry._id } }, { new: true });
-      hourLog.totalHiddenHours += timeEntry.hours;
-      timeEntry.hourLog = hourLog._id;
+      timeEntry.companyHourLog = companyHourLog._id;
+    } else if (companyHourLog) {
+      await companyHourLog.update({ $addToSet: { timeEntries: timeEntry._id } }, { new: true });
+      companyHourLog.totalHiddenHours += timeEntry.hours;
+      timeEntry.companyHourLog = companyHourLog._id;
     }
     await timeEntry.update({ $set: { status: 'hidden' } }, { new: true });
-    await hourLog.save();
+    await companyHourLog.save();
     await timeEntry.save();
 
     const populatedTimeEntry = await TimeEntry.findOne({ _id: timeEntryId }).populate('user publicUser company publicCompany');
@@ -242,11 +243,11 @@ exports.hide = async (req, res) => {
 exports.reject = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
-  const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog }).populate('timeEntries');
+  const companyHourLog = await CompanyHourLog.findOne({ _id: timeEntry.companyHourLog }).populate('timeEntries');
 
-  if (timeEntry.status === 'approved') hourLog.totalPublicHours -= timeEntry.publicHours;
-  else if (timeEntry.status === 'hidden') hourLog.totalHiddenHours -= timeEntry.publicHours;
-  else if (timeEntry.status === 'submitted') hourLog.totalSubmittedHours -= timeEntry.publicHours;
+  if (timeEntry.status === 'approved') companyHourLog.totalPublicHours -= timeEntry.publicHours;
+  else if (timeEntry.status === 'hidden') companyHourLog.totalHiddenHours -= timeEntry.publicHours;
+  else if (timeEntry.status === 'submitted') companyHourLog.totalSubmittedHours -= timeEntry.publicHours;
 
   await timeEntry.update({ $set: { status: 'rejected' } });
 
@@ -264,7 +265,7 @@ exports.reject = async (req, res) => {
     status: 'created',
   }).save();
 
-  await hourLog.save();
+  await companyHourLog.save();
 
   res.json(timeEntry);
 };
@@ -275,39 +276,39 @@ exports.submit = async (req, res) => {
 
   // The user must own the timeEntry or be an admin to submit it
   if (req.user.permissions[0].admin || timeEntry.user.toString() === req.user._id.toString()) {
-    if (timeEntry.hourLog) {
-      const hourLog = await HourLog.findOne({ _id: timeEntry.hourLog });
+    if (timeEntry.companyHourLog) {
+      const companyHourLog = await CompanyHourLog.findOne({ _id: timeEntry.companyHourLog });
 
-      hourLog.totalSubmittedHours += timeEntry.publicHours;
+      companyHourLog.totalSubmittedHours += timeEntry.publicHours;
       if (timeEntry.status === 'approved') {
-        hourLog.totalPublicHours -= timeEntry.publicHours;
+        companyHourLog.totalPublicHours -= timeEntry.publicHours;
       } else if (timeEntry.status === 'hidden') {
-        hourLog.totalHiddenHours -= timeEntry.publicHours;
+        companyHourLog.totalHiddenHours -= timeEntry.publicHours;
       }
 
       await timeEntry.update({ $set: { status: 'submitted' } }, { new: true });
-      await hourLog.save();
+      await companyHourLog.save();
       await timeEntry.save();
 
       res.json(timeEntry);
-    } else if (!timeEntry.hourLog) {
-      let hourLog = await HourLog.findOne({ title: 'Current', company: timeEntry.company });
+    } else if (!timeEntry.companyHourLog) {
+      let companyHourLog = await CompanyHourLog.findOne({ title: 'Current', company: timeEntry.company });
 
-      if (!hourLog) {
-        hourLog = await (new HourLog({
+      if (!companyHourLog) {
+        companyHourLog = await (new CompanyHourLog({
           company: timeEntry.company,
           timeEntries: timeEntry._id,
           dateClosed: new Date(0),
           totalSubmittedHours: timeEntry.hours,
         }));
-        timeEntry.hourLog = hourLog._id;
-      } else if (hourLog) {
-        await hourLog.update({ $addToSet: { timeEntries: timeEntry._id } }, { new: true });
-        hourLog.totalSubmittedHours += timeEntry.hours;
-        timeEntry.hourLog = hourLog._id;
+        timeEntry.companyHourLog = companyHourLog._id;
+      } else if (companyHourLog) {
+        await companyHourLog.update({ $addToSet: { timeEntries: timeEntry._id } }, { new: true });
+        companyHourLog.totalSubmittedHours += timeEntry.hours;
+        timeEntry.companyHourLog = companyHourLog._id;
       }
       await timeEntry.update({ $set: { status: 'submitted' } }, { new: true });
-      await hourLog.save();
+      await companyHourLog.save();
       await timeEntry.save();
 
       res.json(timeEntry);
@@ -328,8 +329,6 @@ exports.delete = async (req, res) => {
 exports.newTimeEntryBulkAction = async (req, res) => {
   const { status } = req.params;
 
-  console.log(status);
-
   if (status === 'deleted') {
     await TimeEntry.remove({ user: req.user._id, status: 'created' });
     return res.json('');
@@ -348,22 +347,22 @@ exports.newTimeEntryBulkAction = async (req, res) => {
 };
 
 exports.timeEntryInHourLogBulkAction = async (req, res) => {
-  const { hourLogId, currentStatus, receivingStatus } = req.params;
+  const { companyHourLogId, currentStatus, receivingStatus } = req.params;
 
-  let currentHourLogHoursUpdateParameter;
-  if (currentStatus === 'approved') currentHourLogHoursUpdateParameter = 'totalPublicHours';
-  else if (currentStatus === 'hidden') currentHourLogHoursUpdateParameter = 'totalHiddenHours';
-  else if (currentStatus === 'submitted') currentHourLogHoursUpdateParameter = 'totalSubmittedHours';
+  let currentCompanyHourLogHoursUpdateParameter;
+  if (currentStatus === 'approved') currentCompanyHourLogHoursUpdateParameter = 'totalPublicHours';
+  else if (currentStatus === 'hidden') currentCompanyHourLogHoursUpdateParameter = 'totalHiddenHours';
+  else if (currentStatus === 'submitted') currentCompanyHourLogHoursUpdateParameter = 'totalSubmittedHours';
 
-  let receivingHourLogHoursUpdateParameter;
-  if (receivingStatus === 'approved') receivingHourLogHoursUpdateParameter = 'totalPublicHours';
-  else if (receivingStatus === 'hidden') receivingHourLogHoursUpdateParameter = 'totalHiddenHours';
-  else if (receivingStatus === 'submitted') receivingHourLogHoursUpdateParameter = 'totalSubmittedHours';
+  let receivingCompanyHourLogHoursUpdateParameter;
+  if (receivingStatus === 'approved') receivingCompanyHourLogHoursUpdateParameter = 'totalPublicHours';
+  else if (receivingStatus === 'hidden') receivingCompanyHourLogHoursUpdateParameter = 'totalHiddenHours';
+  else if (receivingStatus === 'submitted') receivingCompanyHourLogHoursUpdateParameter = 'totalSubmittedHours';
 
   let hours = 0;
 
-  const timeEntries = await TimeEntry.find({ hourLog: hourLogId, status: currentStatus });
-  const hourLog = await HourLog.findOne({ _id: hourLogId }).populate('timeEntries');
+  const timeEntries = await TimeEntry.find({ companyHourLog: companyHourLogId, status: currentStatus });
+  const companyHourLog = await CompanyHourLog.findOne({ _id: companyHourLogId }).populate('timeEntries');
 
   if (receivingStatus === 'rejected') {
     for (let i = 0; i < timeEntries.length; i++) {
@@ -386,8 +385,8 @@ exports.timeEntryInHourLogBulkAction = async (req, res) => {
       }).save();
     }
 
-    hourLog[`${currentHourLogHoursUpdateParameter}`] = 0;
-    hourLog.save();
+    companyHourLog[`${currentCompanyHourLogHoursUpdateParameter}`] = 0;
+    companyHourLog.save();
     res.json('');
   }
 
@@ -398,9 +397,9 @@ exports.timeEntryInHourLogBulkAction = async (req, res) => {
     await timeEntry.save();
   }
 
-  hourLog[`${currentHourLogHoursUpdateParameter}`] = 0;
-  hourLog[`${receivingHourLogHoursUpdateParameter}`] += hours;
-  await hourLog.save();
+  companyHourLog[`${currentCompanyHourLogHoursUpdateParameter}`] = 0;
+  companyHourLog[`${receivingCompanyHourLogHoursUpdateParameter}`] += hours;
+  await companyHourLog.save();
 
   res.json('');
 };
@@ -410,34 +409,34 @@ exports.timeEntryInHourLogBulkAction = async (req, res) => {
  */
 
 async function createOrFindAndUpdateCurrentHourLog(status, timeEntry) {
-  let hourLogHoursUpdateParameter;
-  if (status === 'approved') hourLogHoursUpdateParameter = 'totalPublicHours';
-  else if (status === 'hidden') hourLogHoursUpdateParameter = 'totalHiddenHours';
-  else if (status === 'submitted') hourLogHoursUpdateParameter = 'totalSubmittedHours';
+  let companyHourLogHoursUpdateParameter;
+  if (status === 'approved') companyHourLogHoursUpdateParameter = 'totalPublicHours';
+  else if (status === 'hidden') companyHourLogHoursUpdateParameter = 'totalHiddenHours';
+  else if (status === 'submitted') companyHourLogHoursUpdateParameter = 'totalSubmittedHours';
 
-  let hourLog = await HourLog.findOne({ title: 'Current', company: timeEntry.company });
+  let companyHourLog = await CompanyHourLog.findOne({ title: 'Current', company: timeEntry.company });
 
-  // If there's no current hourLog create one
-  if (!hourLog) {
-    hourLog = await (new HourLog({
+  // If there's no current companyHourLog create one
+  if (!companyHourLog) {
+    companyHourLog = await (new CompanyHourLog({
       company: timeEntry.company,
       timeEntries: timeEntry._id,
       dateClosed: new Date(0),
     }));
     // Total approved, hidden, or submitted hours
-    hourLog[`${hourLogHoursUpdateParameter}`] = timeEntry.hours;
-    timeEntry.hourLog = hourLog._id;
+    companyHourLog[`${companyHourLogHoursUpdateParameter}`] = timeEntry.hours;
+    timeEntry.companyHourLog = companyHourLog._id;
   }
 
-  // If there is a current hourLog append to it
-  else if (hourLog) {
-    await hourLog.update({ $addToSet: { timeEntries: timeEntry._id } }, { new: true });
+  // If there is a current companyHourLog append to it
+  else if (companyHourLog) {
+    await companyHourLog.update({ $addToSet: { timeEntries: timeEntry._id } }, { new: true });
 
-    if (status === 'approved') hourLog.totalPublicHours += timeEntry.hours;
-    else if (status === 'hidden') hourLog.totalHiddenHours += timeEntry.hours;
-    else if (status === 'submitted') hourLog.totalSubmittedHours += timeEntry.hours;
+    if (status === 'approved') companyHourLog.totalPublicHours += timeEntry.hours;
+    else if (status === 'hidden') companyHourLog.totalHiddenHours += timeEntry.hours;
+    else if (status === 'submitted') companyHourLog.totalSubmittedHours += timeEntry.hours;
 
-    timeEntry.hourLog = hourLog._id;
+    timeEntry.companyHourLog = companyHourLog._id;
   }
-  await hourLog.save();
+  await companyHourLog.save();
 }

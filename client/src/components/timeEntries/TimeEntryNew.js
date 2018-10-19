@@ -24,6 +24,9 @@ class TimeEntryNew extends Component {
     const {
       auth, createdTimeEntries, activeUsers, activeCompanies,
     } = this.props;
+
+    console.log(`createdTimeEntries ${JSON.stringify(createdTimeEntries)}`);
+
     return (
       <div className="container table-font-size">
         <TimeEntryTable
@@ -32,7 +35,9 @@ class TimeEntryNew extends Component {
           timeEntries={createdTimeEntries}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
-          defaultPageSize={10}
+          key={createdTimeEntries}
+          defaultPageSize={createdTimeEntries.length}
+          minRows={createdTimeEntries.length}
         />
         <TimeEntryForm activeCompanies={activeCompanies} initialValues={{ company: -1 }} />
       </div>

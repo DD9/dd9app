@@ -8,20 +8,24 @@ import TimeEntryTableActions from './TimeEntryTableActions';
 import TimeEntryTableBulkActions from './TimeEntryTableBulkActions';
 
 const TimeEntryTable = ({
-  auth, hourLogTitle, tableTitle, timeEntries, match, activeUsers, activeCompanies, defaultPageSize,
+  auth, companyHourLogTitle, tableTitle, timeEntries, match, activeUsers, activeCompanies, defaultPageSize, minRows,
 }) => {
+
   let columns;
+
+  /**
+   * New Time Entries Table
+   */
   if (tableTitle === 'New Time Entries') {
     columns = [{
       Header: () => (
-        <span className="table-title">{tableTitle}</span>
+        <span className="table-title-font-size">{tableTitle}</span>
       ),
       columns: [{
         Header: 'Date',
+        accessor: 'publicDate',
         id: 'date',
-        Cell: timeEntry => (
-          <span title={timeEntry.original.publicDate}>{timeEntry.original.publicDate.split('T')[0]}</span>
-        ),
+        Cell: timeEntry => <span title={timeEntry.original.publicDate}>{timeEntry.original.publicDate.split('T')[0]}</span>,
         maxWidth: 95,
       }, {
         Header: 'Company',
@@ -29,11 +33,7 @@ const TimeEntryTable = ({
         Cell: timeEntry => {
           if (auth.permissions[0].admin) {
             return (
-              <span title={timeEntry.original.publicCompany.name}><Link
-                to={`/company/${timeEntry.original.publicCompany._id}`}
-              >{timeEntry.original.publicCompany.name}
-              </Link>
-              </span>
+              <span title={timeEntry.original.publicCompany.name}><Link to={`/company/${timeEntry.original.publicCompany._id}`}>{timeEntry.original.publicCompany.name}</Link></span>
             );
           }
           return <span title={timeEntry.original.publicCompany.name}>{timeEntry.original.publicCompany.name}</span>;
@@ -82,25 +82,33 @@ const TimeEntryTable = ({
       <ReactTable
         data={timeEntries}
         columns={columns}
-        className="-striped -highlight"
+        showPagination={false}
         defaultPageSize={defaultPageSize}
+        minRows={minRows}
+        className="-striped -highlight"
         noDataText="Empty"
         defaultSorted={[
           {
             id: 'date',
-            asc: true,
+            desc: true,
           },
         ]}
       />
     );
-  } if (hourLogTitle !== 'Current') {
+  }
+
+  /**
+   * Closed CompanyHourLog timeEntry tables
+   */
+  if (companyHourLogTitle !== 'Current') {
     columns = [{
       Header: () => (
-        <span className="table-title">{tableTitle}</span>
+        <span className="table-title-font-size">{tableTitle}</span>
       ),
       columns: [{
         Header: 'Date',
         id: 'date',
+        accessor: 'publicDate',
         Cell: timeEntry => <span title={timeEntry.original.publicDate}>{timeEntry.original.publicDate.split('T')[0]}</span>,
         maxWidth: 95,
       }, {
@@ -111,7 +119,7 @@ const TimeEntryTable = ({
       }, {
         Header: 'Company',
         accessor: 'publicCompany.name',
-        Cell: timeEntry => <Link to={`/company/${timeEntry.original.publicCompany._id}`}>{timeEntry.original.publicCompany.name}</Link>,
+        Cell: timeEntry => <span title={timeEntry.original.publicCompany.name}><Link to={`/company/${timeEntry.original.publicCompany._id}`}>{timeEntry.original.publicCompany.name}</Link></span>,
         maxWidth: 175,
       }, {
         Header: 'Hours',
@@ -132,8 +140,10 @@ const TimeEntryTable = ({
       <ReactTable
         data={timeEntries}
         columns={columns}
-        className="-striped -highlight"
+        showPagination={false}
         defaultPageSize={defaultPageSize}
+        minRows={minRows}
+        className="-striped -highlight"
         noDataText="Empty"
         defaultSorted={[
           {
@@ -169,13 +179,17 @@ const TimeEntryTable = ({
       />
     );
   }
+
+  /**
+   * Open CompanyHourLog timeEntry tables default
+   */
   columns = [{
     Header: () => (
-      <span className="table-title">{tableTitle}</span>
+      <span className="table-title-font-size">{tableTitle}</span>
     ),
     columns: [{
       Header: 'Date',
-      id: 'date',
+      accessor: 'publicDate',
       Cell: timeEntry => <span title={timeEntry.original.publicDate}>{timeEntry.original.publicDate.split('T')[0]}</span>,
       maxWidth: 95,
     }, {
@@ -186,7 +200,7 @@ const TimeEntryTable = ({
     }, {
       Header: 'Company',
       accessor: 'publicCompany.name',
-      Cell: timeEntry => <Link to={`/company/${timeEntry.original.publicCompany._id}`}>{timeEntry.original.publicCompany.name}</Link>,
+      Cell: timeEntry => <span title={timeEntry.original.publicCompany.name}><Link to={`/company/${timeEntry.original.publicCompany._id}`}>{timeEntry.original.publicCompany.name}</Link></span>,
       maxWidth: 175,
     }, {
       Header: 'Hours',
@@ -232,8 +246,10 @@ const TimeEntryTable = ({
     <ReactTable
       data={timeEntries}
       columns={columns}
-      className="-striped -highlight"
+      showPagination={false}
       defaultPageSize={defaultPageSize}
+      minRows={minRows}
+      className="-striped -highlight"
       noDataText="Empty"
       defaultSorted={[
         {

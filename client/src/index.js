@@ -11,13 +11,14 @@ import reduxThunk from 'redux-thunk';
 
 import App from './components/App';
 import reducers from './reducers';
+import * as serviceWorker from './serviceWorker';
 
 const store = createStore(
   reducers,
   {
     auth: {
       _id: localStorage.getItem('token'),
-      permissions: [{ admin: true }],
+      permissions: [{ admin: false }],
     },
   },
   applyMiddleware(reduxThunk),
@@ -27,3 +28,5 @@ ReactDOM.render(
   <Provider store={store}><App /></Provider>,
   document.querySelector('#root'),
 );
+
+serviceWorker.unregister();

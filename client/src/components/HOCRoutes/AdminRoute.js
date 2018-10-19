@@ -22,9 +22,6 @@ const AdminRoute = ({
 );
 
 function mapStateToProps({ auth }) {
-  if (!auth.permissions) {
-    return { admin: false, auth };
-  }
   if (auth.permissions[0].admin) {
     return { admin: true, auth };
   }

@@ -49,7 +49,7 @@ class TimeEntryBulkTableActions extends Component {
     $(`.time-entry-table-action`).attr("disabled", true);
     $(`.time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.hideFromApprovedTimeEntries(match.params.id);
+    this.props.hideFromApprovedTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-hide-all-from-approved-modal').modal('hide');
   };
 
@@ -58,7 +58,7 @@ class TimeEntryBulkTableActions extends Component {
     $(`.time-entry-table-action`).attr("disabled", true);
     $(`.time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.rejectFromApprovedTimeEntries(match.params.id);
+    this.props.rejectFromApprovedTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-reject-all-from-approved-modal').modal('hide');
   };
 
@@ -67,7 +67,7 @@ class TimeEntryBulkTableActions extends Component {
     $(`.time-entry-table-action`).attr("disabled", true);
     $(`.time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.approveFromHiddenTimeEntries(match.params.id);
+    this.props.approveFromHiddenTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-approve-all-from-hidden-modal').modal('hide');
   };
 
@@ -76,7 +76,7 @@ class TimeEntryBulkTableActions extends Component {
     $(`.time-entry-table-action`).attr("disabled", true);
     $(`.time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.rejectFromHiddenTimeEntries(match.params.id);
+    this.props.rejectFromHiddenTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-reject-all-from-hidden-modal').modal('hide');
   };
 
@@ -85,7 +85,7 @@ class TimeEntryBulkTableActions extends Component {
     $(`.time-entry-table-action`).attr("disabled", true);
     $(`.time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.approveFromSubmittedTimeEntries(match.params.id);
+    this.props.approveFromSubmittedTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-approve-all-from-submitted-modal').modal('hide');
   };
 
@@ -94,7 +94,7 @@ class TimeEntryBulkTableActions extends Component {
     $(`.time-entry-table-action`).attr("disabled", true);
     $(`.time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.hideFromSubmittedTimeEntries(match.params.id);
+    this.props.hideFromSubmittedTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-hide-all-from-submitted-modal').modal('hide');
   };
 
@@ -103,7 +103,7 @@ class TimeEntryBulkTableActions extends Component {
     $(`.time-entry-table-action`).attr("disabled", true);
     $(`.time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.rejectFromSubmittedTimeEntries(match.params.id);
+    this.props.rejectFromSubmittedTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-reject-all-from-submitted-modal').modal('hide');
   };
 
@@ -121,7 +121,6 @@ class TimeEntryBulkTableActions extends Component {
     } if (tableTitle === 'New Time Entries') {
       return (
         <div className="d-inline text-center">
-          <button type="button" className="btn-link time-entry-table-bulk-action" title="Submit All" data-toggle="modal" data-target="#time-entry-confirm-submit-all-new-time-entries-modal">S</button>
           <button type="button" className="btn-link time-entry-table-bulk-action" title="Delete All" data-toggle="modal" data-target="#time-entry-confirm-delete-all-new-time-entries-modal">D</button>
         </div>
       );

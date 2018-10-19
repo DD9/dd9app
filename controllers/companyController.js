@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const Company = mongoose.model('Company');
-const HourLog = mongoose.model('HourLog');
+const CompanyHourLog = mongoose.model('CompanyHourLog');
 
 exports.all = async (req, res) => {
   const companies = await Company.find().select('name status');
@@ -19,12 +19,12 @@ exports.one = async (req, res) => {
   res.json(company);
 };
 
-exports.hourLogs = async (req, res) => {
+exports.companyHourLogs = async (req, res) => {
   const companyId = req.params.id;
-  const hourLogs = await HourLog.find({ company: companyId })
+  const companyHourLogs = await CompanyHourLog.find({ company: companyId })
     .populate('company', 'name')
     .select('company dateOpened dateClosed title totalPublicHours totalHiddenHours totalSubmittedHours');
-  res.json(hourLogs);
+  res.json(companyHourLogs);
 };
 
 exports.create = async (req, res) => {
@@ -47,8 +47,8 @@ exports.activate = async (req, res) => {
 exports.deactivate = async (req, res) => {
   const companyId = req.params.id;
   const company = await Company.findOne({ _id: companyId }).select('name status');
-  const openHourLog = await HourLog.findOne({ company: companyId, title: 'Current', dateClosed: new Date(0) });
-  if (openHourLog) {
+  const openCompanyHourLog = await CompanyHourLog.findOne({ company: companyId, title: 'Current', dateClosed: new Date(0) });
+  if (openCompanyHourLog) {
     return res.json(company);
   }
   company.status = 'inactive';

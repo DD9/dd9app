@@ -75,6 +75,7 @@ class UserOneAdminEditForm extends Component {
             name="role"
             selectOptions={[
               { _id: 'client', name: 'Client' },
+              { _id: 'contractor', name: 'Contractor' },
               { _id: 'staff', name: 'Staff' },
               { _id: 'admin', name: 'Admin' },
             ]}

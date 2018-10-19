@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-const HourLogCompanyTable = ({ tableTitle, hourLogs }) => {
+const CompanyAllHourLogTable = ({ tableTitle, companyHourLogs, showPagination, defaultPageSize, minRows }) => {
   const columns = [{
     Header: () => (
-      <span className="table-title">{tableTitle}</span>
+      <span className="table-title-font-size">{tableTitle}</span>
     ),
     columns: [{
       Header: 'Date Opened',
@@ -28,6 +28,7 @@ const HourLogCompanyTable = ({ tableTitle, hourLogs }) => {
       Header: 'Company',
       id: 'company',
       accessor: data => <Link to={`/company/${data.company._id}`}>{data.company.name}</Link>,
+      sortMethod: ((a, b) => (a.props.children > b.props.children ? 1 : -1)),
     }, {
       Header: 'Title',
       id: 'title',
@@ -37,6 +38,7 @@ const HourLogCompanyTable = ({ tableTitle, hourLogs }) => {
         }
         return <Link to={`/hourLog/company/${data._id}`}>{data.title}</Link>;
       },
+      sortMethod: ((a, b) => (a.props.children > b.props.children ? 1 : -1)),
     }, {
       Header: 'Hours',
       accessor: 'totalPublicHours',
@@ -51,8 +53,11 @@ const HourLogCompanyTable = ({ tableTitle, hourLogs }) => {
 
   return (
     <ReactTable
-      data={hourLogs}
+      data={companyHourLogs}
       columns={columns}
+      showPagination={showPagination}
+      defaultPageSize={defaultPageSize}
+      minRows={minRows}
       className="-striped -highlight"
       noDataText="Loading..."
       defaultSorted={[
@@ -69,4 +74,4 @@ const HourLogCompanyTable = ({ tableTitle, hourLogs }) => {
   );
 };
 
-export default HourLogCompanyTable;
+export default CompanyAllHourLogTable;

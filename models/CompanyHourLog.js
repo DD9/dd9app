@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const deepPopulate = require('mongoose-deep-populate')(mongoose);
 
-const hourLogSchema = new Schema({
+const companyHourLogSchema = new Schema({
   dateOpened: {
     type: Date,
     default: Date.now,
@@ -44,11 +44,11 @@ const hourLogSchema = new Schema({
   timestamps: true,
 });
 
-hourLogSchema.index(
+companyHourLogSchema.index(
   { title: 1 },
 );
 
-hourLogSchema.plugin(deepPopulate, {
+companyHourLogSchema.plugin(deepPopulate, {
   populate: {
     'timeEntries.user': {
       select: 'firstName lastName',
@@ -65,4 +65,4 @@ hourLogSchema.plugin(deepPopulate, {
   },
 });
 
-module.exports = mongoose.model('HourLog', hourLogSchema);
+module.exports = mongoose.model('CompanyHourLog', companyHourLogSchema);

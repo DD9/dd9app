@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import authReducer from './auth/authReducer';
 import { reducer as reduxForm } from 'redux-form';
+import authReducer from './auth/authReducer';
 import userAllReducer from './users/userAllReducer';
 import userActiveReducer from './users/userActiveReducer';
 import userOneReducer from './users/userOneReducer';
@@ -8,9 +8,9 @@ import companyAllReducer from './companies/companyAllReducer';
 import companyOneReducer from './companies/companyOneReducer';
 import companyHourLogReducer from './companies/companyHourLogReducer';
 import companyActiveReducer from './companies/companyActiveReducer';
-import hourLogOpenReducer from './hourLogs/hourLogOpenReducer';
-import hourLogClosedReducer from './hourLogs/hourLogClosedReducer';
-import hourLogOneReducer from './hourLogs/hourLogOneReducer';
+import openCompanyHourLogsReducer from './companyHourLogs/openCompanyHourLogsReducer';
+import closedCompanyHourLogsReducer from './companyHourLogs/closedCompanyHourLogsReducer';
+import companyOneHourLogReducer from './companyHourLogs/companyOneHourLogReducer';
 import timeEntryNewReducer from './timeEntries/timeEntryNewReducer';
 
 export default combineReducers({
@@ -23,8 +23,8 @@ export default combineReducers({
   company: companyOneReducer,
   activeCompanies: companyActiveReducer,
   companyHourLogs: companyHourLogReducer,
-  openHourLogs: hourLogOpenReducer,
-  closedHourLogs: hourLogClosedReducer,
-  hourLog: hourLogOneReducer,
+  openCompanyHourLogs: openCompanyHourLogsReducer,
+  closedCompanyHourLogs: closedCompanyHourLogsReducer,
+  companyHourLog: companyOneHourLogReducer,
   createdTimeEntries: timeEntryNewReducer,
 });

@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-const CompanyTable = ({ companies }) => {
+const CompanyTable = ({ companies, defaultPageSize, minRows }) => {
   const columns = [{
     Header: () => (
-      <span className="table-title">Companies</span>
+      <span className="table-title-font-size">Companies</span>
     ),
     columns: [{
       Header: 'Name',
@@ -23,6 +23,9 @@ const CompanyTable = ({ companies }) => {
     <ReactTable
       data={companies}
       columns={columns}
+      showPagination={false}
+      defaultPageSize={defaultPageSize}
+      minRows={minRows}
       className="-striped -highlight"
       defaultSorted={[
         {

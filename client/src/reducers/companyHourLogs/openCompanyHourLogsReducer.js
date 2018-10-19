@@ -1,10 +1,10 @@
-import { GET_CLOSED_HOUR_LOGS } from '../../actions/types';
+import { GET_OPEN_COMPANY_HOUR_LOGS } from '../../actions/types';
 
 const INITIAL_STATE = [];
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case GET_CLOSED_HOUR_LOGS:
+    case GET_OPEN_COMPANY_HOUR_LOGS:
       return action.payload || false;
     default:
       return state;

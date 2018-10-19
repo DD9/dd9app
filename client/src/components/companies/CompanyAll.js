@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { getAllCompanies } from '../../actions/company';
@@ -15,7 +15,12 @@ class CompanyAll extends Component {
     const { companies } = this.props;
     return (
       <div className="container table-font-size">
-        <CompanyTable companies={companies} />
+        <CompanyTable
+          companies={companies}
+          key={companies}
+          defaultPageSize={companies.length}
+          minRows={companies.length === 0 ? 20 : companies.length}
+        />
         <CompanyTableControls companies={companies} />
       </div>
     );
