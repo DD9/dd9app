@@ -98,7 +98,7 @@ const TimeEntryTable = ({
   }
 
   /**
-   * Closed HourLog timeEntry tables
+   * Closed CompanyHourLog timeEntry tables
    */
   if (companyHourLogTitle !== 'Current') {
     columns = [{
@@ -181,7 +181,7 @@ const TimeEntryTable = ({
   }
 
   /**
-   * Open HourLog timeEntry tables default
+   * Open CompanyHourLog timeEntry tables default
    */
   columns = [{
     Header: () => (

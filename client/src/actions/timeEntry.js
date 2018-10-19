@@ -255,7 +255,6 @@ export const rejectFromApprovedTimeEntries = companyHourLogId => async dispatch 
 export const approveFromHiddenTimeEntries = companyHourLogId => async dispatch => {
   const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${companyHourLogId}/hidden/approved`);
   const companyHourLog = await axios.get(`/api/v1/hourLog/company/${companyHourLogId}`);
-  console.log(`companyHourLogId ${companyHourLogId}`);
 
   toast.info('Approved all Hidden Time Entries', {
     position: 'top-right',

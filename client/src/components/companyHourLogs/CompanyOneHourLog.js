@@ -39,10 +39,19 @@ class CompanyOneHourLog extends Component {
       );
     }
 
-    const approvedTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved');
-    const hiddenTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'hidden');
-    const submittedTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'submitted');
+    let approvedTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved');
+    let hiddenTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'hidden');
+    let submittedTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'submitted');
 
+    if (!approvedTimeEntries[0]) {
+      approvedTimeEntries = ['approvedTimeEntries'];
+    }
+    if (!hiddenTimeEntries[0]) {
+      hiddenTimeEntries = ['hiddenTimeEntries'];
+    }
+    if (!submittedTimeEntries[0]) {
+      submittedTimeEntries = ['submittedTimeEntries'];
+    }
 
     return (
       <div className="container table-font-size">
@@ -56,10 +65,11 @@ class CompanyOneHourLog extends Component {
           auth={auth}
           companyHourLogTitle={companyHourLog.title}
           tableTitle="Approved Time Entries"
-          timeEntries={approvedTimeEntries}
+          timeEntries={approvedTimeEntries[0] !== 'approvedTimeEntries' ? approvedTimeEntries : []}
           match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
+          key={approvedTimeEntries}
           defaultPageSize={approvedTimeEntries.length}
           minRows={approvedTimeEntries.length}
         />
@@ -68,10 +78,11 @@ class CompanyOneHourLog extends Component {
           auth={auth}
           companyHourLogTitle={companyHourLog.title}
           tableTitle="Hidden Time Entries"
-          timeEntries={hiddenTimeEntries}
+          timeEntries={hiddenTimeEntries[0] !== 'hiddenTimeEntries' ? hiddenTimeEntries : []}
           match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
+          key={hiddenTimeEntries}
           defaultPageSize={hiddenTimeEntries.length}
           minRows={hiddenTimeEntries.length}
         />
@@ -80,10 +91,11 @@ class CompanyOneHourLog extends Component {
           auth={auth}
           companyHourLogTitle={companyHourLog.title}
           tableTitle="Submitted Time Entries"
-          timeEntries={submittedTimeEntries}
+          timeEntries={submittedTimeEntries[0] !== 'submittedTimeEntries' ? submittedTimeEntries : []}
           match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
+          key={submittedTimeEntries}
           defaultPageSize={submittedTimeEntries.length}
           minRows={submittedTimeEntries.length}
         />

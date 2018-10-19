@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { getCompany, getCompanyHourLogs, getAllCompanies } from '../../actions/company';
-
 import SpinnerClipLoader from '../SpinnerClipLoader';
 import CompanyHourLogTable from './CompanyHourLogTable';
 import CompanyHourLogTableControls from './CompanyHourLogTableControls';
+
+import { getCompany, getCompanyHourLogs, getAllCompanies, clearCompanyHourLogsState } from '../../actions/company';
 
 class CompanyOne extends Component {
   componentDidMount() {
@@ -14,11 +14,15 @@ class CompanyOne extends Component {
     this.props.getAllCompanies();
   }
 
+  componentWillUnmount() {
+    this.props.clearCompanyHourLogsState();
+  }
+
   renderContent() {
     const {
       company, companyHourLogs, match, companies,
     } = this.props;
-    if (!companyHourLogs[0] || companyHourLogs[0].company._id !== match.params.companyId) {
+    if (!companyHourLogs[0]) {
       return (
         <div>
           <SpinnerClipLoader />
@@ -52,4 +56,4 @@ function mapStateToProps({ company, companyHourLogs, companies }) {
   return { company, companyHourLogs, companies };
 }
 
-export default connect(mapStateToProps, { getCompany, getCompanyHourLogs, getAllCompanies })(CompanyOne);
+export default connect(mapStateToProps, { getCompany, getCompanyHourLogs, getAllCompanies, clearCompanyHourLogsState })(CompanyOne);

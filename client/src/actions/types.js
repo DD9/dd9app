@@ -20,6 +20,7 @@ export const OPEN_COMPANY_HOUR_LOG = 'open_company_hour_log';
 export const CLOSE_COMPANY_HOUR_LOG = 'close_company_hour_log';
 export const EDIT_COMPANY_HOUR_LOG = 'edit_company_hour_log';
 export const GET_COMPANY_HOUR_LOGS = 'get_company_hour_logs';
+export const CLEAR_COMPANY_HOUR_LOG_STATE = 'clear_company_hour_log_state';
 export const GET_CREATED_TIME_ENTRIES = 'get_created_time_entries';
 export const CREATE_NEW_TIME_ENTRY = 'create_new_time_entry';
 export const CREATE_AND_SUBMIT_TIME_ENTRY = 'create_and_submit_time_entry';
