@@ -4,45 +4,45 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import $ from 'jquery';
 
-import { openHourLog, closeHourLog, editHourLog } from '../../actions/hourLog';
-import TimeEntryExportedTable from "../timeEntries/TimeEntryExportedTable";
+import { openCompanyHourLog, closeCompanyHourLog, editCompanyHourLog } from '../../actions/companyHourLog';
+import TimeEntryExportedTable from '../timeEntries/TimeEntryExportedTable';
 
-class HourLogCompanyOneControls extends Component {
+class CompanyOneHourLogControls extends Component {
   onHourLogOpenFormSubmit() {
-    this.props.openHourLog(this.props.hourLog._id, this.props.history);
-    $('#openHourLogModal').modal('hide');
+    this.props.openCompanyHourLog(this.props.companyHourLog._id, this.props.history);
+    $('#openCompanyHourLogModal').modal('hide');
   }
 
   onHourLogCloseFormSubmit(formProps) {
-    this.props.closeHourLog(this.props.hourLog._id, formProps, this.props.history);
-    $('#closeHourLogModal').modal('hide');
+    this.props.closeCompanyHourLog(this.props.companyHourLog._id, formProps, this.props.history);
+    $('#closeCompanyHourLogModal').modal('hide');
   }
 
   onHourLogEditFormSubmit(formProps) {
-    this.props.editHourLog(this.props.hourLog._id, formProps);
-    $('#editHourLogModal').modal('hide');
+    this.props.editCompanyHourLog(this.props.companyHourLog._id, formProps);
+    $('#editCompanyHourLogModal').modal('hide');
   }
 
   renderHourLogTitle() {
-    const { hourLog } = this.props;
-    if (hourLog.title) {
-      if (hourLog.title === 'Current') {
+    const { companyHourLog } = this.props;
+    if (companyHourLog.title) {
+      if (companyHourLog.title === 'Current') {
         return (
           <div>
-            <h3 className="d-inline"><span style={{ textDecoration: 'underline' }}>{hourLog.title}</span> Hour Log for </h3>
-            <Link className="nav-link d-inline p-0" to={`/company/${hourLog.company._id}`} style={{ fontSize: '24px' }}><i>{hourLog.company.name}</i></Link>
-            <button type="button" className="btn btn-primary pull-right" data-toggle="modal" data-target="#closeHourLogModal">Close</button>
+            <h3 className="d-inline"><span style={{ textDecoration: 'underline' }}>{companyHourLog.title}</span> Hour Log for </h3>
+            <Link className="nav-link d-inline p-0" to={`/company/${companyHourLog.company._id}`} style={{ fontSize: '24px' }}><i>{companyHourLog.company.name}</i></Link>
+            <button type="button" className="btn btn-primary pull-right" data-toggle="modal" data-target="#closeCompanyHourLogModal">Close</button>
           </div>
         );
       }
       return (
         <div>
-          <h3 className="d-inline"><span style={{ textDecoration: 'underline' }}>{hourLog.title}</span> Hour Log for </h3>
-          <Link className="nav-link d-inline p-0" to={`/company/${hourLog.company._id}`} style={{ fontSize: '24px' }}><i>{hourLog.company.name}</i></Link>
+          <h3 className="d-inline"><span style={{ textDecoration: 'underline' }}>{companyHourLog.title}</span> Hour Log for </h3>
+          <Link className="nav-link d-inline p-0" to={`/company/${companyHourLog.company._id}`} style={{ fontSize: '24px' }}><i>{companyHourLog.company.name}</i></Link>
           <div className="pull-right">
             <button type="button" className="btn btn-primary mr-2" data-toggle="modal" data-target="#exportApprovedHoursModal">Export</button>
-            <button type="button" className="btn btn-primary mr-2" data-toggle="modal" data-target="#editHourLogModal">Edit</button>
-            <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#openHourLogModal">Open</button>
+            <button type="button" className="btn btn-primary mr-2" data-toggle="modal" data-target="#editCompanyHourLogModal">Edit</button>
+            <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#openCompanyHourLogModal">Open</button>
           </div>
         </div>
       );
@@ -67,28 +67,28 @@ class HourLogCompanyOneControls extends Component {
           {this.renderHourLogTitle()}
         </div>
         <div>
-          <div className="modal fade" id="openHourLogModal" tabIndex={-1} role="dialog" aria-labelledby="openHourLogModal" aria-hidden="true">
+          <div className="modal fade" id="openCompanyHourLogModal" tabIndex={-1} role="dialog" aria-labelledby="openCompanyHourLogModal" aria-hidden="true">
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">Open Hour Log</h5><button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div className="modal-body">
-                  <form id="openHourLogForm" className="form" onSubmit={handleSubmit(this.onHourLogOpenFormSubmit.bind(this))}>
+                  <form id="openCompanyHourLogForm" className="form" onSubmit={handleSubmit(this.onHourLogOpenFormSubmit.bind(this))}>
                     <p className="text-center">All time entries will be reassigned to the current hour log.</p>
                     <p className="text-center">A new current hour log will be made for this company if one does not exist.</p>
                   </form>
                 </div>
                 <div className="modal-footer">
                   <button className="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                  <button className="btn btn-primary" type="submit" form="openHourLogForm">Open</button>
+                  <button className="btn btn-primary" type="submit" form="openCompanyHourLogForm">Open</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div>
-          <div className="modal fade" id="closeHourLogModal" tabIndex={-1} role="dialog" aria-labelledby="closeHourLogModal" aria-hidden="true">
+          <div className="modal fade" id="closeCompanyHourLogModal" tabIndex={-1} role="dialog" aria-labelledby="closeCompanyHourLogModal" aria-hidden="true">
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
@@ -96,7 +96,7 @@ class HourLogCompanyOneControls extends Component {
                   <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div className="modal-body">
-                  <form id="closeHourLogForm" className="form" onSubmit={handleSubmit(this.onHourLogCloseFormSubmit.bind(this))}>
+                  <form id="closeCompanyHourLogForm" className="form" onSubmit={handleSubmit(this.onHourLogCloseFormSubmit.bind(this))}>
                     <Field
                       label="Title"
                       name="title"
@@ -108,14 +108,14 @@ class HourLogCompanyOneControls extends Component {
                 </div>
                 <div className="modal-footer">
                   <button className="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                  <button className="btn btn-primary" type="submit" form="closeHourLogForm">Close</button>
+                  <button className="btn btn-primary" type="submit" form="closeCompanyHourLogForm">Close</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div>
-          <div className="modal fade" id="editHourLogModal" tabIndex={-1} role="dialog" aria-labelledby="editHourLogModal" aria-hidden="true">
+          <div className="modal fade" id="editCompanyHourLogModal" tabIndex={-1} role="dialog" aria-labelledby="editCompanyHourLogModal" aria-hidden="true">
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
@@ -123,7 +123,7 @@ class HourLogCompanyOneControls extends Component {
                   <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div className="modal-body">
-                  <form id="editHourLogForm" className="form" onSubmit={handleSubmit(this.onHourLogEditFormSubmit.bind(this))}>
+                  <form id="editCompanyHourLogForm" className="form" onSubmit={handleSubmit(this.onHourLogEditFormSubmit.bind(this))}>
                     <Field
                       label="Title"
                       name="title"
@@ -133,7 +133,7 @@ class HourLogCompanyOneControls extends Component {
                 </div>
                 <div className="modal-footer">
                   <button className="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                  <button className="btn btn-primary" type="submit" form="editHourLogForm">Submit</button>
+                  <button className="btn btn-primary" type="submit" form="editCompanyHourLogForm">Submit</button>
                 </div>
               </div>
             </div>
@@ -176,8 +176,8 @@ function validate(values) {
   return errors;
 }
 
-export default withRouter(connect(null, { closeHourLog, openHourLog, editHourLog })(reduxForm({
-  form: 'editHourLog',
+export default withRouter(connect(null, { closeCompanyHourLog, openCompanyHourLog, editCompanyHourLog })(reduxForm({
+  form: 'editCompanyHourLog',
   enableReinitialize: true,
   validate,
-})(HourLogCompanyOneControls)));
+})(CompanyOneHourLogControls)));

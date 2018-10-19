@@ -5,19 +5,19 @@ import $ from 'jquery';
 
 
 import SpinnerClipLoader from '../SpinnerClipLoader';
-import HourLogCompanyOneControls from './HourLogCompanyOneControls';
+import CompanyOneHourLogControls from './CompanyOneHourLogControls';
 import TimeEntryTable from '../timeEntries/TimeEntryTable';
-import HourLogCompanyOneSubmitTimeEntry from './HourLogCompanyOneSubmitTimeEntry';
+import CompanyOneHourLogSubmitTimeEntry from './CompanyOneHourLogSubmitTimeEntry';
 
-import { getHourLog } from '../../actions/hourLog';
+import { getCompanyHourLog } from '../../actions/companyHourLog';
 import { getActiveUsers } from '../../actions/user';
 import { getActiveCompanies } from '../../actions/company';
 
 
-class HourLogCompanyOne extends Component {
+class CompanyOneHourLog extends Component {
   componentDidMount() {
     const { match } = this.props;
-    this.props.getHourLog(match.params.id);
+    this.props.getCompanyHourLog(match.params.companyHourLogId);
     this.props.getActiveUsers();
     this.props.getActiveCompanies();
   }
@@ -28,10 +28,10 @@ class HourLogCompanyOne extends Component {
 
   render() {
     const {
-      auth, hourLog, activeUsers, activeCompanies, match,
+      auth, companyHourLog, activeUsers, activeCompanies, match,
     } = this.props;
 
-    if (!hourLog.timeEntries || hourLog._id !== match.params.id) {
+    if (!companyHourLog.timeEntries || companyHourLog._id !== match.params.companyHourLogId) {
       return (
         <div>
           <SpinnerClipLoader />
@@ -39,22 +39,22 @@ class HourLogCompanyOne extends Component {
       );
     }
 
-    const approvedTimeEntries = hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved');
-    const hiddenTimeEntries = hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'hidden');
-    const submittedTimeEntries = hourLog.timeEntries.filter(timeEntry => timeEntry.status === 'submitted');
+    const approvedTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved');
+    const hiddenTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'hidden');
+    const submittedTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'submitted');
 
 
     return (
       <div className="container table-font-size">
-        <HourLogCompanyOneControls
-          hourLog={hourLog}
-          initialValues={hourLog.title === 'Current' ? { title: moment.utc().format('YYYY-MM-DD') } : { title: hourLog.title }}
+        <CompanyOneHourLogControls
+          companyHourLog={companyHourLog}
+          initialValues={companyHourLog.title === 'Current' ? { title: moment.utc().format('YYYY-MM-DD') } : { title: companyHourLog.title }}
           timeEntries={approvedTimeEntries}
         />
         <div className="m-5" />
         <TimeEntryTable
           auth={auth}
-          hourLogTitle={hourLog.title}
+          companyHourLogTitle={companyHourLog.title}
           tableTitle="Approved Time Entries"
           timeEntries={approvedTimeEntries}
           match={match}
@@ -66,7 +66,7 @@ class HourLogCompanyOne extends Component {
         <div className="m-5" />
         <TimeEntryTable
           auth={auth}
-          hourLogTitle={hourLog.title}
+          companyHourLogTitle={companyHourLog.title}
           tableTitle="Hidden Time Entries"
           timeEntries={hiddenTimeEntries}
           match={match}
@@ -78,7 +78,7 @@ class HourLogCompanyOne extends Component {
         <div className="m-5" />
         <TimeEntryTable
           auth={auth}
-          hourLogTitle={hourLog.title}
+          companyHourLogTitle={companyHourLog.title}
           tableTitle="Submitted Time Entries"
           timeEntries={submittedTimeEntries}
           match={match}
@@ -88,14 +88,14 @@ class HourLogCompanyOne extends Component {
           minRows={submittedTimeEntries.length}
         />
         <div className="m-5" />
-        <HourLogCompanyOneSubmitTimeEntry company={hourLog.company || ''} hourLogTitle={hourLog.title} hourLogId={match.params.id} />
+        <CompanyOneHourLogSubmitTimeEntry company={companyHourLog.company || ''} companyHourLogTitle={companyHourLog.title} companyHourLogId={match.params.companyHourLogId} />
       </div>
     );
   }
 }
 
-function mapStateToProps({ hourLog, activeUsers, activeCompanies }) {
-  return { hourLog, activeUsers, activeCompanies };
+function mapStateToProps({ companyHourLog, activeUsers, activeCompanies }) {
+  return { companyHourLog, activeUsers, activeCompanies };
 }
 
-export default connect(mapStateToProps, { getHourLog, getActiveUsers, getActiveCompanies })(HourLogCompanyOne);
+export default connect(mapStateToProps, { getCompanyHourLog, getActiveUsers, getActiveCompanies })(CompanyOneHourLog);

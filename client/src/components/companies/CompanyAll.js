@@ -5,7 +5,6 @@ import { getAllCompanies } from '../../actions/company';
 
 import CompanyTableControls from './CompanyTableControls';
 import CompanyTable from './CompanyTable';
-import CompanyHourLogTable from './CompanyHourLogTable';
 
 class CompanyAll extends Component {
   componentDidMount() {

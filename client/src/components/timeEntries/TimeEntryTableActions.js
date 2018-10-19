@@ -82,9 +82,6 @@ class TimeEntryTableActions extends Component {
     } if (timeEntry.status === 'created') {
       return (
         <div className="d-inline text-center">
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Submit" data-toggle="modal" data-target={`#time-entry-confirm-submit-modal-${timeEntry._id}`}>
-            <i className="fa fa-paper-plane-o" aria-hidden="true" />
-          </button>
           <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Edit" data-toggle="modal" data-target={`#time-entry-edit-modal-${timeEntry._id}`}>
             <i className="fa fa-pencil-square-o" aria-hidden="true" />
           </button>

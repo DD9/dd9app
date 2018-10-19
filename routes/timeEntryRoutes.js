@@ -21,5 +21,5 @@ module.exports = router => {
   router.post('/api/v1/timeEntry/newTimeEntryBulkAction/deleteAll/:status', authController.isLoggedIn, timeEntryController.newTimeEntryBulkAction);
 
   // timeEntry bulk actions endpoint for hourLog/one timeEntryTables
-  router.post('/api/v1/timeEntry/timeEntryInHourLogBulkAction/:hourLogId/:currentStatus/:receivingStatus', authController.isLoggedIn, authController.isAdmin, timeEntryController.timeEntryInHourLogBulkAction);
+  router.post('/api/v1/timeEntry/timeEntryInHourLogBulkAction/:companyHourLogId/:currentStatus/:receivingStatus', authController.isLoggedIn, authController.isAdmin, timeEntryController.timeEntryInHourLogBulkAction);
 };

@@ -13,8 +13,8 @@ import {
   SUBMIT_TIME_ENTRY,
   DELETE_TIME_ENTRY,
   NEW_TIME_ENTRY_BULK_ACTION,
-  TIME_ENTRY_IN_HOUR_LOG_BULK_ACTION,
-  GET_HOUR_LOG,
+  TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION,
+  GET_COMPANY_HOUR_LOG,
 } from './types';
 
 export const getCreatedTimeEntries = () => async dispatch => {
@@ -218,9 +218,9 @@ export const deleteAllNewTimeEntries = () => async dispatch => {
   dispatch({ type: NEW_TIME_ENTRY_BULK_ACTION, payload: res.data });
 };
 
-export const hideFromApprovedTimeEntries = hourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${hourLogId}/approved/hidden`);
-  const hourLog = await axios.get(`/api/v1/hourLog/company/${hourLogId}`);
+export const hideFromApprovedTimeEntries = companyHourLogId => async dispatch => {
+  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${companyHourLogId}/approved/hidden`);
+  const companyHourLog = await axios.get(`/api/v1/hourLog/company/${companyHourLogId}`);
 
   toast.info('Hid all Approved Time Entries', {
     position: 'top-right',
@@ -231,13 +231,13 @@ export const hideFromApprovedTimeEntries = hourLogId => async dispatch => {
     draggable: true,
   });
 
-  dispatch({ type: TIME_ENTRY_IN_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
-  dispatch({ type: GET_HOUR_LOG, payload: hourLog.data });
+  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
+  dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
 };
 
-export const rejectFromApprovedTimeEntries = hourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${hourLogId}/approved/rejected`);
-  const hourLog = await axios.get(`/api/v1/hourLog/company/${hourLogId}`);
+export const rejectFromApprovedTimeEntries = companyHourLogId => async dispatch => {
+  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${companyHourLogId}/approved/rejected`);
+  const companyHourLog = await axios.get(`/api/v1/hourLog/company/${companyHourLogId}`);
 
   toast.info('Rejected all Approved Time Entries', {
     position: 'top-right',
@@ -248,13 +248,14 @@ export const rejectFromApprovedTimeEntries = hourLogId => async dispatch => {
     draggable: true,
   });
 
-  dispatch({ type: TIME_ENTRY_IN_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
-  dispatch({ type: GET_HOUR_LOG, payload: hourLog.data });
+  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
+  dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
 };
 
-export const approveFromHiddenTimeEntries = hourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${hourLogId}/hidden/approved`);
-  const hourLog = await axios.get(`/api/v1/hourLog/company/${hourLogId}`);
+export const approveFromHiddenTimeEntries = companyHourLogId => async dispatch => {
+  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${companyHourLogId}/hidden/approved`);
+  const companyHourLog = await axios.get(`/api/v1/hourLog/company/${companyHourLogId}`);
+  console.log(`companyHourLogId ${companyHourLogId}`);
 
   toast.info('Approved all Hidden Time Entries', {
     position: 'top-right',
@@ -265,13 +266,13 @@ export const approveFromHiddenTimeEntries = hourLogId => async dispatch => {
     draggable: true,
   });
 
-  dispatch({ type: TIME_ENTRY_IN_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
-  dispatch({ type: GET_HOUR_LOG, payload: hourLog.data });
+  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
+  dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
 };
 
-export const rejectFromHiddenTimeEntries = hourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${hourLogId}/hidden/rejected`);
-  const hourLog = await axios.get(`/api/v1/hourLog/company/${hourLogId}`);
+export const rejectFromHiddenTimeEntries = companyHourLogId => async dispatch => {
+  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${companyHourLogId}/hidden/rejected`);
+  const companyHourLog = await axios.get(`/api/v1/hourLog/company/${companyHourLogId}`);
 
   toast.info('Rejected all Hidden Time Entries', {
     position: 'top-right',
@@ -282,13 +283,13 @@ export const rejectFromHiddenTimeEntries = hourLogId => async dispatch => {
     draggable: true,
   });
 
-  dispatch({ type: TIME_ENTRY_IN_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
-  dispatch({ type: GET_HOUR_LOG, payload: hourLog.data });
+  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
+  dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
 };
 
-export const approveFromSubmittedTimeEntries = hourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${hourLogId}/submitted/approved`);
-  const hourLog = await axios.get(`/api/v1/hourLog/company/${hourLogId}`);
+export const approveFromSubmittedTimeEntries = companyHourLogId => async dispatch => {
+  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${companyHourLogId}/submitted/approved`);
+  const companyHourLog = await axios.get(`/api/v1/hourLog/company/${companyHourLogId}`);
 
   toast.info('Approved all Submitted Time Entries', {
     position: 'top-right',
@@ -299,13 +300,13 @@ export const approveFromSubmittedTimeEntries = hourLogId => async dispatch => {
     draggable: true,
   });
 
-  dispatch({ type: TIME_ENTRY_IN_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
-  dispatch({ type: GET_HOUR_LOG, payload: hourLog.data });
+  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
+  dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
 };
 
-export const hideFromSubmittedTimeEntries = hourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${hourLogId}/submitted/hidden`);
-  const hourLog = await axios.get(`/api/v1/hourLog/company/${hourLogId}`);
+export const hideFromSubmittedTimeEntries = companyHourLogId => async dispatch => {
+  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${companyHourLogId}/submitted/hidden`);
+  const companyHourLog = await axios.get(`/api/v1/hourLog/company/${companyHourLogId}`);
 
   toast.info('Hid all Submitted Time Entries', {
     position: 'top-right',
@@ -316,13 +317,13 @@ export const hideFromSubmittedTimeEntries = hourLogId => async dispatch => {
     draggable: true,
   });
 
-  dispatch({ type: TIME_ENTRY_IN_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
-  dispatch({ type: GET_HOUR_LOG, payload: hourLog.data });
+  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
+  dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
 };
 
-export const rejectFromSubmittedTimeEntries = hourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${hourLogId}/submitted/rejected`);
-  const hourLog = await axios.get(`/api/v1/hourLog/company/${hourLogId}`);
+export const rejectFromSubmittedTimeEntries = companyHourLogId => async dispatch => {
+  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInHourLogBulkAction/${companyHourLogId}/submitted/rejected`);
+  const companyHourLog = await axios.get(`/api/v1/hourLog/company/${companyHourLogId}`);
 
   toast.info('Rejected all Submitted Time Entries', {
     position: 'top-right',
@@ -333,6 +334,6 @@ export const rejectFromSubmittedTimeEntries = hourLogId => async dispatch => {
     draggable: true,
   });
 
-  dispatch({ type: TIME_ENTRY_IN_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
-  dispatch({ type: GET_HOUR_LOG, payload: hourLog.data });
+  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
+  dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
 };

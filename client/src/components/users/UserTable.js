@@ -20,7 +20,7 @@ const UserTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
     }, {
       Header: 'Email',
       accessor: 'email',
-      maxWidth: 200,
+      maxWidth: 175,
     }, {
       Header: 'Company',
       id: 'company',
@@ -31,7 +31,7 @@ const UserTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
       Header: 'Role',
       id: 'role',
       accessor: user => user.role.charAt(0).toUpperCase() + user.role.slice(1),
-      maxWidth: 75,
+      maxWidth: 100,
     }, {
       Header: 'Status',
       id: 'status',

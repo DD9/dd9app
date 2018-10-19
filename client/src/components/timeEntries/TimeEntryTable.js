@@ -8,7 +8,7 @@ import TimeEntryTableActions from './TimeEntryTableActions';
 import TimeEntryTableBulkActions from './TimeEntryTableBulkActions';
 
 const TimeEntryTable = ({
-  auth, hourLogTitle, tableTitle, timeEntries, match, activeUsers, activeCompanies, defaultPageSize, minRows,
+  auth, companyHourLogTitle, tableTitle, timeEntries, match, activeUsers, activeCompanies, defaultPageSize, minRows,
 }) => {
 
   let columns;
@@ -100,7 +100,7 @@ const TimeEntryTable = ({
   /**
    * Closed HourLog timeEntry tables
    */
-  if (hourLogTitle !== 'Current') {
+  if (companyHourLogTitle !== 'Current') {
     columns = [{
       Header: () => (
         <span className="table-title-font-size">{tableTitle}</span>

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-const HourLogCompanyTable = ({ tableTitle, hourLogs, showPagination, defaultPageSize, minRows }) => {
+const CompanyAllHourLogTable = ({ tableTitle, companyHourLogs, showPagination, defaultPageSize, minRows }) => {
   const columns = [{
     Header: () => (
       <span className="table-title-font-size">{tableTitle}</span>
@@ -53,7 +53,7 @@ const HourLogCompanyTable = ({ tableTitle, hourLogs, showPagination, defaultPage
 
   return (
     <ReactTable
-      data={hourLogs}
+      data={companyHourLogs}
       columns={columns}
       showPagination={showPagination}
       defaultPageSize={defaultPageSize}
@@ -74,4 +74,4 @@ const HourLogCompanyTable = ({ tableTitle, hourLogs, showPagination, defaultPage
   );
 };
 
-export default HourLogCompanyTable;
+export default CompanyAllHourLogTable;
