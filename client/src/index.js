@@ -18,7 +18,7 @@ const store = createStore(
   {
     auth: {
       _id: localStorage.getItem('token'),
-      permissions: [{ admin: true }],
+      permissions: [{ admin: false }],
     },
   },
   applyMiddleware(reduxThunk),

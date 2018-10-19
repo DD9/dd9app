@@ -20,7 +20,7 @@ class CompanyOne extends Component {
 
   renderContent() {
     const {
-      company, companyHourLogs, match, companies,
+      company, companyHourLogs, companies,
     } = this.props;
     if (!companyHourLogs[0]) {
       return (
