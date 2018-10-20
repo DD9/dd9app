@@ -1,11 +1,41 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import underConstruction from '../../static/images/under_construction.png';
+import { getOpenContractorHourLogs, getClosedContractorHourLogs } from '../../actions/contractorHourLog';
 
-const ContractorAllHourLog = () => (
-  <div className="py-1 px-3 bg-white rounded box-shadow">
-    <img src={underConstruction} alt="Under Construction" />
-  </div>
-);
+import ContractorAllHourLogTable from './ContractorAllHourLogTable';
 
-export default ContractorAllHourLog;
+class ContractorAllHourLog extends Component {
+  componentDidMount() {
+    this.props.getOpenContractorHourLogs();
+    this.props.getClosedContractorHourLogs();
+  }
+
+  render() {
+    const { openContractorHourLogs, closedContractorHourLogs } = this.props;
+    return (
+      <div className="container table-font-size">
+        <ContractorAllHourLogTable
+          tableTitle="Open Contractor Hour Logs"
+          contractorHourLogs={openContractorHourLogs}
+          showPagination={false}
+          key={openContractorHourLogs.length}
+          defaultPageSize={openContractorHourLogs.length}
+          minRows={openContractorHourLogs.length === 0 ? 20 : openContractorHourLogs.length}
+        />
+        <div className="m-5" />
+        <ContractorAllHourLogTable
+          key={closedContractorHourLogs}
+          tableTitle="Closed Contractor Hour Logs"
+          contractorHourLogs={closedContractorHourLogs}
+        />
+      </div>
+    );
+  }
+}
+
+function mapStateToProps({ openContractorHourLogs, closedContractorHourLogs }) {
+  return { openContractorHourLogs, closedContractorHourLogs };
+}
+
+export default connect(mapStateToProps, { getOpenContractorHourLogs, getClosedContractorHourLogs })(ContractorAllHourLog);

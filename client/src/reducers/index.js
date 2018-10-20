@@ -8,8 +8,10 @@ import companyAllReducer from './companies/companyAllReducer';
 import companyOneReducer from './companies/companyOneReducer';
 import companyHourLogReducer from './companies/companyHourLogReducer';
 import companyActiveReducer from './companies/companyActiveReducer';
-import openCompanyHourLogsReducer from './companyHourLogs/openCompanyHourLogsReducer';
-import closedCompanyHourLogsReducer from './companyHourLogs/closedCompanyHourLogsReducer';
+import openCompanyHourLogReducer from './companyHourLogs/openCompanyHourLogReducer';
+import closedCompanyHourLogReducer from './companyHourLogs/closedCompanyHourLogReducer';
+import openContractorHourLogReducer from './contractorHourLogs/openContractorHourLogReducer';
+import closedContractorHourLogReducer from './contractorHourLogs/closedContractorHourLogReducer';
 import companyOneHourLogReducer from './companyHourLogs/companyOneHourLogReducer';
 import timeEntryNewReducer from './timeEntries/timeEntryNewReducer';
 
@@ -23,8 +25,10 @@ export default combineReducers({
   company: companyOneReducer,
   activeCompanies: companyActiveReducer,
   companyHourLogs: companyHourLogReducer,
-  openCompanyHourLogs: openCompanyHourLogsReducer,
-  closedCompanyHourLogs: closedCompanyHourLogsReducer,
+  openCompanyHourLogs: openCompanyHourLogReducer,
+  closedCompanyHourLogs: closedCompanyHourLogReducer,
+  openContractorHourLogs: openContractorHourLogReducer,
+  closedContractorHourLogs: closedContractorHourLogReducer,
   companyHourLog: companyOneHourLogReducer,
   createdTimeEntries: timeEntryNewReducer,
 });

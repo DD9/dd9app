@@ -1,8 +1,8 @@
 import React from 'react';
 
 const TimeEntryExportedTable = ({ timeEntries }) => {
-  const rows = timeEntries.map(entry => (
-    <tr key={entry}>
+  const rows = timeEntries.map((entry, index) => (
+    <tr key={index}>
       <td>{`${entry.publicDate.split('T')[0].split('-')[1]}-${entry.publicDate.split('T')[0].split('-')[2]}`}</td>
       <td>{entry.publicUser.lastName}</td>
       <td>{entry.publicHours}</td>

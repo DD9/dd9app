@@ -16,7 +16,7 @@ class CompanyAllHourLog extends Component {
     return (
       <div className="container table-font-size">
         <CompanyAllHourLogTable
-          tableTitle="Open Hour Logs"
+          tableTitle="Open Company Hour Logs"
           companyHourLogs={openCompanyHourLogs}
           showPagination={false}
           key={openCompanyHourLogs.length}
@@ -26,7 +26,7 @@ class CompanyAllHourLog extends Component {
         <div className="m-5" />
         <CompanyAllHourLogTable
           key={closedCompanyHourLogs}
-          tableTitle="Closed Hour Logs"
+          tableTitle="Closed Company Hour Logs"
           companyHourLogs={closedCompanyHourLogs}
         />
       </div>

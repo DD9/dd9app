@@ -25,7 +25,7 @@ const CompanyHourLogTable = ({ tableTitle, companyHourLogs, defaultPageSize, min
       },
       maxWidth: 120,
     }, {
-      Header: 'Hour Log Titles',
+      Header: 'Company Hour Log Title',
       id: 'title',
       accessor: data => {
         if (data.totalSubmittedHours > 0) {

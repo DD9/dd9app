@@ -27,14 +27,6 @@ const contractorHourLogSchema = new Schema({
     type: String,
     default: 'Current',
   },
-  totalPublicHours: {
-    type: Number,
-    default: 0,
-  },
-  totalHiddenHours: {
-    type: Number,
-    default: 0,
-  },
   totalSubmittedHours: {
     type: Number,
     default: 0,

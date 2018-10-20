@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const CompanyHourLog = mongoose.model('CompanyHourLog');
 const TimeEntry = mongoose.model('TimeEntry');
 
-exports.openCompanyHourLogs = async (req, res) => {
+exports.openHourLogs = async (req, res) => {
   const openCompanyHourLogs = await CompanyHourLog.find({ dateClosed: new Date(0) }).populate('company');
   res.json(openCompanyHourLogs);
 };
