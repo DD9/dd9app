@@ -4,6 +4,7 @@ import { reduxForm, Field } from 'redux-form';
 import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
+import $ from 'jquery';
 
 import { createAndSubmitTimeEntry } from '../../actions/timeEntry';
 
@@ -12,10 +13,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 class CompanyOneHourLogSubmitTimeEntry extends Component {
   componentDidMount() {
-    const { hourLogTitle } = this.props;
-    if (hourLogTitle === 'Current') {
-      const datePicker = document.getElementsByClassName('react-datepicker__input-container')[0];
-      datePicker.childNodes[0].setAttribute('readOnly', true);
+    const { companyHourLogTitle } = this.props;
+    if (companyHourLogTitle === 'Current') {
+      $('.react-datepicker__input-container')[0].childNodes[0].setAttribute('readOnly', true);
     }
   }
 
@@ -67,8 +67,8 @@ class CompanyOneHourLogSubmitTimeEntry extends Component {
   }
 
   render() {
-    const { hourLogTitle, company, handleSubmit } = this.props;
-    if (hourLogTitle !== 'Current') {
+    const { companyHourLogTitle, company, handleSubmit } = this.props;
+    if (companyHourLogTitle !== 'Current') {
       return <div />;
     }
     return (

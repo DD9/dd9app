@@ -25,8 +25,6 @@ class TimeEntryNew extends Component {
       auth, createdTimeEntries, activeUsers, activeCompanies,
     } = this.props;
 
-    console.log(`createdTimeEntries ${JSON.stringify(createdTimeEntries)}`);
-
     return (
       <div className="container table-font-size">
         <TimeEntryTable

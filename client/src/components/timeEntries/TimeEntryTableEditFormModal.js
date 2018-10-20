@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import DatePicker from 'react-datepicker/';
 import moment from 'moment';
-import $ from 'jquery';
+import $ from 'jquery'
 
 import {
   submitTimeEntry, deleteTimeEntry, editTimeEntry, adjudicateTimeEntry,
@@ -13,12 +13,20 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 class TimeEntryTableEditFormModal extends Component {
   componentDidMount() {
-    $('.react-datepicker__input-container')[0].childNodes[0].setAttribute('readOnly', true);
+    const { timeEntry } = this.props;
+    this.props.initialize({
+      date: timeEntry.publicDate.split('T')[0],
+      user: timeEntry.publicUser._id,
+      company: timeEntry.publicCompany._id,
+      hours: timeEntry.publicHours,
+      description: timeEntry.publicDescription,
+    });
   }
 
   onTimeEntryEditFormSubmit(formProps) {
     const { timeEntry } = this.props;
     $(`#time-entry-edit-modal-${timeEntry._id}`).modal('hide');
+    console.log(formProps);
     switch (this.props.timeEntry.status) {
       case 'created':
         return this.props.editTimeEntry(timeEntry._id, formProps);
@@ -221,6 +229,5 @@ function validate(values) {
 export default connect(null, {
   submitTimeEntry, deleteTimeEntry, editTimeEntry, adjudicateTimeEntry,
 })(reduxForm({
-  enableReinitialize: true,
   validate,
 })(TimeEntryTableEditFormModal));

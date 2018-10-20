@@ -100,7 +100,11 @@ class CompanyOneHourLog extends Component {
           minRows={submittedTimeEntries.length}
         />
         <div className="m-5" />
-        <CompanyOneHourLogSubmitTimeEntry company={companyHourLog.company || ''} companyHourLogTitle={companyHourLog.title} companyHourLogId={match.params.companyHourLogId} />
+        <CompanyOneHourLogSubmitTimeEntry
+          company={companyHourLog.company || ''}
+          companyHourLogTitle={companyHourLog.title}
+          companyHourLogId={match.params.companyHourLogId}
+        />
       </div>
     );
   }

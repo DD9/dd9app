@@ -151,13 +151,6 @@ class TimeEntryTableActions extends Component {
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
           form={`time-entry-edit-form-${timeEntry._id}`}
-          initialValues={{
-            date: timeEntry.publicDate.split('T')[0],
-            user: timeEntry.publicUser._id,
-            company: timeEntry.publicCompany._id,
-            hours: timeEntry.publicHours,
-            description: timeEntry.publicDescription,
-          }}
         />
         <TimeEntryTableActionConfirmModal
           modalId={`time-entry-confirm-submit-modal-${timeEntry._id}`}

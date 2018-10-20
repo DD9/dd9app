@@ -23,8 +23,8 @@ const TimeEntryTable = ({
       ),
       columns: [{
         Header: 'Date',
-        accessor: 'publicDate',
         id: 'date',
+        accessor: 'publicDate',
         Cell: timeEntry => <span title={timeEntry.original.publicDate}>{timeEntry.original.publicDate.split('T')[0]}</span>,
         maxWidth: 95,
       }, {
@@ -93,6 +93,7 @@ const TimeEntryTable = ({
             desc: true,
           },
         ]}
+        sortable={false}
       />
     );
   }
@@ -145,12 +146,7 @@ const TimeEntryTable = ({
         minRows={minRows}
         className="-striped -highlight"
         noDataText="Empty"
-        defaultSorted={[
-          {
-            id: 'date',
-            asc: true,
-          },
-        ]}
+        sortable={false}
         SubComponent={row => (
           <div style={{ padding: '10px' }}>
             <em>Original, Non-public Time Entry Data</em>
@@ -251,12 +247,7 @@ const TimeEntryTable = ({
       minRows={minRows}
       className="-striped -highlight"
       noDataText="Empty"
-      defaultSorted={[
-        {
-          id: 'date',
-          asc: true,
-        },
-      ]}
+      sortable={false}
       SubComponent={row => (
         <div style={{ padding: '10px' }}>
           <em>Original, Non-public Time Entry Data</em>

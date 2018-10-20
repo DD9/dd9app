@@ -7,9 +7,28 @@ import { adminEditUsers } from '../../actions/user';
 import { getCurrentUser } from '../../actions/auth';
 
 class UserTableAdminEditFormModal extends Component {
+  state = { userId: this.props.user._id };
+
+  componentWillReceiveProps (nextProps) {
+    const { user } = this.props;
+    if (this.state.userId !== nextProps.user._id) {
+      this.props.destroy();
+      this.props.initialize({
+        userId: user._id,
+        company: user.company._id,
+        role: user.role,
+        status: user.status,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      });
+      this.setState({ userId: nextProps.user._id })
+    }
+  }
+
   onFormSubmit(formProps) {
     const { auth, user } = this.props;
     this.props.adminEditUsers(user._id, auth._id, formProps);
+    console.log(formProps);
     $(`#user-admin-edit-modal-${user._id}`).modal('hide');
   }
 

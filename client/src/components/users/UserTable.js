@@ -91,6 +91,7 @@ const UserTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
           asc: true,
         },
       ]}
+      sortable={false}
     />
   );
 };
