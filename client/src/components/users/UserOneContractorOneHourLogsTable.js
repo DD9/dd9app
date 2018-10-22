@@ -49,7 +49,7 @@ const UserOneContractorOneHourLogsTable = ({
       },
       maxWidth: 120,
     }, {
-      Header: 'Company Hour Log Title',
+      Header: 'Title',
       id: 'title',
       accessor: data => {
         if (data.totalCreatedHours > 0) {
@@ -65,6 +65,15 @@ const UserOneContractorOneHourLogsTable = ({
       Header: 'Created',
       id: 'created',
       Cell: data => <span style={{ color: '#AAAAAA' }}>{data.original.totalCreatedHours}</span>,
+      maxWidth: 80,
+    }, {
+      Header: 'Rate',
+      id: 'rate',
+      Cell: data => (
+        <span>
+          {`$${parseInt(data.original.hourlyRate[0].USD).toFixed(2)}`}
+        </span>
+      ),
       maxWidth: 80,
     }, {
       Header: 'Payment',

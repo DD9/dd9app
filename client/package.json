@@ -29,7 +29,8 @@
     "react-toastify": "^4.3.2",
     "redux": "^4.0.0",
     "redux-form": "^7.4.2",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "uuid": "^3.3.2"
   },
   "browserslist": [
     ">0.2%",

@@ -8,17 +8,17 @@ import { openCompanyHourLog, closeCompanyHourLog, editCompanyHourLog } from '../
 import TimeEntryExportedTable from '../timeEntries/TimeEntryExportedTable';
 
 class CompanyHourLogOneControls extends Component {
-  onHourLogOpenFormSubmit() {
+  onCompanyHourLogOpenFormSubmit() {
     this.props.openCompanyHourLog(this.props.companyHourLog._id, this.props.history);
     $('#openCompanyHourLogModal').modal('hide');
   }
 
-  onHourLogCloseFormSubmit(formProps) {
+  onCompanyHourLogCloseFormSubmit(formProps) {
     this.props.closeCompanyHourLog(this.props.companyHourLog._id, formProps, this.props.history);
     $('#closeCompanyHourLogModal').modal('hide');
   }
 
-  onHourLogEditFormSubmit(formProps) {
+  onCompanyHourLogEditFormSubmit(formProps) {
     this.props.editCompanyHourLog(this.props.companyHourLog._id, formProps);
     $('#editCompanyHourLogModal').modal('hide');
   }
@@ -29,7 +29,7 @@ class CompanyHourLogOneControls extends Component {
       if (companyHourLog.title === 'Current') {
         return (
           <div>
-            <h3 className="d-inline"><span style={{ textDecoration: 'underline' }}>{companyHourLog.title}</span> Hour Log for </h3>
+            <h3 className="d-inline"><span style={{ textDecoration: 'underline' }}>{companyHourLog.title}</span> Company Hour Log for </h3>
             <Link className="nav-link d-inline p-0" to={`/company/${companyHourLog.company._id}`} style={{ fontSize: '24px' }}><i>{companyHourLog.company.name}</i></Link>
             <button type="button" className="btn btn-primary pull-right" data-toggle="modal" data-target="#closeCompanyHourLogModal">Close</button>
           </div>
@@ -37,7 +37,7 @@ class CompanyHourLogOneControls extends Component {
       }
       return (
         <div>
-          <h3 className="d-inline"><span style={{ textDecoration: 'underline' }}>{companyHourLog.title}</span> Hour Log for </h3>
+          <h3 className="d-inline"><span style={{ textDecoration: 'underline' }}>{companyHourLog.title}</span> Company Hour Log for </h3>
           <Link className="nav-link d-inline p-0" to={`/company/${companyHourLog.company._id}`} style={{ fontSize: '24px' }}><i>{companyHourLog.company.name}</i></Link>
           <div className="pull-right">
             <button type="button" className="btn btn-primary mr-2" data-toggle="modal" data-target="#exportApprovedHoursModal">Export</button>
@@ -75,7 +75,7 @@ class CompanyHourLogOneControls extends Component {
                   <h5 className="modal-title">Open Hour Log</h5><button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div className="modal-body">
-                  <form id="openCompanyHourLogForm" className="form" onSubmit={handleSubmit(this.onHourLogOpenFormSubmit.bind(this))}>
+                  <form id="openCompanyHourLogForm" className="form" onSubmit={handleSubmit(this.onCompanyHourLogOpenFormSubmit.bind(this))}>
                     <p className="text-center">All time entries will be reassigned to the current hour log.</p>
                     <p className="text-center">A new current hour log will be made for this company if one does not exist.</p>
                   </form>
@@ -97,7 +97,7 @@ class CompanyHourLogOneControls extends Component {
                   <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div className="modal-body">
-                  <form id="closeCompanyHourLogForm" className="form" onSubmit={handleSubmit(this.onHourLogCloseFormSubmit.bind(this))}>
+                  <form id="closeCompanyHourLogForm" className="form" onSubmit={handleSubmit(this.onCompanyHourLogCloseFormSubmit.bind(this))}>
                     <Field
                       label="Title"
                       name="title"
@@ -124,7 +124,7 @@ class CompanyHourLogOneControls extends Component {
                   <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div className="modal-body">
-                  <form id="editCompanyHourLogForm" className="form" onSubmit={handleSubmit(this.onHourLogEditFormSubmit.bind(this))}>
+                  <form id="editCompanyHourLogForm" className="form" onSubmit={handleSubmit(this.onCompanyHourLogEditFormSubmit.bind(this))}>
                     <Field
                       label="Title"
                       name="title"

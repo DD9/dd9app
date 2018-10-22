@@ -31,7 +31,7 @@ class ContractorOne extends Component {
     return (
       <div>
         <UserOneContractorOneHourLogsTable
-          tableTitle={`Contractor Hour Logs for ${user.name.full || ''} - $${user.hourlyRate[0].USD || ''}/hr`}
+          tableTitle={`Contractor Hour Logs for ${user.name.full || ''}`}
           contractorHourLogs={contractorHourLogs}
           key={contractorHourLogs}
           defaultPageSize={contractorHourLogs.length}

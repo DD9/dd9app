@@ -57,12 +57,11 @@ const ContractorHourLogAllTable = ({
       Header: 'Title',
       id: 'title',
       accessor: data => {
-        if (data.totalSubmittedHours > 0) {
+        if (data.totalCreatedHours > 0) {
           return <Link to={`/hourLog/contractor/${data._id}`}><b>{data.title}*</b></Link>;
         }
         return <Link to={`/hourLog/contractor/${data._id}`}>{data.title}</Link>;
       },
-      sortMethod: ((a, b) => (a.props.children > b.props.children ? 1 : -1)),
     }, {
       Header: 'Submitted',
       accessor: 'totalSubmittedHours',
@@ -76,9 +75,18 @@ const ContractorHourLogAllTable = ({
       Header: 'Rate',
       id: 'rate',
       Cell: data => (
-        <span style={{ color: '#AAAAAA' }}>
-          {`$${((data.original.totalSubmittedHours * parseInt(data.original.hourlyRate[0].USD)) + (data.original.totalCreatedHours * parseInt(data.original.hourlyRate[0].USD))).toFixed(2)}`}
+        <span>
+          {`$${parseInt(data.original.hourlyRate[0].USD).toFixed(2)}`}
         </span>
+      ),
+      maxWidth: 80,
+    }, {
+      Header: 'Pay',
+      id: 'pay',
+      Cell: data => (
+        tableTitle === ('Open Contractor Hour Logs')
+        ? <span style={{ color: '#AAAAAA' }}> {`$${(data.original.totalCreatedHours * parseInt(data.original.hourlyRate[0].USD)).toFixed(2)}`}</span>
+        : <span> {`$${(data.original.totalSubmittedHours * parseInt(data.original.hourlyRate[0].USD)).toFixed(2)}`}</span>
       ),
       maxWidth: 80,
     }],

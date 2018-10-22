@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import uuid from 'uuid/v1'
 import $ from 'jquery';
 
 import CompanyHourLogOneControls from './CompanyHourLogOneControls';
@@ -59,7 +60,7 @@ class CompanyHourLogOne extends Component {
           match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
-          key={approvedTimeEntries}
+          key={uuid()}
           defaultPageSize={approvedTimeEntries.length}
           minRows={approvedTimeEntries.length}
         />
@@ -72,7 +73,7 @@ class CompanyHourLogOne extends Component {
           match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
-          key={hiddenTimeEntries}
+          key={uuid()}
           defaultPageSize={hiddenTimeEntries.length}
           minRows={hiddenTimeEntries.length}
         />
@@ -85,7 +86,7 @@ class CompanyHourLogOne extends Component {
           match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
-          key={submittedTimeEntries}
+          key={uuid()}
           defaultPageSize={submittedTimeEntries.length}
           minRows={submittedTimeEntries.length}
         />

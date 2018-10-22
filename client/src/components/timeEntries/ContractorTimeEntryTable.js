@@ -3,6 +3,8 @@ import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
+import ContractorTimeEntryTableActions from './ContractorTimeEntryTableActions';
+import ContractorTimeEntryTableBulkActions from './ContractorTimeEntryTableBulkActions';
 
 const ContractorTimeEntryTable = ({
   auth, contractorHourLogTitle, contractorHourLogHourlyRate, tableTitle, timeEntries, match, defaultPageSize, minRows,
@@ -12,7 +14,7 @@ const ContractorTimeEntryTable = ({
   /**
    * Open contractorHourLog Time Entries Table
    */
-  if (contractorHourLogTitle !== 'Current') {
+  if (contractorHourLogTitle === 'Current') {
     columns = [{
       Header: () => (
         <span className="table-title-font-size">{tableTitle}</span>
@@ -39,18 +41,43 @@ const ContractorTimeEntryTable = ({
           </span>
         ),
       }, {
-        Header: 'Rate',
-        id: 'rate',
-        accessor: timeEntry =>
-          <span style={{ color: '#AAAAAA' }}>
-            {`$${((timeEntry.hours * contractorHourLogHourlyRate.toFloat) + (timeEntry.hours * contractorHourLogHourlyRate.toFloat)).toFixed(2)}`}
-          </span>,
+        Header: 'Payment',
+        id: 'payment',
+        accessor: timeEntry => <span>{`$${((timeEntry.hours * parseInt(contractorHourLogHourlyRate)).toFixed(2))}`}</span>,
         maxWidth: 80,
+        Footer: (
+        <div>
+          <span>
+            ${timeEntries.map(timeEntry => timeEntry.hours).reduce((prev, next) => prev + (next * parseInt(contractorHourLogHourlyRate)), 0).toFixed(2)}
+          </span>
+        </div>
+        ),
       }, {
         Header: 'Description',
         id: 'description',
         accessor: timeEntry =>
           <span title={timeEntry.description}>{timeEntry.description}</span>,
+      }, {
+        Header: '',
+        id: 'timeEntryTableRowActions',
+        accessor: timeEntry => (
+          <div className="text-center">
+            <ContractorTimeEntryTableActions
+              auth={auth}
+              timeEntry={timeEntry}
+            />
+          </div>
+        ),
+        maxWidth: 150,
+        Footer: (
+          <div className="text-center">
+            <ContractorTimeEntryTableBulkActions
+              auth={auth}
+              tableTitle={tableTitle}
+              match={match}
+            />
+          </div>
+        ),
       }],
     }];
     return (
@@ -63,6 +90,12 @@ const ContractorTimeEntryTable = ({
         className="-striped -highlight"
         noDataText="Empty"
         sortable={false}
+        defaultSorted={[
+          {
+            id: 'date',
+            desc: true,
+          },
+        ]}
         SubComponent={row => (
           <div style={{padding: '10px'}}>
             <em>Adjudicated, Public Time Entry Data</em>
@@ -73,7 +106,8 @@ const ContractorTimeEntryTable = ({
                 <th scope="col">User</th>
                 <th scope="col">Company</th>
                 <th scope="col">Hours</th>
-                <th scope="col">Rate</th>
+                <th scope="col">cost</th>
+                <th scope="col">Status</th>
                 <th scope="col">Description</th>
               </tr>
               </thead>
@@ -83,7 +117,8 @@ const ContractorTimeEntryTable = ({
                 <td>{row.original.publicUser.name.full}</td>
                 <td>{row.original.publicCompany.name}</td>
                 <td>{row.original.publicHours}</td>
-                <td>{`$${((row.original.hours * contractorHourLogHourlyRate.toFloat) + (row.original.hours * contractorHourLogHourlyRate.toFloat)).toFixed(2)}`}</td>
+                <td>{`$${((row.original.publicHours * parseInt(contractorHourLogHourlyRate)).toFixed(2))}`}</td>
+                <td>{row.original.status}</td>
                 <td>{row.original.publicDescription}</td>
               </tr>
               </tbody>
@@ -123,18 +158,22 @@ const ContractorTimeEntryTable = ({
           </span>
       ),
     }, {
-      Header: 'Rate',
-      id: 'rate',
-      accessor: timeEntry =>
-        <span style={{ color: '#AAAAAA' }}>
-          {`$${((timeEntry.hours * contractorHourLogHourlyRate) + (timeEntry.original.hours * timeEntry.original.user.hourlyRate[0].USD)).toFixed(2)}`}
-        </span>,
+      Header: 'Payment',
+      id: 'payment',
+      accessor: timeEntry => <span>{`$${((timeEntry.hours * parseInt(contractorHourLogHourlyRate)).toFixed(2))}`}</span>,
       maxWidth: 80,
+      Footer: (
+        <div>
+          <span>
+            ${timeEntries.map(timeEntry => timeEntry.hours).reduce((prev, next) => prev + (next * parseInt(contractorHourLogHourlyRate)), 0).toFixed(2)}
+          </span>
+        </div>
+      ),
     }, {
       Header: 'Description',
       id: 'description',
       accessor: timeEntry =>
-        <span title={timeEntry.original.description}>{timeEntry.original.description}</span>,
+        <span title={timeEntry.description}>{timeEntry.description}</span>,
     }],
   }];
   return (
@@ -146,13 +185,42 @@ const ContractorTimeEntryTable = ({
       minRows={minRows}
       className="-striped -highlight"
       noDataText="Empty"
+      sortable={false}
       defaultSorted={[
         {
           id: 'date',
           desc: true,
         },
       ]}
-      sortable={false}
+      SubComponent={row => (
+        <div style={{padding: '10px'}}>
+          <em>Adjudicated, Public Time Entry Data</em>
+          <table className="table">
+            <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">User</th>
+              <th scope="col">Company</th>
+              <th scope="col">Hours</th>
+              <th scope="col">Payment</th>
+              <th scope="col">Status</th>
+              <th scope="col">Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>{row.original.publicDate}</td>
+              <td>{row.original.publicUser.name.full}</td>
+              <td>{row.original.publicCompany.name}</td>
+              <td>{row.original.publicHours}</td>
+              <td>{`$${((row.original.publicHours * parseInt(contractorHourLogHourlyRate)).toFixed(2))}`}</td>
+              <td>{row.original.status}</td>
+              <td>{row.original.publicDescription}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
     />
   );
 };

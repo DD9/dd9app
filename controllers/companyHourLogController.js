@@ -85,7 +85,7 @@ exports.close = async (req, res) => {
     await recievingHourLog.save();
   }
 
-  // Delete an companyHourLog if it's empty
+  // Delete a companyHourLog if it's empty
   if (companyHourLog.totalPublicHours === 0 && companyHourLog.totalHiddenHours === 0 && companyHourLog.totalSubmittedHours === 0) {
     await companyHourLog.remove();
     return res.json({ redirectUrl: `/company/${companyHourLog.company._id}`, companyId: companyHourLog.company._id });

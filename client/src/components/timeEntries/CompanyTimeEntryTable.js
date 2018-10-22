@@ -145,6 +145,12 @@ const CompanyTimeEntryTable = ({
         minRows={minRows}
         className="-striped -highlight"
         noDataText="Empty"
+        defaultSorted={[
+          {
+            id: 'date',
+            desc: true,
+          },
+        ]}
         sortable={false}
         SubComponent={row => (
           <div style={{ padding: '10px' }}>
@@ -246,6 +252,12 @@ const CompanyTimeEntryTable = ({
       minRows={minRows}
       className="-striped -highlight"
       noDataText="Empty"
+      defaultSorted={[
+        {
+          id: 'date',
+          desc: true,
+        },
+      ]}
       sortable={false}
       SubComponent={row => (
         <div style={{ padding: '10px' }}>

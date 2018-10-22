@@ -91,7 +91,7 @@ export default function(state = INITIAL_STATE, action) {
     case REJECT_TIME_ENTRY:
       return {
         ...state,
-        timeEntries: state.timeEntries.filter(timeEntry => timeEntry._id !== action.payload._id),
+        timeEntries: state.timeEntries.filter(timeEntry => timeEntry._id !== action.payload.oldTimeEntry._id),
       };
 
     case TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION:

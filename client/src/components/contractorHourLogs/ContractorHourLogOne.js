@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import uuid from 'uuid/v1'
 import $ from 'jquery';
 
 
@@ -26,7 +27,7 @@ class CompanyHourLogOne extends Component {
       auth, contractorHourLog, match,
     } = this.props;
 
-    if (!contractorHourLog.timeEntries[0]) {
+    if (!contractorHourLog.hourlyRate) {
       return (
         <div>
           <SpinnerClipLoader />
@@ -35,7 +36,7 @@ class CompanyHourLogOne extends Component {
     }
 
     let createdTimeEntries = contractorHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'created');
-    let submittedTimeEntries = contractorHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'submitted');
+    let submittedTimeEntries = contractorHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved' || timeEntry.status === 'hidden' || timeEntry.status === 'submitted');
 
     if (!createdTimeEntries[0]) {
       createdTimeEntries = ['createdTimeEntries'];
@@ -46,11 +47,11 @@ class CompanyHourLogOne extends Component {
 
     return (
       <div className="container table-font-size">
-        {/*<ContractorHourLogOneControls*/}
-          {/*contractorHourLog={contractorHourLog}*/}
-          {/*initialValues={contractorHourLog.title === 'Current' ? { title: moment.utc().format('YYYY-MM-DD') } : { title: contractorHourLog.title }}*/}
-          {/*timeEntries={createdTimeEntries}*/}
-        {/*/>*/}
+        <ContractorHourLogOneControls
+          auth={auth}
+          contractorHourLog={contractorHourLog}
+          initialValues={contractorHourLog.title === 'Current' ? { title: moment.utc().format('YYYY-MM-DD') } : { title: contractorHourLog.title }}
+        />
         <div className="m-5" />
         <ContractorTimeEntryTable
           auth={auth}
@@ -59,7 +60,7 @@ class CompanyHourLogOne extends Component {
           tableTitle="Created Time Entries"
           timeEntries={createdTimeEntries[0] !== 'createdTimeEntries' ? createdTimeEntries : []}
           match={match}
-          key={createdTimeEntries}
+          key={uuid()}
           defaultPageSize={createdTimeEntries.length}
           minRows={createdTimeEntries.length}
         />
@@ -71,7 +72,7 @@ class CompanyHourLogOne extends Component {
           tableTitle="Submitted Time Entries"
           timeEntries={submittedTimeEntries[0] !== 'submittedTimeEntries' ? submittedTimeEntries : []}
           match={match}
-          key={submittedTimeEntries}
+          key={uuid()}
           defaultPageSize={submittedTimeEntries.length}
           minRows={submittedTimeEntries.length}
         />

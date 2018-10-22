@@ -4,7 +4,7 @@ import authReducer from './auth/authReducer';
 import userAllReducer from './users/userAllReducer';
 import userActiveReducer from './users/userActiveReducer';
 import userOneReducer from './users/userOneReducer';
-import contractorOneHourLogReducer from './contractors/contractorOneHourLogReducer';
+import contractorOneHourLogReducer from './users/contractorOneHourLogReducer';
 import companyAllReducer from './companies/companyAllReducer';
 import companyOneReducer from './companies/companyOneReducer';
 import companyOneHourLogReducer from './companies/companyOneHourLogReducer';
