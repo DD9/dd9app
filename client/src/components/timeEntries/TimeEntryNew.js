@@ -6,7 +6,7 @@ import { getCreatedTimeEntries } from '../../actions/timeEntry';
 import { getActiveUsers } from '../../actions/user';
 import { getActiveCompanies } from '../../actions/company';
 
-import TimeEntryTable from './TimeEntryTable';
+import CompanyTimeEntryTable from './CompanyTimeEntryTable';
 import TimeEntryForm from './TimeEntryForm';
 
 class TimeEntryNew extends Component {
@@ -17,22 +17,25 @@ class TimeEntryNew extends Component {
   }
 
   componentDidUpdate() {
-    $('.time-entry-table-bulk-action').attr('disabled', false);
+    $('.company-time-entry-table-bulk-action').attr('disabled', false);
   }
 
   render() {
     const {
       auth, createdTimeEntries, activeUsers, activeCompanies,
     } = this.props;
+
     return (
       <div className="container table-font-size">
-        <TimeEntryTable
+        <CompanyTimeEntryTable
           auth={auth}
           tableTitle="New Time Entries"
           timeEntries={createdTimeEntries}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
-          defaultPageSize={10}
+          key={createdTimeEntries}
+          defaultPageSize={createdTimeEntries.length}
+          minRows={createdTimeEntries.length}
         />
         <TimeEntryForm activeCompanies={activeCompanies} initialValues={{ company: -1 }} />
       </div>

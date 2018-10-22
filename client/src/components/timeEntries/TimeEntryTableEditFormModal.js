@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import DatePicker from 'react-datepicker/';
 import moment from 'moment';
-import $ from 'jquery';
+import $ from 'jquery'
 
 import {
   submitTimeEntry, deleteTimeEntry, editTimeEntry, adjudicateTimeEntry,
@@ -13,18 +13,105 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 class TimeEntryTableEditFormModal extends Component {
   componentDidMount() {
-    $('.react-datepicker__input-container')[0].childNodes[0].setAttribute('readOnly', true);
+    const { timeEntry } = this.props;
+    this.props.initialize({
+      date: timeEntry.publicDate.split('T')[0],
+      user: timeEntry.publicUser._id,
+      company: timeEntry.publicCompany._id,
+      hours: timeEntry.publicHours,
+      description: timeEntry.publicDescription,
+    });
   }
 
   onTimeEntryEditFormSubmit(formProps) {
     const { timeEntry } = this.props;
     $(`#time-entry-edit-modal-${timeEntry._id}`).modal('hide');
+    console.log(formProps);
     switch (this.props.timeEntry.status) {
       case 'created':
         return this.props.editTimeEntry(timeEntry._id, formProps);
       default:
         return this.props.adjudicateTimeEntry(timeEntry._id, formProps);
     }
+  }
+
+  renderDateField(field) {
+    return (
+      <div className="form-group row">
+        <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
+        <div className="col-sm-4">
+          <DatePicker
+            {...field.input}
+            className={`form-control custom-form-width ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`}
+            dateFormat="YYYY-MM-DD"
+            selected={field.input.value ? moment(field.input.value) : ''}
+          />
+        </div>
+        <div className="invalid-feedback">{field.meta.error}</div>
+      </div>
+    );
+  }
+
+  renderUserSelectField(field) {
+    return (
+      <div className="form-group row">
+        <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
+        <div className="col-sm-10">
+          <select {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`}>
+            <option value="-1" disabled>{`Select a ${field.label.toLowerCase()}`}</option>
+            {
+              field.selectOptions
+                ? field.selectOptions.map((option) => (<option key={option._id} value={option._id}>{`${option.name.full}`}</option>))
+                : ''
+            }
+          </select>
+        </div>
+        <div className="invalid-feedback">{field.meta.error}</div>
+      </div>
+    );
+  }
+
+  renderCompanySelectField(field) {
+    return (
+      <div className="form-group row">
+        <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
+        <div className="col-sm-10">
+          <select {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`}>
+            <option value="-1" disabled>{`Select a ${field.label.toLowerCase()}`}</option>
+            {
+              field.selectOptions
+                ? field.selectOptions.map((option) => (<option key={option._id} value={option._id}>{option.name}</option>))
+                : ''
+            }
+          </select>
+        </div>
+        <div className="invalid-feedback">{field.meta.error}</div>
+      </div>
+    );
+  }
+
+  renderNumberField(field) {
+    return (
+      <div className="form-group row">
+        <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
+        <div className="col-sm-10">
+          <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="number" step="0.25" />
+          <div className="invalid-feedback">{field.meta.error}</div>
+        </div>
+      </div>
+    );
+  }
+
+  renderTextField(field) {
+    return (
+      <div className="form-group row">
+        <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
+        <div className="col-sm-10">
+          <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" />
+          <div className="invalid-feedback">{field.meta.error}</div>
+        </div>
+      </div>
+    );
   }
 
   renderFields() {
@@ -89,85 +176,6 @@ class TimeEntryTableEditFormModal extends Component {
     );
   }
 
-  renderDateField(field) {
-    return (
-      <div className="form-group row">
-        <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
-        <div className="col-sm-4">
-          <DatePicker
-            {...field.input}
-            className={`form-control custom-form-width ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`}
-            dateFormat="YYYY-MM-DD"
-            selected={field.input.value ? moment(field.input.value) : ''}
-          />
-        </div>
-        <div className="invalid-feedback">{field.meta.error}</div>
-      </div>
-    );
-  }
-
-  renderUserSelectField(field) {
-    return (
-      <div className="form-group row">
-        <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
-        <div className="col-sm-10">
-          <select {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`}>
-            <option value="-1" disabled>{`Select a ${field.label.toLowerCase()}`}</option>
-            {
-              field.selectOptions
-                ? field.selectOptions.map((option) => (<option key={option._id} value={option._id}>{`${option.firstName} ${option.lastName}`}</option>))
-                : ''
-            }
-          </select>
-        </div>
-        <div className="invalid-feedback">{field.meta.error}</div>
-      </div>
-    );
-  }
-
-  renderCompanySelectField(field) {
-    return (
-      <div className="form-group row">
-        <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
-        <div className="col-sm-10">
-          <select {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`}>
-            <option value="-1" disabled>{`Select a ${field.label.toLowerCase()}`}</option>
-            {
-              field.selectOptions
-                ? field.selectOptions.map((option) => (<option key={option._id} value={option._id}>{option.name}</option>))
-                : ''
-            }
-          </select>
-        </div>
-        <div className="invalid-feedback">{field.meta.error}</div>
-      </div>
-    );
-  }
-
-  renderNumberField(field) {
-    return (
-      <div className="form-group row">
-        <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
-        <div className="col-sm-10">
-          <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="number" step="any"/>
-          <div className="invalid-feedback">{field.meta.error}</div>
-        </div>
-      </div>
-    );
-  }
-
-  renderTextField(field) {
-    return (
-      <div className="form-group row">
-        <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
-        <div className="col-sm-10">
-          <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" />
-          <div className="invalid-feedback">{field.meta.error}</div>
-        </div>
-      </div>
-    );
-  }
-
   render() {
     const { timeEntry, handleSubmit } = this.props;
     return (
@@ -205,8 +213,8 @@ function validate(values) {
   if (!values.company || values.company === -1) {
     errors.company = 'Select company.';
   }
-  if (!values.hours || values.hours <= 0) {
-    errors.hours = 'Enter a value greater than 0.';
+  if (!values.hours || values.hours < 0) {
+    errors.hours = 'Enter a value greater than or equal to 0.';
   }
   if (values.hours > 100) {
     errors.hours = 'Enter a value less than 100.';
@@ -221,6 +229,5 @@ function validate(values) {
 export default connect(null, {
   submitTimeEntry, deleteTimeEntry, editTimeEntry, adjudicateTimeEntry,
 })(reduxForm({
-  enableReinitialize: true,
   validate,
 })(TimeEntryTableEditFormModal));

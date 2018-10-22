@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { getAllCompanies } from '../../actions/company';
 
-import CompanyTableControls from './CompanyTableControls';
-import CompanyTable from './CompanyTable';
+import SpinnerClipLoader from '../SpinnerClipLoader';
+import CompanyAllTable from './CompanyAllTable';
+import CompanyAllControls from './CompanyAllControls';
 
 class CompanyAll extends Component {
   componentDidMount() {
@@ -13,10 +14,24 @@ class CompanyAll extends Component {
 
   render() {
     const { companies } = this.props;
+
+    if (!companies[0]) {
+      return (
+        <div>
+          <SpinnerClipLoader />
+        </div>
+      );
+    }
+
     return (
       <div className="container table-font-size">
-        <CompanyTable companies={companies} />
-        <CompanyTableControls companies={companies} />
+        <CompanyAllTable
+          companies={companies}
+          key={companies}
+          defaultPageSize={companies.length}
+          minRows={companies.length === 0 ? 20 : companies.length}
+        />
+        <CompanyAllControls companies={companies} />
       </div>
     );
   }

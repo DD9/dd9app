@@ -37,8 +37,8 @@ passport.use(new GoogleStrategy({
     const user = await new User(
       {
         email: googleEmail,
-        firstName: googleFirstName,
-        lastName: googleLastName,
+        'name.first': googleFirstName,
+        'name.last': googleLastName,
         lastSignInAt: Date.now(),
       },
     ).save();

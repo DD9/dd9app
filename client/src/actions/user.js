@@ -2,13 +2,13 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 import {
-  GET_USERS, GET_ACTIVE_USERS, GET_USER, ADMIN_EDIT_USERS, ADMIN_EDIT_USER, EDIT_USER, AUTH_USER,
+  GET_ALL_USERS, GET_ACTIVE_USERS, GET_USER, ADMIN_EDIT_USERS, ADMIN_EDIT_USER, EDIT_USER, AUTH_USER, GET_CONTRACTOR_HOUR_LOGS, CLEAR_CONTRACTOR_HOUR_LOGS_STATE,
 } from './types';
 
-export const getUsers = () => async dispatch => {
+export const getAllUsers = () => async dispatch => {
   const res = await axios.get('/api/v1/users/all');
 
-  dispatch({ type: GET_USERS, payload: res.data });
+  dispatch({ type: GET_ALL_USERS, payload: res.data });
 };
 
 export const getActiveUsers = () => async dispatch => {
@@ -32,7 +32,7 @@ export const adminEditUser = (userId, authId, formProps) => async dispatch => {
     await dispatch({ type: AUTH_USER, payload: res.data });
   }
 
-  toast.success(`${res.data.firstName} ${res.data.lastName} successfully edited`, {
+  toast.success(`${res.data.name.full} successfully edited`, {
     position: 'top-right',
     autoClose: 5000,
     hideProgressBar: true,
@@ -52,7 +52,7 @@ export const adminEditUsers = (userId, authId, formProps) => async dispatch => {
     await dispatch({ type: AUTH_USER, payload: res.data });
   }
 
-  toast.success(`${res.data.firstName} ${res.data.lastName} successfully edited`, {
+  toast.success(`${res.data.name.full} successfully edited`, {
     position: 'top-right',
     autoClose: 5000,
     hideProgressBar: true,
@@ -65,7 +65,7 @@ export const adminEditUsers = (userId, authId, formProps) => async dispatch => {
 export const editUser = formProps => async dispatch => {
   const res = await axios.post(`/api/v1/user/${formProps.userId}/edit`, formProps);
 
-  toast.success(`${res.data.firstName} ${res.data.lastName} successfully edited`, {
+  toast.success(`${res.data.name.full} successfully edited`, {
     position: 'top-right',
     autoClose: 5000,
     hideProgressBar: true,
@@ -75,4 +75,14 @@ export const editUser = formProps => async dispatch => {
   });
 
   dispatch({ type: EDIT_USER, payload: res.data });
+};
+
+export const getContractorHourLogs = userId => async dispatch => {
+  const res = await axios.get(`/api/v1/user/${userId}/contractorHourLogs`);
+
+  dispatch({ type: GET_CONTRACTOR_HOUR_LOGS, payload: res.data });
+};
+
+export const clearContractorHourLogState = () => async dispatch => {
+  dispatch({ type: CLEAR_CONTRACTOR_HOUR_LOGS_STATE, payload: {} });
 };

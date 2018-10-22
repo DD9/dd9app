@@ -53,6 +53,18 @@ class UserOneAdminEditForm extends Component {
     );
   }
 
+  renderNumberField(field) {
+    return (
+      <div className="form-group row">
+        <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
+        <div className="col-sm-10">
+          <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="number" step="0.25" />
+          <div className="invalid-feedback">{field.meta.error}</div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const { user, handleSubmit, activeCompanies } = this.props;
     return (
@@ -75,6 +87,7 @@ class UserOneAdminEditForm extends Component {
             name="role"
             selectOptions={[
               { _id: 'client', name: 'Client' },
+              { _id: 'contractor', name: 'Contractor' },
               { _id: 'staff', name: 'Staff' },
               { _id: 'admin', name: 'Admin' },
             ]}
@@ -88,6 +101,12 @@ class UserOneAdminEditForm extends Component {
               { _id: 'inactive', name: 'Inactive' },
             ]}
             component={this.renderSelectField}
+          />
+          <Field
+            label="Hourly Rate (USD)"
+            name="hourlyRate"
+            placeholder={user.hourlyRate[0].USD}
+            component={this.renderNumberField}
           />
           <Field
             label="First name"
@@ -131,6 +150,14 @@ function validate(values) {
 
   if (!values.lastName) {
     errors.lastName = 'Enter a last name.';
+  }
+
+  if (!values.hours || values.hours < 0) {
+    errors.hours = 'Enter a value greater than or equal to 0.';
+  }
+
+  if (values.hours > 100000) {
+    errors.hours = 'Enter a value less than 100,000.';
   }
 
   return errors;

@@ -1,16 +1,20 @@
 import { combineReducers } from 'redux';
-import authReducer from './auth/authReducer';
 import { reducer as reduxForm } from 'redux-form';
+import authReducer from './auth/authReducer';
 import userAllReducer from './users/userAllReducer';
 import userActiveReducer from './users/userActiveReducer';
 import userOneReducer from './users/userOneReducer';
+import contractorOneHourLogReducer from './users/contractorOneHourLogReducer';
 import companyAllReducer from './companies/companyAllReducer';
 import companyOneReducer from './companies/companyOneReducer';
-import companyHourLogReducer from './companies/companyHourLogReducer';
+import companyOneHourLogReducer from './companies/companyOneHourLogReducer';
 import companyActiveReducer from './companies/companyActiveReducer';
-import hourLogOpenReducer from './hourLogs/hourLogOpenReducer';
-import hourLogClosedReducer from './hourLogs/hourLogClosedReducer';
-import hourLogOneReducer from './hourLogs/hourLogOneReducer';
+import openContractorHourLogReducer from './contractorHourLogs/openContractorHourLogReducer';
+import closedContractorHourLogReducer from './contractorHourLogs/closedContractorHourLogReducer';
+import contractorHourLogOneReducer from './contractorHourLogs/contractorOneHourLogReducer'
+import openCompanyHourLogReducer from './companyHourLogs/openCompanyHourLogReducer';
+import closedCompanyHourLogReducer from './companyHourLogs/closedCompanyHourLogReducer';
+import companyHourLogOneReducer from './companyHourLogs/companyHourLogOneReducer';
 import timeEntryNewReducer from './timeEntries/timeEntryNewReducer';
 
 export default combineReducers({
@@ -19,12 +23,16 @@ export default combineReducers({
   users: userAllReducer,
   activeUsers: userActiveReducer,
   user: userOneReducer,
+  contractorHourLogs: contractorOneHourLogReducer,
   companies: companyAllReducer,
   company: companyOneReducer,
   activeCompanies: companyActiveReducer,
-  companyHourLogs: companyHourLogReducer,
-  openHourLogs: hourLogOpenReducer,
-  closedHourLogs: hourLogClosedReducer,
-  hourLog: hourLogOneReducer,
+  companyHourLogs: companyOneHourLogReducer,
+  openContractorHourLogs: openContractorHourLogReducer,
+  closedContractorHourLogs: closedContractorHourLogReducer,
+  contractorHourLog: contractorHourLogOneReducer,
+  openCompanyHourLogs: openCompanyHourLogReducer,
+  closedCompanyHourLogs: closedCompanyHourLogReducer,
+  companyHourLog: companyHourLogOneReducer,
   createdTimeEntries: timeEntryNewReducer,
 });

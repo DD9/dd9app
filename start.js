@@ -24,8 +24,10 @@ mongoose.connect(process.env.DATABASE,
 
 // Import MongoDB models
 require('./models/User');
+require('./models/Project');
 require('./models/Company');
-require('./models/HourLog');
+require('./models/CompanyHourLog');
+require('./models/ContractorHourLog');
 require('./models/TimeEntry');
 
 // Import and run app.js

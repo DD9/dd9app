@@ -1,32 +1,42 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { getCompany, getCompanyHourLogs, getAllCompanies } from '../../actions/company';
+import CompanyOneCompanyHourLogsTable from './CompanyOneCompanyHourLogsTable';
+import CompanyOneControls from './CompanyOneControls';
 
-import HourLogCompanyOneTable from '../hourLogsCompany/HourLogCompanyOneTable';
-import HourLogCompanyOneTableControls from '../hourLogsCompany/HourLogCompanyOneTableControls';
+import {
+  getCompany, getCompanyHourLogs, getAllCompanies, clearCompanyHourLogsState,
+} from '../../actions/company';
 
 class CompanyOne extends Component {
   componentDidMount() {
-    this.props.getCompany(this.props.match.params.id);
-    this.props.getCompanyHourLogs(this.props.match.params.id);
+    const { match } = this.props;
+    this.props.getCompany(match.params.companyId);
+    this.props.getCompanyHourLogs(match.params.companyId);
     this.props.getAllCompanies();
   }
 
+  componentWillUnmount() {
+    this.props.clearCompanyHourLogsState();
+  }
+
   renderContent() {
-    const { company, companyHourLogs, match, companies } = this.props;
-    if (!companyHourLogs[0] || companyHourLogs[0].company._id !== match.params.id) {
-      return (
-        <div>
-          <HourLogCompanyOneTable tableTitle={''} companyHourLogs={[]} />
-          <HourLogCompanyOneTableControls company={company} companies={[]} initialValues={{ name: company.name }} />
-        </div>
-      );
-    }
+    const { company, companyHourLogs, companies } = this.props;
+
     return (
       <div>
-        <HourLogCompanyOneTable tableTitle={`${company.name || ''} - ${company.status.toString().toUpperCase() || ''}`} companyHourLogs={companyHourLogs} />
-        <HourLogCompanyOneTableControls company={company} companies={companies} initialValues={{ name: company.name }} />
+        <CompanyOneCompanyHourLogsTable
+          tableTitle={`Company Hour Logs for ${company.name || ''}`}
+          companyHourLogs={companyHourLogs}
+          key={companyHourLogs}
+          defaultPageSize={companyHourLogs.length}
+          minRows={companyHourLogs.length}
+        />
+        <CompanyOneControls
+          company={company}
+          companies={companies}
+          initialValues={{ name: company.name }}
+        />
       </div>
     );
   }
@@ -44,4 +54,6 @@ function mapStateToProps({ company, companyHourLogs, companies }) {
   return { company, companyHourLogs, companies };
 }
 
-export default connect(mapStateToProps, { getCompany, getCompanyHourLogs, getAllCompanies })(CompanyOne);
+export default connect(mapStateToProps, {
+  getCompany, getCompanyHourLogs, getAllCompanies, clearCompanyHourLogsState,
+})(CompanyOne);

@@ -52,6 +52,18 @@ class UserOneEditForm extends Component {
     );
   }
 
+  renderReadOnlyNumberField(field) {
+    return (
+      <div className="form-group row">
+        <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
+        <div className="col-sm-10">
+          <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="number" step="0.25" placeholder={field.placeholder} disabled />
+          <div className="invalid-feedback">{field.meta.error}</div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const { user, handleSubmit, activeCompanies } = this.props;
     return (
@@ -74,6 +86,7 @@ class UserOneEditForm extends Component {
             name="role"
             selectOptions={[
               { _id: 'client', name: 'Client' },
+              { _id: 'contractor', name: 'Contractor' },
               { _id: 'staff', name: 'Staff' },
               { _id: 'admin', name: 'Admin' },
             ]}
@@ -87,6 +100,12 @@ class UserOneEditForm extends Component {
               { _id: 'inactive', name: 'Inactive' },
             ]}
             component={this.renderReadOnlySelectField}
+          />
+          <Field
+            label="Hourly Rate (USD)"
+            name="hourlyRate"
+            placeholder={user.hourlyRate[0].USD}
+            component={this.renderReadOnlyNumberField}
           />
           <Field
             label="First name"

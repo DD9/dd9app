@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 
 import * as actions from '../actions/auth';
 
-import '../styles/partials/header.css';
+import '../styles/partials/header.scss';
 
 const Header = ({ auth, logout, history }) => {
   const renderContent = () => {
@@ -14,7 +14,8 @@ const Header = ({ auth, logout, history }) => {
         return;
       case false:
         return [
-          <li key="1" className="nav-item"><Link className="nav-link" to="/timeEntry/new">Time Entries</Link></li>,
+          <li key="1" className="nav-item"><Link className="nav-link" to={`/user/${auth._id}/contractorHourLogs`}>Hour Logs</Link></li>,
+          <li key="2" className="nav-item"><Link className="nav-link" to="/timeEntry/new">Time Entries</Link></li>,
         ];
       default:
         return [

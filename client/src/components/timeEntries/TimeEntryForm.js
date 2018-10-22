@@ -61,7 +61,7 @@ class TimeEntryForm extends Component {
     return (
       <div className="form-group col-md-4">
         <label htmlFor={field.name}>{field.label}</label>
-        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="number" />
+        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="number" step="0.25" />
         <div className="invalid-feedback">{field.meta.error}</div>
       </div>
     );
@@ -128,15 +128,19 @@ function validate(values) {
   if (!values.date) {
     errors.date = 'Enter a date.';
   }
+
   if (!values.company || values.company === -1) {
     errors.company = 'Select company.';
   }
-  if (!values.hours || values.hours <= 0) {
-    errors.hours = 'Enter a value greater than 0.';
+
+  if (!values.hours || values.hours < 0) {
+    errors.hours = 'Enter a value greater than or equal to 0.';
   }
+
   if (values.hours > 100) {
-    errors.hours = 'Enter a value greater than 100.';
+    errors.hours = 'Enter a value less than 100.';
   }
+
   if (!values.description) {
     errors.description = 'Enter a description.';
   }

@@ -21,9 +21,13 @@ const timeEntrySchema = new Schema({
     ref: 'Company',
     required: 'Company required.',
   },
-  hourLog: {
+  companyHourLog: {
     type: mongoose.Schema.ObjectId,
-    ref: 'HourLog',
+    ref: 'CompanyHourLog',
+  },
+  contractorHourLog: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'ContractorHourLog',
   },
   hours: {
     type: Number,
