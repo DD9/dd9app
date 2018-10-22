@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 
 import { getOpenCompanyHourLogs, getClosedCompanyHourLogs } from '../../actions/companyHourLog';
 
-import CompanyAllHourLogTable from './CompanyAllHourLogTable';
+import CompanyHourLogAllTable from './CompanyHourLogAllTable';
 
-class CompanyAllHourLog extends Component {
+class CompanyHourLogAll extends Component {
   componentDidMount() {
     this.props.getOpenCompanyHourLogs();
     this.props.getClosedCompanyHourLogs();
@@ -15,7 +15,7 @@ class CompanyAllHourLog extends Component {
     const { openCompanyHourLogs, closedCompanyHourLogs } = this.props;
     return (
       <div className="container table-font-size">
-        <CompanyAllHourLogTable
+        <CompanyHourLogAllTable
           tableTitle="Open Company Hour Logs"
           companyHourLogs={openCompanyHourLogs}
           showPagination={false}
@@ -24,7 +24,7 @@ class CompanyAllHourLog extends Component {
           minRows={openCompanyHourLogs.length === 0 ? 20 : openCompanyHourLogs.length}
         />
         <div className="m-5" />
-        <CompanyAllHourLogTable
+        <CompanyHourLogAllTable
           key={closedCompanyHourLogs}
           tableTitle="Closed Company Hour Logs"
           companyHourLogs={closedCompanyHourLogs}
@@ -38,4 +38,4 @@ function mapStateToProps({ openCompanyHourLogs, closedCompanyHourLogs }) {
   return { openCompanyHourLogs, closedCompanyHourLogs };
 }
 
-export default connect(mapStateToProps, { getOpenCompanyHourLogs, getClosedCompanyHourLogs })(CompanyAllHourLog);
+export default connect(mapStateToProps, { getOpenCompanyHourLogs, getClosedCompanyHourLogs })(CompanyHourLogAll);

@@ -51,10 +51,10 @@ companyHourLogSchema.index(
 companyHourLogSchema.plugin(deepPopulate, {
   populate: {
     'timeEntries.user': {
-      select: 'firstName lastName',
+      select: 'name hourlyRate',
     },
     'timeEntries.publicUser': {
-      select: 'firstName lastName',
+      select: 'name hourlyRate',
     },
     'timeEntries.company': {
       select: 'name',

@@ -12,28 +12,28 @@ import TimeEntryTableActionConfirmModal from './TimeEntryTableActionConfirmModal
 class TimeEntryTableActions extends Component {
   componentDidUpdate() {
     const { timeEntry } = this.props;
-    $(`.time-entry-table-action-${timeEntry._id}`).attr("disabled", false);
+    $(`.company-time-entry-table-action-${timeEntry._id}`).attr("disabled", false);
   }
 
   onApproveTimeEntryClick() {
     const { timeEntry } = this.props;
-    $(`.time-entry-table-action-${timeEntry._id}`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action-${timeEntry._id}`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     this.props.approveTimeEntry(timeEntry._id);
   }
 
   onHideTimeEntryClick() {
     const { timeEntry } = this.props;
-    $(`.time-entry-table-action-${timeEntry._id}`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action-${timeEntry._id}`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     this.props.hideTimeEntry(timeEntry._id);
   }
 
   onRejectTimeEntryClick = e => {
     e.preventDefault();
     const { timeEntry } = this.props;
-    $(`.time-entry-table-action-${timeEntry._id}`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action-${timeEntry._id}`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     $(`#time-entry-confirm-reject-modal-${timeEntry._id}`).modal('hide');
     this.props.rejectTimeEntry(timeEntry._id);
   };
@@ -41,8 +41,8 @@ class TimeEntryTableActions extends Component {
   onSubmitTimeEntryClick = e => {
     e.preventDefault();
     const { timeEntry } = this.props;
-    $(`.time-entry-table-action-${timeEntry._id}`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action-${timeEntry._id}`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     $(`#time-entry-confirm-submit-modal-${timeEntry._id}`).modal('hide');
     this.props.submitTimeEntry(timeEntry._id);
   };
@@ -50,8 +50,8 @@ class TimeEntryTableActions extends Component {
   onDeleteTimeEntryClick = e => {
     e.preventDefault();
     const { timeEntry } = this.props;
-    $(`.time-entry-table-action-${timeEntry._id}`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action-${timeEntry._id}`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     $(`#time-entry-confirm-delete-modal-${timeEntry._id}`).modal('hide');
     this.props.deleteTimeEntry(timeEntry._id);
   };
@@ -59,33 +59,47 @@ class TimeEntryTableActions extends Component {
 
   renderTimeEntryTableActionButtons() {
     const { auth, timeEntry } = this.props;
-    if (auth.permissions[0].admin && timeEntry.status === 'created') {
+      if (timeEntry.status === 'created' && auth.role === 'contractor') {
+        return (
+          <div className="d-inline text-center">
+            <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Edit" data-toggle="modal" data-target={`#time-entry-edit-modal-${timeEntry._id}`}>
+              <i className="fa fa-pencil-square-o" aria-hidden="true" />
+            </button>
+            <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Delete" data-toggle="modal" data-target={`#time-entry-confirm-delete-modal-${timeEntry._id}`}>
+              <i className="fa fa-trash-o" aria-hidden="true" />
+            </button>
+          </div>
+        );
+    } if (timeEntry.status === 'created' && auth.role === 'staff') {
       return (
-        <div className="d-inline">
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Approve" onClick={this.onApproveTimeEntryClick.bind(this)}>
-            <i className="fa fa-check-circle-o" aria-hidden="true" />
-          </button>
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Hide" onClick={this.onHideTimeEntryClick.bind(this)}>
-            <i className="fa fa-eye-slash" aria-hidden="true" />
-          </button>
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Submit" data-toggle="modal" data-target={`#time-entry-confirm-submit-modal-${timeEntry._id}`}>
+        <div className="d-inline text-center">
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Submit" data-toggle="modal" data-target={`#time-entry-confirm-submit-modal-${timeEntry._id}`}>
             <i className="fa fa-paper-plane-o" aria-hidden="true" />
           </button>
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Edit" data-toggle="modal" data-target={`#time-entry-edit-modal-${timeEntry._id}`}>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Edit" data-toggle="modal" data-target={`#time-entry-edit-modal-${timeEntry._id}`}>
             <i className="fa fa-pencil-square-o" aria-hidden="true" />
           </button>
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Delete" data-toggle="modal" data-target={`#time-entry-confirm-delete-modal-${timeEntry._id}`}>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Delete" data-toggle="modal" data-target={`#time-entry-confirm-delete-modal-${timeEntry._id}`}>
             <i className="fa fa-trash-o" aria-hidden="true" />
           </button>
         </div>
-      );
-    } if (timeEntry.status === 'created') {
+        );
+    } if (timeEntry.status === 'created' && auth.permissions[0].admin) {
       return (
-        <div className="d-inline text-center">
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Edit" data-toggle="modal" data-target={`#time-entry-edit-modal-${timeEntry._id}`}>
+        <div className="d-inline">
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Approve" onClick={this.onApproveTimeEntryClick.bind(this)}>
+            <i className="fa fa-check-circle-o" aria-hidden="true" />
+          </button>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Hide" onClick={this.onHideTimeEntryClick.bind(this)}>
+            <i className="fa fa-eye-slash" aria-hidden="true" />
+          </button>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Submit" data-toggle="modal" data-target={`#time-entry-confirm-submit-modal-${timeEntry._id}`}>
+            <i className="fa fa-paper-plane-o" aria-hidden="true" />
+          </button>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Edit" data-toggle="modal" data-target={`#time-entry-edit-modal-${timeEntry._id}`}>
             <i className="fa fa-pencil-square-o" aria-hidden="true" />
           </button>
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Delete" data-toggle="modal" data-target={`#time-entry-confirm-delete-modal-${timeEntry._id}`}>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Delete" data-toggle="modal" data-target={`#time-entry-confirm-delete-modal-${timeEntry._id}`}>
             <i className="fa fa-trash-o" aria-hidden="true" />
           </button>
         </div>
@@ -93,13 +107,13 @@ class TimeEntryTableActions extends Component {
     } if (timeEntry.status === 'approved') {
       return (
         <div className="d-inline">
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Hide" onClick={this.onHideTimeEntryClick.bind(this)}>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Hide" onClick={this.onHideTimeEntryClick.bind(this)}>
             <i className="fa fa-eye-slash" aria-hidden="true" />
           </button>
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Edit" data-toggle="modal" data-target={`#time-entry-edit-modal-${timeEntry._id}`}>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Edit" data-toggle="modal" data-target={`#time-entry-edit-modal-${timeEntry._id}`}>
             <i className="fa fa-pencil-square-o" aria-hidden="true" />
           </button>
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Reject" data-toggle="modal" data-target={`#time-entry-confirm-reject-modal-${timeEntry._id}`}>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Reject" data-toggle="modal" data-target={`#time-entry-confirm-reject-modal-${timeEntry._id}`}>
             <i className="fa fa-ban" aria-hidden="true" />
           </button>
         </div>
@@ -107,13 +121,13 @@ class TimeEntryTableActions extends Component {
     } if (timeEntry.status === 'hidden') {
       return (
         <div className="d-inline">
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Approve" onClick={this.onApproveTimeEntryClick.bind(this)}>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Approve" onClick={this.onApproveTimeEntryClick.bind(this)}>
             <i className="fa fa-check-circle-o" aria-hidden="true" />
           </button>
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Edit" data-toggle="modal" data-target={`#time-entry-edit-modal-${timeEntry._id}`}>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Edit" data-toggle="modal" data-target={`#time-entry-edit-modal-${timeEntry._id}`}>
             <i className="fa fa-pencil-square-o" aria-hidden="true" />
           </button>
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Reject" data-toggle="modal" data-target={`#time-entry-confirm-reject-modal-${timeEntry._id}`}>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Reject" data-toggle="modal" data-target={`#time-entry-confirm-reject-modal-${timeEntry._id}`}>
             <i className="fa fa-ban" aria-hidden="true" />
           </button>
         </div>
@@ -121,16 +135,16 @@ class TimeEntryTableActions extends Component {
     } if (timeEntry.status === 'submitted') {
       return (
         <div className="d-inline">
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Approve" onClick={this.onApproveTimeEntryClick.bind(this)}>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Approve" onClick={this.onApproveTimeEntryClick.bind(this)}>
             <i className="fa fa-check-circle-o" aria-hidden="true" />
           </button>
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Hide" onClick={this.onHideTimeEntryClick.bind(this)}>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Hide" onClick={this.onHideTimeEntryClick.bind(this)}>
             <i className="fa fa-eye-slash" aria-hidden="true" />
           </button>
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Edit" data-toggle="modal" data-target={`#time-entry-edit-modal-${timeEntry._id}`}>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Edit" data-toggle="modal" data-target={`#time-entry-edit-modal-${timeEntry._id}`}>
             <i className="fa fa-pencil-square-o" aria-hidden="true" />
           </button>
-          <button type="button" className={`btn-link time-entry-table-action time-entry-table-action-${timeEntry._id}`} title="Reject" data-toggle="modal" data-target={`#time-entry-confirm-reject-modal-${timeEntry._id}`}>
+          <button type="button" className={`btn-link company-time-entry-table-action company-time-entry-table-action-${timeEntry._id}`} title="Reject" data-toggle="modal" data-target={`#time-entry-confirm-reject-modal-${timeEntry._id}`}>
             <i className="fa fa-ban" aria-hidden="true" />
           </button>
         </div>

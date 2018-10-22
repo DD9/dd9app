@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-const CompanyHourLogTable = ({ tableTitle, companyHourLogs, defaultPageSize, minRows }) => {
+const CompanyOneCompanyHourLogsTable = ({ tableTitle, companyHourLogs, defaultPageSize, minRows }) => {
   const columns = [{
     Header: () => (
       <span className="table-title-font-size">{tableTitle}</span>
@@ -25,7 +25,7 @@ const CompanyHourLogTable = ({ tableTitle, companyHourLogs, defaultPageSize, min
       },
       maxWidth: 120,
     }, {
-      Header: 'Company Hour Log Title',
+      Header: 'Title',
       id: 'title',
       accessor: data => {
         if (data.totalSubmittedHours > 0) {
@@ -64,4 +64,4 @@ const CompanyHourLogTable = ({ tableTitle, companyHourLogs, defaultPageSize, min
   );
 };
 
-export default CompanyHourLogTable;
+export default CompanyOneCompanyHourLogsTable;

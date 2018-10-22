@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 import { editCompany, activateCompany, deactivateCompany } from '../../actions/company';
 
-class CompanyCreate extends Component {
+class CompanyOneControls extends Component {
   componentDidMount() {
     $('#companyEditModal').on('hidden.bs.modal', () => {
       this.props.reset();
@@ -152,4 +152,4 @@ export default connect(null, { editCompany, activateCompany, deactivateCompany }
   form: 'editCompany',
   enableReinitialize: true,
   validate,
-})(CompanyCreate));
+})(CompanyOneControls));

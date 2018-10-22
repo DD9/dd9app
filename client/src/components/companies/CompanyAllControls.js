@@ -6,7 +6,7 @@ import $ from 'jquery';
 import { createCompany } from '../../actions/company';
 
 
-class CompanyCreate extends Component {
+class CompanyAllControls extends Component {
   componentDidMount() {
     $('#companyCreateModal').on('hidden.bs.modal', () => {
       this.props.reset();
@@ -87,4 +87,4 @@ function validate(values, props) {
 export default connect(null, { createCompany })(reduxForm({
   form: 'createCompany',
   validate,
-})(CompanyCreate));
+})(CompanyAllControls));

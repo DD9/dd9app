@@ -128,15 +128,19 @@ function validate(values) {
   if (!values.date) {
     errors.date = 'Enter a date.';
   }
+
   if (!values.company || values.company === -1) {
     errors.company = 'Select company.';
   }
+
   if (!values.hours || values.hours < 0) {
     errors.hours = 'Enter a value greater than or equal to 0.';
   }
+
   if (values.hours > 100) {
     errors.hours = 'Enter a value less than 100.';
   }
+
   if (!values.description) {
     errors.description = 'Enter a description.';
   }

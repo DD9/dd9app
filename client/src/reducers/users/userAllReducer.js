@@ -1,12 +1,12 @@
 /* eslint no-trailing-spaces:0 */
 
-import { GET_USERS, ADMIN_EDIT_USERS } from '../../actions/types';
+import { GET_ALL_USERS, ADMIN_EDIT_USERS } from '../../actions/types';
 
 const INITIAL_STATE = [];
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case GET_USERS:
+    case GET_ALL_USERS:
       return action.payload || false;
 
     case ADMIN_EDIT_USERS: {

@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 
 const CompanyHourLog = mongoose.model('CompanyHourLog');
+const ContractorHourLog = mongoose.model('ContractorHourLog');
 const TimeEntry = mongoose.model('TimeEntry');
 
 exports.created = async (req, res) => {
   const createdTimeEntries = await TimeEntry.find({ status: 'created', user: req.user._id })
     .populate('publicCompany', 'name')
-    .populate('publicUser', 'firstName lastName');
+    .populate('publicUser', 'name');
 
   res.json(createdTimeEntries);
 };
@@ -26,9 +27,11 @@ exports.create = async (req, res) => {
     status: 'created',
   }).save();
 
+  await createOrFindAndUpdateCurrentContractorHourLog(newTimeEntry);
+
   const populatedTimeEntry = await TimeEntry.findOne({ _id: newTimeEntry._id })
     .populate('publicCompany', 'name')
-    .populate('publicUser', 'firstName lastName');
+    .populate('publicUser', 'name');
 
   res.json(populatedTimeEntry);
 };
@@ -91,12 +94,12 @@ exports.adjudicate = async (req, res) => {
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
   const companyHourLog = await CompanyHourLog.findOne({ _id: timeEntry.companyHourLog }).populate('timeEntries');
 
-  // If transferring the time entry to another companies hour log
+  // If transferring the timeEntry to another companies companyHourLog
   if (timeEntry.publicCompany.toString() !== req.body.company.toString()) {
     await companyHourLog.update({ $pull: { timeEntries: timeEntry._id } });
 
     let receivingCompanyHourLog = await CompanyHourLog.findOne({ title: 'Current', company: req.body.company });
-    // If there's no current hour log for the company that a time entry is being transferred to, create one
+    // If there's no current companyHourLog for the company that a timeEntry is being transferred to, create one
     if (!receivingCompanyHourLog) {
       receivingCompanyHourLog = await (new CompanyHourLog({
         company: req.body.company,
@@ -108,7 +111,7 @@ exports.adjudicate = async (req, res) => {
     }
     timeEntry.companyHourLog = receivingCompanyHourLog._id;
 
-    // Subtract current hours on sending hour log, add new hours to receiving hour log
+    // Subtract current hours on sending companyHourLog, add new hours to receiving companyHourLog
     if (timeEntry.status === 'approved') {
       companyHourLog.totalPublicHours -= timeEntry.publicHours;
       receivingCompanyHourLog.totalPublicHours += +req.body.hours;
@@ -338,7 +341,7 @@ exports.newTimeEntryBulkAction = async (req, res) => {
 
   for (let i = 0; i < timeEntries.length; i++) {
     const timeEntry = timeEntries[i];
-    await createOrFindAndUpdateCurrentHourLog(status, timeEntry);
+    await createOrFindAndUpdateCurrentCompanyHourLog(status, timeEntry);
     timeEntry.status = status;
     await timeEntry.save();
   }
@@ -408,7 +411,28 @@ exports.timeEntryInHourLogBulkAction = async (req, res) => {
  * Helper functions
  */
 
-async function createOrFindAndUpdateCurrentHourLog(status, timeEntry) {
+async function createOrFindAndUpdateCurrentContractorHourLog(timeEntry) {
+  let receivingContractorHourLog = await ContractorHourLog.findOne({ title: 'Current', user: timeEntry.user._id});
+
+  // If there's no current contractorHourLog for the user that a timeEntry is being created for, create one
+  if (!receivingContractorHourLog) {
+    receivingContractorHourLog = await (new ContractorHourLog({
+      user: timeEntry.user._id,
+      timeEntries: timeEntry._id,
+      dateClosed: new Date(0),
+      totalCreatedHours: timeEntry.hours,
+    })).save();
+    // Else append to the current contractorHourLog
+  } else if (receivingContractorHourLog) {
+    await receivingContractorHourLog.update({ $addToSet: { timeEntries: timeEntry._id } });
+    receivingContractorHourLog.totalCreatedHours = timeEntry.hours;
+    await receivingContractorHourLog.save();
+  }
+  timeEntry.contractorHourLog = receivingContractorHourLog._id;
+  await timeEntry.save();
+}
+
+async function createOrFindAndUpdateCurrentCompanyHourLog(status, timeEntry) {
   let companyHourLogHoursUpdateParameter;
   if (status === 'approved') companyHourLogHoursUpdateParameter = 'totalPublicHours';
   else if (status === 'hidden') companyHourLogHoursUpdateParameter = 'totalHiddenHours';

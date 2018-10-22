@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-const CompanyTable = ({ companies, defaultPageSize, minRows }) => {
+const CompanyAllTable = ({ companies, defaultPageSize, minRows }) => {
   const columns = [{
     Header: () => (
       <span className="table-title-font-size">Companies</span>
@@ -42,4 +42,4 @@ const CompanyTable = ({ companies, defaultPageSize, minRows }) => {
   );
 };
 
-export default CompanyTable;
+export default CompanyAllTable;

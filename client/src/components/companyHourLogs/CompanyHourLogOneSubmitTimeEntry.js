@@ -11,7 +11,7 @@ import { createAndSubmitTimeEntry } from '../../actions/timeEntry';
 import 'react-datepicker/dist/react-datepicker.css';
 
 
-class CompanyOneHourLogSubmitTimeEntry extends Component {
+class CompanyHourLogOneSubmitTimeEntry extends Component {
   componentDidMount() {
     const { companyHourLogTitle } = this.props;
     if (companyHourLogTitle === 'Current') {
@@ -130,4 +130,4 @@ function validate(values) {
 export default connect(null, { createAndSubmitTimeEntry })(reduxForm({
   form: 'submitTimeEntry',
   validate,
-})(CompanyOneHourLogSubmitTimeEntry));
+})(CompanyHourLogOneSubmitTimeEntry));

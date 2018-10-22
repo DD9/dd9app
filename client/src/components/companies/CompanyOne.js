@@ -2,15 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import SpinnerClipLoader from '../SpinnerClipLoader';
-import CompanyHourLogTable from './CompanyHourLogTable';
-import CompanyHourLogTableControls from './CompanyHourLogTableControls';
+import CompanyOneCompanyHourLogsTable from './CompanyOneCompanyHourLogsTable';
+import CompanyOneControls from './CompanyOneControls';
 
-import { getCompany, getCompanyHourLogs, getAllCompanies, clearCompanyHourLogsState } from '../../actions/company';
+import {
+  getCompany, getCompanyHourLogs, getAllCompanies, clearCompanyHourLogsState,
+} from '../../actions/company';
 
 class CompanyOne extends Component {
   componentDidMount() {
-    this.props.getCompany(this.props.match.params.companyId);
-    this.props.getCompanyHourLogs(this.props.match.params.companyId);
+    const { match } = this.props;
+    this.props.getCompany(match.params.companyId);
+    this.props.getCompanyHourLogs(match.params.companyId);
     this.props.getAllCompanies();
   }
 
@@ -19,9 +22,7 @@ class CompanyOne extends Component {
   }
 
   renderContent() {
-    const {
-      company, companyHourLogs, companies,
-    } = this.props;
+    const { company, companyHourLogs, companies } = this.props;
     if (!companyHourLogs[0]) {
       return (
         <div>
@@ -31,14 +32,18 @@ class CompanyOne extends Component {
     }
     return (
       <div>
-        <CompanyHourLogTable
-          tableTitle={`${company.name || ''} - ${company.status.toString().toUpperCase() || ''}`}
+        <CompanyOneCompanyHourLogsTable
+          tableTitle={`Company Hour Logs for ${company.name || ''}`}
           companyHourLogs={companyHourLogs}
           key={companyHourLogs}
           defaultPageSize={companyHourLogs.length}
           minRows={companyHourLogs.length}
         />
-        <CompanyHourLogTableControls company={company} companies={companies} initialValues={{ name: company.name }} />
+        <CompanyOneControls
+          company={company}
+          companies={companies}
+          initialValues={{ name: company.name }}
+        />
       </div>
     );
   }
@@ -56,4 +61,6 @@ function mapStateToProps({ company, companyHourLogs, companies }) {
   return { company, companyHourLogs, companies };
 }
 
-export default connect(mapStateToProps, { getCompany, getCompanyHourLogs, getAllCompanies, clearCompanyHourLogsState })(CompanyOne);
+export default connect(mapStateToProps, {
+  getCompany, getCompanyHourLogs, getAllCompanies, clearCompanyHourLogsState,
+})(CompanyOne);

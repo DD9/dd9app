@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { AUTH_USER, AUTH_ERROR } from './types';
 
 export const getCurrentUser = () => async dispatch => {
-  const res = await axios.get('/api/v1/user/current');
+  const res = await axios.get('/api/v1/auth/current');
 
   try {
     localStorage.setItem('token', res.data._id);
@@ -13,7 +13,7 @@ export const getCurrentUser = () => async dispatch => {
   }
 
   if (res.data) {
-    toast.info(`Welcome ${res.data.firstName} ${res.data.lastName}`, {
+    toast.info(`Welcome ${res.data.name.full}`, {
       position: 'top-right',
       autoClose: 5000,
       hideProgressBar: true,

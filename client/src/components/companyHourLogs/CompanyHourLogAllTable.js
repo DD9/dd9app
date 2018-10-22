@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-const ContractorAllHourLogTable = ({ tableTitle, companyHourLogs, showPagination, defaultPageSize, minRows }) => {
+const CompanyHourLogAllTable = ({ tableTitle, companyHourLogs, showPagination, defaultPageSize, minRows }) => {
   const columns = [{
     Header: () => (
       <span className="table-title-font-size">{tableTitle}</span>
@@ -25,33 +25,28 @@ const ContractorAllHourLogTable = ({ tableTitle, companyHourLogs, showPagination
       },
       maxWidth: 100,
     }, {
-      Header: 'Contractor',
-      id: 'contractor',
-      accessor: data => <Link to={`/contractor/${data.user._id}`}>`${data.firstName} ${data.lastName}`</Link>,
+      Header: 'Company',
+      id: 'company',
+      accessor: data => <Link to={`/company/${data.company._id}`}>{data.company.name}</Link>,
       sortMethod: ((a, b) => (a.props.children > b.props.children ? 1 : -1)),
     }, {
       Header: 'Title',
       id: 'title',
       accessor: data => {
         if (data.totalSubmittedHours > 0) {
-          return <Link to={`/hourLog/contractor/${data._id}`}><b>{data.title}*</b></Link>;
+          return <Link to={`/hourLog/company/${data._id}`}><b>{data.title}*</b></Link>;
         }
-        return <Link to={`/hourLog/contractor/${data._id}`}>{data.title}</Link>;
+        return <Link to={`/hourLog/company/${data._id}`}>{data.title}</Link>;
       },
       sortMethod: ((a, b) => (a.props.children > b.props.children ? 1 : -1)),
     }, {
-      Header: 'Submitted',
-      accessor: 'totalSubmittedHours',
+      Header: 'Hours',
+      accessor: 'totalPublicHours',
       maxWidth: 70,
     }, {
-      Header: 'Pending',
-      id: 'pending',
-      Cell: data => <span style={{ color: '#AAAAAA' }}>0</span>,
-      maxWidth: 70,
-    }, {
-      Header: 'Payment',
-      id: 'payment',
-      Cell: data => <span style={{ color: '#AAAAAA' }}>0</span>,
+      Header: 'Hidden',
+      accessor: 'totalHiddenHours',
+      Cell: data => <span style={{ color: '#AAAAAA' }}>{data.original.totalHiddenHours}</span>,
       maxWidth: 70,
     }],
   }];
@@ -79,4 +74,4 @@ const ContractorAllHourLogTable = ({ tableTitle, companyHourLogs, showPagination
   );
 };
 
-export default ContractorAllHourLogTable;
+export default CompanyHourLogAllTable;

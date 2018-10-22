@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-const CompanyAllHourLogTable = ({ tableTitle, companyHourLogs, showPagination, defaultPageSize, minRows }) => {
+const ContractorHourLogAllTable = ({ tableTitle, contractorHourLogs, showPagination, defaultPageSize, minRows }) => {
   const columns = [{
     Header: () => (
       <span className="table-title-font-size">{tableTitle}</span>
@@ -25,35 +25,43 @@ const CompanyAllHourLogTable = ({ tableTitle, companyHourLogs, showPagination, d
       },
       maxWidth: 100,
     }, {
-      Header: 'Company',
-      id: 'company',
-      accessor: data => <Link to={`/company/${data.company._id}`}>{data.company.name}</Link>,
+      Header: 'Contractor',
+      id: 'contractor',
+      accessor: data => <Link to={`/user/${data.user._id}/contractorHourLogs`}>{data.user.name.full}</Link>,
       sortMethod: ((a, b) => (a.props.children > b.props.children ? 1 : -1)),
     }, {
       Header: 'Title',
       id: 'title',
       accessor: data => {
         if (data.totalSubmittedHours > 0) {
-          return <Link to={`/hourLog/company/${data._id}`}><b>{data.title}*</b></Link>;
+          return <Link to={`/hourLog/contractor/${data._id}`}><b>{data.title}*</b></Link>;
         }
-        return <Link to={`/hourLog/company/${data._id}`}>{data.title}</Link>;
+        return <Link to={`/hourLog/contractor/${data._id}`}>{data.title}</Link>;
       },
       sortMethod: ((a, b) => (a.props.children > b.props.children ? 1 : -1)),
     }, {
-      Header: 'Hours',
-      accessor: 'totalPublicHours',
-      maxWidth: 70,
+      Header: 'Submitted',
+      accessor: 'totalSubmittedHours',
+      maxWidth: 80,
     }, {
-      Header: 'Hidden',
-      accessor: 'totalHiddenHours',
-      Cell: data => <span style={{ color: '#AAAAAA' }}>{data.original.totalHiddenHours}</span>,
-      maxWidth: 70,
+      Header: 'Created',
+      id: 'created',
+      Cell: data => <span style={{ color: '#AAAAAA' }}>{data.original.totalCreatedHours}</span>,
+      maxWidth: 80,
+    }, {
+      Header: 'Rate',
+      id: 'rate',
+      Cell: data =>
+        <span style={{ color: '#AAAAAA' }}>
+          {`$${((data.original.totalSubmittedHours * data.original.user.hourlyRate[0].USD) + (data.original.totalCreatedHours * data.original.user.hourlyRate[0].USD)).toFixed(2)}`}
+        </span>,
+      maxWidth: 80,
     }],
   }];
 
   return (
     <ReactTable
-      data={companyHourLogs}
+      data={contractorHourLogs}
       columns={columns}
       showPagination={showPagination}
       defaultPageSize={defaultPageSize}
@@ -74,4 +82,4 @@ const CompanyAllHourLogTable = ({ tableTitle, companyHourLogs, showPagination, d
   );
 };
 
-export default CompanyAllHourLogTable;
+export default ContractorHourLogAllTable;

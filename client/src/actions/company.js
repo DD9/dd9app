@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 import {
-  GET_ALL_COMPANIES, GET_COMPANY, GET_COMPANY_HOUR_LOGS, CLEAR_COMPANY_HOUR_LOG_STATE, GET_ACTIVE_COMPANIES, CREATE_COMPANY, EDIT_COMPANY, ACTIVATE_COMPANY, DEACTIVATE_COMPANY,
+  GET_ALL_COMPANIES, GET_COMPANY, GET_COMPANY_HOUR_LOGS, CLEAR_COMPANY_HOUR_LOGS_STATE, GET_ACTIVE_COMPANIES, CREATE_COMPANY, EDIT_COMPANY, ACTIVATE_COMPANY, DEACTIVATE_COMPANY,
 } from './types';
 
 export const getAllCompanies = () => async dispatch => {
@@ -24,7 +24,7 @@ export const getCompanyHourLogs = companyId => async dispatch => {
 };
 
 export const clearCompanyHourLogsState = () => async dispatch => {
-  dispatch({ type: CLEAR_COMPANY_HOUR_LOG_STATE, payload: {} });
+  dispatch({ type: CLEAR_COMPANY_HOUR_LOGS_STATE, payload: {} });
 };
 
 export const getActiveCompanies = () => async dispatch => {

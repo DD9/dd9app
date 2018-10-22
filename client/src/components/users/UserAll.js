@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { getUsers } from '../../actions/user';
+import { getAllUsers } from '../../actions/user';
 import { getActiveCompanies } from '../../actions/company';
 
-import UserTable from './UserTable';
-import UserTableControls from './UserTableControls';
+import UserAllTable from './UserAllTable';
+import UserAllControls from './UserAllControls';
 
 class UserAll extends Component {
   componentDidMount() {
-    this.props.getUsers();
+    this.props.getAllUsers();
     this.props.getActiveCompanies();
   }
 
@@ -17,13 +17,13 @@ class UserAll extends Component {
     const { users, activeCompanies } = this.props;
     return (
       <div className="container table-font-size">
-        <UserTable
+        <UserAllTable
           users={users}
           activeCompanies={activeCompanies}
           key={users}
           defaultPageSize={users.length}
           minRows={users.length === 0 ? 20 : users.length} />
-        <UserTableControls />
+        <UserAllControls />
       </div>
     );
   }
@@ -33,4 +33,4 @@ function mapStateToProps({ users, activeCompanies }) {
   return { users, activeCompanies };
 }
 
-export default connect(mapStateToProps, { getUsers, getActiveCompanies })(UserAll);
+export default connect(mapStateToProps, { getAllUsers, getActiveCompanies })(UserAll);

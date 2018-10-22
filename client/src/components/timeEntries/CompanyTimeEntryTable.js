@@ -7,7 +7,7 @@ import 'react-table/react-table.css';
 import TimeEntryTableActions from './TimeEntryTableActions';
 import TimeEntryTableBulkActions from './TimeEntryTableBulkActions';
 
-const TimeEntryTable = ({
+const CompanyTimeEntryTable = ({
   auth, companyHourLogTitle, tableTitle, timeEntries, match, activeUsers, activeCompanies, defaultPageSize, minRows,
 }) => {
 
@@ -115,7 +115,7 @@ const TimeEntryTable = ({
       }, {
         Header: 'User',
         id: 'publicUser',
-        Cell: timeEntry => `${timeEntry.original.publicUser.firstName} ${timeEntry.original.publicUser.lastName}`,
+        Cell: timeEntry => <Link to={`/user/${timeEntry.original.publicUser._id}/contractorHourLogs`}>{timeEntry.original.publicUser.name.full}</Link>,
         maxWidth: 125,
       }, {
         Header: 'Company',
@@ -163,7 +163,7 @@ const TimeEntryTable = ({
               <tbody>
                 <tr>
                   <td>{row.original.date}</td>
-                  <td>{row.original.user.firstName} {row.original.user.lastName}</td>
+                  <td>{row.original.user.name.full}</td>
                   <td>{row.original.company.name}</td>
                   <td>{row.original.hours}</td>
                   <td>{row.original.description}</td>
@@ -177,7 +177,7 @@ const TimeEntryTable = ({
   }
 
   /**
-   * Open CompanyHourLog timeEntry tables default
+   * Open companyHourLog timeEntry tables default
    */
   columns = [{
     Header: () => (
@@ -191,7 +191,7 @@ const TimeEntryTable = ({
     }, {
       Header: 'User',
       id: 'publicUser',
-      Cell: timeEntry => `${timeEntry.original.publicUser.firstName} ${timeEntry.original.publicUser.lastName}`,
+      Cell: timeEntry => <Link to={`/user/${timeEntry.original.publicUser._id}/contractorHourLogs`}>{timeEntry.original.publicUser.name.full}</Link>,
       maxWidth: 125,
     }, {
       Header: 'Company',
@@ -264,7 +264,7 @@ const TimeEntryTable = ({
             <tbody>
               <tr>
                 <td>{row.original.date}</td>
-                <td>{row.original.user.firstName} {row.original.user.lastName}</td>
+                <td>{row.original.user.name.full}</td>
                 <td>{row.original.company.name}</td>
                 <td>{row.original.hours}</td>
                 <td>{row.original.description}</td>
@@ -277,4 +277,4 @@ const TimeEntryTable = ({
   );
 };
 
-export default TimeEntryTable;
+export default CompanyTimeEntryTable;

@@ -5,16 +5,16 @@ import $ from 'jquery';
 
 
 import SpinnerClipLoader from '../SpinnerClipLoader';
-import CompanyOneHourLogControls from './CompanyOneHourLogControls';
-import TimeEntryTable from '../timeEntries/TimeEntryTable';
-import CompanyOneHourLogSubmitTimeEntry from './CompanyOneHourLogSubmitTimeEntry';
+import CompanyHourLogOneControls from './CompanyHourLogOneControls';
+import CompanyTimeEntryTable from '../timeEntries/CompanyTimeEntryTable';
+import CompanyHourLogOneSubmitTimeEntry from './CompanyHourLogOneSubmitTimeEntry';
 
 import { getCompanyHourLog } from '../../actions/companyHourLog';
 import { getActiveUsers } from '../../actions/user';
 import { getActiveCompanies } from '../../actions/company';
 
 
-class CompanyOneHourLog extends Component {
+class CompanyHourLogOne extends Component {
   componentDidMount() {
     const { match } = this.props;
     this.props.getCompanyHourLog(match.params.companyHourLogId);
@@ -23,7 +23,7 @@ class CompanyOneHourLog extends Component {
   }
 
   componentDidUpdate() {
-    $('.time-entry-table-bulk-action').attr('disabled', false);
+    $('.company-time-entry-table-bulk-action').attr('disabled', false);
   }
 
   render() {
@@ -55,13 +55,13 @@ class CompanyOneHourLog extends Component {
 
     return (
       <div className="container table-font-size">
-        <CompanyOneHourLogControls
+        <CompanyHourLogOneControls
           companyHourLog={companyHourLog}
           initialValues={companyHourLog.title === 'Current' ? { title: moment.utc().format('YYYY-MM-DD') } : { title: companyHourLog.title }}
           timeEntries={approvedTimeEntries}
         />
         <div className="m-5" />
-        <TimeEntryTable
+        <CompanyTimeEntryTable
           auth={auth}
           companyHourLogTitle={companyHourLog.title}
           tableTitle="Approved Time Entries"
@@ -74,7 +74,7 @@ class CompanyOneHourLog extends Component {
           minRows={approvedTimeEntries.length}
         />
         <div className="m-5" />
-        <TimeEntryTable
+        <CompanyTimeEntryTable
           auth={auth}
           companyHourLogTitle={companyHourLog.title}
           tableTitle="Hidden Time Entries"
@@ -87,7 +87,7 @@ class CompanyOneHourLog extends Component {
           minRows={hiddenTimeEntries.length}
         />
         <div className="m-5" />
-        <TimeEntryTable
+        <CompanyTimeEntryTable
           auth={auth}
           companyHourLogTitle={companyHourLog.title}
           tableTitle="Submitted Time Entries"
@@ -100,7 +100,7 @@ class CompanyOneHourLog extends Component {
           minRows={submittedTimeEntries.length}
         />
         <div className="m-5" />
-        <CompanyOneHourLogSubmitTimeEntry
+        <CompanyHourLogOneSubmitTimeEntry
           company={companyHourLog.company || ''}
           companyHourLogTitle={companyHourLog.title}
           companyHourLogId={match.params.companyHourLogId}
@@ -114,4 +114,4 @@ function mapStateToProps({ companyHourLog, activeUsers, activeCompanies }) {
   return { companyHourLog, activeUsers, activeCompanies };
 }
 
-export default connect(mapStateToProps, { getCompanyHourLog, getActiveUsers, getActiveCompanies })(CompanyOneHourLog);
+export default connect(mapStateToProps, { getCompanyHourLog, getActiveUsers, getActiveCompanies })(CompanyHourLogOne);

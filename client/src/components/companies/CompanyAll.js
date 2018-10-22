@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 
 import { getAllCompanies } from '../../actions/company';
 
-import CompanyTableControls from './CompanyTableControls';
-import CompanyTable from './CompanyTable';
+import CompanyAllTable from './CompanyAllTable';
+import CompanyAllControls from './CompanyAllControls';
 
 class CompanyAll extends Component {
   componentDidMount() {
@@ -15,13 +15,13 @@ class CompanyAll extends Component {
     const { companies } = this.props;
     return (
       <div className="container table-font-size">
-        <CompanyTable
+        <CompanyAllTable
           companies={companies}
           key={companies}
           defaultPageSize={companies.length}
           minRows={companies.length === 0 ? 20 : companies.length}
         />
-        <CompanyTableControls companies={companies} />
+        <CompanyAllControls companies={companies} />
       </div>
     );
   }

@@ -9,7 +9,7 @@ import UserOneAdminEditForm from './UserOneAdminEditForm';
 import UserOneEditForm from './UserOneEditForm';
 
 
-class UserOne extends Component {
+class UserOneEdit extends Component {
   componentDidMount() {
     this.props.getUser(this.props.auth._id);
     this.props.getActiveCompanies();
@@ -31,8 +31,9 @@ class UserOne extends Component {
               company: user.company._id,
               role: user.role,
               status: user.status,
-              firstName: user.firstName,
-              lastName: user.lastName,
+              hourlyRate: user.hourlyRate[0].USD,
+              firstName: user.name.first,
+              lastName: user.name.last,
             }}
           />
         );
@@ -46,8 +47,9 @@ class UserOne extends Component {
               company: user.company._id,
               role: user.role,
               status: user.status,
-              firstName: user.firstName,
-              lastName: user.lastName,
+              hourlyRate: user.hourlyRate[0].USD,
+              firstName: user.name.first,
+              lastName: user.name.last,
             }}
           />
         );
@@ -67,4 +69,4 @@ function mapStateToProps({ auth, user, activeCompanies }) {
   return { auth, user, activeCompanies };
 }
 
-export default connect(mapStateToProps, { getUser, getActiveCompanies, getCurrentUser })(UserOne);
+export default connect(mapStateToProps, { getUser, getActiveCompanies, getCurrentUser })(UserOneEdit);

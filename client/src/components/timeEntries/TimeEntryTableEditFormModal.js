@@ -61,7 +61,7 @@ class TimeEntryTableEditFormModal extends Component {
             <option value="-1" disabled>{`Select a ${field.label.toLowerCase()}`}</option>
             {
               field.selectOptions
-                ? field.selectOptions.map((option) => (<option key={option._id} value={option._id}>{`${option.firstName} ${option.lastName}`}</option>))
+                ? field.selectOptions.map((option) => (<option key={option._id} value={option._id}>{`${option.name.full}`}</option>))
                 : ''
             }
           </select>

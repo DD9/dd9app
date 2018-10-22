@@ -7,7 +7,7 @@ import $ from 'jquery';
 import { openCompanyHourLog, closeCompanyHourLog, editCompanyHourLog } from '../../actions/companyHourLog';
 import TimeEntryExportedTable from '../timeEntries/TimeEntryExportedTable';
 
-class CompanyOneHourLogControls extends Component {
+class CompanyHourLogOneControls extends Component {
   onHourLogOpenFormSubmit() {
     this.props.openCompanyHourLog(this.props.companyHourLog._id, this.props.history);
     $('#openCompanyHourLogModal').modal('hide');
@@ -180,4 +180,4 @@ export default withRouter(connect(null, { closeCompanyHourLog, openCompanyHourLo
   form: 'editCompanyHourLog',
   enableReinitialize: true,
   validate,
-})(CompanyOneHourLogControls)));
+})(CompanyHourLogOneControls)));

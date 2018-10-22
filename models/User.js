@@ -35,19 +35,21 @@ const userSchema = new Schema({
   lastLoginIP: {
     type: String,
   },
-  firstName: {
-    type: String,
-    required: 'Please supply a first name',
-    trim: true,
-  },
-  lastName: {
-    type: String,
-    required: 'Please supply a last name',
-    trim: true,
+  name: {
+    first: {
+      type: String,
+      required: 'Please supply a first name',
+      trim: true,
+    },
+    last: {
+      type: String,
+      required: 'Please supply a last name',
+      trim: true,
+    },
   },
   role: {
     type: String,
-    default: 'staff',
+    default: 'contractor',
   },
   permissions: {
     type: Array,
@@ -59,9 +61,22 @@ const userSchema = new Schema({
     type: String,
     default: 'active',
   },
+  hourlyRate: {
+    type: Array,
+    default: [{
+      USD: 60.00,
+    }],
+  }
 },
 {
   timestamps: true,
+});
+
+userSchema.set('toObject', { virtuals: true });
+userSchema.set('toJSON', { virtuals: true });
+
+userSchema.virtual('name.full').get(function () {
+  return `${this.name.first} ${this.name.last}`;
 });
 
 // Compound index as text
