@@ -43,7 +43,7 @@ exports.requireLogin = (req, res, next) => {
 };
 
 exports.isOwner = (req, res, next) => {
-  if (req.params.id === req.user._id.toString()) {
+  if (req.params.id === req.user._id.toString() || req.user.permissions[0].admin) {
     return next();
   }
   req.flash('warning', 'Oops, you are not the owner of that entity');

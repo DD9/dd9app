@@ -64,9 +64,9 @@ const userSchema = new Schema({
   hourlyRate: {
     type: Array,
     default: [{
-      USD: 60.00,
+      USD: 60,
     }],
-  }
+  },
 },
 {
   timestamps: true,

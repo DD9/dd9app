@@ -14,7 +14,7 @@ exports.active = async (req, res) => {
 };
 
 exports.one = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.params.id;
   const user = await User.findOne({ _id: userId }).populate('company', 'name');
   res.json(user);
 };
@@ -60,6 +60,6 @@ exports.contractorHourLogs = async (req, res) => {
   const userId = req.params.id;
   const contractorHourLog = await ContractorHourLog.find({ user: userId })
     .populate('user', 'name hourlyRate');
-
+  if (!contractorHourLog[0]) return res.json('empty');
   res.json(contractorHourLog);
 };

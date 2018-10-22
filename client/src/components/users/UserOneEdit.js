@@ -5,6 +5,7 @@ import { getUser } from '../../actions/user';
 import { getActiveCompanies } from '../../actions/company';
 import { getCurrentUser } from '../../actions/auth';
 
+import SpinnerClipLoader from '../SpinnerClipLoader';
 import UserOneAdminEditForm from './UserOneAdminEditForm';
 import UserOneEditForm from './UserOneEditForm';
 
@@ -17,7 +18,7 @@ class UserOneEdit extends Component {
 
   renderContent() {
     const { user, activeCompanies } = this.props;
-    if (!user.permissions) return;
+    if (!user.permissions) return <SpinnerClipLoader />;
     switch (user.permissions[0].admin) {
       case null:
         return;

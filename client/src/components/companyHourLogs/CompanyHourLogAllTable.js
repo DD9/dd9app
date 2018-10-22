@@ -2,9 +2,33 @@ import React from 'react';
 import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
 
+import SpinnerClipLoader from '../SpinnerClipLoader';
+
 import 'react-table/react-table.css';
 
-const CompanyHourLogAllTable = ({ tableTitle, companyHourLogs, showPagination, defaultPageSize, minRows }) => {
+const CompanyHourLogAllTable = ({
+  tableTitle, companyHourLogs, showPagination, defaultPageSize, minRows,
+}) => {
+  if (companyHourLogs === 'empty') {
+    return (
+      <ReactTable
+        data={[]}
+        columns={[{ Header: () => (<span className="table-title-font-size">{tableTitle}</span>) }]}
+        showPagination={false}
+        minRows={4}
+        noDataText="Empty"
+      />
+    );
+  }
+
+  if (!companyHourLogs[0]) {
+    return (
+      <div>
+        <SpinnerClipLoader outerSpacingClasses='py-3 px-3' innerSpacingClasses='py-0'/>
+      </div>
+    );
+  }
+
   const columns = [{
     Header: () => (
       <span className="table-title-font-size">{tableTitle}</span>

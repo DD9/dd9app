@@ -421,6 +421,7 @@ async function createOrFindAndUpdateCurrentContractorHourLog(timeEntry) {
       timeEntries: timeEntry._id,
       dateClosed: new Date(0),
       totalCreatedHours: timeEntry.hours,
+      hourlyRate: timeEntry.user.hourlyRate,
     })).save();
     // Else append to the current contractorHourLog
   } else if (receivingContractorHourLog) {

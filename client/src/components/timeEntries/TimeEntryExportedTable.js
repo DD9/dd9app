@@ -1,6 +1,10 @@
 import React from 'react';
 
 const TimeEntryExportedTable = ({ timeEntries }) => {
+  if (!timeEntries || timeEntries[0] === 'approvedTimeEntries') {
+    return null;
+  }
+
   const rows = timeEntries.map((entry, index) => (
     <tr key={index}>
       <td>{`${entry.publicDate.split('T')[0].split('-')[1]}-${entry.publicDate.split('T')[0].split('-')[2]}`}</td>

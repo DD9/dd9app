@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import $ from 'jquery';
 
-
-import SpinnerClipLoader from '../SpinnerClipLoader';
 import CompanyHourLogOneControls from './CompanyHourLogOneControls';
 import CompanyTimeEntryTable from '../timeEntries/CompanyTimeEntryTable';
 import CompanyHourLogOneSubmitTimeEntry from './CompanyHourLogOneSubmitTimeEntry';
@@ -30,14 +28,6 @@ class CompanyHourLogOne extends Component {
     const {
       auth, companyHourLog, activeUsers, activeCompanies, match,
     } = this.props;
-
-    if (!companyHourLog.timeEntries || companyHourLog._id !== match.params.companyHourLogId) {
-      return (
-        <div>
-          <SpinnerClipLoader />
-        </div>
-      );
-    }
 
     let approvedTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved');
     let hiddenTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'hidden');

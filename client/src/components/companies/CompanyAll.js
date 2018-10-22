@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { getAllCompanies } from '../../actions/company';
 
+import SpinnerClipLoader from '../SpinnerClipLoader';
 import CompanyAllTable from './CompanyAllTable';
 import CompanyAllControls from './CompanyAllControls';
 
@@ -13,6 +14,15 @@ class CompanyAll extends Component {
 
   render() {
     const { companies } = this.props;
+
+    if (!companies[0]) {
+      return (
+        <div>
+          <SpinnerClipLoader />
+        </div>
+      );
+    }
+
     return (
       <div className="container table-font-size">
         <CompanyAllTable

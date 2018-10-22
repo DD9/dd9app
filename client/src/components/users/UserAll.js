@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { getAllUsers } from '../../actions/user';
 import { getActiveCompanies } from '../../actions/company';
 
+import SpinnerClipLoader from '../SpinnerClipLoader';
 import UserAllTable from './UserAllTable';
 import UserAllControls from './UserAllControls';
 
@@ -15,6 +16,15 @@ class UserAll extends Component {
 
   render() {
     const { users, activeCompanies } = this.props;
+
+    if (!users[0]) {
+      return (
+        <div>
+          <SpinnerClipLoader />
+        </div>
+      );
+    }
+
     return (
       <div className="container table-font-size">
         <UserAllTable
@@ -22,7 +32,8 @@ class UserAll extends Component {
           activeCompanies={activeCompanies}
           key={users}
           defaultPageSize={users.length}
-          minRows={users.length === 0 ? 20 : users.length} />
+          minRows={users.length === 0 ? 20 : users.length}
+        />
         <UserAllControls />
       </div>
     );

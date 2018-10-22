@@ -3,8 +3,32 @@ import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
+import SpinnerClipLoader from '../SpinnerClipLoader';
 
-const UserOneContractorOneHourLogsTable = ({ tableTitle, companyHourLogs, defaultPageSize, minRows }) => {
+const UserOneContractorOneHourLogsTable = ({
+  tableTitle, contractorHourLogs, defaultPageSize, minRows,
+}) => {
+  if (contractorHourLogs === 'empty') {
+    return (
+      <ReactTable
+        data={[]}
+        columns={[{ Header: () => (<span className="table-title-font-size">{tableTitle}</span>) }]}
+        showPagination={false}
+        minRows={4}
+        noDataText="Empty"
+      />
+    );
+  }
+
+  if (!contractorHourLogs[0]) {
+    return (
+      <div>
+        <SpinnerClipLoader outerSpacingClasses="py-3 px-3" innerSpacingClasses="py-0" />
+      </div>
+    );
+  }
+
+
   const columns = [{
     Header: () => (
       <span className="table-title-font-size">{tableTitle}</span>
@@ -45,17 +69,18 @@ const UserOneContractorOneHourLogsTable = ({ tableTitle, companyHourLogs, defaul
     }, {
       Header: 'Payment',
       id: 'payment',
-      Cell: data =>
+      Cell: data => (
         <span style={{ color: '#AAAAAA' }}>
-          {(data.original.totalSubmittedHours * data.original.user.hourlyRate[0].USD) + (data.original.totalCreatedHours * data.original.user.hourlyRate[0].USD)}
-        </span>,
+          {`$${((data.original.totalSubmittedHours * parseInt(data.original.hourlyRate[0].USD)) + (data.original.totalCreatedHours * parseInt(data.original.hourlyRate[0].USD))).toFixed(2)}`}
+        </span>
+      ),
       maxWidth: 80,
     }],
   }];
 
   return (
     <ReactTable
-      data={companyHourLogs}
+      data={contractorHourLogs}
       columns={columns}
       showPagination={false}
       defaultPageSize={defaultPageSize}

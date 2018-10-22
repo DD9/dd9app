@@ -27,11 +27,17 @@ const contractorHourLogSchema = new Schema({
     type: String,
     default: 'Current',
   },
-  totalSubmittedHours: {
+  hourlyRate: {
+    type: Array,
+    default: [{
+      USD: 0,
+    }],
+  },
+  totalCreatedHours: {
     type: Number,
     default: 0,
   },
-  totalCreatedHours: {
+  totalSubmittedHours: {
     type: Number,
     default: 0,
   },
@@ -51,10 +57,10 @@ contractorHourLogSchema.index(
 contractorHourLogSchema.plugin(deepPopulate, {
   populate: {
     'timeEntries.user': {
-      select: 'name hourlyRate',
+      select: 'name',
     },
     'timeEntries.publicUser': {
-      select: 'name hourlyRate',
+      select: 'name',
     },
     'timeEntries.company': {
       select: 'name',

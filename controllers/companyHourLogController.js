@@ -5,11 +5,13 @@ const TimeEntry = mongoose.model('TimeEntry');
 
 exports.openHourLogs = async (req, res) => {
   const openCompanyHourLogs = await CompanyHourLog.find({ dateClosed: new Date(0) }).populate('company');
+  if (!openCompanyHourLogs[0]) return res.json('empty');
   res.json(openCompanyHourLogs);
 };
 
 exports.closedHourLogs = async (req, res) => {
   const closedCompanyHourLogs = await CompanyHourLog.find({ dateClosed: { $ne: new Date(0) } }).populate('company').limit(200).sort({ dateOpened: -1 });
+  if (!closedCompanyHourLogs[0]) return res.json('empty');
   res.json(closedCompanyHourLogs);
 };
 

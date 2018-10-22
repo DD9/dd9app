@@ -26,7 +26,7 @@ class CompanyHourLogOne extends Component {
       auth, contractorHourLog, match,
     } = this.props;
 
-    if (!contractorHourLog.timeEntries || contractorHourLog._id !== match.params.contractorHourLogId) {
+    if (!contractorHourLog.timeEntries[0]) {
       return (
         <div>
           <SpinnerClipLoader />
@@ -55,6 +55,7 @@ class CompanyHourLogOne extends Component {
         <ContractorTimeEntryTable
           auth={auth}
           contractorHourLogTitle={contractorHourLog.title}
+          contractorHourLogHourlyRate={contractorHourLog.hourlyRate[0].USD}
           tableTitle="Created Time Entries"
           timeEntries={createdTimeEntries[0] !== 'createdTimeEntries' ? createdTimeEntries : []}
           match={match}
@@ -66,6 +67,7 @@ class CompanyHourLogOne extends Component {
         <ContractorTimeEntryTable
           auth={auth}
           contractorHourLogTitle={contractorHourLog.title}
+          contractorHourLogHourlyRate={contractorHourLog.hourlyRate[0].USD}
           tableTitle="Submitted Time Entries"
           timeEntries={submittedTimeEntries[0] !== 'submittedTimeEntries' ? submittedTimeEntries : []}
           match={match}

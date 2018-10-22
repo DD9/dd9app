@@ -19,14 +19,6 @@ exports.one = async (req, res) => {
   res.json(company);
 };
 
-exports.companyHourLogs = async (req, res) => {
-  const companyId = req.params.id;
-  const companyHourLogs = await CompanyHourLog.find({ company: companyId })
-    .populate('company', 'name')
-    .select('company dateOpened dateClosed title totalPublicHours totalHiddenHours totalSubmittedHours');
-  res.json(companyHourLogs);
-};
-
 exports.create = async (req, res) => {
   const company = await (new Company(req.body)).save();
   res.json(company);
@@ -54,4 +46,13 @@ exports.deactivate = async (req, res) => {
   company.status = 'inactive';
   await company.save();
   return res.json(company);
+};
+
+exports.companyHourLogs = async (req, res) => {
+  const companyId = req.params.id;
+  const companyHourLogs = await CompanyHourLog.find({ company: companyId })
+    .populate('company', 'name')
+    .select('company dateOpened dateClosed title totalPublicHours totalHiddenHours totalSubmittedHours');
+  if (!companyHourLogs[0]) return res.json('empty');
+  res.json(companyHourLogs);
 };

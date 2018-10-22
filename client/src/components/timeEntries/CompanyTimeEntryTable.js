@@ -10,7 +10,6 @@ import TimeEntryTableBulkActions from './TimeEntryTableBulkActions';
 const CompanyTimeEntryTable = ({
   auth, companyHourLogTitle, tableTitle, timeEntries, match, activeUsers, activeCompanies, defaultPageSize, minRows,
 }) => {
-
   let columns;
 
   /**

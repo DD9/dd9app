@@ -19,18 +19,20 @@ class ContractorOne extends Component {
 
   renderContent() {
     const { user, contractorHourLogs } = this.props;
-    if (!user.hourlyRate || !contractorHourLogs[0]) {
+
+    if (!user.hourlyRate) {
       return (
         <div>
           <SpinnerClipLoader />
         </div>
       );
     }
+
     return (
       <div>
         <UserOneContractorOneHourLogsTable
           tableTitle={`Contractor Hour Logs for ${user.name.full || ''} - $${user.hourlyRate[0].USD || ''}/hr`}
-          companyHourLogs={contractorHourLogs}
+          contractorHourLogs={contractorHourLogs}
           key={contractorHourLogs}
           defaultPageSize={contractorHourLogs.length}
           minRows={contractorHourLogs.length}

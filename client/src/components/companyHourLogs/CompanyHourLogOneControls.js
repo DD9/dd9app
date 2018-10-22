@@ -61,6 +61,7 @@ class CompanyHourLogOneControls extends Component {
 
   render() {
     const { handleSubmit, timeEntries } = this.props;
+
     return (
       <div className="py-1 px-3 bg-white rounded box-shadow">
         <div className="py-2">

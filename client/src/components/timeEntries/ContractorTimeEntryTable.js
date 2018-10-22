@@ -5,15 +5,14 @@ import { Link } from 'react-router-dom';
 import 'react-table/react-table.css';
 
 const ContractorTimeEntryTable = ({
-  auth, companyHourLogTitle, tableTitle, timeEntries, match, activeUsers, activeCompanies, defaultPageSize, minRows,
+  auth, contractorHourLogTitle, contractorHourLogHourlyRate, tableTitle, timeEntries, match, defaultPageSize, minRows,
 }) => {
-
   let columns;
 
   /**
    * Open contractorHourLog Time Entries Table
    */
-  if (companyHourLogTitle !== 'Current') {
+  if (contractorHourLogTitle !== 'Current') {
     columns = [{
       Header: () => (
         <span className="table-title-font-size">{tableTitle}</span>
@@ -44,7 +43,7 @@ const ContractorTimeEntryTable = ({
         id: 'rate',
         accessor: timeEntry =>
           <span style={{ color: '#AAAAAA' }}>
-            {`$${((timeEntry.hours * timeEntry.user.hourlyRate[0].USD) + (timeEntry.hours * timeEntry.user.hourlyRate[0].USD)).toFixed(2)}`}
+            {`$${((timeEntry.hours * contractorHourLogHourlyRate.toFloat) + (timeEntry.hours * contractorHourLogHourlyRate.toFloat)).toFixed(2)}`}
           </span>,
         maxWidth: 80,
       }, {
@@ -84,7 +83,7 @@ const ContractorTimeEntryTable = ({
                 <td>{row.original.publicUser.name.full}</td>
                 <td>{row.original.publicCompany.name}</td>
                 <td>{row.original.publicHours}</td>
-                <td>{`$${((row.original.hours * row.original.user.hourlyRate[0].USD) + (row.original.hours * row.original.user.hourlyRate[0].USD)).toFixed(2)}`}</td>
+                <td>{`$${((row.original.hours * contractorHourLogHourlyRate.toFloat) + (row.original.hours * contractorHourLogHourlyRate.toFloat)).toFixed(2)}`}</td>
                 <td>{row.original.publicDescription}</td>
               </tr>
               </tbody>
@@ -128,7 +127,7 @@ const ContractorTimeEntryTable = ({
       id: 'rate',
       accessor: timeEntry =>
         <span style={{ color: '#AAAAAA' }}>
-          {`$${((timeEntry.hours * timeEntry.user.hourlyRate[0].USD) + (timeEntry.original.hours * timeEntry.original.user.hourlyRate[0].USD)).toFixed(2)}`}
+          {`$${((timeEntry.hours * contractorHourLogHourlyRate) + (timeEntry.original.hours * timeEntry.original.user.hourlyRate[0].USD)).toFixed(2)}`}
         </span>,
       maxWidth: 80,
     }, {

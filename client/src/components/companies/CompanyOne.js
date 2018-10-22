@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import SpinnerClipLoader from '../SpinnerClipLoader';
 import CompanyOneCompanyHourLogsTable from './CompanyOneCompanyHourLogsTable';
 import CompanyOneControls from './CompanyOneControls';
 
@@ -23,13 +22,7 @@ class CompanyOne extends Component {
 
   renderContent() {
     const { company, companyHourLogs, companies } = this.props;
-    if (!companyHourLogs[0]) {
-      return (
-        <div>
-          <SpinnerClipLoader />
-        </div>
-      );
-    }
+
     return (
       <div>
         <CompanyOneCompanyHourLogsTable
