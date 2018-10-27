@@ -52,10 +52,13 @@ export const closeContractorHourLog = (contractorHourLogId, formProps, history) 
       pauseOnHover: true,
       draggable: true,
     });
-    const getContractorHourLogs = await axios.get(`/api/v1/user/${closeContractorHourLogRes.data.userId}/contractorHourLogs`);
+    const openContractorHourLogsRes = await axios.get('/api/v1/hourLogs/contractor/open');
+    const closedContractorHourLogsRes = await axios.get('/api/v1/hourLogs/contractor/closed');
 
     history.push(closeContractorHourLogRes.data.redirectUrl);
-    dispatch({ type: GET_CONTRACTOR_HOUR_LOGS, payload: getContractorHourLogs.data });
+
+    dispatch({ type: GET_OPEN_CONTRACTOR_HOUR_LOGS, payload: openContractorHourLogsRes.data });
+    dispatch({ type: GET_CLOSED_CONTRACTOR_HOUR_LOGS, payload: closedContractorHourLogsRes.data });
   } else {
     toast.success('Successfully closed hour log', {
       position: 'top-right',

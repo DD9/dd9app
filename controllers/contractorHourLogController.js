@@ -36,13 +36,13 @@ exports.close = async (req, res) => {
   const contractorHourLog = await ContractorHourLog.findOne({ _id: contractorHourLogId }).populate('timeEntries');
 
   if (contractorHourLog.totalCreatedHours !== 0) {
-    return res.json({error: 'cannot close a contractor hour log containing created time entries, please submit them'});
+    return res.json({ error: 'cannot close a contractor hour log containing created time entries, please submit them' });
   }
 
   // Delete a contractorHourLog if it's empty
   if (contractorHourLog.totalCreatedHours === 0 && contractorHourLog.totalSubmittedHours === 0) {
     await contractorHourLog.remove();
-    return res.json({ redirectUrl: `/user/${contractorHourLog.user._id}/contractorHourLogs`, userId: contractorHourLog.user._id });
+    return res.json({ redirectUrl: '/hourLog/contractor/all' });
   }
 
   contractorHourLog.title = req.body.title;
