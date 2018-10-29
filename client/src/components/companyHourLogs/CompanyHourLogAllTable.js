@@ -58,9 +58,9 @@ const CompanyHourLogAllTable = ({
       id: 'title',
       accessor: data => {
         if (data.totalSubmittedHours > 0) {
-          return <Link to={`/hourLog/company/${data._id}`}><b>{data.title}*</b></Link>;
+          return <Link to={`/companyHourLogs/${data._id}`}><b>{data.title}*</b></Link>;
         }
-        return <Link to={`/hourLog/company/${data._id}`}>{data.title}</Link>;
+        return <Link to={`/companyHourLogs/${data._id}`}>{data.title}</Link>;
       },
       sortMethod: ((a, b) => (a.props.children > b.props.children ? 1 : -1)),
     }, {

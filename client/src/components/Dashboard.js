@@ -27,15 +27,15 @@ class Dashboard extends Component {
       <div>
         <Header auth={auth} />
         <Switch>
-          <AdminRoute path="/user/all" component={UserAll} />
+          <AdminRoute path="/users" component={UserAll} />
           <Route path="/user/:userId/contractorHourLogs" render={(props) => <UserOneContractorHourLogs {...props} />} />
           <Route path="/user/:id" component={UserOneEdit} />
-          <AdminRoute path="/company/all" component={CompanyAll} />
+          <AdminRoute path="/companies" component={CompanyAll} />
           <AdminRoute path="/company/:companyId" component={CompanyOne} />
-          <AdminRoute path="/hourLog/contractor/all" component={ContractorHourLogAll} />
-          <Route path="/hourLog/contractor/:contractorHourLogId" render={(props) => <ContractorHourLogOne {...props} auth={auth} />} />
-          <AdminRoute path="/hourLog/company/all" component={CompanyHourLogAll} />
-          <AdminRoute path="/hourLog/company/:companyHourLogId" component={CompanyHourLogOne} />
+          <AdminRoute path="/contractorHourLogs" component={ContractorHourLogAll} />
+          <Route path="/contractorHourLog/:contractorHourLogId" render={(props) => <ContractorHourLogOne {...props} auth={auth} />} />
+          <AdminRoute path="/companyHourLogs/all" component={CompanyHourLogAll} />
+          <AdminRoute path="/companyHourLogs/:companyHourLogId" component={CompanyHourLogOne} />
           <Route path="/timeEntry/new" render={(props) => <TimeEntryNew {...props} auth={auth} />} />
           <Redirect to="/timeEntry/new" />
         </Switch>

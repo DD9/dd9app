@@ -6,7 +6,7 @@ import {
 } from './types';
 
 export const getAllCompanies = () => async dispatch => {
-  const res = await axios.get('/api/v1/companies/all');
+  const res = await axios.get('/api/v1/companies/');
 
   dispatch({ type: GET_ALL_COMPANIES, payload: res.data });
 };
@@ -28,7 +28,7 @@ export const clearCompanyHourLogsState = () => async dispatch => {
 };
 
 export const getActiveCompanies = () => async dispatch => {
-  const res = await axios.get('/api/v1/companies/active');
+  const res = await axios.get('/api/v1/activeCompanies');
 
   dispatch({ type: GET_ACTIVE_COMPANIES, payload: res.data });
 };

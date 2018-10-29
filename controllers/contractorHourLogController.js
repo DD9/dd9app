@@ -42,7 +42,7 @@ exports.close = async (req, res) => {
   // Delete a contractorHourLog if it's empty
   if (contractorHourLog.totalCreatedHours === 0 && contractorHourLog.totalSubmittedHours === 0) {
     await contractorHourLog.remove();
-    return res.json({ redirectUrl: '/hourLog/contractor/all' });
+    return res.json({ redirectUrl: '/contractorHourLogs' });
   }
 
   contractorHourLog.title = req.body.title;

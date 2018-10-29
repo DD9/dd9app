@@ -6,13 +6,13 @@ import {
 } from './types';
 
 export const getAllUsers = () => async dispatch => {
-  const res = await axios.get('/api/v1/users/all');
+  const res = await axios.get('/api/v1/users');
 
   dispatch({ type: GET_ALL_USERS, payload: res.data });
 };
 
 export const getActiveUsers = () => async dispatch => {
-  const res = await axios.get('/api/v1/users/active');
+  const res = await axios.get('/api/v1/activeUsers');
 
   dispatch({ type: GET_ACTIVE_USERS, payload: res.data });
 };

@@ -5,10 +5,7 @@ const ContractorHourLog = mongoose.model('ContractorHourLog');
 const TimeEntry = mongoose.model('TimeEntry');
 
 exports.created = async (req, res) => {
-  const createdTimeEntries = await TimeEntry.find({ status: 'created', user: req.user._id })
-    .populate('publicCompany', 'name')
-    .populate('publicUser', 'name');
-
+  const createdTimeEntries = await TimeEntry.find({ status: 'created', user: req.user._id });
   res.json(createdTimeEntries);
 };
 
@@ -29,11 +26,8 @@ exports.create = async (req, res) => {
 
   await createOrAppendCurrentContractorHourLog(req.user._id, req.user.hourlyRate, newTimeEntry);
 
-  const populatedTimeEntry = await TimeEntry.findOne({ _id: newTimeEntry._id })
-    .populate('publicCompany', 'name')
-    .populate('publicUser', 'name');
-
-  res.json(populatedTimeEntry);
+  const populatedNewTimeEntry = await TimeEntry.findOne({ _id: newTimeEntry._id });
+  res.json(populatedNewTimeEntry);
 };
 
 exports.createAndSubmit = async (req, res) => {
@@ -56,13 +50,12 @@ exports.createAndSubmit = async (req, res) => {
     { _id: req.body.companyHourLog },
     {
       $addToSet: { timeEntries: newTimeEntry._id },
-      $inc: { totalSubmittedHours: newTimeEntry.hours },
     },
   );
 
   await createOrAppendCurrentContractorHourLog(req.user._id, req.user.hourlyRate, newTimeEntry);
 
-  const populatedTimeEntry = await TimeEntry.findOne({ _id: newTimeEntry._id }).populate('user publicUser company publicCompany');
+  const populatedTimeEntry = await TimeEntry.findOne({ _id: newTimeEntry._id });
 
   res.json(populatedTimeEntry);
 };

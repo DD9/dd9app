@@ -11,25 +11,25 @@ import {
 } from './types';
 
 export const getOpenContractorHourLogs = () => async dispatch => {
-  const res = await axios.get('/api/v1/hourLogs/contractor/open');
+  const res = await axios.get('/api/v1/contractorHourLogs/open');
 
   dispatch({ type: GET_OPEN_CONTRACTOR_HOUR_LOGS, payload: res.data });
 };
 
 export const getClosedContractorHourLogs = () => async dispatch => {
-  const res = await axios.get('/api/v1/hourLogs/contractor/closed');
+  const res = await axios.get('/api/v1/contractorHourLogs/closed');
 
   dispatch({ type: GET_CLOSED_CONTRACTOR_HOUR_LOGS, payload: res.data });
 };
 
 export const getContractorHourLog = contractorHourLogId => async dispatch => {
-  const res = await axios.get(`/api/v1/hourLog/contractor/${contractorHourLogId}`);
+  const res = await axios.get(`/api/v1/contractorHourLog/${contractorHourLogId}`);
 
   dispatch({ type: GET_CONTRACTOR_HOUR_LOG, payload: res.data });
 };
 
 export const closeContractorHourLog = (contractorHourLogId, formProps, history) => async dispatch => {
-  const closeContractorHourLogRes = await axios.post(`/api/v1/hourLog/contractor/${contractorHourLogId}/close`, formProps);
+  const closeContractorHourLogRes = await axios.post(`/api/v1/contractorHourLog/${contractorHourLogId}/close`, formProps);
 
   if (closeContractorHourLogRes.data.error) {
     toast.error(`Error: ${closeContractorHourLogRes.data.error}`, {
@@ -40,7 +40,7 @@ export const closeContractorHourLog = (contractorHourLogId, formProps, history) 
       pauseOnHover: true,
       draggable: true,
     });
-    const contractorHourLog = await axios.get(`/api/v1/hourLog/contractor/${contractorHourLogId}`);
+    const contractorHourLog = await axios.get(`/api/v1/contractorHourLog/${contractorHourLogId}`);
     dispatch({ type: CLOSE_CONTRACTOR_HOUR_LOG, payload: closeContractorHourLogRes.data });
     dispatch({ type: GET_CONTRACTOR_HOUR_LOG, payload: contractorHourLog.data });
   } else if (closeContractorHourLogRes.data.redirectUrl) {
@@ -52,8 +52,8 @@ export const closeContractorHourLog = (contractorHourLogId, formProps, history) 
       pauseOnHover: true,
       draggable: true,
     });
-    const openContractorHourLogsRes = await axios.get('/api/v1/hourLogs/contractor/open');
-    const closedContractorHourLogsRes = await axios.get('/api/v1/hourLogs/contractor/closed');
+    const openContractorHourLogsRes = await axios.get('/api/v1/contractorHourLogs/open');
+    const closedContractorHourLogsRes = await axios.get('/api/v1/contractorHourLogs/closed');
 
     history.push(closeContractorHourLogRes.data.redirectUrl);
 
@@ -68,14 +68,14 @@ export const closeContractorHourLog = (contractorHourLogId, formProps, history) 
       pauseOnHover: true,
       draggable: true,
     });
-    const contractorHourLog = await axios.get(`/api/v1/hourLog/contractor/${contractorHourLogId}`);
+    const contractorHourLog = await axios.get(`/api/v1/contractorHourLog/${contractorHourLogId}`);
     dispatch({ type: CLOSE_CONTRACTOR_HOUR_LOG, payload: closeContractorHourLogRes.data });
     dispatch({ type: GET_CONTRACTOR_HOUR_LOG, payload: contractorHourLog.data });
   }
 };
 
 export const editContractorHourLog = (contractorHourLogId, formProps) => async dispatch => {
-  const res = await axios.post(`/api/v1/hourLog/contractor/${contractorHourLogId}/edit`, formProps);
+  const res = await axios.post(`/api/v1/contractorHourLog/${contractorHourLogId}/edit`, formProps);
 
   dispatch({ type: EDIT_CONTRACTOR_HOUR_LOG, payload: res.data });
 };

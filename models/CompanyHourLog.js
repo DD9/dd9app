@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 const autoPopulate = require('mongoose-autopopulate');
-const deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 const companyHourLogSchema = new Schema({
   dateOpened: {
@@ -19,6 +18,7 @@ const companyHourLogSchema = new Schema({
   company: {
     type: mongoose.Schema.ObjectId,
     ref: 'Company',
+    autopopulate: true,
   },
   timeEntries: [{
     type: mongoose.Schema.ObjectId,
@@ -38,15 +38,15 @@ companyHourLogSchema.set('toObject', { virtuals: true });
 companyHourLogSchema.set('toJSON', { virtuals: true });
 
 companyHourLogSchema.virtual('totalPublicHours').get(function () {
-  return this.timeEntries.filter(timeEntry => timeEntry.status === 'approved').reduce((prev, next) => prev + next.hours, 0);
+  return this.timeEntries.filter(timeEntry => timeEntry.status === 'approved').reduce((prev, next) => prev + next.publicHours, 0);
 });
 
 companyHourLogSchema.virtual('totalHiddenHours').get(function () {
-  return this.timeEntries.filter(timeEntry => timeEntry.status === 'hidden').reduce((prev, next) => prev + next.hours, 0);
+  return this.timeEntries.filter(timeEntry => timeEntry.status === 'hidden').reduce((prev, next) => prev + next.publicHours, 0);
 });
 
 companyHourLogSchema.virtual('totalSubmittedHours').get(function () {
-  return this.timeEntries.filter(timeEntry => timeEntry.status === 'submitted').reduce((prev, next) => prev + next.hours, 0);
+  return this.timeEntries.filter(timeEntry => timeEntry.status === 'submitted').reduce((prev, next) => prev + next.publicHours, 0);
 });
 
 companyHourLogSchema.index(
@@ -54,21 +54,5 @@ companyHourLogSchema.index(
 );
 
 companyHourLogSchema.plugin(autoPopulate);
-companyHourLogSchema.plugin(deepPopulate, {
-  populate: {
-    'timeEntries.user': {
-      select: 'name hourlyRate',
-    },
-    'timeEntries.publicUser': {
-      select: 'name hourlyRate',
-    },
-    'timeEntries.company': {
-      select: 'name',
-    },
-    'timeEntries.publicCompany': {
-      select: 'name',
-    },
-  },
-});
 
 module.exports = mongoose.model('CompanyHourLog', companyHourLogSchema);

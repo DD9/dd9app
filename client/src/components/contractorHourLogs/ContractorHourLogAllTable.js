@@ -58,9 +58,9 @@ const ContractorHourLogAllTable = ({
       id: 'title',
       accessor: data => {
         if (data.totalCreatedHours > 0) {
-          return <Link to={`/hourLog/contractor/${data._id}`}><b>{data.title}*</b></Link>;
+          return <Link to={`/contractorHourLog/${data._id}`}><b>{data.title}*</b></Link>;
         }
-        return <Link to={`/hourLog/contractor/${data._id}`}>{data.title}</Link>;
+        return <Link to={`/contractorHourLog/${data._id}`}>{data.title}</Link>;
       },
     }, {
       Header: 'Submitted',
