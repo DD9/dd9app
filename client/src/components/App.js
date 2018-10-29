@@ -33,7 +33,14 @@ class App extends Component {
             <AuthedRoute path="/" component={Dashboard} />
           </Switch>
         </BrowserRouter>
-        <ToastContainer />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar
+          closeOnClick
+          pauseOnHover
+          draggable
+        />
       </div>
     );
   }

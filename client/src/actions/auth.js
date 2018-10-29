@@ -13,14 +13,7 @@ export const getCurrentUser = () => async dispatch => {
   }
 
   if (res.data) {
-    toast.info(`Welcome ${res.data.name.full}`, {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
+    toast.info(`Welcome ${res.data.name.full}`);
   }
 
   dispatch({ type: AUTH_USER, payload: res.data });
@@ -36,15 +29,7 @@ export const logout = history => async dispatch => {
   }
 
   await history.push('/login');
-
-  toast.info('Goodbye!', {
-    position: 'top-right',
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
+  toast.info('Goodbye!');
 
   dispatch({ type: AUTH_USER, payload: res.data });
 };

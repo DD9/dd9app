@@ -32,14 +32,7 @@ export const adminEditUser = (userId, authId, formProps) => async dispatch => {
     await dispatch({ type: AUTH_USER, payload: res.data });
   }
 
-  toast.success(`${res.data.name.full} successfully edited`, {
-    position: 'top-right',
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
+  toast.success(`${res.data.name.full} successfully edited`);
 };
 
 
@@ -52,27 +45,13 @@ export const adminEditUsers = (userId, authId, formProps) => async dispatch => {
     await dispatch({ type: AUTH_USER, payload: res.data });
   }
 
-  toast.success(`${res.data.name.full} successfully edited`, {
-    position: 'top-right',
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
+  toast.success(`${res.data.name.full} successfully edited`);
 };
 
 export const editUser = formProps => async dispatch => {
   const res = await axios.post(`/api/v1/user/${formProps.userId}/edit`, formProps);
 
-  toast.success(`${res.data.name.full} successfully edited`, {
-    position: 'top-right',
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
+  toast.success(`${res.data.name.full} successfully edited`);
 
   dispatch({ type: EDIT_USER, payload: res.data });
 };

@@ -43,52 +43,24 @@ export const openCompanyHourLog = (companyHourLogId, history) => async dispatch 
     dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
   }
 
-  toast.success('Successfully opened hour log', {
-    position: 'top-right',
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
+  toast.success('Successfully opened hour log');
 };
 
 export const closeCompanyHourLog = (companyHourLogId, formProps, history) => async dispatch => {
   const closeCompanyHourLogRes = await axios.post(`/api/v1/companyHourLog/${companyHourLogId}/close`, formProps);
 
   if (closeCompanyHourLogRes.data.title === 'Current') {
-    toast.error('Error: failed to close hour log', {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
+    toast.error('Error: failed to close hour log');
     const companyHourLog = await axios.get(`/api/v1/companyHourLog/${companyHourLogId}`);
     dispatch({ type: CLOSE_COMPANY_HOUR_LOG, payload: closeCompanyHourLogRes.data });
     dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
   } else if (closeCompanyHourLogRes.data.redirectUrl) {
-    toast.success('Successfully deleted hour log', {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
+    toast.success('Successfully deleted hour log');
     const getCompanyHourLogs = await axios.get(`/api/v1/company/${closeCompanyHourLogRes.data.companyId}/hourLogs`);
     history.push(closeCompanyHourLogRes.data.redirectUrl);
     dispatch({ type: GET_COMPANY_HOUR_LOGS, payload: getCompanyHourLogs.data });
   } else {
-    toast.success('Successfully closed hour log', {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
+    toast.success('Successfully closed hour log');
     const companyHourLog = await axios.get(`/api/v1/companyHourLog/${companyHourLogId}`);
     dispatch({ type: CLOSE_COMPANY_HOUR_LOG, payload: closeCompanyHourLogRes.data });
     dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });

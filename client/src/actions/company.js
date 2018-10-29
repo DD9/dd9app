@@ -36,14 +36,7 @@ export const getActiveCompanies = () => async dispatch => {
 export const createCompany = formProps => async dispatch => {
   const res = await axios.post('/api/v1/company/create', formProps);
 
-  toast.success(`${res.data.name} successfully created`, {
-    position: 'top-right',
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
+  toast.success(`${res.data.name} successfully created`);
 
   dispatch({ type: CREATE_COMPANY, payload: res.data });
 };
@@ -51,14 +44,7 @@ export const createCompany = formProps => async dispatch => {
 export const editCompany = (companyId, formProps) => async dispatch => {
   const res = await axios.post(`/api/v1/company/${companyId}/edit`, formProps);
 
-  toast.success(`${res.data.name} successfully edited`, {
-    position: 'top-right',
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
+  toast.success(`${res.data.name} successfully edited`);
 
   await dispatch({ type: EDIT_COMPANY, payload: res.data });
 };
@@ -66,14 +52,7 @@ export const editCompany = (companyId, formProps) => async dispatch => {
 export const activateCompany = companyId => async dispatch => {
   const res = await axios.post(`/api/v1/company/${companyId}/activate`);
 
-  toast.success(`${res.data.name} successfully activated`, {
-    position: 'top-right',
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
+  toast.success(`${res.data.name} successfully activated`);
 
   dispatch({ type: ACTIVATE_COMPANY, payload: res.data });
 };
@@ -82,23 +61,9 @@ export const deactivateCompany = companyId => async dispatch => {
   const res = await axios.post(`/api/v1/company/${companyId}/deactivate`);
 
   if (res.data.status === 'active') {
-    toast.error('Error: cannot deactivate a company with an open hour log', {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
+    toast.error('Error: cannot deactivate a company with an open hour log');
   } else {
-    toast.success(`${res.data.name} successfully deactivated`, {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
+    toast.success(`${res.data.name} successfully deactivated`);
   }
 
   dispatch({ type: DEACTIVATE_COMPANY, payload: res.data });
