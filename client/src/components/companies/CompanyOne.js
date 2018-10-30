@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import uuid from 'uuid/v1';
 
+import SpinnerClipLoader from '../SpinnerClipLoader';
 import CompanyOneCompanyHourLogsTable from './CompanyOneCompanyHourLogsTable';
 import CompanyOneControls from './CompanyOneControls';
 
 import {
-  getCompany, getCompanyHourLogs, getAllCompanies, clearCompanyHourLogsState,
+  getCompany, getCompanyHourLogs, getCompanies, clearCompanyOneState,
 } from '../../actions/company';
 
 class CompanyOne extends Component {
@@ -13,27 +15,35 @@ class CompanyOne extends Component {
     const { match } = this.props;
     this.props.getCompany(match.params.companyId);
     this.props.getCompanyHourLogs(match.params.companyId);
-    this.props.getAllCompanies();
+    this.props.getCompanies();
   }
 
   componentWillUnmount() {
-    this.props.clearCompanyHourLogsState();
+    this.props.clearCompanyOneState();
   }
 
   renderContent() {
     const { company, companyHourLogs, companies } = this.props;
+    if (!companyHourLogs[0]) {
+      return (
+        <div>
+          <SpinnerClipLoader />
+        </div>
+      );
+    }
 
     return (
       <div>
         <CompanyOneCompanyHourLogsTable
-          tableTitle={`Company Hour Logs for ${company.name || ''}`}
+          tableTitle={`Company Hour Logs for ${company.name}`}
           companyHourLogs={companyHourLogs}
-          key={companyHourLogs}
+          key={uuid()}
           defaultPageSize={companyHourLogs.length}
           minRows={companyHourLogs.length}
         />
         <CompanyOneControls
           company={company}
+          companyHourLogs={companyHourLogs}
           companies={companies}
           initialValues={{ name: company.name }}
         />
@@ -55,5 +65,5 @@ function mapStateToProps({ company, companyHourLogs, companies }) {
 }
 
 export default connect(mapStateToProps, {
-  getCompany, getCompanyHourLogs, getAllCompanies, clearCompanyHourLogsState,
+  getCompany, getCompanyHourLogs, getCompanies, clearCompanyOneState,
 })(CompanyOne);

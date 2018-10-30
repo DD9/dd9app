@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-const autoPopulate = require('mongoose-autopopulate');
 const deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 const contractorHourLogSchema = new Schema({
@@ -23,7 +22,6 @@ const contractorHourLogSchema = new Schema({
   timeEntries: [{
     type: mongoose.Schema.ObjectId,
     ref: 'TimeEntry',
-    autopopulate: true,
   }],
   title: {
     type: String,
@@ -55,7 +53,6 @@ contractorHourLogSchema.index(
   { title: 1 },
 );
 
-contractorHourLogSchema.plugin(autoPopulate);
 contractorHourLogSchema.plugin(deepPopulate, {
   populate: {
     'timeEntries.user': {

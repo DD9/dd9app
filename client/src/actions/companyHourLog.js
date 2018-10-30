@@ -9,6 +9,7 @@ import {
   OPEN_COMPANY_HOUR_LOG,
   CLOSE_COMPANY_HOUR_LOG,
   EDIT_COMPANY_HOUR_LOG,
+  CLEAR_COMPANY_HOUR_LOG_ONE_STATE,
 } from './types';
 
 export const getOpenCompanyHourLogs = () => async dispatch => {
@@ -71,4 +72,8 @@ export const editCompanyHourLog = (companyHourLogId, formProps) => async dispatc
   const res = await axios.post(`/api/v1/companyHourLog/${companyHourLogId}/edit`, formProps);
 
   dispatch({ type: EDIT_COMPANY_HOUR_LOG, payload: res.data });
+};
+
+export const clearCompanyHourLogOneState = () => async dispatch => {
+  dispatch({ type: CLEAR_COMPANY_HOUR_LOG_ONE_STATE, payload: {} });
 };

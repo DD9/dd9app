@@ -5,6 +5,7 @@ const CompanyHourLog = mongoose.model('CompanyHourLog');
 
 exports.all = async (req, res) => {
   const companies = await Company.find();
+  if (!companies[0]) return res.json('empty');
   res.json(companies);
 };
 
@@ -50,9 +51,7 @@ exports.deactivate = async (req, res) => {
 
 exports.companyHourLogs = async (req, res) => {
   const companyId = req.params.id;
-  const companyHourLogs = await CompanyHourLog.find({ company: companyId })
-    .populate('company', 'name')
-    .select('company dateOpened dateClosed title totalPublicHours totalHiddenHours totalSubmittedHours');
+  const companyHourLogs = await CompanyHourLog.find({ company: companyId }).populate('timeEntries', 'status publicHours');
   if (!companyHourLogs[0]) return res.json('empty');
   res.json(companyHourLogs);
 };

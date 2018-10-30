@@ -5,7 +5,7 @@ const ContractorHourLog = mongoose.model('ContractorHourLog');
 const TimeEntry = mongoose.model('TimeEntry');
 
 exports.created = async (req, res) => {
-  const createdTimeEntries = await TimeEntry.find({ status: 'created', user: req.user._id });
+  const createdTimeEntries = await TimeEntry.find({ status: 'created', user: req.user._id }).populate('publicCompany', 'name');
   res.json(createdTimeEntries);
 };
 
@@ -26,8 +26,9 @@ exports.create = async (req, res) => {
 
   await createOrAppendCurrentContractorHourLog(req.user._id, req.user.hourlyRate, newTimeEntry);
 
-  const populatedNewTimeEntry = await TimeEntry.findOne({ _id: newTimeEntry._id });
-  res.json(populatedNewTimeEntry);
+  const populatedTimeEntry = await TimeEntry.findOne({ _id: newTimeEntry._id }).populate('user publicUser company publicCompany');
+
+  res.json(populatedTimeEntry);
 };
 
 exports.createAndSubmit = async (req, res) => {
@@ -55,7 +56,7 @@ exports.createAndSubmit = async (req, res) => {
 
   await createOrAppendCurrentContractorHourLog(req.user._id, req.user.hourlyRate, newTimeEntry);
 
-  const populatedTimeEntry = await TimeEntry.findOne({ _id: newTimeEntry._id });
+  const populatedTimeEntry = await TimeEntry.findOne({ _id: newTimeEntry._id }).populate('user publicUser company publicCompany');
 
   res.json(populatedTimeEntry);
 };
@@ -90,6 +91,9 @@ exports.edit = async (req, res) => {
   }
 };
 
+/**
+ * Modify to save adjudication artifact through status and create new time entry for new company on company change
+ */
 exports.adjudicate = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });

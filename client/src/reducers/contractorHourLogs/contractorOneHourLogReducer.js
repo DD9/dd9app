@@ -8,6 +8,7 @@ import {
   SUBMIT_TIME_ENTRY,
   DELETE_TIME_ENTRY,
   TIME_ENTRY_IN_CONTRACTOR_HOUR_LOG_BULK_ACTION,
+  CLEAR_CONTRACTOR_HOUR_LOG_ONE_STATE,
 } from '../../actions/types';
 
 const INITIAL_STATE = { timeEntries: [] };
@@ -51,11 +52,19 @@ export default function(state = INITIAL_STATE, action) {
     case DELETE_TIME_ENTRY:
       return {
         ...state,
-        timeEntries: state.timeEntries.filter(timeEntry => timeEntry._id !== action.payload._id),
+        timeEntries: state.timeEntries.map(timeEntry => {
+          if (timeEntry._id === action.payload._id) {
+            timeEntry = action.payload;
+          }
+          return timeEntry;
+        }),
       };
 
     case TIME_ENTRY_IN_CONTRACTOR_HOUR_LOG_BULK_ACTION:
       return state;
+
+    case CLEAR_CONTRACTOR_HOUR_LOG_ONE_STATE:
+      return INITIAL_STATE || false;
 
     default:
       return state;

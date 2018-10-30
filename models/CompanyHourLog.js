@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-const autoPopulate = require('mongoose-autopopulate');
+const deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 const companyHourLogSchema = new Schema({
   dateOpened: {
@@ -18,12 +18,10 @@ const companyHourLogSchema = new Schema({
   company: {
     type: mongoose.Schema.ObjectId,
     ref: 'Company',
-    autopopulate: true,
   },
   timeEntries: [{
     type: mongoose.Schema.ObjectId,
     ref: 'TimeEntry',
-    autopopulate: true,
   }],
   title: {
     type: String,
@@ -53,6 +51,21 @@ companyHourLogSchema.index(
   { title: 1 },
 );
 
-companyHourLogSchema.plugin(autoPopulate);
+companyHourLogSchema.plugin(deepPopulate, {
+  populate: {
+    'timeEntries.user': {
+      select: 'name',
+    },
+    'timeEntries.publicUser': {
+      select: 'name',
+    },
+    'timeEntries.company': {
+      select: 'name',
+    },
+    'timeEntries.publicCompany': {
+      select: 'name',
+    },
+  },
+});
 
 module.exports = mongoose.model('CompanyHourLog', companyHourLogSchema);

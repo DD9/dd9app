@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-const autoPopulate = require('mongoose-autopopulate');
 
 const timeEntrySchema = new Schema({
   date: {
@@ -16,13 +15,11 @@ const timeEntrySchema = new Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'User',
     required: 'User required.',
-    autopopulate: true,
   },
   company: {
     type: mongoose.Schema.ObjectId,
     ref: 'Company',
     required: 'Company required.',
-    autopopulate: true,
   },
   companyHourLog: {
     type: mongoose.Schema.ObjectId,
@@ -48,13 +45,11 @@ const timeEntrySchema = new Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'User',
     required: 'Public user required.',
-    autopopulate: true,
   },
   publicCompany: {
     type: mongoose.Schema.ObjectId,
     ref: 'Company',
     required: 'Public company required.',
-    autopopulate: true,
   },
   publicDate: {
     type: Date,
@@ -77,7 +72,5 @@ timeEntrySchema.index({
   status: 1,
   user: -1,
 });
-
-timeEntrySchema.plugin(autoPopulate);
 
 module.exports = mongoose.model('TimeEntry', timeEntrySchema);

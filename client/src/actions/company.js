@@ -2,13 +2,22 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 import {
-  GET_ALL_COMPANIES, GET_COMPANY, GET_COMPANY_HOUR_LOGS, CLEAR_COMPANY_HOUR_LOGS_STATE, GET_ACTIVE_COMPANIES, CREATE_COMPANY, EDIT_COMPANY, ACTIVATE_COMPANY, DEACTIVATE_COMPANY,
+  GET_COMPANIES,
+  GET_COMPANY,
+  GET_COMPANY_HOUR_LOGS,
+  GET_ACTIVE_COMPANIES,
+  CREATE_COMPANY,
+  EDIT_COMPANY,
+  ACTIVATE_COMPANY,
+  DEACTIVATE_COMPANY,
+  CLEAR_COMPANY_ONE_STATE,
+  CLEAR_COMPANY_HOUR_LOGS_STATE,
 } from './types';
 
-export const getAllCompanies = () => async dispatch => {
+export const getCompanies = () => async dispatch => {
   const res = await axios.get('/api/v1/companies/');
 
-  dispatch({ type: GET_ALL_COMPANIES, payload: res.data });
+  dispatch({ type: GET_COMPANIES, payload: res.data });
 };
 
 export const getCompany = companyId => async dispatch => {
@@ -21,10 +30,6 @@ export const getCompanyHourLogs = companyId => async dispatch => {
   const res = await axios.get(`/api/v1/company/${companyId}/hourLogs`);
 
   dispatch({ type: GET_COMPANY_HOUR_LOGS, payload: res.data });
-};
-
-export const clearCompanyHourLogsState = () => async dispatch => {
-  dispatch({ type: CLEAR_COMPANY_HOUR_LOGS_STATE, payload: {} });
 };
 
 export const getActiveCompanies = () => async dispatch => {
@@ -67,4 +72,9 @@ export const deactivateCompany = companyId => async dispatch => {
   }
 
   dispatch({ type: DEACTIVATE_COMPANY, payload: res.data });
+};
+
+export const clearCompanyOneState = () => async dispatch => {
+  dispatch({ type: CLEAR_COMPANY_ONE_STATE, payload: {} });
+  dispatch({ type: CLEAR_COMPANY_HOUR_LOGS_STATE, payload: {} });
 };

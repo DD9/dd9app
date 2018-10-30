@@ -6,9 +6,10 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import $ from 'jquery';
 
+import 'react-datepicker/dist/react-datepicker.css';
+
 import { createAndSubmitTimeEntry } from '../../actions/timeEntry';
 
-import 'react-datepicker/dist/react-datepicker.css';
 
 
 class CompanyHourLogOneSubmitTimeEntry extends Component {

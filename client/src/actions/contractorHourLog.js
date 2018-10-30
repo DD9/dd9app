@@ -6,8 +6,8 @@ import {
   GET_CLOSED_CONTRACTOR_HOUR_LOGS,
   GET_CONTRACTOR_HOUR_LOG,
   CLOSE_CONTRACTOR_HOUR_LOG,
-  GET_CONTRACTOR_HOUR_LOGS,
   EDIT_CONTRACTOR_HOUR_LOG,
+  CLEAR_CONTRACTOR_HOUR_LOG_ONE_STATE,
 } from './types';
 
 export const getOpenContractorHourLogs = () => async dispatch => {
@@ -57,4 +57,8 @@ export const editContractorHourLog = (contractorHourLogId, formProps) => async d
   const res = await axios.post(`/api/v1/contractorHourLog/${contractorHourLogId}/edit`, formProps);
 
   dispatch({ type: EDIT_CONTRACTOR_HOUR_LOG, payload: res.data });
+};
+
+export const clearContractorHourLogOneState = () => async dispatch => {
+  dispatch({ type: CLEAR_CONTRACTOR_HOUR_LOG_ONE_STATE, payload: {} });
 };

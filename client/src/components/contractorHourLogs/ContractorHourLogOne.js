@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import uuid from 'uuid/v1'
+import uuid from 'uuid/v1';
 import $ from 'jquery';
 
 
@@ -9,7 +9,7 @@ import SpinnerClipLoader from '../SpinnerClipLoader';
 import ContractorHourLogOneControls from './ContractorHourLogOneControls';
 import ContractorTimeEntryTable from '../timeEntries/ContractorTimeEntryTable';
 
-import { getContractorHourLog } from '../../actions/contractorHourLog';
+import { getContractorHourLog, clearContractorHourLogOneState } from '../../actions/contractorHourLog';
 
 
 class CompanyHourLogOne extends Component {
@@ -20,6 +20,10 @@ class CompanyHourLogOne extends Component {
 
   componentDidUpdate() {
     $('.contractor-time-entry-table-bulk-action').attr('disabled', false);
+  }
+
+  componentWillUnmount() {
+    this.props.clearContractorHourLogOneState();
   }
 
   render() {
@@ -35,15 +39,8 @@ class CompanyHourLogOne extends Component {
       );
     }
 
-    let createdTimeEntries = contractorHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'created');
-    let submittedTimeEntries = contractorHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved' || timeEntry.status === 'hidden' || timeEntry.status === 'submitted');
-
-    if (!createdTimeEntries[0]) {
-      createdTimeEntries = ['createdTimeEntries'];
-    }
-    if (!submittedTimeEntries[0]) {
-      submittedTimeEntries = ['submittedTimeEntries'];
-    }
+    const createdTimeEntries = contractorHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'created');
+    const submittedTimeEntries = contractorHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved' || timeEntry.status === 'hidden' || timeEntry.status === 'submitted');
 
     return (
       <div className="container table-font-size">
@@ -58,7 +55,7 @@ class CompanyHourLogOne extends Component {
           contractorHourLogTitle={contractorHourLog.title}
           contractorHourLogHourlyRate={contractorHourLog.hourlyRate[0].USD}
           tableTitle="Created Time Entries"
-          timeEntries={createdTimeEntries[0] !== 'createdTimeEntries' ? createdTimeEntries : []}
+          timeEntries={createdTimeEntries}
           match={match}
           key={uuid()}
           defaultPageSize={createdTimeEntries.length}
@@ -70,7 +67,7 @@ class CompanyHourLogOne extends Component {
           contractorHourLogTitle={contractorHourLog.title}
           contractorHourLogHourlyRate={contractorHourLog.hourlyRate[0].USD}
           tableTitle="Submitted Time Entries"
-          timeEntries={submittedTimeEntries[0] !== 'submittedTimeEntries' ? submittedTimeEntries : []}
+          timeEntries={submittedTimeEntries}
           match={match}
           key={uuid()}
           defaultPageSize={submittedTimeEntries.length}
@@ -85,4 +82,4 @@ function mapStateToProps({ contractorHourLog }) {
   return { contractorHourLog };
 }
 
-export default connect(mapStateToProps, { getContractorHourLog })(CompanyHourLogOne);
+export default connect(mapStateToProps, { getContractorHourLog, clearContractorHourLogOneState })(CompanyHourLogOne);

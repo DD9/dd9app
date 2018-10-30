@@ -59,7 +59,8 @@ exports.adminEdit = async (req, res) => {
 exports.contractorHourLogs = async (req, res) => {
   const userId = req.params.id;
   const contractorHourLog = await ContractorHourLog.find({ user: userId })
-    .populate('user', 'name hourlyRate');
+    .populate('user', 'name hourlyRate')
+    .populate('timeEntries', 'status hours');
   if (!contractorHourLog[0]) return res.json('empty');
   res.json(contractorHourLog);
 };

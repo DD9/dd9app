@@ -1,4 +1,10 @@
-import { GET_COMPANY, EDIT_COMPANY, ACTIVATE_COMPANY, DEACTIVATE_COMPANY } from '../../actions/types';
+import {
+  GET_COMPANY,
+  EDIT_COMPANY,
+  ACTIVATE_COMPANY,
+  DEACTIVATE_COMPANY,
+  CLEAR_COMPANY_ONE_STATE
+} from '../../actions/types';
 
 const INITIAL_STATE = [];
 
@@ -12,6 +18,8 @@ export default function(state = INITIAL_STATE, action) {
       return action.payload || false;
     case DEACTIVATE_COMPANY:
       return action.payload || false;
+    case CLEAR_COMPANY_ONE_STATE:
+      return INITIAL_STATE || false;
     default:
       return state;
   }

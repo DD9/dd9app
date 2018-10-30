@@ -2,7 +2,15 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 import {
-  GET_ALL_USERS, GET_ACTIVE_USERS, GET_USER, ADMIN_EDIT_USERS, ADMIN_EDIT_USER, EDIT_USER, AUTH_USER, GET_CONTRACTOR_HOUR_LOGS, CLEAR_CONTRACTOR_HOUR_LOGS_STATE,
+  GET_ALL_USERS,
+  GET_ACTIVE_USERS,
+  GET_USER,
+  ADMIN_EDIT_USERS,
+  ADMIN_EDIT_USER,
+  EDIT_USER,
+  AUTH_USER,
+  GET_CONTRACTOR_HOUR_LOGS,
+  CLEAR_USER_ONE_CONTRACTOR_HOUR_LOGS_STATE,
 } from './types';
 
 export const getAllUsers = () => async dispatch => {
@@ -62,6 +70,6 @@ export const getContractorHourLogs = userId => async dispatch => {
   dispatch({ type: GET_CONTRACTOR_HOUR_LOGS, payload: res.data });
 };
 
-export const clearContractorHourLogState = () => async dispatch => {
-  dispatch({ type: CLEAR_CONTRACTOR_HOUR_LOGS_STATE, payload: {} });
+export const clearUserOneContractorHourLogsState = () => async dispatch => {
+  dispatch({ type: CLEAR_USER_ONE_CONTRACTOR_HOUR_LOGS_STATE, payload: {} });
 };
