@@ -29,7 +29,6 @@
     "express-session": "^1.15.6",
     "lodash": "^4.17.10",
     "mongoose": "^5.2.13",
-    "mongoose-autopopulate": "^0.8.2",
     "mongoose-deep-populate": "^3.1.1",
     "mongoose-mongodb-errors": "0.0.2",
     "passport": "^0.4.0",

@@ -4,7 +4,6 @@ import moment from 'moment';
 import uuid from 'uuid/v1';
 import $ from 'jquery';
 
-
 import SpinnerClipLoader from '../SpinnerClipLoader';
 import ContractorHourLogOneControls from './ContractorHourLogOneControls';
 import ContractorTimeEntryTable from '../timeEntries/ContractorTimeEntryTable';
