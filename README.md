@@ -15,7 +15,7 @@ cd client
 npm install
 ```
 
-####To run the development server 
+#### To run the development server 
 
 In the root directory:
 ```bash 
@@ -24,7 +24,7 @@ npm run dev
 
 Navigate to `localhost:3000`
 
-####To build and run a production environment locally:
+#### To build and run a production environment locally:
 
 In the client directory
 ```bash
