@@ -4,18 +4,20 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import $ from 'jquery';
 
+import ContractorHourLogOneControlsModal from './ContractorHourLogOneControlsModal';
+
 import { closeContractorHourLog, editContractorHourLog } from '../../actions/contractorHourLog';
 
 class ContractorHourLogOneControls extends Component {
-  onContractorHourLogCloseFormSubmit(formProps) {
+  onContractorHourLogCloseFormSubmit = formProps => {
     this.props.closeContractorHourLog(this.props.contractorHourLog._id, formProps, this.props.history);
     $('#closeContractorHourLogModal').modal('hide');
-  }
+  };
 
-  onContractorHourLogEditFormSubmit(formProps) {
+  onContractorHourLogEditFormSubmit = formProps => {
     this.props.editContractorHourLog(this.props.contractorHourLog._id, formProps);
     $('#editContractorHourLogModal').modal('hide');
-  }
+  };
 
   renderHourLogTitle() {
     const { auth, contractorHourLog } = this.props;
@@ -67,58 +69,21 @@ class ContractorHourLogOneControls extends Component {
         <div className="py-2">
           {this.renderHourLogTitle()}
         </div>
-        <div>
-          <div className="modal fade" id="closeContractorHourLogModal" tabIndex={-1} role="dialog" aria-labelledby="closeContractorHourLogModal" aria-hidden="true">
-            <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Close Hour Log</h5>
-                  <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div className="modal-body">
-                  <form id="closeContractorHourLogForm" className="form" onSubmit={handleSubmit(this.onContractorHourLogCloseFormSubmit.bind(this))}>
-                    <Field
-                      label="Title"
-                      name="title"
-                      component={this.renderField}
-                    />
-                    <p className="text-center">Cannot close an hour log with created time entries.</p>
-                    <p className="text-center">Closing an empty hour log will trigger its deletion.</p>
-                  </form>
-                </div>
-                <div className="modal-footer">
-                  <button className="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                  <button className="btn btn-primary" type="submit" form="closeContractorHourLogForm">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="modal fade" id="editContractorHourLogModal" tabIndex={-1} role="dialog" aria-labelledby="editContractorHourLogModal" aria-hidden="true">
-            <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Edit Hour Log</h5>
-                  <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div className="modal-body">
-                  <form id="editContractorHourLogForm" className="form" onSubmit={handleSubmit(this.onContractorHourLogEditFormSubmit.bind(this))}>
-                    <Field
-                      label="Title"
-                      name="title"
-                      component={this.renderField}
-                    />
-                  </form>
-                </div>
-                <div className="modal-footer">
-                  <button className="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                  <button className="btn btn-primary" type="submit" form="editContractorHourLogForm">Submit</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ContractorHourLogOneControlsModal
+          modalId="closeContractorHourLogModal"
+          modalTitle="Close Hour Log"
+          formId="closeContractorHourLogForm"
+          modalField={<Field label="Title" name="title" component={this.renderField} />}
+          modalBody="Cannot close an hour log with created time entries.Closing an empty hour log will trigger its deletion. Closing an empty hour log will trigger its deletion."
+          onSubmit={handleSubmit(this.onContractorHourLogCloseFormSubmit)}
+        />
+        <ContractorHourLogOneControlsModal
+          modalId="editContractorHourLogModal"
+          modalTitle="Edit Hour Log"
+          formId="editContractorHourLogForm"
+          modalField={<Field label="Title" name="title" component={this.renderField} />}
+          onSubmit={handleSubmit(this.onContractorHourLogEditFormSubmit)}
+        />
       </div>
     );
   }

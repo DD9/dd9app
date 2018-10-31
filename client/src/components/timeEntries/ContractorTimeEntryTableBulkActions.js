@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import $ from 'jquery';
 
-import { submitFromNewContractorHourLogTimeEntries, deleteFromNewContractorHourLogTimeEntries, rejectFromSubmittedContractorHourLogTimeEntries } from '../../actions/timeEntry';
-
 import TimeEntryTableActionConfirmModal from './TimeEntryTableActionConfirmModal';
+
+import { submitFromNewContractorHourLogTimeEntries, deleteFromNewContractorHourLogTimeEntries, rejectFromSubmittedContractorHourLogTimeEntries } from '../../actions/timeEntry';
 
 class TimeEntryBulkTableActions extends Component {
 

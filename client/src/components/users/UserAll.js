@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import uuid from 'uuid/v1';
 
 import { getAllUsers } from '../../actions/user';
 import { getActiveCompanies } from '../../actions/company';
@@ -30,9 +31,9 @@ class UserAll extends Component {
         <UserAllTable
           users={users}
           activeCompanies={activeCompanies}
-          key={users}
+          key={uuid()}
           defaultPageSize={users.length}
-          minRows={users.length === 0 ? 20 : users.length}
+          minRows={users.length}
         />
         <UserAllControls />
       </div>

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import $ from 'jquery';
+import uuid from 'uuid/v1';
+
+import CompanyTimeEntryTable from './CompanyTimeEntryTable';
+import TimeEntryForm from './TimeEntryForm';
 
 import { getCreatedTimeEntries } from '../../actions/timeEntry';
 import { getActiveUsers } from '../../actions/user';
 import { getActiveCompanies } from '../../actions/company';
-
-import CompanyTimeEntryTable from './CompanyTimeEntryTable';
-import TimeEntryForm from './TimeEntryForm';
 
 class TimeEntryNew extends Component {
   componentDidMount() {
@@ -33,7 +34,7 @@ class TimeEntryNew extends Component {
           timeEntries={createdTimeEntries}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
-          key={createdTimeEntries}
+          key={uuid()}
           defaultPageSize={createdTimeEntries.length}
           minRows={createdTimeEntries.length}
         />

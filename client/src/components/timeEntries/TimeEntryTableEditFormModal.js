@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import DatePicker from 'react-datepicker/';
 import moment from 'moment';
-import $ from 'jquery'
+import $ from 'jquery';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 import {
   submitTimeEntry, deleteTimeEntry, editTimeEntry, adjudicateTimeEntry,
 } from '../../actions/timeEntry';
-
-import 'react-datepicker/dist/react-datepicker.css';
 
 class TimeEntryTableEditFormModal extends Component {
   componentDidMount() {

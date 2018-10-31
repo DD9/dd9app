@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TimeEntryExportedTable = ({ timeEntries }) => {
+const CompanyTimeEntryExportedTable = ({ timeEntries }) => {
   if (!timeEntries || timeEntries[0] === 'approvedTimeEntries') {
     return null;
   }
@@ -34,4 +34,4 @@ const TimeEntryExportedTable = ({ timeEntries }) => {
   );
 };
 
-export default TimeEntryExportedTable;
+export default CompanyTimeEntryExportedTable;

@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
-import * as actions from '../actions/auth';
-
 import '../styles/partials/header.scss';
+
+import * as actions from '../actions/auth';
 
 const Header = ({ auth, logout, history }) => {
   const renderContent = () => {
@@ -26,7 +26,7 @@ const Header = ({ auth, logout, history }) => {
               Hour Logs
             </a>
             <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <Link className="nav-link" to="/companyHourLogs/all">Company Hour Logs</Link>
+              <Link className="nav-link" to="/companyHourLogs">Company Hour Logs</Link>
               <Link className="nav-link" to="/contractorHourLogs">Contractor Hour Logs</Link>
             </div>
           </li>,

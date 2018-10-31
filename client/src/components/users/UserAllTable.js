@@ -88,6 +88,7 @@ const UserAllTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
       data={users}
       columns={columns}
       showPagination={false}
+      sortable={false}
       defaultPageSize={defaultPageSize}
       minRows={minRows}
       className="-striped -highlight"
@@ -98,7 +99,6 @@ const UserAllTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
           asc: true,
         },
       ]}
-      sortable={false}
     />
   );
 };

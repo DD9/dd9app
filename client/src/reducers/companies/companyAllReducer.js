@@ -1,6 +1,4 @@
-import {
-  GET_COMPANIES, CREATE_COMPANY,
-} from '../../actions/types';
+import { GET_COMPANIES, CREATE_COMPANY } from '../../actions/types';
 
 const INITIAL_STATE = [];
 

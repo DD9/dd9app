@@ -4,14 +4,33 @@ DD9 Extranet V2 - a software contractor management application
 
 ## Build and Run locally
 
-Requires NodeJS and Webpack
+Requires NodeJS
 
+Requires external DB import scripts and keys
+
+First, install dependencies for the server and the client:
 ```bash
 npm install
+cd client
+npm install
+```
+
+####To run the development server 
+
+In the root directory:
+```bash 
 npm run dev
 ```
 
-App entry point: start.js
+Navigate to `localhost:3000`
 
-## TODO
-* documentation
+####To build and run a production environment locally:
+
+In the client directory
+```bash
+npm run build
+```
+
+In the server, modify the variables.env `NODE_ENV` to 'production'
+
+Navigate to the localhost port specified in the app entry point: start.js, `localhost:5000` by default

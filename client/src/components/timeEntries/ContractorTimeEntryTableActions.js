@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import $ from 'jquery';
 
-import { rejectTimeEntry, submitTimeEntry, deleteTimeEntry } from '../../actions/timeEntry';
+import CTimeEntryTableActionConfirmModal from './TimeEntryTableActionConfirmModal';
 
-import TimeEntryTableActionConfirmModal from './TimeEntryTableActionConfirmModal';
+import { rejectTimeEntry, submitTimeEntry, deleteTimeEntry } from '../../actions/timeEntry';
 
 class ContractorTimeEntryTableActions extends Component {
   componentDidUpdate() {
@@ -79,21 +79,21 @@ class ContractorTimeEntryTableActions extends Component {
     return (
       <div>
         {this.renderTimeEntryTableActionButtons()}
-        <TimeEntryTableActionConfirmModal
+        <CTimeEntryTableActionConfirmModal
           modalId={`time-entry-confirm-reject-modal-${timeEntry._id}`}
           modalTitle="Confirm Reject"
           formId={`time-entry-confirm-reject-form-${timeEntry._id}`}
           modalBody="Are you sure you want to reject this time entry?"
           onSubmit={this.onRejectTimeEntryClick}
         />
-        <TimeEntryTableActionConfirmModal
+        <CTimeEntryTableActionConfirmModal
           modalId={`time-entry-confirm-submit-modal-${timeEntry._id}`}
           modalTitle="Confirm Submit"
           formId={`time-entry-confirm-submit-form-${timeEntry._id}`}
           modalBody="Are you sure you want to submit this time entry?"
           onSubmit={this.onSubmitTimeEntryClick}
         />
-        <TimeEntryTableActionConfirmModal
+        <CTimeEntryTableActionConfirmModal
           modalId={`time-entry-confirm-delete-modal-${timeEntry._id}`}
           modalTitle="Confirm Delete"
           formId={`time-entry-confirm-delete-form-${timeEntry._id}`}

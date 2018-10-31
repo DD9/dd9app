@@ -3,7 +3,7 @@ import {
   EDIT_COMPANY,
   ACTIVATE_COMPANY,
   DEACTIVATE_COMPANY,
-  CLEAR_COMPANY_ONE_STATE
+  CLEAR_COMPANY_ONE_STATE,
 } from '../../actions/types';
 
 const INITIAL_STATE = [];

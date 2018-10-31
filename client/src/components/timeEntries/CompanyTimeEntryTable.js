@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-import TimeEntryTableActions from './TimeEntryTableActions';
-import TimeEntryTableBulkActions from './TimeEntryTableBulkActions';
+import CompanyTimeEntryTableActions from './CompanyTimeEntryTableActions';
+import CompanyTimeEntryTableBulkActions from './CompanyTimeEntryTableBulkActions';
 
 const CompanyTimeEntryTable = ({
   auth, companyHourLogTitle, tableTitle, timeEntries, match, activeUsers, activeCompanies, defaultPageSize, minRows,
@@ -54,7 +54,7 @@ const CompanyTimeEntryTable = ({
       id: 'timeEntryTableRowActions',
       accessor: timeEntry => (
         <div className="text-center">
-          <TimeEntryTableActions
+          <CompanyTimeEntryTableActions
             auth={auth}
             timeEntry={timeEntry}
             activeUsers={activeUsers}
@@ -65,7 +65,7 @@ const CompanyTimeEntryTable = ({
       maxWidth: 120,
       Footer: (
         <div className="text-center">
-          <TimeEntryTableBulkActions
+          <CompanyTimeEntryTableBulkActions
             auth={auth}
             tableTitle={tableTitle}
             match={match}
@@ -91,6 +91,7 @@ const CompanyTimeEntryTable = ({
       data={timeEntries}
       columns={columns}
       showPagination={false}
+      sortable={false}
       defaultPageSize={defaultPageSize}
       minRows={minRows}
       className="-striped -highlight"
@@ -101,7 +102,6 @@ const CompanyTimeEntryTable = ({
           desc: true,
         },
       ]}
-      sortable={false}
       SubComponent={tableTitle !== 'New Time Entries'
         ? row => (
           <div style={{ padding: '10px' }}>

@@ -3,8 +3,6 @@ import { BrowserRouter, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
-import { getCurrentUser } from '../actions/auth';
-
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -13,6 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../styles/partials/app.scss';
 import '../styles/partials/normalize.scss';
 import '../styles/partials/toasts.scss';
+
+import { getCurrentUser } from '../actions/auth';
 
 import AuthedRoute from './HOCRoutes/AuthedRoute';
 import PublicOnlyRoute from './HOCRoutes/PublicOnlyRoute';

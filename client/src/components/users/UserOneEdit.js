@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { getUser } from '../../actions/user';
-import { getActiveCompanies } from '../../actions/company';
-import { getCurrentUser } from '../../actions/auth';
-
 import SpinnerClipLoader from '../SpinnerClipLoader';
 import UserOneAdminEditForm from './UserOneAdminEditForm';
 import UserOneEditForm from './UserOneEditForm';
 
+import { getUser } from '../../actions/user';
+import { getActiveCompanies } from '../../actions/company';
+import { getCurrentUser } from '../../actions/auth';
 
 class UserOneEdit extends Component {
   componentDidMount() {

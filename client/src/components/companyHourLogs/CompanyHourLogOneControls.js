@@ -5,7 +5,7 @@ import { reduxForm, Field } from 'redux-form';
 import $ from 'jquery';
 
 import CompanyHourLogOneControlsModal from './CompanyHourLogOneControlsModal';
-import TimeEntryExportedTable from '../timeEntries/TimeEntryExportedTable';
+import CompanyTimeEntryExportedTable from '../timeEntries/CompanyTimeEntryExportedTable';
 
 import { openCompanyHourLog, closeCompanyHourLog, editCompanyHourLog } from '../../actions/companyHourLog';
 
@@ -13,17 +13,17 @@ class CompanyHourLogOneControls extends Component {
   onCompanyHourLogOpenFormSubmit = () => {
     this.props.openCompanyHourLog(this.props.companyHourLog._id, this.props.history);
     $('#openCompanyHourLogModal').modal('hide');
-  }
+  };
 
   onCompanyHourLogCloseFormSubmit = formProps => {
     this.props.closeCompanyHourLog(this.props.companyHourLog._id, formProps, this.props.history);
     $('#closeCompanyHourLogModal').modal('hide');
-  }
+  };
 
   onCompanyHourLogEditFormSubmit = formProps => {
     this.props.editCompanyHourLog(this.props.companyHourLog._id, formProps);
     $('#editCompanyHourLogModal').modal('hide');
-  }
+  };
 
   renderHourLogTitle() {
     const { companyHourLog } = this.props;
@@ -100,7 +100,7 @@ class CompanyHourLogOneControls extends Component {
                   <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div className="modal-body">
-                  <TimeEntryExportedTable timeEntries={timeEntries} />
+                  <CompanyTimeEntryExportedTable timeEntries={timeEntries} />
                 </div>
                 <div className="modal-footer">
                   <button className="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>

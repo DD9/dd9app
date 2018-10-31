@@ -34,8 +34,8 @@ class Dashboard extends Component {
           <AdminRoute path="/company/:companyId" component={CompanyOne} />
           <AdminRoute path="/contractorHourLogs" component={ContractorHourLogAll} />
           <Route path="/contractorHourLog/:contractorHourLogId" render={(props) => <ContractorHourLogOne {...props} auth={auth} />} />
-          <AdminRoute path="/companyHourLogs/all" component={CompanyHourLogAll} />
           <AdminRoute path="/companyHourLogs/:companyHourLogId" component={CompanyHourLogOne} />
+          <AdminRoute path="/companyHourLogs" component={CompanyHourLogAll} />
           <Route path="/timeEntry/new" render={(props) => <TimeEntryNew {...props} auth={auth} />} />
           <Redirect to="/timeEntry/new" />
         </Switch>
