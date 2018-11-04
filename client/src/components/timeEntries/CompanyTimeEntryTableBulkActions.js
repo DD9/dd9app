@@ -4,9 +4,9 @@ import $ from 'jquery';
 
 import {
   approveAllNewTimeEntries, hideAllNewTimeEntries, submitAllNewTimeEntries, deleteAllNewTimeEntries,
-  hideFromApprovedTimeEntries, rejectFromApprovedTimeEntries, approveFromHiddenTimeEntries,
-  rejectFromHiddenTimeEntries, approveFromSubmittedTimeEntries, hideFromSubmittedTimeEntries,
-  rejectFromSubmittedTimeEntries,
+  hideFromApprovedCompanyHourLogTimeEntries, rejectFromApprovedCompanyHourLogTimeEntries, approveFromHiddenCompanyHourLogTimeEntries,
+  rejectFromHiddenCompanyHourLogTimeEntries, approveFromSubmittedCompanyHourLogTimeEntries, hideFromSubmittedCompanyHourLogTimeEntries,
+  rejectFromSubmittedCompanyHourLogTimeEntries,
 } from '../../actions/timeEntry';
 
 import TimeEntryTableActionConfirmModal from './TimeEntryTableActionConfirmModal';
@@ -49,7 +49,7 @@ class TimeEntryBulkTableActions extends Component {
     $(`.company-time-entry-table-action`).attr("disabled", true);
     $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.hideFromApprovedTimeEntries(match.params.companyHourLogId);
+    this.props.hideFromApprovedCompanyHourLogTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-hide-all-from-approved-modal').modal('hide');
   };
 
@@ -58,7 +58,7 @@ class TimeEntryBulkTableActions extends Component {
     $(`.company-time-entry-table-action`).attr("disabled", true);
     $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.rejectFromApprovedTimeEntries(match.params.companyHourLogId);
+    this.props.rejectFromApprovedCompanyHourLogTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-reject-all-from-approved-modal').modal('hide');
   };
 
@@ -67,7 +67,7 @@ class TimeEntryBulkTableActions extends Component {
     $(`.company-time-entry-table-action`).attr("disabled", true);
     $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.approveFromHiddenTimeEntries(match.params.companyHourLogId);
+    this.props.approveFromHiddenCompanyHourLogTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-approve-all-from-hidden-modal').modal('hide');
   };
 
@@ -76,7 +76,7 @@ class TimeEntryBulkTableActions extends Component {
     $(`.company-time-entry-table-action`).attr("disabled", true);
     $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.rejectFromHiddenTimeEntries(match.params.companyHourLogId);
+    this.props.rejectFromHiddenCompanyHourLogTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-reject-all-from-hidden-modal').modal('hide');
   };
 
@@ -85,7 +85,7 @@ class TimeEntryBulkTableActions extends Component {
     $(`.company-time-entry-table-action`).attr("disabled", true);
     $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.approveFromSubmittedTimeEntries(match.params.companyHourLogId);
+    this.props.approveFromSubmittedCompanyHourLogTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-approve-all-from-submitted-modal').modal('hide');
   };
 
@@ -94,7 +94,7 @@ class TimeEntryBulkTableActions extends Component {
     $(`.company-time-entry-table-action`).attr("disabled", true);
     $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.hideFromSubmittedTimeEntries(match.params.companyHourLogId);
+    this.props.hideFromSubmittedCompanyHourLogTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-hide-all-from-submitted-modal').modal('hide');
   };
 
@@ -103,7 +103,7 @@ class TimeEntryBulkTableActions extends Component {
     $(`.company-time-entry-table-action`).attr("disabled", true);
     $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.rejectFromSubmittedTimeEntries(match.params.companyHourLogId);
+    this.props.rejectFromSubmittedCompanyHourLogTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-reject-all-from-submitted-modal').modal('hide');
   };
 
@@ -251,11 +251,11 @@ export default connect(null, {
   hideAllNewTimeEntries,
   submitAllNewTimeEntries,
   deleteAllNewTimeEntries,
-  hideFromApprovedTimeEntries,
-  rejectFromApprovedTimeEntries,
-  approveFromHiddenTimeEntries,
-  rejectFromHiddenTimeEntries,
-  approveFromSubmittedTimeEntries,
-  hideFromSubmittedTimeEntries,
-  rejectFromSubmittedTimeEntries,
+  hideFromApprovedCompanyHourLogTimeEntries,
+  rejectFromApprovedCompanyHourLogTimeEntries,
+  approveFromHiddenCompanyHourLogTimeEntries,
+  rejectFromHiddenCompanyHourLogTimeEntries,
+  approveFromSubmittedCompanyHourLogTimeEntries,
+  hideFromSubmittedCompanyHourLogTimeEntries,
+  rejectFromSubmittedCompanyHourLogTimeEntries,
 })(TimeEntryBulkTableActions);

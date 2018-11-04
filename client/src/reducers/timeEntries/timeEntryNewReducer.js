@@ -47,7 +47,7 @@ export default function(state = INITIAL_STATE, action) {
       return state.filter(timeEntry => timeEntry._id !== action.payload._id);
 
     case NEW_TIME_ENTRY_BULK_ACTION:
-      return [];
+      return INITIAL_STATE;
 
     default:
       return state;

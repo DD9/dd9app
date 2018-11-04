@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 
 import {
-  editTimeEntry, adjudicateTimeEntry, approveTimeEntry, hideTimeEntry, rejectTimeEntry, submitTimeEntry, deleteTimeEntry,
+  approveTimeEntry, hideTimeEntry, rejectTimeEntry, submitTimeEntry, deleteTimeEntry,
 } from '../../actions/timeEntry';
 
 import TimeEntryTableEditFormModal from './TimeEntryTableEditFormModal';
@@ -193,5 +193,5 @@ class CompanyTimeEntryTableActions extends Component {
 }
 
 export default connect(null, {
-  editTimeEntry, adjudicateTimeEntry, approveTimeEntry, hideTimeEntry, rejectTimeEntry, submitTimeEntry, deleteTimeEntry,
+  approveTimeEntry, hideTimeEntry, rejectTimeEntry, submitTimeEntry, deleteTimeEntry,
 })(CompanyTimeEntryTableActions);

@@ -205,6 +205,7 @@ exports.reject = async (req, res) => {
   const newTimeEntry = await new TimeEntry({
     user: rejectedTimeEntry.user,
     company: rejectedTimeEntry.company,
+    contractorHourLog: rejectedTimeEntry.contractorHourLog,
     date: rejectedTimeEntry.date,
     hours: rejectedTimeEntry.hours,
     description: rejectedTimeEntry.description,
@@ -297,33 +298,32 @@ exports.newTimeEntryBulkAction = async (req, res) => {
   res.json('');
 };
 
-exports.timeEntryInCompanyHourLogBulkAction = async (req, res) => {
+exports.companyHourLogTimeEntryBulkAction = async (req, res) => {
   const { companyHourLogId, currentStatus, receivingStatus } = req.params;
 
   const timeEntries = await TimeEntry.find({ companyHourLog: companyHourLogId, status: currentStatus });
 
   if (receivingStatus === 'rejected') {
     for (let i = 0; i < timeEntries.length; i++) {
-      const timeEntry = timeEntries[i];
-      timeEntry.status = receivingStatus;
-      await timeEntry.save();
+      const rejectedTimeEntry = timeEntries[i];
+      rejectedTimeEntry.status = receivingStatus;
+      await rejectedTimeEntry.save();
 
       const newTimeEntry = await new TimeEntry({
-        user: timeEntry.user,
-        company: timeEntry.company,
-        date: timeEntry.date,
-        hours: timeEntry.hours,
-        description: timeEntry.description,
-        publicUser: timeEntry.user,
-        publicCompany: timeEntry.company,
-        publicDate: timeEntry.date,
-        publicHours: timeEntry.hours,
-        publicDescription: timeEntry.description,
+        user: rejectedTimeEntry.user,
+        company: rejectedTimeEntry.company,
+        contractorHourLog: rejectedTimeEntry.contractorHourLog,
+        date: rejectedTimeEntry.date,
+        hours: rejectedTimeEntry.hours,
+        description: rejectedTimeEntry.description,
+        publicUser: rejectedTimeEntry.user,
+        publicCompany: rejectedTimeEntry.company,
+        publicDate: rejectedTimeEntry.date,
+        publicHours: rejectedTimeEntry.hours,
+        publicDescription: rejectedTimeEntry.description,
         status: 'created',
       }).save();
-
-      const populatedTimeEntry = await TimeEntry.findOne({ _id: newTimeEntry._id }).populate('user');
-      await createOrAppendCurrentContractorHourLog(populatedTimeEntry.user._id, populatedTimeEntry.hourlyRate, newTimeEntry);
+      rejectSubmittedTimeEntryInCurrentContractorHourLog(rejectedTimeEntry, newTimeEntry);
     }
     return res.json('');
   }
@@ -336,16 +336,16 @@ exports.timeEntryInCompanyHourLogBulkAction = async (req, res) => {
   res.json('');
 };
 
-exports.timeEntryInContractorHourLogBulkReject = async (req, res) => {
-  const contractorHourLogId = req.params.contractorHourLogId;
-  const contractorHourLog = await ContractorHourLog.findOne({ _id: contractorHourLogId }).populate('timeEntries, company');
-  for (let i = 0; i < contractorHourLog.timeEntries.length; i++) {
-    const timeEntry = contractorHourLog.timeEntries[i];
-    const rejectedTimeEntry = await TimeEntry.findOne({ _id: timeEntry._id });
-    await rejectedTimeEntry.update({ $set: { status: 'rejected' } }, { new: true });
+exports.contractorHourLogTimeEntryBulkReject = async (req, res) => {
+  const { contractorHourLogId } = req.params;
+  const timeEntries = await TimeEntry.find({ contractorHourLog: contractorHourLogId, $or: [{ status: 'submitted' }, { status: 'approved' }, { status: 'hidden' }] });
+  for (let i = 0; i < timeEntries.length; i++) {
+    const rejectedTimeEntry = timeEntries[i];
+    await rejectedTimeEntry.update({ $set: { status: 'rejected' } });
     const newTimeEntry = await new TimeEntry({
       user: rejectedTimeEntry.user,
       company: rejectedTimeEntry.company,
+      contractorHourLog: rejectedTimeEntry.contractorHourLog,
       date: rejectedTimeEntry.date,
       hours: rejectedTimeEntry.hours,
       description: rejectedTimeEntry.description,
@@ -362,29 +362,26 @@ exports.timeEntryInContractorHourLogBulkReject = async (req, res) => {
   res.json('');
 };
 
-exports.timeEntryInContractorHourLogBulkSubmit = async (req, res) => {
-  const contractorHourLogId = req.params.contractorHourLogId;
-  const contractorHourLog = await ContractorHourLog.findOne({ _id: contractorHourLogId }).populate('timeEntries, company');
-  for (let i = 0; i < contractorHourLog.timeEntries.length; i++) {
-    const timeEntryId = contractorHourLog.timeEntries[i]._id;
-    const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
-    await createOrAppendCurrentCompanyHourLog('submitted', timeEntry);
+exports.contractorHourLogTimeEntryBulkSubmit = async (req, res) => {
+  const { contractorHourLogId } = req.params;
+  const timeEntries = await TimeEntry.find({ contractorHourLog: contractorHourLogId, status: 'created' });
+  for (let i = 0; i < timeEntries.length; i++) {
+    const timeEntry = timeEntries[i];
     timeEntry.status = 'submitted';
     await timeEntry.save();
+    await createOrAppendCurrentCompanyHourLog('submitted', timeEntry);
   }
-  await contractorHourLog.save();
   res.json('');
 };
 
-exports.timeEntryInContractorHourLogBulkDelete = async (req, res) => {
-  const contractorHourLogId = req.params.contractorHourLogId;
-  const contractorHourLog = await ContractorHourLog.findOne({ _id: contractorHourLogId }).populate('timeEntries', 'status');
-  for (let i = 0; i < contractorHourLog.timeEntries.length; i++) {
-    const timeEntry = contractorHourLog.timeEntries[i];
-    if (timeEntry.status === 'created') {
-      await TimeEntry.findOneAndDelete({ _id: timeEntry._id });
-      await contractorHourLog.update({ $pull: { timeEntries: timeEntry._id } });
-    }
+exports.contractorHourLogTimeEntryBulkDelete = async (req, res) => {
+  const { contractorHourLogId } = req.params;
+  const contractorHourLog = await ContractorHourLog.findOne({ _id: contractorHourLogId });
+  const timeEntries = await TimeEntry.find({ contractorHourLog: contractorHourLogId, status: 'created' });
+  for (let i = 0; i < timeEntries.length; i++) {
+    const timeEntry = timeEntries[i];
+    await TimeEntry.findOneAndDelete({ _id: timeEntry._id });
+    await contractorHourLog.update({ $pull: { timeEntries: timeEntry._id } });
   }
   await contractorHourLog.save();
   res.json('');

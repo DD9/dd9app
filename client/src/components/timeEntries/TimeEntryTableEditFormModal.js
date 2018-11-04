@@ -8,7 +8,7 @@ import $ from 'jquery';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import {
-  submitTimeEntry, deleteTimeEntry, editTimeEntry, adjudicateTimeEntry,
+  editTimeEntry, adjudicateTimeEntry,
 } from '../../actions/timeEntry';
 
 class TimeEntryTableEditFormModal extends Component {
@@ -226,7 +226,7 @@ function validate(values) {
 }
 
 export default connect(null, {
-  submitTimeEntry, deleteTimeEntry, editTimeEntry, adjudicateTimeEntry,
+  editTimeEntry, adjudicateTimeEntry,
 })(reduxForm({
   validate,
 })(TimeEntryTableEditFormModal));

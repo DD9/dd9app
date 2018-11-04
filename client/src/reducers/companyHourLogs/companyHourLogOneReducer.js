@@ -10,7 +10,6 @@ import {
   APPROVE_TIME_ENTRY,
   HIDE_TIME_ENTRY,
   REJECT_TIME_ENTRY,
-  TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION,
   CLEAR_COMPANY_HOUR_LOG_ONE_STATE,
 } from '../../actions/types';
 
@@ -87,9 +86,6 @@ export default function(state = INITIAL_STATE, action) {
           return timeEntry;
         }),
       };
-
-    case TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION:
-      return state;
 
     case CLEAR_COMPANY_HOUR_LOG_ONE_STATE:
       return INITIAL_STATE || false;

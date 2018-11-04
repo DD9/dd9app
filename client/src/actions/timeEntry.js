@@ -13,7 +13,6 @@ import {
   SUBMIT_TIME_ENTRY,
   DELETE_TIME_ENTRY,
   NEW_TIME_ENTRY_BULK_ACTION,
-  TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION,
   GET_COMPANY_HOUR_LOG,
   GET_CONTRACTOR_HOUR_LOG,
 } from './types';
@@ -128,102 +127,92 @@ export const deleteAllNewTimeEntries = () => async dispatch => {
   dispatch({ type: NEW_TIME_ENTRY_BULK_ACTION, payload: res.data });
 };
 
-export const hideFromApprovedTimeEntries = companyHourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInCompanyHourLogBulkAction/${companyHourLogId}/approved/hidden`);
+export const hideFromApprovedCompanyHourLogTimeEntries = companyHourLogId => async dispatch => {
+  await axios.post(`/api/v1/timeEntry/companyHourLogTimeEntryBulkAction/${companyHourLogId}/approved/hidden`);
   const companyHourLog = await axios.get(`/api/v1/companyHourLog/${companyHourLogId}`);
 
   toast.info('Hid all Approved Time Entries');
 
-  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
   dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
 };
 
-export const rejectFromApprovedTimeEntries = companyHourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInCompanyHourLogBulkAction/${companyHourLogId}/approved/rejected`);
+export const rejectFromApprovedCompanyHourLogTimeEntries = companyHourLogId => async dispatch => {
+  await axios.post(`/api/v1/timeEntry/companyHourLogTimeEntryBulkAction/${companyHourLogId}/approved/rejected`);
   const companyHourLog = await axios.get(`/api/v1/companyHourLog/${companyHourLogId}`);
 
   toast.info('Rejected all Approved Time Entries');
 
-  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
   dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
 };
 
-export const approveFromHiddenTimeEntries = companyHourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInCompanyHourLogBulkAction/${companyHourLogId}/hidden/approved`);
+export const approveFromHiddenCompanyHourLogTimeEntries = companyHourLogId => async dispatch => {
+  await axios.post(`/api/v1/timeEntry/companyHourLogTimeEntryBulkAction/${companyHourLogId}/hidden/approved`);
   const companyHourLog = await axios.get(`/api/v1/companyHourLog/${companyHourLogId}`);
 
   toast.info('Approved all Hidden Time Entries');
 
-  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
   dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
 };
 
-export const rejectFromHiddenTimeEntries = companyHourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInCompanyHourLogBulkAction/${companyHourLogId}/hidden/rejected`);
+export const rejectFromHiddenCompanyHourLogTimeEntries = companyHourLogId => async dispatch => {
+  await axios.post(`/api/v1/timeEntry/companyHourLogTimeEntryBulkAction/${companyHourLogId}/hidden/rejected`);
   const companyHourLog = await axios.get(`/api/v1/companyHourLog/${companyHourLogId}`);
 
   toast.info('Rejected all Hidden Time Entries');
 
-  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
   dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
 };
 
-export const approveFromSubmittedTimeEntries = companyHourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInCompanyHourLogBulkAction/${companyHourLogId}/submitted/approved`);
+export const approveFromSubmittedCompanyHourLogTimeEntries = companyHourLogId => async dispatch => {
+  await axios.post(`/api/v1/timeEntry/companyHourLogTimeEntryBulkAction/${companyHourLogId}/submitted/approved`);
   const companyHourLog = await axios.get(`/api/v1/companyHourLog/${companyHourLogId}`);
 
   toast.info('Approved all Submitted Time Entries');
 
-  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
   dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
 };
 
-export const hideFromSubmittedTimeEntries = companyHourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInCompanyHourLogBulkAction/${companyHourLogId}/submitted/hidden`);
+export const hideFromSubmittedCompanyHourLogTimeEntries = companyHourLogId => async dispatch => {
+  await axios.post(`/api/v1/timeEntry/companyHourLogTimeEntryBulkAction/${companyHourLogId}/submitted/hidden`);
   const companyHourLog = await axios.get(`/api/v1/companyHourLog/${companyHourLogId}`);
 
   toast.info('Hid all Submitted Time Entries');
 
-  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
   dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
 };
 
-export const rejectFromSubmittedTimeEntries = companyHourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/timeEntryInCompanyHourLogBulkAction/${companyHourLogId}/submitted/rejected`);
+export const rejectFromSubmittedCompanyHourLogTimeEntries = companyHourLogId => async dispatch => {
+  await axios.post(`/api/v1/timeEntry/companyHourLogTimeEntryBulkAction/${companyHourLogId}/submitted/rejected`);
   const companyHourLog = await axios.get(`/api/v1/companyHourLog/${companyHourLogId}`);
 
   toast.info('Rejected all Submitted Time Entries');
 
-  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
   dispatch({ type: GET_COMPANY_HOUR_LOG, payload: companyHourLog.data });
 };
 
 export const rejectFromSubmittedContractorHourLogTimeEntries = contractorHourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/contractorHourLogBulkAction/${contractorHourLogId}/rejectAllSubmitted`);
+  await axios.post(`/api/v1/timeEntry/contractorHourLogTimeEntryBulkAction/${contractorHourLogId}/rejectAllSubmitted`);
   const contractorHourLog = await axios.get(`/api/v1/contractorHourLog/${contractorHourLogId}`);
 
   toast.info('Rejected all Submitted Time Entries');
 
-  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
   dispatch({ type: GET_CONTRACTOR_HOUR_LOG, payload: contractorHourLog.data });
 };
 
 export const submitFromNewContractorHourLogTimeEntries = contractorHourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/contractorHourLogBulkAction/${contractorHourLogId}/submitAllCreated`);
+  await axios.post(`/api/v1/timeEntry/contractorHourLogTimeEntryBulkAction/${contractorHourLogId}/submitAllCreated`);
   const contractorHourLog = await axios.get(`/api/v1/contractorHourLog/${contractorHourLogId}`);
 
   toast.info('Submitted all Created Time Entries');
 
-  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
   dispatch({ type: GET_CONTRACTOR_HOUR_LOG, payload: contractorHourLog.data });
 };
 
 export const deleteFromNewContractorHourLogTimeEntries = contractorHourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/contractorHourLogBulkAction/${contractorHourLogId}/deleteAllCreated`);
+  await axios.post(`/api/v1/timeEntry/contractorHourLogTimeEntryBulkAction/${contractorHourLogId}/deleteAllCreated`);
   const contractorHourLog = await axios.get(`/api/v1/contractorHourLog/${contractorHourLogId}`);
 
   toast.info('Deleted all Created Time Entries');
 
-  dispatch({ type: TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION, payload: bulkAction.data });
   dispatch({ type: GET_CONTRACTOR_HOUR_LOG, payload: contractorHourLog.data });
 };

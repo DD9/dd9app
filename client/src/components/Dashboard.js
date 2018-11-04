@@ -29,7 +29,7 @@ class Dashboard extends Component {
         <Switch>
           <AdminRoute path="/users" component={UserAll} />
           <Route path="/user/:userId/contractorHourLogs" render={(props) => <UserOneContractorHourLogs {...props} />} />
-          <Route path="/user/:id" component={UserOneEdit} />
+          <Route path="/user/:userId" component={UserOneEdit} />
           <AdminRoute path="/companies" component={CompanyAll} />
           <AdminRoute path="/company/:companyId" component={CompanyOne} />
           <AdminRoute path="/contractorHourLogs" component={ContractorHourLogAll} />

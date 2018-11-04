@@ -7,7 +7,6 @@ import {
   REJECT_TIME_ENTRY,
   SUBMIT_TIME_ENTRY,
   DELETE_TIME_ENTRY,
-  TIME_ENTRY_IN_CONTRACTOR_HOUR_LOG_BULK_ACTION,
   CLEAR_CONTRACTOR_HOUR_LOG_ONE_STATE,
 } from '../../actions/types';
 
@@ -54,9 +53,6 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         timeEntries: state.timeEntries.filter(timeEntry => timeEntry._id !== action.payload._id),
       };
-
-    case TIME_ENTRY_IN_CONTRACTOR_HOUR_LOG_BULK_ACTION:
-      return state;
 
     case CLEAR_CONTRACTOR_HOUR_LOG_ONE_STATE:
       return INITIAL_STATE || false;
