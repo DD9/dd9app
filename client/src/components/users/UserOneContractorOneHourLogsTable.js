@@ -3,6 +3,7 @@ import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
+
 import SpinnerClipLoader from '../SpinnerClipLoader';
 
 const UserOneContractorOneHourLogsTable = ({
@@ -63,7 +64,7 @@ const UserOneContractorOneHourLogsTable = ({
       maxWidth: 80,
     }, {
       Header: 'Created',
-      id: 'created',
+      accessor: 'totalCreatedHours',
       Cell: data => <span style={{ color: '#AAAAAA' }}>{data.original.totalCreatedHours}</span>,
       maxWidth: 80,
     }, {
@@ -77,7 +78,7 @@ const UserOneContractorOneHourLogsTable = ({
       maxWidth: 80,
     }, {
       Header: 'Payment',
-      id: 'payment',
+      accessor: 'hourlyRate[0].USD',
       Cell: data => (
         <span style={{ color: '#AAAAAA' }}>
           {`$${((data.original.totalSubmittedHours * parseInt(data.original.hourlyRate[0].USD)) + (data.original.totalCreatedHours * parseInt(data.original.hourlyRate[0].USD))).toFixed(2)}`}

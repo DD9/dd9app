@@ -31,9 +31,17 @@ exports.edit = async (req, res) => {
 };
 
 exports.adminEdit = async (req, res) => {
-  console.log(req.body);
   const { userId } = req.body;
-  const user = await User.findOneAndUpdate({ _id: userId }, req.body, { new: true }).populate('company', 'name');
+  const user = await User.findOneAndUpdate(
+    { _id: userId },
+    {
+      company: req.body.company,
+      status: req.body.status,
+      'name.first': req.body.firstName,
+      'name.last': req.body.lastName,
+    },
+    { new: true },
+  ).populate('company', 'name');
 
   await user.hourlyRate.pop();
   await user.hourlyRate.push({

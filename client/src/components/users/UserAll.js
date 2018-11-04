@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import uuid from 'uuid/v1';
 
-import { getAllUsers } from '../../actions/user';
-import { getActiveCompanies } from '../../actions/company';
-
 import SpinnerClipLoader from '../SpinnerClipLoader';
 import UserAllTable from './UserAllTable';
 import UserAllControls from './UserAllControls';
+
+import { getAllUsers } from '../../actions/user';
+import { getActiveCompanies } from '../../actions/company';
 
 class UserAll extends Component {
   componentDidMount() {

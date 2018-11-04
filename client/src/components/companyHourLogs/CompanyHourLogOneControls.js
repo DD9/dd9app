@@ -81,7 +81,7 @@ class CompanyHourLogOneControls extends Component {
           modalTitle="Close Hour Log"
           formId="closeCompanyHourLogForm"
           modalField={<Field label="Title" name="title" component={this.renderField} />}
-          modalBody="Submitted time entries will be moved to a new Current hour log. Closing an empty hour log will trigger its deletion."
+          modalBody="Submitted time entries will be moved to a new Current hour log. Closing an hour log with no approved or hidden time entries will trigger its deletion."
           onSubmit={handleSubmit(this.onCompanyHourLogCloseFormSubmit)}
         />
         <CompanyHourLogOneControlsModal

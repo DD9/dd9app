@@ -1,7 +1,7 @@
 import React from 'react';
 
 const CompanyOneControlsModal = ({
-  modalId, modalTitle, formId, modalBody, onSubmit,
+  modalId, modalTitle, formId, modalField, modalBody, onSubmit,
 }) => (
   <div>
     <div className="modal fade" id={modalId} tabIndex={-1} role="dialog" aria-labelledby={`#${modalId}`} aria-hidden="true">
@@ -12,6 +12,7 @@ const CompanyOneControlsModal = ({
           </div>
           <div className="modal-body">
             <form id={formId} className="form" onSubmit={onSubmit}>
+              {modalField}
               <p className="text-center">{modalBody}</p>
             </form>
           </div>

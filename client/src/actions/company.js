@@ -47,11 +47,13 @@ export const createCompany = formProps => async dispatch => {
 };
 
 export const editCompany = (companyId, formProps) => async dispatch => {
-  const res = await axios.post(`/api/v1/company/${companyId}/edit`, formProps);
+  const editCompanyRes = await axios.post(`/api/v1/company/${companyId}/edit`, formProps);
+  const getCompaniesRes = await axios.get('/api/v1/companies/');
 
-  toast.success(`${res.data.name} successfully edited`);
+  toast.success(`${editCompanyRes.data.name} successfully edited`);
 
-  await dispatch({ type: EDIT_COMPANY, payload: res.data });
+  await dispatch({ type: EDIT_COMPANY, payload: editCompanyRes.data });
+  await dispatch({ type: GET_COMPANIES, payload: getCompaniesRes.data });
 };
 
 export const activateCompany = companyId => async dispatch => {

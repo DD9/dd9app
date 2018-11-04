@@ -31,6 +31,9 @@ exports.one = async (req, res) => {
         console.log(err);
       }
     });
+  if (!companyHourLog.timeEntries[0]) {
+    companyHourLog.timeEntries.push('empty');
+  }
   res.json(companyHourLog);
 };
 
@@ -66,7 +69,7 @@ exports.open = async (req, res) => {
 
 exports.close = async (req, res) => {
   const { companyHourLogId } = req.params;
-  const companyHourLog = await CompanyHourLog.findOne({ _id: companyHourLogId }).populate('timeEntries');
+  let companyHourLog = await CompanyHourLog.findOne({ _id: companyHourLogId }).populate('timeEntries');
 
   // If closing an companyHourLog with submitted timeEntries, move the timeEntries to a new Current companyHourLog
   if (companyHourLog.totalSubmittedHours > 0) {
@@ -74,31 +77,27 @@ exports.close = async (req, res) => {
       company: companyHourLog.company,
       dateClosed: new Date(0),
     })).save();
-    let totalSubmittedHours = 0;
     for (let i = 0; i < companyHourLog.timeEntries.length; i++) {
       const timeEntry = companyHourLog.timeEntries[i];
       if (timeEntry.status === 'submitted') {
-        totalSubmittedHours += timeEntry.publicHours;
         await recievingHourLog.update({ $addToSet: { timeEntries: timeEntry._id } });
         await companyHourLog.update({ $pull: { timeEntries: timeEntry._id } });
         await TimeEntry.findOneAndUpdate({ _id: timeEntry._id }, { companyHourLog: recievingHourLog._id });
       }
     }
-    companyHourLog.totalSubmittedHours = 0;
-    recievingHourLog.totalSubmittedHours = totalSubmittedHours;
+    companyHourLog.title = req.body.title;
+    companyHourLog.dateClosed = new Date();
+
+    await companyHourLog.save();
     await recievingHourLog.save();
   }
 
   // Delete a companyHourLog if it's empty
+  companyHourLog = await CompanyHourLog.findOne({ _id: companyHourLogId }).populate('timeEntries');
   if (companyHourLog.totalPublicHours === 0 && companyHourLog.totalHiddenHours === 0 && companyHourLog.totalSubmittedHours === 0) {
     await companyHourLog.remove();
     return res.json({ redirectUrl: `/company/${companyHourLog.company._id}`, companyId: companyHourLog.company._id });
   }
-
-  companyHourLog.title = req.body.title;
-  companyHourLog.dateClosed = new Date();
-
-  await companyHourLog.save();
 
   res.json(companyHourLog);
 };

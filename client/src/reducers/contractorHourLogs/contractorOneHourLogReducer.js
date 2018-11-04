@@ -31,7 +31,7 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         timeEntries: state.timeEntries.map(timeEntry => {
-          if (timeEntry._id === action.payload.oldTimeEntry._id) {
+          if (timeEntry._id === action.payload.rejectedTimeEntry._id) {
             timeEntry = action.payload.newTimeEntry;
           }
           return timeEntry;
@@ -52,12 +52,7 @@ export default function(state = INITIAL_STATE, action) {
     case DELETE_TIME_ENTRY:
       return {
         ...state,
-        timeEntries: state.timeEntries.map(timeEntry => {
-          if (timeEntry._id === action.payload._id) {
-            timeEntry = action.payload;
-          }
-          return timeEntry;
-        }),
+        timeEntries: state.timeEntries.filter(timeEntry => timeEntry._id !== action.payload._id),
       };
 
     case TIME_ENTRY_IN_CONTRACTOR_HOUR_LOG_BULK_ACTION:

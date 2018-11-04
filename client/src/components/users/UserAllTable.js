@@ -3,9 +3,9 @@ import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
-import UserAllTableAdminEditFormModal from './UserAllTableAdminEditFormModal';
-
 import 'react-table/react-table.css';
+
+import UserAllTableAdminEditFormModal from './UserAllTableAdminEditFormModal';
 
 const UserAllTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
   const columns = [{

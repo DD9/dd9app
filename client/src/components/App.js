@@ -12,12 +12,12 @@ import '../styles/partials/app.scss';
 import '../styles/partials/normalize.scss';
 import '../styles/partials/toasts.scss';
 
-import { getCurrentUser } from '../actions/auth';
-
 import AuthedRoute from './HOCRoutes/AuthedRoute';
 import PublicOnlyRoute from './HOCRoutes/PublicOnlyRoute';
 import Login from './Login';
 import Dashboard from './Dashboard';
+
+import { getCurrentUser } from '../actions/auth';
 
 class App extends Component {
   componentWillMount() {

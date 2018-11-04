@@ -199,7 +199,7 @@ export const rejectFromSubmittedTimeEntries = companyHourLogId => async dispatch
 };
 
 export const rejectFromSubmittedContractorHourLogTimeEntries = contractorHourLogId => async dispatch => {
-  const bulkAction = await axios.post(`/api/v1/timeEntry/contractorHourLogBulkAction/${contractorHourLogId}/rejectAllCreated`);
+  const bulkAction = await axios.post(`/api/v1/timeEntry/contractorHourLogBulkAction/${contractorHourLogId}/rejectAllSubmitted`);
   const contractorHourLog = await axios.get(`/api/v1/contractorHourLog/${contractorHourLogId}`);
 
   toast.info('Rejected all Submitted Time Entries');
@@ -219,7 +219,6 @@ export const submitFromNewContractorHourLogTimeEntries = contractorHourLogId => 
 };
 
 export const deleteFromNewContractorHourLogTimeEntries = contractorHourLogId => async dispatch => {
-  console.log(contractorHourLogId);
   const bulkAction = await axios.post(`/api/v1/timeEntry/contractorHourLogBulkAction/${contractorHourLogId}/deleteAllCreated`);
   const contractorHourLog = await axios.get(`/api/v1/contractorHourLog/${contractorHourLogId}`);
 

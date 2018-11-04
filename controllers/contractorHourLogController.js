@@ -4,7 +4,8 @@ const ContractorHourLog = mongoose.model('ContractorHourLog');
 
 exports.openHourLogs = async (req, res) => {
   const openContractorHourLogs = await ContractorHourLog.find({ dateClosed: new Date(0) })
-    .populate('user', 'name hourlyRate');
+    .populate('user', 'name hourlyRate')
+    .populate('timeEntries', 'status hours');
   if (!openContractorHourLogs[0]) return res.json('empty');
   res.json(openContractorHourLogs);
 };
@@ -12,6 +13,7 @@ exports.openHourLogs = async (req, res) => {
 exports.closedHourLogs = async (req, res) => {
   const closedContractorHourLogs = await ContractorHourLog.find({ dateClosed: { $ne: new Date(0) } })
     .populate('user', 'name hourlyRate')
+    .populate('timeEntries', 'status hours')
     .limit(200)
     .sort({ dateOpened: -1 });
   if (!closedContractorHourLogs[0]) return res.json('empty');

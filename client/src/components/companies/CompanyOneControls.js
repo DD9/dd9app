@@ -11,7 +11,7 @@ class CompanyOneControls extends Component {
   onCompanyEditFormSubmit = formProps => {
     this.props.editCompany(this.props.company._id, formProps);
     $('#companyEditModal').modal('hide');
-    this.props.reset();
+    setTimeout(() => this.props.reset(), 500);
   };
 
   onCompanyActivateFormSubmit = () => {
@@ -55,7 +55,7 @@ class CompanyOneControls extends Component {
           modalId="companyEditModal"
           modalTitle={`Edit ${company.name}`}
           formId="companyEditForm"
-          modalBody={<Field label="Name" name="name" component={this.renderField} />}
+          modalField={<Field label="Name" name="name" component={this.renderField} />}
           onSubmit={handleSubmit(this.onCompanyEditFormSubmit)}
         />
         <CompanyOneControlsModal

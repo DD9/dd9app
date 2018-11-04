@@ -26,7 +26,6 @@ class TimeEntryTableEditFormModal extends Component {
   onTimeEntryEditFormSubmit(formProps) {
     const { timeEntry } = this.props;
     $(`#time-entry-edit-modal-${timeEntry._id}`).modal('hide');
-    console.log(formProps);
     switch (this.props.timeEntry.status) {
       case 'created':
         return this.props.editTimeEntry(timeEntry._id, formProps);

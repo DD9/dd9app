@@ -44,15 +44,15 @@ export default function(state = INITIAL_STATE, action) {
     }
 
     case ADJUDICATE_TIME_ENTRY: {
-      return {
+      const newState = {
         ...state,
-        timeEntries: state.timeEntries.map(timeEntry => {
-          if (timeEntry._id === action.payload._id) {
-            timeEntry = action.payload;
-          }
-          return timeEntry;
-        }),
+        timeEntries: state.timeEntries.filter(timeEntry => timeEntry._id !== action.payload._id),
       };
+
+      if (!newState.timeEntries) {
+        newState.timeEntries.push('empty');
+      }
+      return newState;
     }
 
     case APPROVE_TIME_ENTRY:
@@ -81,8 +81,8 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         timeEntries: state.timeEntries.map(timeEntry => {
-          if (timeEntry._id === action.payload.oldTimeEntry._id) {
-            timeEntry = action.payload.oldTimeEntry;
+          if (timeEntry._id === action.payload.rejectedTimeEntry._id) {
+            timeEntry = action.payload.rejectedTimeEntry;
           }
           return timeEntry;
         }),
