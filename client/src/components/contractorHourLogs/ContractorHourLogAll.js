@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import { getOpenContractorHourLogs, getClosedContractorHourLogs } from '../../actions/contractorHourLog';
+import uuid from 'uuid/v1';
 
 import ContractorHourLogAllTable from './ContractorHourLogAllTable';
+
+import { getOpenContractorHourLogs, getClosedContractorHourLogs } from '../../actions/contractorHourLog';
 
 class ContractorHourLogAll extends Component {
   componentDidMount() {
@@ -19,13 +20,13 @@ class ContractorHourLogAll extends Component {
           tableTitle="Open Contractor Hour Logs"
           contractorHourLogs={openContractorHourLogs}
           showPagination={false}
-          key={openContractorHourLogs.length}
+          key={uuid()}
           defaultPageSize={openContractorHourLogs.length}
-          minRows={openContractorHourLogs.length === 0 ? 20 : openContractorHourLogs.length}
+          minRows={openContractorHourLogs.length}
         />
         <div className="m-5" />
         <ContractorHourLogAllTable
-          key={closedContractorHourLogs}
+          key={uuid()}
           tableTitle="Closed Contractor Hour Logs"
           contractorHourLogs={closedContractorHourLogs}
         />

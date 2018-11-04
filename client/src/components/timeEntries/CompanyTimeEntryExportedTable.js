@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TimeEntryExportedTable = ({ timeEntries }) => {
+const CompanyTimeEntryExportedTable = ({ timeEntries }) => {
   if (!timeEntries || timeEntries[0] === 'approvedTimeEntries') {
     return null;
   }
@@ -8,7 +8,7 @@ const TimeEntryExportedTable = ({ timeEntries }) => {
   const rows = timeEntries.map((entry, index) => (
     <tr key={index}>
       <td>{`${entry.publicDate.split('T')[0].split('-')[1]}-${entry.publicDate.split('T')[0].split('-')[2]}`}</td>
-      <td>{entry.publicUser.lastName}</td>
+      <td>{entry.publicUser.name.last}</td>
       <td>{entry.publicHours}</td>
       <td>{entry.publicDescription}</td>
     </tr>
@@ -34,4 +34,4 @@ const TimeEntryExportedTable = ({ timeEntries }) => {
   );
 };
 
-export default TimeEntryExportedTable;
+export default CompanyTimeEntryExportedTable;

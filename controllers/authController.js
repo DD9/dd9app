@@ -11,9 +11,7 @@ exports.googleAuth = passport.authenticate('google', {
 
 exports.googleAuthRedirect = passport.authenticate('google', {
   successRedirect: '/timeEntry/new',
-  successFlash: 'You are now logged in',
   failureRedirect: '/login',
-  failureFlash: 'Please login with a dd9.com or designdivine.com email',
 });
 
 exports.currentUser = (req, res) => {
@@ -22,7 +20,6 @@ exports.currentUser = (req, res) => {
 
 exports.logout = (req, res) => {
   req.logout();
-  req.flash('success', 'You are now logged out');
   res.send('You are now logged out');
 };
 
@@ -30,7 +27,6 @@ exports.isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  req.flash('danger', 'Oops, you must be logged in to do that');
   res.send('Oops, you must be logged in to do that');
 };
 
@@ -38,7 +34,6 @@ exports.requireLogin = (req, res, next) => {
   if (!req.isAuthenticated()) {
     return next();
   }
-  req.flash('warning', 'Oops, You are already logged in');
   res.send('Oops, You are already logged in');
 };
 
@@ -46,7 +41,6 @@ exports.isOwner = (req, res, next) => {
   if (req.params.id === req.user._id.toString() || req.user.permissions[0].admin) {
     return next();
   }
-  req.flash('warning', 'Oops, you are not the owner of that entity');
   res.send('Oops, you are not the owner of that entity');
 };
 
@@ -55,6 +49,5 @@ exports.isAdmin = (req, res, next) => {
   if (isAdmin) {
     return next();
   }
-  req.flash('warning', 'Oops, you must be an admin to do that');
   res.send('Oops, you must be an admin to do that');
 };

@@ -73,5 +73,4 @@ timeEntrySchema.index({
   user: -1,
 });
 
-
 module.exports = mongoose.model('TimeEntry', timeEntrySchema);

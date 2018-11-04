@@ -33,21 +33,20 @@ const contractorHourLogSchema = new Schema({
       USD: 0,
     }],
   },
-  totalCreatedHours: {
-    type: Number,
-    default: 0,
-  },
-  totalSubmittedHours: {
-    type: Number,
-    default: 0,
-  },
-  totalPayment: {
-    type: Number,
-    default: 0,
-  },
 },
 {
   timestamps: true,
+});
+
+contractorHourLogSchema.set('toObject', { virtuals: true });
+contractorHourLogSchema.set('toJSON', { virtuals: true });
+
+contractorHourLogSchema.virtual('totalCreatedHours').get(function () {
+  return this.timeEntries.filter(timeEntry => timeEntry.status === 'created').reduce((prev, next) => prev + next.hours, 0);
+});
+
+contractorHourLogSchema.virtual('totalSubmittedHours').get(function () {
+  return this.timeEntries.filter(timeEntry => timeEntry.status === 'submitted').reduce((prev, next) => prev + next.hours, 0);
 });
 
 contractorHourLogSchema.index(

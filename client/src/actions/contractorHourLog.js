@@ -6,73 +6,59 @@ import {
   GET_CLOSED_CONTRACTOR_HOUR_LOGS,
   GET_CONTRACTOR_HOUR_LOG,
   CLOSE_CONTRACTOR_HOUR_LOG,
-  GET_CONTRACTOR_HOUR_LOGS,
-  EDIT_CONTRACTOR_HOUR_LOG
+  EDIT_CONTRACTOR_HOUR_LOG,
+  CLEAR_CONTRACTOR_HOUR_LOG_ONE_STATE,
 } from './types';
 
 export const getOpenContractorHourLogs = () => async dispatch => {
-  const res = await axios.get('/api/v1/hourLogs/contractor/open');
+  const res = await axios.get('/api/v1/contractorHourLogs/open');
 
   dispatch({ type: GET_OPEN_CONTRACTOR_HOUR_LOGS, payload: res.data });
 };
 
 export const getClosedContractorHourLogs = () => async dispatch => {
-  const res = await axios.get('/api/v1/hourLogs/contractor/closed');
+  const res = await axios.get('/api/v1/contractorHourLogs/closed');
 
   dispatch({ type: GET_CLOSED_CONTRACTOR_HOUR_LOGS, payload: res.data });
 };
 
 export const getContractorHourLog = contractorHourLogId => async dispatch => {
-  const res = await axios.get(`/api/v1/hourLog/contractor/${contractorHourLogId}`);
+  const res = await axios.get(`/api/v1/contractorHourLog/${contractorHourLogId}`);
 
   dispatch({ type: GET_CONTRACTOR_HOUR_LOG, payload: res.data });
 };
 
 export const closeContractorHourLog = (contractorHourLogId, formProps, history) => async dispatch => {
-  const closeContractorHourLogRes = await axios.post(`/api/v1/hourLog/contractor/${contractorHourLogId}/close`, formProps);
+  const closeContractorHourLogRes = await axios.post(`/api/v1/contractorHourLog/${contractorHourLogId}/close`, formProps);
 
   if (closeContractorHourLogRes.data.error) {
-    toast.error(`Error: ${closeContractorHourLogRes.data.error}`, {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-    const contractorHourLog = await axios.get(`/api/v1/hourLog/contractor/${contractorHourLogId}`);
+    toast.error(`Error: ${closeContractorHourLogRes.data.error}`);
+    const contractorHourLog = await axios.get(`/api/v1/contractorHourLog/${contractorHourLogId}`);
     dispatch({ type: CLOSE_CONTRACTOR_HOUR_LOG, payload: closeContractorHourLogRes.data });
     dispatch({ type: GET_CONTRACTOR_HOUR_LOG, payload: contractorHourLog.data });
   } else if (closeContractorHourLogRes.data.redirectUrl) {
-    toast.success('Successfully deleted hour log', {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-    const getContractorHourLogs = await axios.get(`/api/v1/user/${closeContractorHourLogRes.data.userId}/contractorHourLogs`);
+    toast.success('Successfully deleted hour log');
+    const openContractorHourLogsRes = await axios.get('/api/v1/contractorHourLogs/open');
+    const closedContractorHourLogsRes = await axios.get('/api/v1/contractorHourLogs/closed');
 
     history.push(closeContractorHourLogRes.data.redirectUrl);
-    dispatch({ type: GET_CONTRACTOR_HOUR_LOGS, payload: getContractorHourLogs.data });
+
+    dispatch({ type: GET_OPEN_CONTRACTOR_HOUR_LOGS, payload: openContractorHourLogsRes.data });
+    dispatch({ type: GET_CLOSED_CONTRACTOR_HOUR_LOGS, payload: closedContractorHourLogsRes.data });
   } else {
-    toast.success('Successfully closed hour log', {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-    const contractorHourLog = await axios.get(`/api/v1/hourLog/contractor/${contractorHourLogId}`);
+    toast.success('Successfully closed hour log');
+    const contractorHourLog = await axios.get(`/api/v1/contractorHourLog/${contractorHourLogId}`);
     dispatch({ type: CLOSE_CONTRACTOR_HOUR_LOG, payload: closeContractorHourLogRes.data });
     dispatch({ type: GET_CONTRACTOR_HOUR_LOG, payload: contractorHourLog.data });
   }
 };
 
 export const editContractorHourLog = (contractorHourLogId, formProps) => async dispatch => {
-  const res = await axios.post(`/api/v1/hourLog/contractor/${contractorHourLogId}/edit`, formProps);
+  const res = await axios.post(`/api/v1/contractorHourLog/${contractorHourLogId}/edit`, formProps);
 
   dispatch({ type: EDIT_CONTRACTOR_HOUR_LOG, payload: res.data });
+};
+
+export const clearContractorHourLogOneState = () => async dispatch => {
+  dispatch({ type: CLEAR_CONTRACTOR_HOUR_LOG_ONE_STATE, payload: {} });
 };

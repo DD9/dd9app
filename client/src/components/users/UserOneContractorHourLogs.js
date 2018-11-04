@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import SpinnerClipLoader from '../SpinnerClipLoader';
 import UserOneContractorOneHourLogsTable from './UserOneContractorOneHourLogsTable';
 
-import { getUser, getContractorHourLogs, clearContractorHourLogState } from '../../actions/user';
+import { getUser, getContractorHourLogs, clearUserOneContractorHourLogsState } from '../../actions/user';
 
 class ContractorOne extends Component {
   componentDidMount() {
@@ -14,7 +14,7 @@ class ContractorOne extends Component {
   }
 
   componentWillUnmount() {
-    this.props.clearContractorHourLogState();
+    this.props.clearUserOneContractorHourLogsState();
   }
 
   renderContent() {
@@ -54,4 +54,4 @@ function mapStateToProps({ user, contractorHourLogs }) {
   return { user, contractorHourLogs };
 }
 
-export default connect(mapStateToProps, { getUser, getContractorHourLogs, clearContractorHourLogState })(ContractorOne);
+export default connect(mapStateToProps, { getUser, getContractorHourLogs, clearUserOneContractorHourLogsState })(ContractorOne);

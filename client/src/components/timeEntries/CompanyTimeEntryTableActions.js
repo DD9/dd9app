@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 
 import {
-  editTimeEntry, adjudicateTimeEntry, approveTimeEntry, hideTimeEntry, rejectTimeEntry, submitTimeEntry, deleteTimeEntry,
+  approveTimeEntry, hideTimeEntry, rejectTimeEntry, submitTimeEntry, deleteTimeEntry,
 } from '../../actions/timeEntry';
 
 import TimeEntryTableEditFormModal from './TimeEntryTableEditFormModal';
 import TimeEntryTableActionConfirmModal from './TimeEntryTableActionConfirmModal';
 
-class TimeEntryTableActions extends Component {
+class CompanyTimeEntryTableActions extends Component {
   componentDidUpdate() {
     const { timeEntry } = this.props;
     $(`.company-time-entry-table-action-${timeEntry._id}`).attr("disabled", false);
@@ -193,5 +193,5 @@ class TimeEntryTableActions extends Component {
 }
 
 export default connect(null, {
-  editTimeEntry, adjudicateTimeEntry, approveTimeEntry, hideTimeEntry, rejectTimeEntry, submitTimeEntry, deleteTimeEntry,
-})(TimeEntryTableActions);
+  approveTimeEntry, hideTimeEntry, rejectTimeEntry, submitTimeEntry, deleteTimeEntry,
+})(CompanyTimeEntryTableActions);

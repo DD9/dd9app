@@ -7,15 +7,10 @@ import { createCompany } from '../../actions/company';
 
 
 class CompanyAllControls extends Component {
-  componentDidMount() {
-    $('#companyCreateModal').on('hidden.bs.modal', () => {
-      this.props.reset();
-    });
-  }
-
   onFormSubmit(formProps) {
-    this.props.createCompany(formProps)
-      .then($('#companyCreateModal').modal('hide'));
+    this.props.createCompany(formProps);
+    $('#companyCreateModal').modal('hide');
+    this.props.reset();
   }
 
   renderField(field) {

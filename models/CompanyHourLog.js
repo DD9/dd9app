@@ -27,21 +27,24 @@ const companyHourLogSchema = new Schema({
     type: String,
     default: 'Current',
   },
-  totalPublicHours: {
-    type: Number,
-    default: 0,
-  },
-  totalHiddenHours: {
-    type: Number,
-    default: 0,
-  },
-  totalSubmittedHours: {
-    type: Number,
-    default: 0,
-  },
 },
 {
   timestamps: true,
+});
+
+companyHourLogSchema.set('toObject', { virtuals: true });
+companyHourLogSchema.set('toJSON', { virtuals: true });
+
+companyHourLogSchema.virtual('totalPublicHours').get(function () {
+  return this.timeEntries.filter(timeEntry => timeEntry.status === 'approved').reduce((prev, next) => prev + next.publicHours, 0);
+});
+
+companyHourLogSchema.virtual('totalHiddenHours').get(function () {
+  return this.timeEntries.filter(timeEntry => timeEntry.status === 'hidden').reduce((prev, next) => prev + next.publicHours, 0);
+});
+
+companyHourLogSchema.virtual('totalSubmittedHours').get(function () {
+  return this.timeEntries.filter(timeEntry => timeEntry.status === 'submitted').reduce((prev, next) => prev + next.publicHours, 0);
 });
 
 companyHourLogSchema.index(
@@ -51,10 +54,10 @@ companyHourLogSchema.index(
 companyHourLogSchema.plugin(deepPopulate, {
   populate: {
     'timeEntries.user': {
-      select: 'name hourlyRate',
+      select: 'name',
     },
     'timeEntries.publicUser': {
-      select: 'name hourlyRate',
+      select: 'name',
     },
     'timeEntries.company': {
       select: 'name',

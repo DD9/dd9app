@@ -7,7 +7,7 @@ export default function(state = INITIAL_STATE, action) {
     case GET_COMPANY_HOUR_LOGS:
       return action.payload || false;
     case CLEAR_COMPANY_HOUR_LOGS_STATE:
-      return [] || false;
+      return INITIAL_STATE || false;
     default:
       return state;
   }

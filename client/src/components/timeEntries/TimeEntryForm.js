@@ -5,10 +5,9 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import $ from 'jquery';
 
-import { createNewTimeEntry } from '../../actions/timeEntry';
-
 import 'react-datepicker/dist/react-datepicker.css';
 
+import { createNewTimeEntry } from '../../actions/timeEntry';
 
 class TimeEntryForm extends Component {
   componentDidMount() {

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import { getAllUsers } from '../../actions/user';
-import { getActiveCompanies } from '../../actions/company';
+import uuid from 'uuid/v1';
 
 import SpinnerClipLoader from '../SpinnerClipLoader';
 import UserAllTable from './UserAllTable';
 import UserAllControls from './UserAllControls';
+
+import { getAllUsers } from '../../actions/user';
+import { getActiveCompanies } from '../../actions/company';
 
 class UserAll extends Component {
   componentDidMount() {
@@ -30,9 +31,9 @@ class UserAll extends Component {
         <UserAllTable
           users={users}
           activeCompanies={activeCompanies}
-          key={users}
+          key={uuid()}
           defaultPageSize={users.length}
-          minRows={users.length === 0 ? 20 : users.length}
+          minRows={users.length}
         />
         <UserAllControls />
       </div>

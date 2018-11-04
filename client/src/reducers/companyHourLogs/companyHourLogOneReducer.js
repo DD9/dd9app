@@ -10,7 +10,7 @@ import {
   APPROVE_TIME_ENTRY,
   HIDE_TIME_ENTRY,
   REJECT_TIME_ENTRY,
-  TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION,
+  CLEAR_COMPANY_HOUR_LOG_ONE_STATE,
 } from '../../actions/types';
 
 const INITIAL_STATE = { timeEntries: [] };
@@ -43,27 +43,15 @@ export default function(state = INITIAL_STATE, action) {
     }
 
     case ADJUDICATE_TIME_ENTRY: {
-      let removeTimeEntry = false;
-      state.timeEntries.forEach(timeEntry => {
-        if ((timeEntry._id === action.payload._id) && (timeEntry.publicCompany._id !== action.payload.publicCompany._id)) {
-          removeTimeEntry = true;
-        }
-      });
-      if (removeTimeEntry) {
-        return {
-          ...state,
-          timeEntries: state.timeEntries.filter(timeEntry => timeEntry._id !== action.payload._id),
-        };
-      } 
-      return {
+      const newState = {
         ...state,
-        timeEntries: state.timeEntries.map(timeEntry => {
-          if (timeEntry._id === action.payload._id) {
-            timeEntry = action.payload;
-          }
-          return timeEntry;
-        }),
+        timeEntries: state.timeEntries.filter(timeEntry => timeEntry._id !== action.payload._id),
       };
+
+      if (!newState.timeEntries) {
+        newState.timeEntries.push('empty');
+      }
+      return newState;
     }
 
     case APPROVE_TIME_ENTRY:
@@ -91,11 +79,16 @@ export default function(state = INITIAL_STATE, action) {
     case REJECT_TIME_ENTRY:
       return {
         ...state,
-        timeEntries: state.timeEntries.filter(timeEntry => timeEntry._id !== action.payload.oldTimeEntry._id),
+        timeEntries: state.timeEntries.map(timeEntry => {
+          if (timeEntry._id === action.payload.rejectedTimeEntry._id) {
+            timeEntry = action.payload.rejectedTimeEntry;
+          }
+          return timeEntry;
+        }),
       };
 
-    case TIME_ENTRY_IN_COMPANY_HOUR_LOG_BULK_ACTION:
-      return state;
+    case CLEAR_COMPANY_HOUR_LOG_ONE_STATE:
+      return INITIAL_STATE || false;
 
     default:
       return state;

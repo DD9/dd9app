@@ -4,155 +4,106 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-import TimeEntryTableActions from './TimeEntryTableActions';
-import TimeEntryTableBulkActions from './TimeEntryTableBulkActions';
+import CompanyTimeEntryTableActions from './CompanyTimeEntryTableActions';
+import CompanyTimeEntryTableBulkActions from './CompanyTimeEntryTableBulkActions';
 
 const CompanyTimeEntryTable = ({
   auth, companyHourLogTitle, tableTitle, timeEntries, match, activeUsers, activeCompanies, defaultPageSize, minRows,
 }) => {
-  let columns;
-
-  /**
-   * New Time Entries Table
-   */
-  if (tableTitle === 'New Time Entries') {
-    columns = [{
-      Header: () => (
-        <span className="table-title-font-size">{tableTitle}</span>
+  const columns = [{
+    Header: () => (
+      <span className="table-title-font-size">{tableTitle}</span>
+    ),
+    columns: [{
+      Header: 'Date',
+      accessor: 'publicDate',
+      Cell: data => <span title={data.original.publicDate}>{data.original.publicDate.split('T')[0]}</span>,
+      maxWidth: 95,
+    }, {
+      Header: 'User',
+      accessor: 'publicUser',
+      Cell: data => <Link to={`/user/${data.original.publicUser._id}/contractorHourLogs`}>{data.original.publicUser.name.full}</Link>,
+      maxWidth: 125,
+    }, {
+      Header: 'Company',
+      accessor: 'publicCompany.name',
+      Cell: data => {
+        if (auth.permissions[0].admin) {
+          return (
+            <span title={data.original.publicCompany.name}><Link to={`/company/${data.original.publicCompany._id}`}>{data.original.publicCompany.name}</Link></span>
+          );
+        }
+        return <span title={data.original.publicCompany.name}>{data.original.publicCompany.name}</span>;
+      },
+      maxWidth: 175,
+    }, {
+      Header: 'Hours',
+      accessor: 'publicHours',
+      maxWidth: 70,
+      Footer: (
+        <span>
+          {timeEntries.reduce((prev, next) => prev + next.publicHours, 0)}
+        </span>
       ),
-      columns: [{
-        Header: 'Date',
-        id: 'date',
-        accessor: 'publicDate',
-        Cell: timeEntry => <span title={timeEntry.original.publicDate}>{timeEntry.original.publicDate.split('T')[0]}</span>,
-        maxWidth: 95,
-      }, {
-        Header: 'Company',
-        accessor: 'publicCompany.name',
-        Cell: timeEntry => {
-          if (auth.permissions[0].admin) {
-            return (
-              <span title={timeEntry.original.publicCompany.name}><Link to={`/company/${timeEntry.original.publicCompany._id}`}>{timeEntry.original.publicCompany.name}</Link></span>
-            );
-          }
-          return <span title={timeEntry.original.publicCompany.name}>{timeEntry.original.publicCompany.name}</span>;
-        },
-        maxWidth: 175,
-      }, {
-        Header: 'Hours',
-        accessor: 'publicHours',
-        maxWidth: 70,
-        Footer: (
-          <span>
-            {timeEntries.map(timeEntry => timeEntry.publicHours).reduce((prev, next) => prev + next, 0)}
-          </span>
-        ),
-      }, {
-        Header: 'Description',
-        accessor: 'publicDescription',
-        Cell: timeEntry => <span title={timeEntry.original.publicDescription}>{timeEntry.original.publicDescription}</span>,
-      }, {
-        Header: '',
-        id: 'timeEntryTableRowActions',
-        accessor: timeEntry => (
-          <div className="text-center">
-            <TimeEntryTableActions
-              auth={auth}
-              timeEntry={timeEntry}
-              activeUsers={activeUsers}
-              activeCompanies={activeCompanies}
-            />
-          </div>
-        ),
-        maxWidth: 150,
-        Footer: (
-          <div className="text-center">
-            <TimeEntryTableBulkActions
-              auth={auth}
-              tableTitle={tableTitle}
-              activeUsers={activeUsers}
-              activeCompanies={activeCompanies}
-            />
-          </div>
-        ),
-      }],
-    }];
-    return (
-      <ReactTable
-        data={timeEntries}
-        columns={columns}
-        showPagination={false}
-        defaultPageSize={defaultPageSize}
-        minRows={minRows}
-        className="-striped -highlight"
-        noDataText="Empty"
-        defaultSorted={[
-          {
-            id: 'date',
-            desc: true,
-          },
-        ]}
-        sortable={false}
-      />
-    );
+    }, {
+      Header: 'Description',
+      accessor: 'publicDescription',
+      Cell: timeEntry => <span title={timeEntry.original.publicDescription}>{timeEntry.original.publicDescription}</span>,
+    }, {
+      Header: '',
+      id: 'timeEntryTableRowActions',
+      accessor: timeEntry => (
+        <div className="text-center">
+          <CompanyTimeEntryTableActions
+            auth={auth}
+            timeEntry={timeEntry}
+            activeUsers={activeUsers}
+            activeCompanies={activeCompanies}
+          />
+        </div>
+      ),
+      maxWidth: 120,
+      Footer: (
+        <div className="text-center">
+          <CompanyTimeEntryTableBulkActions
+            auth={auth}
+            tableTitle={tableTitle}
+            match={match}
+            activeUsers={activeUsers}
+            activeCompanies={activeCompanies}
+          />
+        </div>
+      ),
+    }],
+  }];
+
+  if (tableTitle === 'New Time Entries') {
+    delete columns[0].columns[1];
+    if (auth.permissions[0].admin) {
+      columns[0].columns[5].maxWidth = 150;
+    }
+  } else if (companyHourLogTitle !== 'Current') {
+    delete columns[0].columns[5];
   }
 
-  /**
-   * Closed CompanyHourLog timeEntry tables
-   */
-  if (companyHourLogTitle !== 'Current') {
-    columns = [{
-      Header: () => (
-        <span className="table-title-font-size">{tableTitle}</span>
-      ),
-      columns: [{
-        Header: 'Date',
-        id: 'date',
-        accessor: 'publicDate',
-        Cell: timeEntry => <span title={timeEntry.original.publicDate}>{timeEntry.original.publicDate.split('T')[0]}</span>,
-        maxWidth: 95,
-      }, {
-        Header: 'User',
-        id: 'publicUser',
-        Cell: timeEntry => <Link to={`/user/${timeEntry.original.publicUser._id}/contractorHourLogs`}>{timeEntry.original.publicUser.name.full}</Link>,
-        maxWidth: 125,
-      }, {
-        Header: 'Company',
-        accessor: 'publicCompany.name',
-        Cell: timeEntry => <span title={timeEntry.original.publicCompany.name}><Link to={`/company/${timeEntry.original.publicCompany._id}`}>{timeEntry.original.publicCompany.name}</Link></span>,
-        maxWidth: 175,
-      }, {
-        Header: 'Hours',
-        accessor: 'publicHours',
-        maxWidth: 70,
-        Footer: (
-          <span>
-            {timeEntries.map(timeEntry => timeEntry.publicHours).reduce((prev, next) => prev + next, 0)}
-          </span>
-        ),
-      }, {
-        Header: 'Description',
-        accessor: 'publicDescription',
-        Cell: timeEntry => <span title={timeEntry.original.publicDescription}>{timeEntry.original.publicDescription}</span>,
-      }],
-    }];
-    return (
-      <ReactTable
-        data={timeEntries}
-        columns={columns}
-        showPagination={false}
-        defaultPageSize={defaultPageSize}
-        minRows={minRows}
-        className="-striped -highlight"
-        noDataText="Empty"
-        defaultSorted={[
-          {
-            id: 'date',
-            desc: true,
-          },
-        ]}
-        sortable={false}
-        SubComponent={row => (
+  return (
+    <ReactTable
+      data={timeEntries}
+      columns={columns}
+      showPagination={false}
+      sortable={false}
+      defaultPageSize={defaultPageSize}
+      minRows={minRows}
+      className="-striped -highlight"
+      noDataText="Empty"
+      defaultSorted={[
+        {
+          id: 'publicDate',
+          desc: true,
+        },
+      ]}
+      SubComponent={tableTitle !== 'New Time Entries'
+        ? row => (
           <div style={{ padding: '10px' }}>
             <em>Original, Non-public Time Entry Data</em>
             <table className="table">
@@ -175,115 +126,9 @@ const CompanyTimeEntryTable = ({
                 </tr>
               </tbody>
             </table>
-          </div>
-        )}
-      />
-    );
-  }
-
-  /**
-   * Open companyHourLog timeEntry tables default
-   */
-  columns = [{
-    Header: () => (
-      <span className="table-title-font-size">{tableTitle}</span>
-    ),
-    columns: [{
-      Header: 'Date',
-      accessor: 'publicDate',
-      Cell: timeEntry => <span title={timeEntry.original.publicDate}>{timeEntry.original.publicDate.split('T')[0]}</span>,
-      maxWidth: 95,
-    }, {
-      Header: 'User',
-      id: 'publicUser',
-      Cell: timeEntry => <Link to={`/user/${timeEntry.original.publicUser._id}/contractorHourLogs`}>{timeEntry.original.publicUser.name.full}</Link>,
-      maxWidth: 125,
-    }, {
-      Header: 'Company',
-      accessor: 'publicCompany.name',
-      Cell: timeEntry => <span title={timeEntry.original.publicCompany.name}><Link to={`/company/${timeEntry.original.publicCompany._id}`}>{timeEntry.original.publicCompany.name}</Link></span>,
-      maxWidth: 175,
-    }, {
-      Header: 'Hours',
-      accessor: 'publicHours',
-      maxWidth: 70,
-      Footer: (
-        <span>
-          {timeEntries.map(timeEntry => timeEntry.publicHours).reduce((prev, next) => prev + next, 0)}
-        </span>
-      ),
-    }, {
-      Header: 'Description',
-      accessor: 'publicDescription',
-      Cell: timeEntry => <span title={timeEntry.original.publicDescription}>{timeEntry.original.publicDescription}</span>,
-    }, {
-      Header: '',
-      id: 'timeEntryTableRowActions',
-      accessor: timeEntry => (
-        <div className="text-center">
-          <TimeEntryTableActions
-            auth={auth}
-            timeEntry={timeEntry}
-            activeUsers={activeUsers}
-            activeCompanies={activeCompanies}
-          />
-        </div>
-      ),
-      maxWidth: 120,
-      Footer: (
-        <div className="text-center">
-          <TimeEntryTableBulkActions
-            auth={auth}
-            tableTitle={tableTitle}
-            match={match}
-            activeUsers={activeUsers}
-            activeCompanies={activeCompanies}
-          />
-        </div>
-      ),
-    }],
-  }];
-  return (
-    <ReactTable
-      data={timeEntries}
-      columns={columns}
-      showPagination={false}
-      defaultPageSize={defaultPageSize}
-      minRows={minRows}
-      className="-striped -highlight"
-      noDataText="Empty"
-      defaultSorted={[
-        {
-          id: 'date',
-          desc: true,
-        },
-      ]}
-      sortable={false}
-      SubComponent={row => (
-        <div style={{ padding: '10px' }}>
-          <em>Original, Non-public Time Entry Data</em>
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">User</th>
-                <th scope="col">Company</th>
-                <th scope="col">Hours</th>
-                <th scope="col">Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{row.original.date}</td>
-                <td>{row.original.user.name.full}</td>
-                <td>{row.original.company.name}</td>
-                <td>{row.original.hours}</td>
-                <td>{row.original.description}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      )}
+          </div>)
+        : false
+        }
     />
   );
 };
