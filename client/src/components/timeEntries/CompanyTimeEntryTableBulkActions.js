@@ -4,9 +4,9 @@ import $ from 'jquery';
 
 import {
   approveAllNewTimeEntries, hideAllNewTimeEntries, submitAllNewTimeEntries, deleteAllNewTimeEntries,
-  hideFromApprovedTimeEntries, rejectFromApprovedTimeEntries, approveFromHiddenTimeEntries,
-  rejectFromHiddenTimeEntries, approveFromSubmittedTimeEntries, hideFromSubmittedTimeEntries,
-  rejectFromSubmittedTimeEntries,
+  hideFromApprovedCompanyHourLogTimeEntries, rejectFromApprovedCompanyHourLogTimeEntries, approveFromHiddenCompanyHourLogTimeEntries,
+  rejectFromHiddenCompanyHourLogTimeEntries, approveFromSubmittedCompanyHourLogTimeEntries, hideFromSubmittedCompanyHourLogTimeEntries,
+  rejectFromSubmittedCompanyHourLogTimeEntries,
 } from '../../actions/timeEntry';
 
 import TimeEntryTableActionConfirmModal from './TimeEntryTableActionConfirmModal';
@@ -14,136 +14,145 @@ import TimeEntryTableActionConfirmModal from './TimeEntryTableActionConfirmModal
 class TimeEntryBulkTableActions extends Component {
   onApproveAllNewTimeEntriesClick = e => {
     e.preventDefault();
-    $(`.time-entry-table-action`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     this.props.approveAllNewTimeEntries();
     $('#time-entry-confirm-approve-all-new-time-entries-modal').modal('hide');
   };
 
   onHideAllNewTimeEntriesClick = e => {
     e.preventDefault();
-    $(`.time-entry-table-action`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     this.props.hideAllNewTimeEntries();
     $('#time-entry-confirm-hide-all-new-time-entries-modal').modal('hide');
   };
 
   onSubmitAllNewTimeEntriesClick = e => {
     e.preventDefault();
-    $(`.time-entry-table-action`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     this.props.submitAllNewTimeEntries();
     $('#time-entry-confirm-submit-all-new-time-entries-modal').modal('hide');
   };
 
   onDeleteAllNewTimeEntriesClick = e => {
     e.preventDefault();
-    $(`.time-entry-table-action`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     this.props.deleteAllNewTimeEntries();
     $('#time-entry-confirm-delete-all-new-time-entries-modal').modal('hide');
   };
 
   onHideAllFromApprovedClick = e => {
     e.preventDefault();
-    $(`.time-entry-table-action`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.hideFromApprovedTimeEntries(match.params.companyHourLogId);
+    this.props.hideFromApprovedCompanyHourLogTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-hide-all-from-approved-modal').modal('hide');
   };
 
   onRejectAllFromApprovedClick = e => {
     e.preventDefault();
-    $(`.time-entry-table-action`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.rejectFromApprovedTimeEntries(match.params.companyHourLogId);
+    this.props.rejectFromApprovedCompanyHourLogTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-reject-all-from-approved-modal').modal('hide');
   };
 
   onApproveAllFromHiddenClick = e => {
     e.preventDefault();
-    $(`.time-entry-table-action`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.approveFromHiddenTimeEntries(match.params.companyHourLogId);
+    this.props.approveFromHiddenCompanyHourLogTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-approve-all-from-hidden-modal').modal('hide');
   };
 
   onRejectAllFromHiddenClick = e => {
     e.preventDefault();
-    $(`.time-entry-table-action`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.rejectFromHiddenTimeEntries(match.params.companyHourLogId);
+    this.props.rejectFromHiddenCompanyHourLogTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-reject-all-from-hidden-modal').modal('hide');
   };
 
   onApproveAllFromSubmittedClick = e => {
     e.preventDefault();
-    $(`.time-entry-table-action`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.approveFromSubmittedTimeEntries(match.params.companyHourLogId);
+    this.props.approveFromSubmittedCompanyHourLogTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-approve-all-from-submitted-modal').modal('hide');
   };
 
   onHideAllFromSubmittedClick = e => {
     e.preventDefault();
-    $(`.time-entry-table-action`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.hideFromSubmittedTimeEntries(match.params.companyHourLogId);
+    this.props.hideFromSubmittedCompanyHourLogTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-hide-all-from-submitted-modal').modal('hide');
   };
 
   onRejectAllFromSubmittedClick = e => {
     e.preventDefault();
-    $(`.time-entry-table-action`).attr("disabled", true);
-    $(`.time-entry-table-bulk-action`).attr("disabled", true);
+    $(`.company-time-entry-table-action`).attr("disabled", true);
+    $(`.company-time-entry-table-bulk-action`).attr("disabled", true);
     const { match } = this.props;
-    this.props.rejectFromSubmittedTimeEntries(match.params.companyHourLogId);
+    this.props.rejectFromSubmittedCompanyHourLogTimeEntries(match.params.companyHourLogId);
     $('#time-entry-confirm-reject-all-from-submitted-modal').modal('hide');
   };
 
   renderTimeEntryTableBulkActionButtons() {
     const { auth, tableTitle } = this.props;
-    if (auth.permissions[0].admin && tableTitle === 'New Time Entries') {
-      return (
-        <div className="d-inline">
-          <button type="button" className="btn-link time-entry-table-bulk-action" title="Approve All" data-toggle="modal" data-target="#time-entry-confirm-approve-all-new-time-entries-modal">A</button>
-          <button type="button" className="btn-link time-entry-table-bulk-action" title="Hide All" data-toggle="modal" data-target="#time-entry-confirm-hide-all-new-time-entries-modal">H</button>
-          <button type="button" className="btn-link time-entry-table-bulk-action" title="Submit All" data-toggle="modal" data-target="#time-entry-confirm-submit-all-new-time-entries-modal">S</button>
-          <button type="button" className="btn-link time-entry-table-bulk-action" title="Delete All" data-toggle="modal" data-target="#time-entry-confirm-delete-all-new-time-entries-modal">D</button>
-        </div>
-      );
-    } if (tableTitle === 'New Time Entries') {
+    if (tableTitle === 'New Time Entries' && auth.role === 'contractor') {
       return (
         <div className="d-inline text-center">
-          <button type="button" className="btn-link time-entry-table-bulk-action" title="Delete All" data-toggle="modal" data-target="#time-entry-confirm-delete-all-new-time-entries-modal">D</button>
+          <button type="button" className="btn-link company-time-entry-table-bulk-action" title="Delete All" data-toggle="modal" data-target="#time-entry-confirm-delete-all-new-time-entries-modal">D</button>
+        </div>
+      );
+    }
+    if (tableTitle === 'New Time Entries' && auth.role === 'staff') {
+      return (
+        <div className="d-inline text-center">
+          <button type="button" className="btn-link company-time-entry-table-bulk-action" title="Submit All" data-toggle="modal" data-target="#time-entry-confirm-submit-all-new-time-entries-modal">S</button>
+          <button type="button" className="btn-link company-time-entry-table-bulk-action" title="Delete All" data-toggle="modal" data-target="#time-entry-confirm-delete-all-new-time-entries-modal">D</button>
+        </div>
+      );
+    }
+    if (tableTitle === 'New Time Entries' && auth.permissions[0].admin) {
+      return (
+        <div className="d-inline">
+          <button type="button" className="btn-link company-time-entry-table-bulk-action" title="Approve All" data-toggle="modal" data-target="#time-entry-confirm-approve-all-new-time-entries-modal">A</button>
+          <button type="button" className="btn-link company-time-entry-table-bulk-action" title="Hide All" data-toggle="modal" data-target="#time-entry-confirm-hide-all-new-time-entries-modal">H</button>
+          <button type="button" className="btn-link company-time-entry-table-bulk-action" title="Submit All" data-toggle="modal" data-target="#time-entry-confirm-submit-all-new-time-entries-modal">S</button>
+          <button type="button" className="btn-link company-time-entry-table-bulk-action" title="Delete All" data-toggle="modal" data-target="#time-entry-confirm-delete-all-new-time-entries-modal">D</button>
         </div>
       );
     } if (tableTitle === 'Approved Time Entries') {
       return (
         <div className="d-inline">
-          <button type="button" className="btn-link time-entry-table-bulk-action" title="Hide All" data-toggle="modal" data-target="#time-entry-confirm-hide-all-from-approved-modal">H</button>
-          <button type="button" className="btn-link time-entry-table-bulk-action" title="Reject All" data-toggle="modal" data-target="#time-entry-confirm-reject-all-from-approved-modal">R</button>
+          <button type="button" className="btn-link company-time-entry-table-bulk-action" title="Hide All" data-toggle="modal" data-target="#time-entry-confirm-hide-all-from-approved-modal">H</button>
+          <button type="button" className="btn-link company-time-entry-table-bulk-action" title="Reject All" data-toggle="modal" data-target="#time-entry-confirm-reject-all-from-approved-modal">R</button>
         </div>
       );
     } if (tableTitle === 'Hidden Time Entries') {
       return (
         <div className="d-inline">
-          <button type="button" className="btn-link time-entry-table-bulk-action" title="Approve All" data-toggle="modal" data-target="#time-entry-confirm-approve-all-from-hidden-modal">A</button>
-          <button type="button" className="btn-link time-entry-table-bulk-action" title="Reject All" data-toggle="modal" data-target="#time-entry-confirm-reject-all-from-hidden-modal">R</button>
+          <button type="button" className="btn-link company-time-entry-table-bulk-action" title="Approve All" data-toggle="modal" data-target="#time-entry-confirm-approve-all-from-hidden-modal">A</button>
+          <button type="button" className="btn-link company-time-entry-table-bulk-action" title="Reject All" data-toggle="modal" data-target="#time-entry-confirm-reject-all-from-hidden-modal">R</button>
         </div>
       );
     } if (tableTitle === 'Submitted Time Entries') {
       return (
         <div className="d-inline">
-          <button type="button" className="btn-link time-entry-table-bulk-action" title="Approve All" data-toggle="modal" data-target="#time-entry-confirm-approve-all-from-submitted-modal">A</button>
-          <button type="button" className="btn-link time-entry-table-bulk-action" title="Hide All" data-toggle="modal" data-target="#time-entry-confirm-hide-all-from-submitted-modal">H</button>
-          <button type="button" className="btn-link time-entry-table-bulk-action" title="Reject All" data-toggle="modal" data-target="#time-entry-confirm-reject-all-from-submitted-modal">R</button>
+          <button type="button" className="btn-link company-time-entry-table-bulk-action" title="Approve All" data-toggle="modal" data-target="#time-entry-confirm-approve-all-from-submitted-modal">A</button>
+          <button type="button" className="btn-link company-time-entry-table-bulk-action" title="Hide All" data-toggle="modal" data-target="#time-entry-confirm-hide-all-from-submitted-modal">H</button>
+          <button type="button" className="btn-link company-time-entry-table-bulk-action" title="Reject All" data-toggle="modal" data-target="#time-entry-confirm-reject-all-from-submitted-modal">R</button>
         </div>
       );
     }
@@ -242,11 +251,11 @@ export default connect(null, {
   hideAllNewTimeEntries,
   submitAllNewTimeEntries,
   deleteAllNewTimeEntries,
-  hideFromApprovedTimeEntries,
-  rejectFromApprovedTimeEntries,
-  approveFromHiddenTimeEntries,
-  rejectFromHiddenTimeEntries,
-  approveFromSubmittedTimeEntries,
-  hideFromSubmittedTimeEntries,
-  rejectFromSubmittedTimeEntries,
+  hideFromApprovedCompanyHourLogTimeEntries,
+  rejectFromApprovedCompanyHourLogTimeEntries,
+  approveFromHiddenCompanyHourLogTimeEntries,
+  rejectFromHiddenCompanyHourLogTimeEntries,
+  approveFromSubmittedCompanyHourLogTimeEntries,
+  hideFromSubmittedCompanyHourLogTimeEntries,
+  rejectFromSubmittedCompanyHourLogTimeEntries,
 })(TimeEntryBulkTableActions);

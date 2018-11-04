@@ -3,14 +3,21 @@ const mongoose = require('mongoose');
 const CompanyHourLog = mongoose.model('CompanyHourLog');
 const TimeEntry = mongoose.model('TimeEntry');
 
-exports.openCompanyHourLogs = async (req, res) => {
-  const openCompanyHourLogs = await CompanyHourLog.find({ dateClosed: new Date(0) }).populate('company');
-  console.log(openCompanyHourLogs);
+exports.openHourLogs = async (req, res) => {
+  const openCompanyHourLogs = await CompanyHourLog.find({ dateClosed: new Date(0) })
+    .populate('timeEntries', 'status publicHours')
+    .populate('company', 'name');
+  if (!openCompanyHourLogs[0]) return res.json('empty');
   res.json(openCompanyHourLogs);
 };
 
 exports.closedHourLogs = async (req, res) => {
-  const closedCompanyHourLogs = await CompanyHourLog.find({ dateClosed: { $ne: new Date(0) } }).populate('company').limit(200).sort({ dateOpened: -1 });
+  const closedCompanyHourLogs = await CompanyHourLog.find({ dateClosed: { $ne: new Date(0) } })
+    .populate('timeEntries', 'status publicHours')
+    .populate('company', 'name')
+    .sort({ dateOpened: -1 })
+    .limit(200);
+  if (!closedCompanyHourLogs[0]) return res.json('empty');
   res.json(closedCompanyHourLogs);
 };
 
@@ -24,6 +31,9 @@ exports.one = async (req, res) => {
         console.log(err);
       }
     });
+  if (!companyHourLog.timeEntries[0]) {
+    companyHourLog.timeEntries.push('empty');
+  }
   res.json(companyHourLog);
 };
 
@@ -44,8 +54,6 @@ exports.open = async (req, res) => {
   }
   // If there is a Current companyHourLog, merge the timeEntries in this companyHourLog with the Current companyHourLog
   if (currentCompanyHourLog) {
-    currentCompanyHourLog.totalPublicHours += closingCompanyHourLog.totalPublicHours;
-    currentCompanyHourLog.totalHiddenHours += closingCompanyHourLog.totalHiddenHours;
     await currentCompanyHourLog.updateOne({ $addToSet: { timeEntries: closingCompanyHourLog.timeEntries } });
 
     for (let i = 0; i < closingCompanyHourLog.timeEntries.length; i++) {
@@ -61,7 +69,7 @@ exports.open = async (req, res) => {
 
 exports.close = async (req, res) => {
   const { companyHourLogId } = req.params;
-  const companyHourLog = await CompanyHourLog.findOne({ _id: companyHourLogId }).populate('timeEntries');
+  let companyHourLog = await CompanyHourLog.findOne({ _id: companyHourLogId }).populate('timeEntries');
 
   // If closing an companyHourLog with submitted timeEntries, move the timeEntries to a new Current companyHourLog
   if (companyHourLog.totalSubmittedHours > 0) {
@@ -69,31 +77,27 @@ exports.close = async (req, res) => {
       company: companyHourLog.company,
       dateClosed: new Date(0),
     })).save();
-    let totalSubmittedHours = 0;
     for (let i = 0; i < companyHourLog.timeEntries.length; i++) {
       const timeEntry = companyHourLog.timeEntries[i];
       if (timeEntry.status === 'submitted') {
-        totalSubmittedHours += timeEntry.publicHours;
         await recievingHourLog.update({ $addToSet: { timeEntries: timeEntry._id } });
         await companyHourLog.update({ $pull: { timeEntries: timeEntry._id } });
         await TimeEntry.findOneAndUpdate({ _id: timeEntry._id }, { companyHourLog: recievingHourLog._id });
       }
     }
-    companyHourLog.totalSubmittedHours = 0;
-    recievingHourLog.totalSubmittedHours = totalSubmittedHours;
+    companyHourLog.title = req.body.title;
+    companyHourLog.dateClosed = new Date();
+
+    await companyHourLog.save();
     await recievingHourLog.save();
   }
 
-  // Delete an companyHourLog if it's empty
+  // Delete a companyHourLog if it's empty
+  companyHourLog = await CompanyHourLog.findOne({ _id: companyHourLogId }).populate('timeEntries');
   if (companyHourLog.totalPublicHours === 0 && companyHourLog.totalHiddenHours === 0 && companyHourLog.totalSubmittedHours === 0) {
     await companyHourLog.remove();
     return res.json({ redirectUrl: `/company/${companyHourLog.company._id}`, companyId: companyHourLog.company._id });
   }
-
-  companyHourLog.title = req.body.title;
-  companyHourLog.dateClosed = new Date();
-
-  await companyHourLog.save();
 
   res.json(companyHourLog);
 };

@@ -17,18 +17,15 @@ passport.use(new GoogleStrategy({
   callbackURL: '/auth/google/callback',
   proxy: true,
 },
-// Do after successful Google authentication
+
+// Callback from successful Google authentication
 (accessToken, refreshToken, profile, done) => {
   const googleEmail = profile.emails[0].value;
   const googleFirstName = profile.name.givenName;
   const googleLastName = profile.name.familyName;
 
   async function login() {
-    console.log('logging in');
-
     const existingUser = await User.findOne({ email: googleEmail });
-
-    console.log(existingUser);
 
     if (existingUser) {
       return done(null, existingUser);
@@ -37,8 +34,8 @@ passport.use(new GoogleStrategy({
     const user = await new User(
       {
         email: googleEmail,
-        firstName: googleFirstName,
-        lastName: googleLastName,
+        'name.first': googleFirstName,
+        'name.last': googleLastName,
         lastSignInAt: Date.now(),
       },
     ).save();

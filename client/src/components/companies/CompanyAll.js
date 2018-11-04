@@ -1,27 +1,39 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import uuid from 'uuid/v1';
 
-import { getAllCompanies } from '../../actions/company';
+import SpinnerClipLoader from '../SpinnerClipLoader';
+import CompanyAllTable from './CompanyAllTable';
+import CompanyAllControls from './CompanyAllControls';
 
-import CompanyTableControls from './CompanyTableControls';
-import CompanyTable from './CompanyTable';
+import { getCompanies } from '../../actions/company';
 
 class CompanyAll extends Component {
   componentDidMount() {
-    this.props.getAllCompanies();
+    this.props.getCompanies();
   }
 
   render() {
     const { companies } = this.props;
+
+    if (!companies[0]) {
+      return (
+        <div>
+          <SpinnerClipLoader />
+        </div>
+      );
+    }
+
     return (
       <div className="container table-font-size">
-        <CompanyTable
+        <CompanyAllTable
+          tableTitle="Companies"
           companies={companies}
-          key={companies}
+          key={uuid()}
           defaultPageSize={companies.length}
-          minRows={companies.length === 0 ? 20 : companies.length}
+          minRows={companies.length}
         />
-        <CompanyTableControls companies={companies} />
+        <CompanyAllControls companies={companies} />
       </div>
     );
   }
@@ -31,4 +43,4 @@ function mapStateToProps({ companies }) {
   return { companies };
 }
 
-export default connect(mapStateToProps, { getAllCompanies })(CompanyAll);
+export default connect(mapStateToProps, { getCompanies })(CompanyAll);

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const UserTableControls = () => (
+const UserAllControls = () => (
   <div className="py-1 px-3 bg-white rounded box-shadow">
     <div className="pt-2">
       <button type="button" className="ml-3 mb-2 btn btn-primary" data-toggle="modal" data-target="#userCreateModal">Add User</button>
@@ -24,4 +24,4 @@ const UserTableControls = () => (
   </div>
 );
 
-export default UserTableControls;
+export default UserAllControls;

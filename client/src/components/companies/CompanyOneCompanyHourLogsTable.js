@@ -4,7 +4,21 @@ import { Link } from 'react-router-dom';
 
 import 'react-table/react-table.css';
 
-const CompanyHourLogTable = ({ tableTitle, companyHourLogs, defaultPageSize, minRows }) => {
+const CompanyOneCompanyHourLogsTable = ({
+  tableTitle, companyHourLogs, defaultPageSize, minRows,
+}) => {
+  if (companyHourLogs === 'empty') {
+    return (
+      <ReactTable
+        data={[]}
+        columns={[{ Header: () => (<span className="table-title-font-size">{tableTitle}</span>) }]}
+        showPagination={false}
+        minRows={4}
+        noDataText="Empty"
+      />
+    );
+  }
+
   const columns = [{
     Header: () => (
       <span className="table-title-font-size">{tableTitle}</span>
@@ -25,13 +39,13 @@ const CompanyHourLogTable = ({ tableTitle, companyHourLogs, defaultPageSize, min
       },
       maxWidth: 120,
     }, {
-      Header: 'Hour Log Titles',
+      Header: 'Title',
       id: 'title',
       accessor: data => {
         if (data.totalSubmittedHours > 0) {
-          return <Link to={`/hourLog/company/${data._id}`}><b>{data.title}*</b></Link>;
+          return <Link to={`/companyHourLogs/${data._id}`}><b>{data.title}*</b></Link>;
         }
-        return <Link to={`/hourLog/company/${data._id}`}>{data.title}</Link>;
+        return <Link to={`/companyHourLogs/${data._id}`}>{data.title}</Link>;
       },
     }, {
       Header: 'Hours',
@@ -64,4 +78,4 @@ const CompanyHourLogTable = ({ tableTitle, companyHourLogs, defaultPageSize, min
   );
 };
 
-export default CompanyHourLogTable;
+export default CompanyOneCompanyHourLogsTable;

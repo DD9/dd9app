@@ -9,12 +9,14 @@ import '../styles/partials/tables.scss';
 import AdminRoute from './HOCRoutes/AdminRoute';
 import Header from './Header';
 import UserAll from './users/UserAll';
-import UserOne from './users/UserOne';
+import UserOneEdit from './users/UserOneEdit';
+import UserOneContractorHourLogs from './users/UserOneContractorHourLogs';
 import CompanyAll from './companies/CompanyAll';
 import CompanyOne from './companies/CompanyOne';
-import CompanyAllHourLog from './companyHourLogs/CompanyAllHourLog';
-import CompanyOneHourLog from './companyHourLogs/CompanyOneHourLog';
-import ContractorAllHourLog from './contractorHourLogs/ContractorAllHourLog';
+import ContractorHourLogAll from './contractorHourLogs/ContractorHourLogAll';
+import ContractorHourLogOne from './contractorHourLogs/ContractorHourLogOne';
+import CompanyHourLogAll from './companyHourLogs/CompanyHourLogAll';
+import CompanyHourLogOne from './companyHourLogs/CompanyHourLogOne';
 import TimeEntryNew from './timeEntries/TimeEntryNew';
 import Footer from './Footer';
 
@@ -25,13 +27,15 @@ class Dashboard extends Component {
       <div>
         <Header auth={auth} />
         <Switch>
-          <AdminRoute path="/user/all" component={UserAll} />
-          <Route path="/user/:id" component={UserOne} />
-          <AdminRoute path="/company/all" component={CompanyAll} />
+          <AdminRoute path="/users" component={UserAll} />
+          <Route path="/user/:userId/contractorHourLogs" render={(props) => <UserOneContractorHourLogs {...props} />} />
+          <Route path="/user/:userId" component={UserOneEdit} />
+          <AdminRoute path="/companies" component={CompanyAll} />
           <AdminRoute path="/company/:companyId" component={CompanyOne} />
-          <AdminRoute path="/hourLog/company/all" component={CompanyAllHourLog} />
-          <AdminRoute path="/hourLog/contractor/all" component={ContractorAllHourLog} />
-          <AdminRoute path="/hourLog/company/:companyHourLogId" component={CompanyOneHourLog} />
+          <AdminRoute path="/contractorHourLogs" component={ContractorHourLogAll} />
+          <Route path="/contractorHourLog/:contractorHourLogId" render={(props) => <ContractorHourLogOne {...props} auth={auth} />} />
+          <AdminRoute path="/companyHourLogs/:companyHourLogId" component={CompanyHourLogOne} />
+          <AdminRoute path="/companyHourLogs" component={CompanyHourLogAll} />
           <Route path="/timeEntry/new" render={(props) => <TimeEntryNew {...props} auth={auth} />} />
           <Redirect to="/timeEntry/new" />
         </Switch>

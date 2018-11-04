@@ -5,15 +5,22 @@ import DatePicker from 'react-datepicker/';
 import moment from 'moment';
 import $ from 'jquery';
 
-import {
-  submitTimeEntry, deleteTimeEntry, editTimeEntry, adjudicateTimeEntry,
-} from '../../actions/timeEntry';
-
 import 'react-datepicker/dist/react-datepicker.css';
+
+import {
+  editTimeEntry, adjudicateTimeEntry,
+} from '../../actions/timeEntry';
 
 class TimeEntryTableEditFormModal extends Component {
   componentDidMount() {
-    $('.react-datepicker__input-container')[0].childNodes[0].setAttribute('readOnly', true);
+    const { timeEntry } = this.props;
+    this.props.initialize({
+      date: timeEntry.publicDate.split('T')[0],
+      user: timeEntry.publicUser._id,
+      company: timeEntry.publicCompany._id,
+      hours: timeEntry.publicHours,
+      description: timeEntry.publicDescription,
+    });
   }
 
   onTimeEntryEditFormSubmit(formProps) {
@@ -53,7 +60,7 @@ class TimeEntryTableEditFormModal extends Component {
             <option value="-1" disabled>{`Select a ${field.label.toLowerCase()}`}</option>
             {
               field.selectOptions
-                ? field.selectOptions.map((option) => (<option key={option._id} value={option._id}>{`${option.firstName} ${option.lastName}`}</option>))
+                ? field.selectOptions.map((option) => (<option key={option._id} value={option._id}>{`${option.name.full}`}</option>))
                 : ''
             }
           </select>
@@ -219,8 +226,7 @@ function validate(values) {
 }
 
 export default connect(null, {
-  submitTimeEntry, deleteTimeEntry, editTimeEntry, adjudicateTimeEntry,
+  editTimeEntry, adjudicateTimeEntry,
 })(reduxForm({
-  enableReinitialize: true,
   validate,
 })(TimeEntryTableEditFormModal));

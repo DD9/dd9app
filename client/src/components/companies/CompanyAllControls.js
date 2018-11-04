@@ -6,16 +6,11 @@ import $ from 'jquery';
 import { createCompany } from '../../actions/company';
 
 
-class CompanyCreate extends Component {
-  componentDidMount() {
-    $('#companyCreateModal').on('hidden.bs.modal', () => {
-      this.props.reset();
-    });
-  }
-
+class CompanyAllControls extends Component {
   onFormSubmit(formProps) {
-    this.props.createCompany(formProps)
-      .then($('#companyCreateModal').modal('hide'));
+    this.props.createCompany(formProps);
+    $('#companyCreateModal').modal('hide');
+    this.props.reset();
   }
 
   renderField(field) {
@@ -87,4 +82,4 @@ function validate(values, props) {
 export default connect(null, { createCompany })(reduxForm({
   form: 'createCompany',
   validate,
-})(CompanyCreate));
+})(CompanyAllControls));

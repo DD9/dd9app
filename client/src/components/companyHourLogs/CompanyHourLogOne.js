@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import uuid from 'uuid/v1';
 import $ from 'jquery';
 
-
 import SpinnerClipLoader from '../SpinnerClipLoader';
-import CompanyOneHourLogControls from './CompanyOneHourLogControls';
-import TimeEntryTable from '../timeEntries/TimeEntryTable';
-import CompanyOneHourLogSubmitTimeEntry from './CompanyOneHourLogSubmitTimeEntry';
+import CompanyHourLogOneControls from './CompanyHourLogOneControls';
+import CompanyTimeEntryTable from '../timeEntries/CompanyTimeEntryTable';
+import CompanyHourLogOneSubmitTimeEntry from './CompanyHourLogOneSubmitTimeEntry';
 
-import { getCompanyHourLog } from '../../actions/companyHourLog';
+import { getCompanyHourLog, clearCompanyHourLogOneState } from '../../actions/companyHourLog';
 import { getActiveUsers } from '../../actions/user';
 import { getActiveCompanies } from '../../actions/company';
 
 
-class CompanyOneHourLog extends Component {
+class CompanyHourLogOne extends Component {
   componentDidMount() {
     const { match } = this.props;
     this.props.getCompanyHourLog(match.params.companyHourLogId);
@@ -23,7 +23,11 @@ class CompanyOneHourLog extends Component {
   }
 
   componentDidUpdate() {
-    $('.time-entry-table-bulk-action').attr('disabled', false);
+    $('.company-time-entry-table-bulk-action').attr('disabled', false);
+  }
+
+  componentWillUnmount() {
+    this.props.clearCompanyHourLogOneState();
   }
 
   render() {
@@ -31,7 +35,7 @@ class CompanyOneHourLog extends Component {
       auth, companyHourLog, activeUsers, activeCompanies, match,
     } = this.props;
 
-    if (!companyHourLog.timeEntries || companyHourLog._id !== match.params.companyHourLogId) {
+    if (!companyHourLog.timeEntries[0]) {
       return (
         <div>
           <SpinnerClipLoader />
@@ -39,68 +43,62 @@ class CompanyOneHourLog extends Component {
       );
     }
 
-    let approvedTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved');
-    let hiddenTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'hidden');
-    let submittedTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'submitted');
-
-    if (!approvedTimeEntries[0]) {
-      approvedTimeEntries = ['approvedTimeEntries'];
-    }
-    if (!hiddenTimeEntries[0]) {
-      hiddenTimeEntries = ['hiddenTimeEntries'];
-    }
-    if (!submittedTimeEntries[0]) {
-      submittedTimeEntries = ['submittedTimeEntries'];
-    }
+    const approvedTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'approved');
+    const hiddenTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'hidden');
+    const submittedTimeEntries = companyHourLog.timeEntries.filter(timeEntry => timeEntry.status === 'submitted');
 
     return (
       <div className="container table-font-size">
-        <CompanyOneHourLogControls
+        <CompanyHourLogOneControls
           companyHourLog={companyHourLog}
           initialValues={companyHourLog.title === 'Current' ? { title: moment.utc().format('YYYY-MM-DD') } : { title: companyHourLog.title }}
           timeEntries={approvedTimeEntries}
         />
         <div className="m-5" />
-        <TimeEntryTable
+        <CompanyTimeEntryTable
           auth={auth}
           companyHourLogTitle={companyHourLog.title}
           tableTitle="Approved Time Entries"
-          timeEntries={approvedTimeEntries[0] !== 'approvedTimeEntries' ? approvedTimeEntries : []}
+          timeEntries={approvedTimeEntries}
           match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
-          key={approvedTimeEntries}
+          key={uuid()}
           defaultPageSize={approvedTimeEntries.length}
           minRows={approvedTimeEntries.length}
         />
         <div className="m-5" />
-        <TimeEntryTable
+        <CompanyTimeEntryTable
           auth={auth}
           companyHourLogTitle={companyHourLog.title}
           tableTitle="Hidden Time Entries"
-          timeEntries={hiddenTimeEntries[0] !== 'hiddenTimeEntries' ? hiddenTimeEntries : []}
+          timeEntries={hiddenTimeEntries}
           match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
-          key={hiddenTimeEntries}
+          key={uuid()}
           defaultPageSize={hiddenTimeEntries.length}
           minRows={hiddenTimeEntries.length}
         />
         <div className="m-5" />
-        <TimeEntryTable
+        <CompanyTimeEntryTable
           auth={auth}
           companyHourLogTitle={companyHourLog.title}
           tableTitle="Submitted Time Entries"
-          timeEntries={submittedTimeEntries[0] !== 'submittedTimeEntries' ? submittedTimeEntries : []}
+          timeEntries={submittedTimeEntries}
           match={match}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
-          key={submittedTimeEntries}
+          key={uuid()}
           defaultPageSize={submittedTimeEntries.length}
           minRows={submittedTimeEntries.length}
         />
         <div className="m-5" />
-        <CompanyOneHourLogSubmitTimeEntry company={companyHourLog.company || ''} companyHourLogTitle={companyHourLog.title} companyHourLogId={match.params.companyHourLogId} />
+        <CompanyHourLogOneSubmitTimeEntry
+          company={companyHourLog.company || ''}
+          companyHourLogTitle={companyHourLog.title}
+          companyHourLogId={match.params.companyHourLogId}
+        />
       </div>
     );
   }
@@ -110,4 +108,4 @@ function mapStateToProps({ companyHourLog, activeUsers, activeCompanies }) {
   return { companyHourLog, activeUsers, activeCompanies };
 }
 
-export default connect(mapStateToProps, { getCompanyHourLog, getActiveUsers, getActiveCompanies })(CompanyOneHourLog);
+export default connect(mapStateToProps, { getCompanyHourLog, clearCompanyHourLogOneState, getActiveUsers, getActiveCompanies })(CompanyHourLogOne);

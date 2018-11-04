@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import $ from 'jquery';
+import uuid from 'uuid/v1';
+
+import CompanyTimeEntryTable from './CompanyTimeEntryTable';
+import TimeEntryForm from './TimeEntryForm';
 
 import { getCreatedTimeEntries } from '../../actions/timeEntry';
 import { getActiveUsers } from '../../actions/user';
 import { getActiveCompanies } from '../../actions/company';
-
-import TimeEntryTable from './TimeEntryTable';
-import TimeEntryForm from './TimeEntryForm';
 
 class TimeEntryNew extends Component {
   componentDidMount() {
@@ -17,7 +18,7 @@ class TimeEntryNew extends Component {
   }
 
   componentDidUpdate() {
-    $('.time-entry-table-bulk-action').attr('disabled', false);
+    $('.company-time-entry-table-bulk-action').attr('disabled', false);
   }
 
   render() {
@@ -25,17 +26,15 @@ class TimeEntryNew extends Component {
       auth, createdTimeEntries, activeUsers, activeCompanies,
     } = this.props;
 
-    console.log(`createdTimeEntries ${JSON.stringify(createdTimeEntries)}`);
-
     return (
       <div className="container table-font-size">
-        <TimeEntryTable
+        <CompanyTimeEntryTable
           auth={auth}
           tableTitle="New Time Entries"
           timeEntries={createdTimeEntries}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
-          key={createdTimeEntries}
+          key={uuid()}
           defaultPageSize={createdTimeEntries.length}
           minRows={createdTimeEntries.length}
         />

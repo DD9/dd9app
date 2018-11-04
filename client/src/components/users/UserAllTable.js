@@ -3,11 +3,11 @@ import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
-import UserTableAdminEditFormModal from './UserTableAdminEditFormModal';
-
 import 'react-table/react-table.css';
 
-const UserTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
+import UserAllTableAdminEditFormModal from './UserAllTableAdminEditFormModal';
+
+const UserAllTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
   const columns = [{
     Header: () => (
       <span className="table-title-font-size">Users</span>
@@ -15,8 +15,9 @@ const UserTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
     columns: [{
       Header: 'Name',
       id: 'name',
-      accessor: user => `${user.firstName} ${user.lastName}`,
-      maxWidth: 200,
+      accessor: user => <Link to={`/user/${user._id}/contractorHourLogs`}>{user.name.full}</Link>,
+      sortMethod: ((a, b) => (a.props.children > b.props.children ? 1 : -1)),
+      maxWidth: 190,
     }, {
       Header: 'Email',
       accessor: 'email',
@@ -26,17 +27,22 @@ const UserTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
       id: 'company',
       accessor: user => <Link to={`/company/${user.company._id}`}>{user.company.name}</Link>,
       sortMethod: ((a, b) => (a.props.children > b.props.children ? 1 : -1)),
-      maxWidth: 150,
+      maxWidth: 120,
     }, {
       Header: 'Role',
       id: 'role',
       accessor: user => user.role.charAt(0).toUpperCase() + user.role.slice(1),
-      maxWidth: 100,
+      maxWidth: 80,
     }, {
       Header: 'Status',
       id: 'status',
       accessor: user => user.status.charAt(0).toUpperCase() + user.status.slice(1),
       maxWidth: 75,
+    }, {
+      Header: 'Rate',
+      id: 'hourlyRate',
+      accessor: user => `$${user.hourlyRate[0].USD}/hr`,
+      maxWidth: 100,
     }, {
       Header: 'Last Login',
       id: 'lastLogin',
@@ -57,7 +63,7 @@ const UserTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
       id: 'editUser',
       accessor: user => (
         <div>
-          <UserTableAdminEditFormModal
+          <UserAllTableAdminEditFormModal
             user={user}
             activeCompanies={activeCompanies}
             form={`user-admin-edit-form-${user._id}`}
@@ -66,8 +72,9 @@ const UserTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
               company: user.company._id,
               role: user.role,
               status: user.status,
-              firstName: user.firstName,
-              lastName: user.lastName,
+              hourlyRate: user.hourlyRate[0].USD,
+              firstName: user.name.first,
+              lastName: user.name.last,
             }}
           />
         </div>
@@ -81,6 +88,7 @@ const UserTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
       data={users}
       columns={columns}
       showPagination={false}
+      sortable={false}
       defaultPageSize={defaultPageSize}
       minRows={minRows}
       className="-striped -highlight"
@@ -95,4 +103,4 @@ const UserTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
   );
 };
 
-export default UserTable;
+export default UserAllTable;

@@ -20,6 +20,11 @@ module.exports = router => {
   router.post('/api/v1/timeEntry/newTimeEntryBulkAction/submitAll/:status', authController.isLoggedIn, timeEntryController.newTimeEntryBulkAction);
   router.post('/api/v1/timeEntry/newTimeEntryBulkAction/deleteAll/:status', authController.isLoggedIn, timeEntryController.newTimeEntryBulkAction);
 
-  // timeEntry bulk actions endpoint for hourLog/one timeEntryTables
-  router.post('/api/v1/timeEntry/timeEntryInHourLogBulkAction/:companyHourLogId/:currentStatus/:receivingStatus', authController.isLoggedIn, authController.isAdmin, timeEntryController.timeEntryInHourLogBulkAction);
+  // timeEntry bulk actions endpoint for companyHourLog timeEntryTables
+  router.post('/api/v1/timeEntry/companyHourLogTimeEntryBulkAction/:companyHourLogId/:currentStatus/:receivingStatus', authController.isLoggedIn, authController.isAdmin, timeEntryController.companyHourLogTimeEntryBulkAction);
+
+  // timeEntry bulk actions endpoint for contractorHourLog timeEntryTables
+  router.post('/api/v1/timeEntry/contractorHourLogTimeEntryBulkAction/:contractorHourLogId/rejectAllSubmitted', authController.isLoggedIn, authController.isAdmin, timeEntryController.contractorHourLogTimeEntryBulkReject);
+  router.post('/api/v1/timeEntry/contractorHourLogTimeEntryBulkAction/:contractorHourLogId/submitAllCreated', authController.isLoggedIn, timeEntryController.contractorHourLogTimeEntryBulkSubmit);
+  router.post('/api/v1/timeEntry/contractorHourLogTimeEntryBulkAction/:contractorHourLogId/deleteAllCreated', authController.isLoggedIn, timeEntryController.contractorHourLogTimeEntryBulkDelete);
 };

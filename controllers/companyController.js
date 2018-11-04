@@ -4,27 +4,20 @@ const Company = mongoose.model('Company');
 const CompanyHourLog = mongoose.model('CompanyHourLog');
 
 exports.all = async (req, res) => {
-  const companies = await Company.find().select('name status');
+  const companies = await Company.find();
+  if (!companies[0]) return res.json('empty');
   res.json(companies);
 };
 
 exports.active = async (req, res) => {
-  const companies = await Company.find({ status: 'active' }).select('name').sort('name');
+  const companies = await Company.find({ status: 'active' }).sort('name');
   res.json(companies);
 };
 
 exports.one = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOne({ _id: companyId }).select('name status');
+  const company = await Company.findOne({ _id: companyId });
   res.json(company);
-};
-
-exports.companyHourLogs = async (req, res) => {
-  const companyId = req.params.id;
-  const companyHourLogs = await CompanyHourLog.find({ company: companyId })
-    .populate('company', 'name')
-    .select('company dateOpened dateClosed title totalPublicHours totalHiddenHours totalSubmittedHours');
-  res.json(companyHourLogs);
 };
 
 exports.create = async (req, res) => {
@@ -34,7 +27,7 @@ exports.create = async (req, res) => {
 
 exports.edit = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOneAndUpdate({ _id: companyId }, { name: req.body.name }, { new: true }).select('name status');
+  const company = await Company.findOneAndUpdate({ _id: companyId }, { name: req.body.name }, { new: true });
   res.json(company);
 };
 
@@ -46,7 +39,7 @@ exports.activate = async (req, res) => {
 
 exports.deactivate = async (req, res) => {
   const companyId = req.params.id;
-  const company = await Company.findOne({ _id: companyId }).select('name status');
+  const company = await Company.findOne({ _id: companyId });
   const openCompanyHourLog = await CompanyHourLog.findOne({ company: companyId, title: 'Current', dateClosed: new Date(0) });
   if (openCompanyHourLog) {
     return res.json(company);
@@ -54,4 +47,11 @@ exports.deactivate = async (req, res) => {
   company.status = 'inactive';
   await company.save();
   return res.json(company);
+};
+
+exports.companyHourLogs = async (req, res) => {
+  const companyId = req.params.id;
+  const companyHourLogs = await CompanyHourLog.find({ company: companyId }).populate('timeEntries', 'status publicHours');
+  if (!companyHourLogs[0]) return res.json('empty');
+  res.json(companyHourLogs);
 };

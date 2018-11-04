@@ -4,18 +4,19 @@ import { reduxForm, Field } from 'redux-form';
 import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-
-import { createAndSubmitTimeEntry } from '../../actions/timeEntry';
+import $ from 'jquery';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
+import { createAndSubmitTimeEntry } from '../../actions/timeEntry';
 
-class CompanyOneHourLogSubmitTimeEntry extends Component {
+
+
+class CompanyHourLogOneSubmitTimeEntry extends Component {
   componentDidMount() {
-    const { hourLogTitle } = this.props;
-    if (hourLogTitle === 'Current') {
-      const datePicker = document.getElementsByClassName('react-datepicker__input-container')[0];
-      datePicker.childNodes[0].setAttribute('readOnly', true);
+    const { companyHourLogTitle } = this.props;
+    if (companyHourLogTitle === 'Current') {
+      $('.react-datepicker__input-container')[0].childNodes[0].setAttribute('readOnly', true);
     }
   }
 
@@ -67,8 +68,8 @@ class CompanyOneHourLogSubmitTimeEntry extends Component {
   }
 
   render() {
-    const { hourLogTitle, company, handleSubmit } = this.props;
-    if (hourLogTitle !== 'Current') {
+    const { companyHourLogTitle, company, handleSubmit } = this.props;
+    if (companyHourLogTitle !== 'Current') {
       return <div />;
     }
     return (
@@ -130,4 +131,4 @@ function validate(values) {
 export default connect(null, { createAndSubmitTimeEntry })(reduxForm({
   form: 'submitTimeEntry',
   validate,
-})(CompanyOneHourLogSubmitTimeEntry));
+})(CompanyHourLogOneSubmitTimeEntry));

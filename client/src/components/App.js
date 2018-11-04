@@ -3,8 +3,6 @@ import { BrowserRouter, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
-import { getCurrentUser } from '../actions/auth';
-
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -18,6 +16,8 @@ import AuthedRoute from './HOCRoutes/AuthedRoute';
 import PublicOnlyRoute from './HOCRoutes/PublicOnlyRoute';
 import Login from './Login';
 import Dashboard from './Dashboard';
+
+import { getCurrentUser } from '../actions/auth';
 
 class App extends Component {
   componentWillMount() {
@@ -33,7 +33,14 @@ class App extends Component {
             <AuthedRoute path="/" component={Dashboard} />
           </Switch>
         </BrowserRouter>
-        <ToastContainer />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar
+          closeOnClick
+          pauseOnHover
+          draggable
+        />
       </div>
     );
   }

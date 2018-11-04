@@ -6,7 +6,20 @@ import $ from 'jquery';
 import { adminEditUsers } from '../../actions/user';
 import { getCurrentUser } from '../../actions/auth';
 
-class UserTableAdminEditFormModal extends Component {
+class UserAllTableAdminEditFormModal extends Component {
+  componentDidMount() {
+    const { user } = this.props;
+    this.props.initialize({
+      userId: user._id,
+      company: user.company._id,
+      role: user.role,
+      status: user.status,
+      hourlyRate: user.hourlyRate[0].USD,
+      firstName: user.name.first,
+      lastName: user.name.last,
+    });
+  }
+
   onFormSubmit(formProps) {
     const { auth, user } = this.props;
     this.props.adminEditUsers(user._id, auth._id, formProps);
@@ -55,6 +68,18 @@ class UserTableAdminEditFormModal extends Component {
     );
   }
 
+  renderNumberField(field) {
+    return (
+      <div className="form-group row">
+        <label className="col-sm-3 col-form-label" htmlFor={field.name}>{field.label}</label>
+        <div className="col-sm-9">
+          <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="number" step="0.25" />
+          <div className="invalid-feedback">{field.meta.error}</div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const { handleSubmit, user, activeCompanies } = this.props;
     return (
@@ -67,7 +92,7 @@ class UserTableAdminEditFormModal extends Component {
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">Edit {`${user.firstName} ${user.lastName}`}</h5>
+                  <h5 className="modal-title">Edit {`${user.name.full}`}</h5>
                   <button className="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div className="modal-body">
@@ -97,6 +122,11 @@ class UserTableAdminEditFormModal extends Component {
                         { _id: 'inactive', name: 'Inactive' },
                       ]}
                       component={this.renderSelectField}
+                    />
+                    <Field
+                      label="Hourly Rate (USD)"
+                      name="hourlyRate"
+                      component={this.renderNumberField}
                     />
                     <Field
                       label="First name"
@@ -146,6 +176,14 @@ function validate(values) {
     errors.lastName = 'Enter a last name.';
   }
 
+  if (!values.hours || values.hours < 0) {
+    errors.hours = 'Enter a value greater than or equal to 0.';
+  }
+
+  if (values.hours > 100000) {
+    errors.hours = 'Enter a value less than 100,000.';
+  }
+
   return errors;
 }
 
@@ -156,4 +194,4 @@ function mapStateToProps({ auth }) {
 export default connect(mapStateToProps, { adminEditUsers, getCurrentUser })(reduxForm({
   enableReinitialize: true,
   validate,
-})(UserTableAdminEditFormModal));
+})(UserAllTableAdminEditFormModal));
