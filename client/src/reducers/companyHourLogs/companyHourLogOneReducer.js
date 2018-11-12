@@ -30,6 +30,7 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         title: action.payload.title,
+        notes: action.payload.notes,
       };
 
     case CREATE_AND_SUBMIT_TIME_ENTRY: {
@@ -43,9 +44,16 @@ export default function(state = INITIAL_STATE, action) {
     }
 
     case ADJUDICATE_TIME_ENTRY: {
+      const updatedTimeEntries = state.timeEntries.map(timeEntry => {
+        if (timeEntry._id === action.payload._id) {
+          timeEntry = action.payload;
+        }
+        return timeEntry;
+      });
+
       const newState = {
         ...state,
-        timeEntries: state.timeEntries.filter(timeEntry => timeEntry._id !== action.payload._id),
+        timeEntries: updatedTimeEntries.filter(timeEntry => timeEntry.publicCompany._id === state.company._id),
       };
 
       if (!newState.timeEntries) {

@@ -14,6 +14,7 @@ import {
 class TimeEntryTableEditFormModal extends Component {
   componentDidMount() {
     const { timeEntry } = this.props;
+    $('.react-datepicker-date-field').prop('readOnly', true);
     this.props.initialize({
       date: timeEntry.publicDate.split('T')[0],
       user: timeEntry.publicUser._id,
@@ -41,7 +42,7 @@ class TimeEntryTableEditFormModal extends Component {
         <div className="col-sm-4">
           <DatePicker
             {...field.input}
-            className={`form-control custom-form-width ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`}
+            className={`form-control react-datepicker-date-field ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`}
             dateFormat="YYYY-MM-DD"
             selected={field.input.value ? moment(field.input.value) : ''}
           />
@@ -94,7 +95,7 @@ class TimeEntryTableEditFormModal extends Component {
       <div className="form-group row">
         <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
         <div className="col-sm-10">
-          <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="number" step="0.25" />
+          <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="number" step="0.25" autoComplete="off" />
           <div className="invalid-feedback">{field.meta.error}</div>
         </div>
       </div>
@@ -106,7 +107,7 @@ class TimeEntryTableEditFormModal extends Component {
       <div className="form-group row">
         <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
         <div className="col-sm-10">
-          <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" />
+          <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" autoComplete="off" />
           <div className="invalid-feedback">{field.meta.error}</div>
         </div>
       </div>

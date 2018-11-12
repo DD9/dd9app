@@ -33,6 +33,9 @@ const contractorHourLogSchema = new Schema({
       USD: 0,
     }],
   },
+  notes: {
+    type: String,
+  },
 },
 {
   timestamps: true,

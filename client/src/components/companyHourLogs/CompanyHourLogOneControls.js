@@ -25,6 +25,14 @@ class CompanyHourLogOneControls extends Component {
     $('#editCompanyHourLogModal').modal('hide');
   };
 
+  renderHourLogNotes() {
+    const { companyHourLog } = this.props;
+    console.log(companyHourLog.notes);
+    if (companyHourLog.notes) {
+      return <p className="mt-1 mb-0">Notes: {companyHourLog.notes}</p>
+    }
+  }
+
   renderHourLogTitle() {
     const { companyHourLog } = this.props;
     if (companyHourLog.title) {
@@ -46,6 +54,7 @@ class CompanyHourLogOneControls extends Component {
             <button type="button" className="btn btn-primary mr-2" data-toggle="modal" data-target="#editCompanyHourLogModal">Edit</button>
             <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#openCompanyHourLogModal">Open</button>
           </div>
+          {this.renderHourLogNotes()}
         </div>
       );
     }
@@ -55,7 +64,7 @@ class CompanyHourLogOneControls extends Component {
     return (
       <div className="form-group">
         <label className="col-form-label" htmlFor={field.name}>{field.label}</label>
-        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" />
+        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" autoComplete="off" />
         <div className="invalid-feedback">{field.meta.error}</div>
       </div>
     );
@@ -80,7 +89,8 @@ class CompanyHourLogOneControls extends Component {
           modalId="closeCompanyHourLogModal"
           modalTitle="Close Hour Log"
           formId="closeCompanyHourLogForm"
-          modalField={<Field label="Title" name="title" component={this.renderField} />}
+          titleField={<Field label="Title" name="title" component={this.renderField} />}
+          notesField={<Field label="Notes" name="notes" component={this.renderField} />}
           modalBody="Submitted time entries will be moved to a new Current hour log. Closing an hour log with no approved or hidden time entries will trigger its deletion."
           onSubmit={handleSubmit(this.onCompanyHourLogCloseFormSubmit)}
         />
@@ -88,7 +98,8 @@ class CompanyHourLogOneControls extends Component {
           modalId="editCompanyHourLogModal"
           modalTitle="Edit Hour Log"
           formId="editCompanyHourLogForm"
-          modalField={<Field label="Title" name="title" component={this.renderField} />}
+          titleField={<Field label="Title" name="title" component={this.renderField} />}
+          notesField={<Field label="Notes" name="notes" component={this.renderField} />}
           onSubmit={handleSubmit(this.onCompanyHourLogEditFormSubmit)}
         />
         <div>

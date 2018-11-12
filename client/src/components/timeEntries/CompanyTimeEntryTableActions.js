@@ -154,13 +154,12 @@ class CompanyTimeEntryTableActions extends Component {
 
   render() {
     const {
-      auth, timeEntry, activeUsers, activeCompanies,
+      timeEntry, activeUsers, activeCompanies,
     } = this.props;
     return (
       <div>
         {this.renderTimeEntryTableActionButtons()}
         <TimeEntryTableEditFormModal
-          auth={auth}
           timeEntry={timeEntry}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}

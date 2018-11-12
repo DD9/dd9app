@@ -69,8 +69,6 @@ const CompanyTimeEntryTable = ({
             auth={auth}
             tableTitle={tableTitle}
             match={match}
-            activeUsers={activeUsers}
-            activeCompanies={activeCompanies}
           />
         </div>
       ),

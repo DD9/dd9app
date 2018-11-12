@@ -21,16 +21,9 @@ const Header = ({ auth, logout, history }) => {
         return [
           <li key="1" className="nav-item"><Link className="nav-link" to="/users">Users</Link></li>,
           <li key="2" className="nav-item"><Link className="nav-link" to="/companies">Companies</Link></li>,
-          <li key="3" className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Hour Logs
-            </a>
-            <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <Link className="nav-link" to="/companyHourLogs">Company Hour Logs</Link>
-              <Link className="nav-link" to="/contractorHourLogs">Contractor Hour Logs</Link>
-            </div>
-          </li>,
-          <li key="4" className="nav-item"><Link className="nav-link" to="/timeEntry/new">Time Entries</Link></li>,
+          <li key="3" className="nav-item"><Link className="nav-link" to="/companyHourLogs">Company Hour Logs</Link></li>,
+          <li key="4" className="nav-item"><Link className="nav-link" to="/contractorHourLogs">Contractor Hour Logs</Link></li>,
+          <li key="5" className="nav-item"><Link className="nav-link" to="/timeEntry/new">Time Entries</Link></li>,
         ];
     }
   };

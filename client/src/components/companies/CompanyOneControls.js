@@ -14,12 +14,14 @@ class CompanyOneControls extends Component {
     setTimeout(() => this.props.reset(), 500);
   };
 
-  onCompanyActivateFormSubmit = () => {
+  onCompanyActivateFormSubmit = e => {
+    e.preventDefault();
     this.props.activateCompany(this.props.company._id);
     $('#companyActivateModal').modal('hide');
   };
 
-  onCompanyDeactivateFormSubmit = () => {
+  onCompanyDeactivateFormSubmit = e => {
+    e.preventDefault();
     this.props.deactivateCompany(this.props.company._id);
     $('#companyDeactivateModal').modal('hide');
   };
@@ -36,7 +38,7 @@ class CompanyOneControls extends Component {
     return (
       <div className="form-group">
         <label className="col-form-label" htmlFor={field.name}>{field.label}</label>
-        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" />
+        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" autoComplete="off" />
         <div className="invalid-feedback">{field.meta.error}</div>
       </div>
     );
@@ -63,14 +65,14 @@ class CompanyOneControls extends Component {
           modalTitle="Confirm Company Activation"
           formId="companyActivateForm"
           modalBody={`Are you sure you want to activate ${company.name}?`}
-          onSubmit={handleSubmit(this.onCompanyActivateFormSubmit)}
+          onSubmit={this.onCompanyActivateFormSubmit}
         />
         <CompanyOneControlsModal
           modalId="companyDeactivateModal"
           modalTitle="Confirm Company Deactivation"
           formId="companyDeactivateForm"
           modalBody={`Are you sure you want to deactivate ${company.name}?`}
-          onSubmit={handleSubmit(this.onCompanyDeactivateFormSubmit)}
+          onSubmit={this.onCompanyDeactivateFormSubmit}
         />
       </div>
     );

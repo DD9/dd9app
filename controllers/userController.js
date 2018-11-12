@@ -31,11 +31,14 @@ exports.edit = async (req, res) => {
 };
 
 exports.adminEdit = async (req, res) => {
+  console.log(req.body);
+
   const { userId } = req.body;
   const user = await User.findOneAndUpdate(
     { _id: userId },
     {
       company: req.body.company,
+      role: req.body.role,
       status: req.body.status,
       'name.first': req.body.firstName,
       'name.last': req.body.lastName,
