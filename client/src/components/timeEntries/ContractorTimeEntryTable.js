@@ -62,7 +62,6 @@ const ContractorTimeEntryTable = ({
           <ContractorTimeEntryTableActions
             auth={auth}
             timeEntry={timeEntry}
-            activeUsers={activeUsers}
             activeCompanies={activeCompanies}
           />
         </div>

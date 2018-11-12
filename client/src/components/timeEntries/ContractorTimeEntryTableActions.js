@@ -88,7 +88,6 @@ class ContractorTimeEntryTableActions extends Component {
         {this.renderTimeEntryTableActionButtons()}
         <TimeEntryTableEditFormModal
           timeEntry={timeEntry}
-          activeUsers={activeUsers}
           activeCompanies={activeCompanies}
           form={`time-entry-edit-form-${timeEntry._id}`}
         />

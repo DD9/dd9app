@@ -9,7 +9,6 @@ import ContractorHourLogOneControls from './ContractorHourLogOneControls';
 import ContractorTimeEntryTable from '../timeEntries/ContractorTimeEntryTable';
 
 import { getContractorHourLog, clearContractorHourLogOneState } from '../../actions/contractorHourLog';
-import { getActiveUsers } from '../../actions/user';
 import { getActiveCompanies } from '../../actions/company';
 
 
@@ -17,7 +16,6 @@ class CompanyHourLogOne extends Component {
   componentDidMount() {
     const { match } = this.props;
     this.props.getContractorHourLog(match.params.contractorHourLogId);
-    this.props.getActiveUsers();
     this.props.getActiveCompanies();
   }
 
@@ -31,7 +29,7 @@ class CompanyHourLogOne extends Component {
 
   render() {
     const {
-      auth, contractorHourLog, activeUsers, activeCompanies, match,
+      auth, contractorHourLog, activeCompanies, match,
     } = this.props;
 
     if (!contractorHourLog.hourlyRate) {
@@ -59,7 +57,6 @@ class CompanyHourLogOne extends Component {
           contractorHourLogHourlyRate={contractorHourLog.hourlyRate[0].USD}
           tableTitle="Created Time Entries"
           timeEntries={createdTimeEntries}
-          activeUsers={activeUsers}
           activeCompanies={activeCompanies}
           match={match}
           key={uuid()}
@@ -73,7 +70,6 @@ class CompanyHourLogOne extends Component {
           contractorHourLogHourlyRate={contractorHourLog.hourlyRate[0].USD}
           tableTitle="Submitted Time Entries"
           timeEntries={submittedTimeEntries}
-          activeUsers={activeUsers}
           activeCompanies={activeCompanies}
           match={match}
           key={uuid()}
@@ -85,10 +81,10 @@ class CompanyHourLogOne extends Component {
   }
 }
 
-function mapStateToProps({ contractorHourLog, activeUsers, activeCompanies }) {
-  return { contractorHourLog, activeUsers, activeCompanies };
+function mapStateToProps({ contractorHourLog, activeCompanies }) {
+  return { contractorHourLog, activeCompanies };
 }
 
 export default connect(mapStateToProps, {
-  getContractorHourLog, clearContractorHourLogOneState, getActiveUsers, getActiveCompanies,
+  getContractorHourLog, clearContractorHourLogOneState, getActiveCompanies,
 })(CompanyHourLogOne);
