@@ -65,8 +65,13 @@ exports.edit = async (req, res) => {
   const timeEntryId = req.params.id;
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
 
+  if (timeEntry.companyHourLog) {
+    res.json({ error: 'unauthorized' });
+    return console.log(`unauthorized request: ${req.url} \n from user: ${req.user} \n with post body: ${JSON.stringify(req.body)}`);
+  }
+
   // The timeEntry must be 'new' and a user must own the timeEntry to edit it
-  if ((!timeEntry.companyHourLog && timeEntry.user.toString() === req.user._id.toString()) || req.user.permissions[0]) {
+  if ((timeEntry.user.toString() === req.user._id.toString()) || req.user.permissions[0]) {
     timeEntry.date = req.body.date;
     timeEntry.company = req.body.company;
     timeEntry.hours = req.body.hours;
