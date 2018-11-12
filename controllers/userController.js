@@ -31,8 +31,6 @@ exports.edit = async (req, res) => {
 };
 
 exports.adminEdit = async (req, res) => {
-  console.log(req.body);
-
   const { userId } = req.body;
   const user = await User.findOneAndUpdate(
     { _id: userId },

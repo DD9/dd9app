@@ -66,7 +66,7 @@ exports.edit = async (req, res) => {
   const timeEntry = await TimeEntry.findOne({ _id: timeEntryId });
 
   // The timeEntry must be 'new' and a user must own the timeEntry to edit it
-  if (!timeEntry.companyHourLog && timeEntry.user.toString() === req.user._id.toString()) {
+  if ((!timeEntry.companyHourLog && timeEntry.user.toString() === req.user._id.toString()) || req.user.permissions[0]) {
     timeEntry.date = req.body.date;
     timeEntry.company = req.body.company;
     timeEntry.hours = req.body.hours;
