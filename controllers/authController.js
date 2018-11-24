@@ -1,5 +1,10 @@
 const passport = require('passport');
 
+exports.localAuth = passport.authenticate('local', {
+  successRedirect: '/timeEntry/new',
+  failureRedirect: '/login',
+});
+
 exports.googleAuth = passport.authenticate('google', {
   scope: [
     'https://www.googleapis.com/auth/plus.profile.emails.read',

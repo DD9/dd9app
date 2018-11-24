@@ -3,6 +3,8 @@
 
 # Testing
 /coverage
+/cypress
+cypress.json
 
 # Production
 /build

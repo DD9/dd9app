@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Switch } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
@@ -15,6 +15,7 @@ import '../styles/partials/toasts.scss';
 import AuthedRoute from './HOCRoutes/AuthedRoute';
 import PublicOnlyRoute from './HOCRoutes/PublicOnlyRoute';
 import Login from './Login';
+import TestLogin from './TestLogin';
 import Dashboard from './Dashboard';
 
 import { getCurrentUser } from '../actions/auth';
@@ -30,6 +31,7 @@ class App extends Component {
         <BrowserRouter>
           <Switch>
             <PublicOnlyRoute exact path="/login" component={Login} />
+            <Route exact path="/test/login" component={TestLogin} />
             <AuthedRoute path="/" component={Dashboard} />
           </Switch>
         </BrowserRouter>

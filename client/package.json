@@ -40,6 +40,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "redux-devtools-extension": "^2.13.5"
+    "redux-devtools-extension": "^2.13.5",
+    "cypress": "^3.1.2"
   }
 }
