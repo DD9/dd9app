@@ -28,11 +28,12 @@
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "lodash": "^4.17.10",
-    "mongoose": "^5.2.13",
+    "mongoose": "^5.3.13",
     "mongoose-deep-populate": "^3.1.1",
     "mongoose-mongodb-errors": "0.0.2",
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
+    "passport-local": "^1.0.0",
     "passport-local-mongoose": "^5.0.1",
     "validator": "^10.7.1"
   },
@@ -40,6 +41,7 @@
     "cli-progress": "^2.1.0",
     "concurrently": "^4.0.1",
     "csvtojson": "^2.0.8",
+    "es6-promisify": "^6.0.1",
     "nodemon": "^1.18.4"
   }
 }
