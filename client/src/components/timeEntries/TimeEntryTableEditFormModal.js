@@ -194,7 +194,7 @@ class TimeEntryTableEditFormModal extends Component {
               </div>
               <div className="modal-footer">
                 <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-                <button className="btn btn-primary" type="submit" form={`time-entry-edit-form-${timeEntry._id}`}>Submit</button>
+                <button className="btn btn-primary time-entry-edit-form-submit" type="submit" form={`time-entry-edit-form-${timeEntry._id}`}>Submit</button>
               </div>
             </div>
           </div>
