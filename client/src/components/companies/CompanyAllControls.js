@@ -17,7 +17,7 @@ class CompanyAllControls extends Component {
     return (
       <div className="form-group">
         <label className="col-form-label" htmlFor={field.name}>{field.label}</label>
-        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" />
+        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" autoComplete="off" />
         <div className="invalid-feedback">{field.meta.error}</div>
       </div>
     );

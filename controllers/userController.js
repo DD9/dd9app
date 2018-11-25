@@ -36,6 +36,7 @@ exports.adminEdit = async (req, res) => {
     { _id: userId },
     {
       company: req.body.company,
+      role: req.body.role,
       status: req.body.status,
       'name.first': req.body.firstName,
       'name.last': req.body.lastName,

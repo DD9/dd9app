@@ -16,7 +16,13 @@ class CompanyHourLogOneSubmitTimeEntry extends Component {
   componentDidMount() {
     const { companyHourLogTitle } = this.props;
     if (companyHourLogTitle === 'Current') {
-      $('.react-datepicker__input-container')[0].childNodes[0].setAttribute('readOnly', true);
+      $('.react-datepicker-date-field').prop('readOnly', true);
+      this.props.initialize({
+        date: moment(),
+        company: '-1',
+        hours: '',
+        description: '',
+      });
     }
   }
 
@@ -38,7 +44,7 @@ class CompanyHourLogOneSubmitTimeEntry extends Component {
         <label htmlFor={field.name}>{field.label}</label>
         <DatePicker
           {...field.input}
-          className={`form-control custom-form-width ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`}
+          className={`form-control react-datepicker-date-field ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`}
           dateFormat="YYYY-MM-DD"
           selected={field.input.value ? moment(field.input.value) : ''}
         />
@@ -51,7 +57,7 @@ class CompanyHourLogOneSubmitTimeEntry extends Component {
     return (
       <div className="form-group col-md-4">
         <label htmlFor={field.name}>{field.label}</label>
-        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="number" step="0.25" />
+        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="number" step="0.25" autoComplete="off" />
         <div className="invalid-feedback">{field.meta.error}</div>
       </div>
     );
@@ -61,7 +67,7 @@ class CompanyHourLogOneSubmitTimeEntry extends Component {
     return (
       <div className="form-group">
         <label htmlFor={field.name}>{field.label}</label>
-        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" />
+        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" autoComplete="off" />
         <div className="invalid-feedback">{field.meta.error}</div>
       </div>
     );

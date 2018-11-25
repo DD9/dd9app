@@ -9,12 +9,14 @@ import ContractorHourLogOneControls from './ContractorHourLogOneControls';
 import ContractorTimeEntryTable from '../timeEntries/ContractorTimeEntryTable';
 
 import { getContractorHourLog, clearContractorHourLogOneState } from '../../actions/contractorHourLog';
+import { getActiveCompanies } from '../../actions/company';
 
 
 class CompanyHourLogOne extends Component {
   componentDidMount() {
     const { match } = this.props;
     this.props.getContractorHourLog(match.params.contractorHourLogId);
+    this.props.getActiveCompanies();
   }
 
   componentDidUpdate() {
@@ -27,7 +29,7 @@ class CompanyHourLogOne extends Component {
 
   render() {
     const {
-      auth, contractorHourLog, match,
+      auth, contractorHourLog, activeCompanies, match,
     } = this.props;
 
     if (!contractorHourLog.hourlyRate) {
@@ -46,7 +48,7 @@ class CompanyHourLogOne extends Component {
         <ContractorHourLogOneControls
           auth={auth}
           contractorHourLog={contractorHourLog}
-          initialValues={contractorHourLog.title === 'Current' ? { title: moment.utc().format('YYYY-MM-DD') } : { title: contractorHourLog.title }}
+          initialValues={contractorHourLog.title === 'Current' ? { title: moment.utc().format('YYYY-MM-DD') } : { title: contractorHourLog.title, notes: contractorHourLog.notes }}
         />
         <div className="m-5" />
         <ContractorTimeEntryTable
@@ -55,6 +57,7 @@ class CompanyHourLogOne extends Component {
           contractorHourLogHourlyRate={contractorHourLog.hourlyRate[0].USD}
           tableTitle="Created Time Entries"
           timeEntries={createdTimeEntries}
+          activeCompanies={activeCompanies}
           match={match}
           key={uuid()}
           defaultPageSize={createdTimeEntries.length}
@@ -67,6 +70,7 @@ class CompanyHourLogOne extends Component {
           contractorHourLogHourlyRate={contractorHourLog.hourlyRate[0].USD}
           tableTitle="Submitted Time Entries"
           timeEntries={submittedTimeEntries}
+          activeCompanies={activeCompanies}
           match={match}
           key={uuid()}
           defaultPageSize={submittedTimeEntries.length}
@@ -77,8 +81,10 @@ class CompanyHourLogOne extends Component {
   }
 }
 
-function mapStateToProps({ contractorHourLog }) {
-  return { contractorHourLog };
+function mapStateToProps({ contractorHourLog, activeCompanies }) {
+  return { contractorHourLog, activeCompanies };
 }
 
-export default connect(mapStateToProps, { getContractorHourLog, clearContractorHourLogOneState })(CompanyHourLogOne);
+export default connect(mapStateToProps, {
+  getContractorHourLog, clearContractorHourLogOneState, getActiveCompanies,
+})(CompanyHourLogOne);

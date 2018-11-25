@@ -6,7 +6,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -39,6 +40,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "redux-devtools-extension": "^2.13.5"
+    "redux-devtools-extension": "^2.13.5",
+    "cypress": "^3.1.2"
   }
 }

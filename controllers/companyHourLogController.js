@@ -86,6 +86,7 @@ exports.close = async (req, res) => {
       }
     }
     companyHourLog.title = req.body.title;
+    companyHourLog.notes = req.body.notes;
     companyHourLog.dateClosed = new Date();
 
     await companyHourLog.save();
@@ -98,6 +99,11 @@ exports.close = async (req, res) => {
     await companyHourLog.remove();
     return res.json({ redirectUrl: `/company/${companyHourLog.company._id}`, companyId: companyHourLog.company._id });
   }
+
+  companyHourLog.title = req.body.title;
+  companyHourLog.notes = req.body.notes;
+  companyHourLog.dateClosed = new Date();
+  await companyHourLog.save();
 
   res.json(companyHourLog);
 };

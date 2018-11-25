@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TimeEntryTableActionConfirmModal = ({ modalId, modalTitle, formId, modalBody, onSubmit }) => (
+const TimeEntryTableActionConfirmModal = ({ modalId, modalClass, modalTitle, formId, modalBody, onSubmit }) => (
   <div>
     <div className="modal fade" id={modalId} tabIndex={-1} role="dialog" aria-labelledby={`#${modalId}`} aria-hidden="true">
       <div className="modal-dialog" role="document">
@@ -15,7 +15,7 @@ const TimeEntryTableActionConfirmModal = ({ modalId, modalTitle, formId, modalBo
           </div>
           <div className="modal-footer">
             <button className="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-            <button className="btn btn-primary" type="submit" form={formId}>Submit</button>
+            <button className={`btn btn-primary ${modalClass}`} type="submit" form={formId}>Submit</button>
           </div>
         </div>
       </div>

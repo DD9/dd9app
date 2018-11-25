@@ -48,6 +48,7 @@ exports.close = async (req, res) => {
   }
 
   contractorHourLog.title = req.body.title;
+  contractorHourLog.notes = req.body.notes;
   contractorHourLog.dateClosed = new Date();
 
   await contractorHourLog.save();

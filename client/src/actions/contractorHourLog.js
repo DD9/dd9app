@@ -55,7 +55,7 @@ export const closeContractorHourLog = (contractorHourLogId, formProps, history) 
 
 export const editContractorHourLog = (contractorHourLogId, formProps) => async dispatch => {
   const res = await axios.post(`/api/v1/contractorHourLog/${contractorHourLogId}/edit`, formProps);
-
+  toast.success('Successfully edited hour log');
   dispatch({ type: EDIT_CONTRACTOR_HOUR_LOG, payload: res.data });
 };
 

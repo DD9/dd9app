@@ -27,6 +27,9 @@ const companyHourLogSchema = new Schema({
     type: String,
     default: 'Current',
   },
+  notes: {
+    type: String,
+  },
 },
 {
   timestamps: true,

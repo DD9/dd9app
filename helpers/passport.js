@@ -1,14 +1,16 @@
 const passport = require('passport');
 const mongoose = require('mongoose');
-
 const User = mongoose.model('User');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 /**
+ Use the LocalStrategy within Passport.
+*/
+
+passport.use(User.createStrategy());
+
+/**
   Use the GoogleStrategy within Passport.
-  Strategies in Passport require a `verify` function, which accept
-  credentials (in this case, an accessToken, refreshToken, and Google
-  profile), and invoke a callback with a user object.
 */
 
 passport.use(new GoogleStrategy({

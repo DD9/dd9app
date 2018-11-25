@@ -40,11 +40,16 @@ export const createAndSubmitTimeEntry = formProps => async dispatch => {
 };
 
 export const editTimeEntry = (timeEntryId, formProps) => async dispatch => {
-  const res = await axios.post(`/api/v1/timeEntry/${timeEntryId}/edit`, formProps);
+  const editTimeEntryRes = await axios.post(`/api/v1/timeEntry/${timeEntryId}/edit`, formProps);
+  const getCreatedTimeEntriesRes = await axios.get('/api/v1/timeEntries/created');
 
-  toast.info('Time Entry Edited');
-
-  dispatch({ type: EDIT_TIME_ENTRY, payload: res.data });
+  if (editTimeEntryRes.data.error) {
+    toast.error('Time Entry has already been submitted');
+    dispatch({ type: GET_CREATED_TIME_ENTRIES, payload: getCreatedTimeEntriesRes.data });
+  } else {
+    toast.info('Time Entry Edited');
+    dispatch({ type: EDIT_TIME_ENTRY, payload: editTimeEntryRes.data });
+  }
 };
 
 export const adjudicateTimeEntry = (timeEntryId, formProps) => async dispatch => {

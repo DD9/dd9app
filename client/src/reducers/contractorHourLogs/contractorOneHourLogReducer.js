@@ -4,6 +4,7 @@ import {
   GET_CONTRACTOR_HOUR_LOG,
   CLOSE_CONTRACTOR_HOUR_LOG,
   EDIT_CONTRACTOR_HOUR_LOG,
+  EDIT_TIME_ENTRY,
   REJECT_TIME_ENTRY,
   SUBMIT_TIME_ENTRY,
   DELETE_TIME_ENTRY,
@@ -24,7 +25,20 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         title: action.payload.title,
+        notes: action.payload.notes,
       };
+
+    case EDIT_TIME_ENTRY: {
+      return {
+        ...state,
+        timeEntries: state.timeEntries.map(timeEntry => {
+          if (timeEntry._id === action.payload._id) {
+            timeEntry = action.payload;
+          }
+          return timeEntry;
+        }),
+      }
+    }
 
     case REJECT_TIME_ENTRY:
       return {

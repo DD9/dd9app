@@ -33,7 +33,7 @@ class UserOneEditForm extends Component {
       <div className="form-group row">
         <label className="col-sm-2 col-form-label" htmlFor={field.name}>{field.label}</label>
         <div className="col-sm-10">
-          <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" maxLength="30" />
+          <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" maxLength="30" autoComplete="off" />
           <div className="invalid-feedback">{field.meta.error}</div>
         </div>
       </div>

@@ -51,7 +51,7 @@ class CompanyHourLogOne extends Component {
       <div className="container table-font-size">
         <CompanyHourLogOneControls
           companyHourLog={companyHourLog}
-          initialValues={companyHourLog.title === 'Current' ? { title: moment.utc().format('YYYY-MM-DD') } : { title: companyHourLog.title }}
+          initialValues={companyHourLog.title === 'Current' ? { title: moment.utc().format('YYYY-MM-DD') } : { title: companyHourLog.title, notes: companyHourLog.notes }}
           timeEntries={approvedTimeEntries}
         />
         <div className="m-5" />

@@ -154,13 +154,12 @@ class CompanyTimeEntryTableActions extends Component {
 
   render() {
     const {
-      auth, timeEntry, activeUsers, activeCompanies,
+      timeEntry, activeUsers, activeCompanies,
     } = this.props;
     return (
       <div>
         {this.renderTimeEntryTableActionButtons()}
         <TimeEntryTableEditFormModal
-          auth={auth}
           timeEntry={timeEntry}
           activeUsers={activeUsers}
           activeCompanies={activeCompanies}
@@ -168,6 +167,7 @@ class CompanyTimeEntryTableActions extends Component {
         />
         <TimeEntryTableActionConfirmModal
           modalId={`time-entry-confirm-reject-modal-${timeEntry._id}`}
+          modalClass='time-entry-confirm-reject-modal-submit'
           modalTitle="Confirm Reject"
           formId={`time-entry-confirm-reject-form-${timeEntry._id}`}
           modalBody="Are you sure you want to reject this time entry?"
@@ -175,6 +175,7 @@ class CompanyTimeEntryTableActions extends Component {
         />
         <TimeEntryTableActionConfirmModal
           modalId={`time-entry-confirm-submit-modal-${timeEntry._id}`}
+          modalClass='time-entry-confirm-submit-modal-submit'
           modalTitle="Confirm Submit"
           formId={`time-entry-confirm-submit-form-${timeEntry._id}`}
           modalBody="Are you sure you want to submit this time entry?"
@@ -182,6 +183,7 @@ class CompanyTimeEntryTableActions extends Component {
         />
         <TimeEntryTableActionConfirmModal
           modalId={`time-entry-confirm-delete-modal-${timeEntry._id}`}
+          modalClass='time-entry-confirm-delete-modal-submit'
           modalTitle="Confirm Delete"
           formId={`time-entry-confirm-delete-form-${timeEntry._id}`}
           modalBody="Are you sure you want to delete this time entry?"

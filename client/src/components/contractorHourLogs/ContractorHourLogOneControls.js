@@ -19,6 +19,13 @@ class ContractorHourLogOneControls extends Component {
     $('#editContractorHourLogModal').modal('hide');
   };
 
+  renderHourLogNotes() {
+    const { contractorHourLog } = this.props;
+    if (contractorHourLog.notes) {
+      return <p className="mt-1 mb-0">Notes: {contractorHourLog.notes}</p>
+    }
+  }
+
   renderHourLogTitle() {
     const { auth, contractorHourLog } = this.props;
     if (contractorHourLog.title) {
@@ -39,6 +46,7 @@ class ContractorHourLogOneControls extends Component {
             <div className="pull-right">
               <button type="button" className="btn btn-primary mr-2" data-toggle="modal" data-target="#editContractorHourLogModal">Edit</button>
             </div>
+            {this.renderHourLogNotes()}
           </div>
         );
       }
@@ -46,6 +54,7 @@ class ContractorHourLogOneControls extends Component {
         <div>
           <h3 className="d-inline"><span style={{textDecoration: 'underline'}}>{contractorHourLog.title}</span> Contractor Hour Log for </h3>
           <Link className="nav-link d-inline p-0" to={`/user/${contractorHourLog.user._id}/contractorHourLogs`} style={{fontSize: '24px'}}><i>{contractorHourLog.user.name.full}</i></Link>
+          {this.renderHourLogNotes()}
         </div>
       );
     }
@@ -55,7 +64,7 @@ class ContractorHourLogOneControls extends Component {
     return (
       <div className="form-group">
         <label className="col-form-label" htmlFor={field.name}>{field.label}</label>
-        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" />
+        <input {...field.input} className={`form-control ${field.meta.touched && field.meta.invalid ? 'is-invalid' : ''}`} type="text" autoComplete="off" />
         <div className="invalid-feedback">{field.meta.error}</div>
       </div>
     );
@@ -73,7 +82,8 @@ class ContractorHourLogOneControls extends Component {
           modalId="closeContractorHourLogModal"
           modalTitle="Close Hour Log"
           formId="closeContractorHourLogForm"
-          modalField={<Field label="Title" name="title" component={this.renderField} />}
+          titleField={<Field label="Title" name="title" component={this.renderField} />}
+          notesField={<Field label="Notes" name="notes" component={this.renderField} />}
           modalBody="Cannot close an hour log with created time entries.Closing an empty hour log will trigger its deletion. Closing an empty hour log will trigger its deletion."
           onSubmit={handleSubmit(this.onContractorHourLogCloseFormSubmit)}
         />
@@ -81,7 +91,8 @@ class ContractorHourLogOneControls extends Component {
           modalId="editContractorHourLogModal"
           modalTitle="Edit Hour Log"
           formId="editContractorHourLogForm"
-          modalField={<Field label="Title" name="title" component={this.renderField} />}
+          titleField={<Field label="Title" name="title" component={this.renderField} />}
+          notesField={<Field label="Notes" name="notes" component={this.renderField} />}
           onSubmit={handleSubmit(this.onContractorHourLogEditFormSubmit)}
         />
       </div>

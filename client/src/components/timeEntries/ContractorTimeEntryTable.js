@@ -6,9 +6,10 @@ import 'react-table/react-table.css';
 
 import ContractorTimeEntryTableActions from './ContractorTimeEntryTableActions';
 import ContractorTimeEntryTableBulkActions from './ContractorTimeEntryTableBulkActions';
+import CompanyTimeEntryTableActions from "./CompanyTimeEntryTableActions";
 
 const ContractorTimeEntryTable = ({
-  auth, contractorHourLogTitle, contractorHourLogHourlyRate, tableTitle, timeEntries, match, defaultPageSize, minRows,
+  auth, contractorHourLogTitle, contractorHourLogHourlyRate, tableTitle, timeEntries, activeUsers, activeCompanies, match, defaultPageSize, minRows,
 }) => {
   const columns = [{
     Header: () => (
@@ -61,6 +62,7 @@ const ContractorTimeEntryTable = ({
           <ContractorTimeEntryTableActions
             auth={auth}
             timeEntry={timeEntry}
+            activeCompanies={activeCompanies}
           />
         </div>
       ),
