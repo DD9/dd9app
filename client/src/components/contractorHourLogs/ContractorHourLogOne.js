@@ -8,15 +8,19 @@ import SpinnerClipLoader from '../SpinnerClipLoader';
 import ContractorHourLogOneControls from './ContractorHourLogOneControls';
 import ContractorTimeEntryTable from '../timeEntries/ContractorTimeEntryTable';
 
-import { getContractorHourLog, clearContractorHourLogOneState } from '../../actions/contractorHourLog';
+import { getPublicContractorHourLog, getContractorHourLog, clearContractorHourLogOneState } from '../../actions/contractorHourLog';
 import { getActiveCompanies } from '../../actions/company';
 
 
 class CompanyHourLogOne extends Component {
   componentDidMount() {
-    const { match } = this.props;
-    this.props.getContractorHourLog(match.params.contractorHourLogId);
+    const { auth, match } = this.props;
     this.props.getActiveCompanies();
+    if (auth.permissions[0].admin) {
+      this.props.getPublicContractorHourLog(match.params.contractorHourLogId);
+    } else {
+      this.props.getContractorHourLog(match.params.contractorHourLogId);
+    }
   }
 
   componentDidUpdate() {
@@ -86,5 +90,5 @@ function mapStateToProps({ contractorHourLog, activeCompanies }) {
 }
 
 export default connect(mapStateToProps, {
-  getContractorHourLog, clearContractorHourLogOneState, getActiveCompanies,
+  getPublicContractorHourLog, getContractorHourLog, clearContractorHourLogOneState, getActiveCompanies,
 })(CompanyHourLogOne);

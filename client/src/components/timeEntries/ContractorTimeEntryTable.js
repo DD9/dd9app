@@ -6,7 +6,6 @@ import 'react-table/react-table.css';
 
 import ContractorTimeEntryTableActions from './ContractorTimeEntryTableActions';
 import ContractorTimeEntryTableBulkActions from './ContractorTimeEntryTableBulkActions';
-import CompanyTimeEntryTableActions from "./CompanyTimeEntryTableActions";
 
 const ContractorTimeEntryTable = ({
   auth, contractorHourLogTitle, contractorHourLogHourlyRate, tableTitle, timeEntries, activeUsers, activeCompanies, match, defaultPageSize, minRows,
@@ -99,35 +98,37 @@ const ContractorTimeEntryTable = ({
           desc: true,
         },
       ]}
-      SubComponent={row => (
+      SubComponent={auth.permissions[0].admin
+        ? row => (
         <div style={{ padding: '10px' }}>
           <em>Adjudicated, Public Time Entry Data</em>
           <table className="table">
             <thead>
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">User</th>
-                <th scope="col">Company</th>
-                <th scope="col">Hours</th>
-                <th scope="col">cost</th>
-                <th scope="col">Status</th>
-                <th scope="col">Description</th>
-              </tr>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">User</th>
+              <th scope="col">Company</th>
+              <th scope="col">Hours</th>
+              <th scope="col">cost</th>
+              <th scope="col">Status</th>
+              <th scope="col">Description</th>
+            </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>{row.original.publicDate}</td>
-                <td>{row.original.publicUser.name.full}</td>
-                <td>{row.original.publicCompany.name}</td>
-                <td>{row.original.publicHours}</td>
-                <td>{`$${((row.original.publicHours * parseInt(contractorHourLogHourlyRate)).toFixed(2))}`}</td>
-                <td>{row.original.status}</td>
-                <td>{row.original.publicDescription}</td>
-              </tr>
+            <tr>
+              <td>{row.original.publicDate}</td>
+              <td>{row.original.publicUser.name.full}</td>
+              <td>{row.original.publicCompany.name}</td>
+              <td>{row.original.publicHours}</td>
+              <td>{`$${((row.original.publicHours * parseInt(contractorHourLogHourlyRate)).toFixed(2))}`}</td>
+              <td>{row.original.status}</td>
+              <td>{row.original.publicDescription}</td>
+            </tr>
             </tbody>
           </table>
-        </div>
-      )}
+        </div>)
+      : false
+      }
     />
   );
 };

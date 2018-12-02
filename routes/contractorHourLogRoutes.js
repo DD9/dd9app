@@ -5,6 +5,7 @@ module.exports = router => {
   router.get('/api/v1/contractorHourLogs/open', authController.isLoggedIn, authController.isAdmin, contractorHourLogController.openHourLogs);
   router.get('/api/v1/contractorHourLogs/closed', authController.isLoggedIn, authController.isAdmin, contractorHourLogController.closedHourLogs);
   router.get('/api/v1/contractorHourLog/:contractorHourLogId', authController.isLoggedIn, contractorHourLogController.one);
+  router.get('/api/v1/contractorHourLog/:contractorHourLogId/public', authController.isLoggedIn, authController.isAdmin, contractorHourLogController.publicOne);
   router.post('/api/v1/contractorHourLog/:contractorHourLogId/close', authController.isLoggedIn, authController.isAdmin, contractorHourLogController.close);
   router.post('/api/v1/contractorHourLog/:contractorHourLogId/edit', authController.isLoggedIn, authController.isAdmin, contractorHourLogController.edit);
 };

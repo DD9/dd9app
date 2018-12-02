@@ -24,6 +24,25 @@ exports.one = async (req, res) => {
   const { contractorHourLogId } = req.params;
   const contractorHourLog = await ContractorHourLog.findOne({ _id: contractorHourLogId })
     .populate('user', 'name hourlyRate')
+    .populate('timeEntries', 'date user company hours description status')
+    .deepPopulate('timeEntries.user timeEntries.company')
+    .lean();
+
+  contractorHourLog.timeEntries.forEach(function(timeEntry) {
+    delete timeEntry.publicDate;
+    delete timeEntry.publicUser;
+    delete timeEntry.publicCompany;
+    delete timeEntry.publicHours;
+    delete timeEntry.publicDescription;
+  });
+  
+  res.json(contractorHourLog);
+};
+
+exports.publicOne = async (req, res) => {
+  const { contractorHourLogId } = req.params;
+  const contractorHourLog = await ContractorHourLog.findOne({ _id: contractorHourLogId })
+    .populate('user', 'name hourlyRate')
     .populate('timeEntries', 'user publicUser company publicCompany hours publicHours publicDescription')
     .deepPopulate('timeEntries.user timeEntries.publicUser timeEntries.company timeEntries.publicCompany', err => {
       if (err) {

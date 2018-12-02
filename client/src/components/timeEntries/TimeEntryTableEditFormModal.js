@@ -16,11 +16,11 @@ class TimeEntryTableEditFormModal extends Component {
     const { timeEntry } = this.props;
     $('.react-datepicker-date-field').prop('readOnly', true);
     this.props.initialize({
-      date: timeEntry.publicDate.split('T')[0],
-      user: timeEntry.publicUser._id,
-      company: timeEntry.publicCompany._id,
-      hours: timeEntry.publicHours,
-      description: timeEntry.publicDescription,
+      date: timeEntry.date.split('T')[0],
+      user: timeEntry.user._id,
+      company: timeEntry.company._id,
+      hours: timeEntry.hours,
+      description: timeEntry.description,
     });
   }
 
