@@ -22,6 +22,12 @@ export const getClosedContractorHourLogs = () => async dispatch => {
   dispatch({ type: GET_CLOSED_CONTRACTOR_HOUR_LOGS, payload: res.data });
 };
 
+export const getPublicContractorHourLog = contractorHourLogId => async dispatch => {
+  const res = await axios.get(`/api/v1/contractorHourLog/${contractorHourLogId}/public`);
+
+  dispatch({ type: GET_CONTRACTOR_HOUR_LOG, payload: res.data });
+};
+
 export const getContractorHourLog = contractorHourLogId => async dispatch => {
   const res = await axios.get(`/api/v1/contractorHourLog/${contractorHourLogId}`);
 
