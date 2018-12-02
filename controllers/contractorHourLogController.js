@@ -35,6 +35,8 @@ exports.one = async (req, res) => {
     delete timeEntry.publicHours;
     delete timeEntry.publicDescription;
   });
+
+  contractorHourLog.user.name.full = `${contractorHourLog.user.name.first} ${contractorHourLog.user.name.last}`;
   
   res.json(contractorHourLog);
 };
