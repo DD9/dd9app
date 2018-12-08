@@ -23,10 +23,10 @@ const userSchema = new Schema({
     validate: [validator.isEmail, 'Invalid Email Address'],
     required: 'Please supply an email address',
   },
-  signInCount: {
+  loginCount: {
     type: Number,
   },
-  lastLogin: {
+  lastLoginDate: {
     type: Date,
   },
   lastLoginIP: {

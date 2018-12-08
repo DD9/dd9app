@@ -30,7 +30,7 @@ const contractorHourLogSchema = new Schema({
   hourlyRate: {
     type: Array,
     default: [{
-      USD: 0,
+      USD: 60,
     }],
   },
   notes: {

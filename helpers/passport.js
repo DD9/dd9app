@@ -30,6 +30,7 @@ passport.use(new GoogleStrategy({
     const existingUser = await User.findOne({ email: googleEmail });
 
     if (existingUser) {
+      await User.findOneAndUpdate({ email: googleEmail }, { lastLoginDate: Date.now() }).exec();
       return done(null, existingUser);
     }
 
@@ -38,7 +39,7 @@ passport.use(new GoogleStrategy({
         email: googleEmail,
         'name.first': googleFirstName,
         'name.last': googleLastName,
-        lastSignInAt: Date.now(),
+        lastLoginDate: Date.now(),
       },
     ).save();
 

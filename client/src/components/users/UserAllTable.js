@@ -39,18 +39,18 @@ const UserAllTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
       accessor: user => user.status.charAt(0).toUpperCase() + user.status.slice(1),
       maxWidth: 75,
     }, {
-      Header: 'Rate',
+      Header: 'Hourly Rate',
       id: 'hourlyRate',
-      accessor: user => `$${user.hourlyRate[0].USD}/hr`,
+      accessor: user => `$${user.hourlyRate[0].USD.toFixed(2)}`,
       maxWidth: 100,
     }, {
       Header: 'Last Login',
-      id: 'lastLogin',
+      id: 'lastLoginDate',
       accessor: user => {
-        if (!user.lastLogin) {
+        if (!user.lastLoginDate) {
           return '';
         }
-        return moment.utc(user.lastLogin).format('dddd, MMMM Do YYYY [at] h:mmA [UTC]');
+        return moment.utc(user.lastLoginDate).format('dddd, MMMM Do YYYY [at] h:mmA [UTC]');
       },
       sortMethod: ((a, b) => {
         if (!a || !b) return 0;
