@@ -47,7 +47,7 @@ const ContractorHourLogAllTable = ({
         }
         return data.original.dateClosed.split('T')[0];
       },
-      maxWidth: 100,
+      maxWidth: 80,
     }, {
       Header: 'Contractor',
       accessor: 'user.name.first',
@@ -72,14 +72,14 @@ const ContractorHourLogAllTable = ({
       Cell: data => <span style={{ color: '#AAAAAA' }}>{data.original.totalCreatedHours}</span>,
       maxWidth: 80,
     }, {
-      Header: 'Rate',
+      Header: 'Hourly Rate',
       accessor: 'hourlyRate[0].USD',
       Cell: data => (
         <span>
           {`$${parseInt(data.original.hourlyRate[0].USD).toFixed(2)}`}
         </span>
       ),
-      maxWidth: 80,
+      maxWidth: 100,
     }, {
       Header: 'Pay',
       id: 'pay',
