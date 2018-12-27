@@ -41,7 +41,7 @@ const UserAllTable = ({ users, activeCompanies, defaultPageSize, minRows }) => {
     }, {
       Header: 'Hourly Rate',
       id: 'hourlyRate',
-      accessor: user => `$${user.hourlyRate[0].USD.toFixed(2)}`,
+      accessor: user => `$${parseFloat(user.hourlyRate[0].USD).toFixed(2)}`,
       maxWidth: 100,
     }, {
       Header: 'Last Login',
