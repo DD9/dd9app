@@ -62,6 +62,16 @@ exports.adminEdit = async (req, res) => {
 
   await user.save();
 
+
+  const contractorHourLog = await ContractorHourLog.findOne({ user: userId, title: 'Current' });
+  if (contractorHourLog) {
+    await contractorHourLog.hourlyRate.pop();
+    await contractorHourLog.hourlyRate.push({
+      USD: req.body.hourlyRate,
+    });
+    await contractorHourLog.save();
+  }
+
   res.json(user);
 };
 
